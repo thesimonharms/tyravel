@@ -393,6 +393,10 @@ export default {
       driver: 'session',
       provider: 'users',
     },
+    api: {
+      driver: 'token',
+      provider: 'users',
+    },
   },
   providers: {
     users: {
@@ -406,6 +410,36 @@ export default {
     table: 'sessions',
     connection: 'sqlite',
   },
+  passwords: {
+    users: {
+      provider: 'users',
+      table: 'password_reset_tokens',
+      expireMinutes: 60,
+      connection: 'sqlite',
+    },
+  },
+  tokens: {
+    table: 'personal_access_tokens',
+    connection: 'sqlite',
+  },
+  oauth: {
+    accountsTable: 'oauth_accounts',
+    connection: 'sqlite',
+    providers: {
+      github: {
+        clientId: process.env.GITHUB_CLIENT_ID ?? '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET ?? '',
+        redirectUri: process.env.GITHUB_REDIRECT_URI ?? 'http://127.0.0.1:3000/auth/github/callback',
+        scopes: ['user:email'],
+      },
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+        redirectUri: process.env.GOOGLE_REDIRECT_URI ?? 'http://127.0.0.1:3000/auth/google/callback',
+      },
+    },
+  },
+  policies: {},
 } satisfies AuthConfig;
 `;
 }
@@ -484,12 +518,103 @@ export default class CreateSessionsTable extends Migration {
 `;
 }
 
+export function passwordResetTokensMigration(): string {
+  return `import { Migration } from '@tyravel/database';
+import type { DatabaseConnection } from '@tyravel/database';
+import type { SchemaBuilder } from '@tyravel/database';
+
+export default class CreatePasswordResetTokensTable extends Migration {
+  override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
+    await schema.create('password_reset_tokens', (table) => {
+      table.string('email');
+      table.string('token');
+      table.integer('created_at');
+      table.unique('email');
+    });
+  }
+
+  override async down(_connection: DatabaseConnection, schema: SchemaBuilder) {
+    await schema.drop('password_reset_tokens');
+  }
+}
+`;
+}
+
+export function personalAccessTokensMigration(): string {
+  return `import { Migration } from '@tyravel/database';
+import type { DatabaseConnection } from '@tyravel/database';
+import type { SchemaBuilder } from '@tyravel/database';
+
+export default class CreatePersonalAccessTokensTable extends Migration {
+  override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
+    await schema.create('personal_access_tokens', (table) => {
+      table.id();
+      table.string('tokenable_type');
+      table.integer('tokenable_id');
+      table.string('name');
+      table.string('token', 64);
+      table.text('abilities').nullable();
+      table.integer('last_used_at').nullable();
+      table.integer('expires_at').nullable();
+      table.integer('created_at').nullable();
+    });
+  }
+
+  override async down(_connection: DatabaseConnection, schema: SchemaBuilder) {
+    await schema.drop('personal_access_tokens');
+  }
+}
+`;
+}
+
+export function oauthAccountsMigration(): string {
+  return `import { Migration } from '@tyravel/database';
+import type { DatabaseConnection } from '@tyravel/database';
+import type { SchemaBuilder } from '@tyravel/database';
+
+export default class CreateOauthAccountsTable extends Migration {
+  override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
+    await schema.create('oauth_accounts', (table) => {
+      table.id();
+      table.integer('user_id');
+      table.string('provider');
+      table.string('provider_user_id');
+      table.string('email').nullable();
+      table.string('avatar').nullable();
+      table.integer('created_at').nullable();
+      table.unique(['provider', 'provider_user_id']);
+    });
+  }
+
+  override async down(_connection: DatabaseConnection, schema: SchemaBuilder) {
+    await schema.drop('oauth_accounts');
+  }
+}
+`;
+}
+
+export function postPolicyStub(): string {
+  return `import { Policy } from '@tyravel/auth';
+import type { Authenticatable } from '@tyravel/auth';
+
+export class PostPolicy extends Policy {
+  update(user: Authenticatable, _post: unknown): boolean {
+    return user.getAuthIdentifier() !== undefined;
+  }
+}
+`;
+}
+
 export function authController(): string {
   return `import type { TyravelRequest } from '@tyravel/http';
 import { Response } from '@tyravel/http';
-import { Auth } from '@tyravel/core';
+import { Auth, Password } from '@tyravel/core';
+import type { Application } from '@tyravel/core';
+import { OAuthManager } from '@tyravel/auth';
 
 export class AuthController {
+  constructor(private readonly app: Application) {}
+
   async login(request: TyravelRequest) {
     const body = await request.json<{ email?: string; password?: string }>();
     await Auth.attempt({
@@ -514,23 +639,94 @@ export class AuthController {
       user: request.user,
     });
   }
+
+  async forgotPassword(request: TyravelRequest) {
+    const body = await request.json<{ email?: string }>();
+    const token = await Password.sendResetLink(body.email ?? '');
+    return Response.json({
+      message: 'Password reset link generated.',
+      token,
+    });
+  }
+
+  async resetPassword(request: TyravelRequest) {
+    const body = await request.json<{
+      email?: string;
+      token?: string;
+      password?: string;
+    }>();
+    await Password.reset({
+      email: body.email ?? '',
+      token: body.token ?? '',
+      password: body.password ?? '',
+    });
+    return Response.json({ message: 'Password has been reset.' });
+  }
+
+  async createToken(request: TyravelRequest) {
+    const body = await request.json<{ name?: string; abilities?: string[] }>();
+    const token = await Auth.createToken(body.name ?? 'api', body.abilities);
+    return Response.json({
+      name: token.name,
+      plainTextToken: token.plainTextToken,
+      abilities: token.abilities,
+    });
+  }
+
+  oauthRedirect(request: TyravelRequest) {
+    const provider = request.param('provider');
+    const oauth = this.app.make(OAuthManager);
+    const state = oauth.createState();
+    request.session?.put(\`oauth.\${provider}.state\`, state);
+    const url = oauth.redirectUrl(provider, state);
+    return Response.redirect(url, 302);
+  }
+
+  async oauthCallback(request: TyravelRequest) {
+    const provider = request.param('provider');
+    const oauth = this.app.make(OAuthManager);
+    const url = new URL(request.url);
+    const code = url.searchParams.get('code') ?? '';
+    const state = url.searchParams.get('state') ?? '';
+    const expected = request.session?.get<string>(\`oauth.\${provider}.state\`);
+    if (!expected || expected !== state) {
+      return Response.json({ message: 'Invalid OAuth state.' }, { status: 422 });
+    }
+
+    const profile = await oauth.handleCallback(provider, code, state);
+    const user = await oauth.findOrCreateUser(provider, profile);
+    await Auth.login(user);
+    return Response.redirect('/', 302);
+  }
 }
 `;
 }
 
 export function authRoutes(): string {
-  return `import { Route, createControllerHandler } from '@tyravel/core';
+  return `import { Route } from '@tyravel/core';
 import { AuthController } from '../controllers/AuthController.js';
 
-Route.post('/login', createControllerHandler(AuthController, 'login'), {
-  middleware: ['guest'],
-});
-Route.post('/logout', createControllerHandler(AuthController, 'logout'), {
-  middleware: ['auth'],
-});
-Route.get('/me', createControllerHandler(AuthController, 'me'), {
-  middleware: ['auth'],
-});
+Route.middleware('guest').post('/login', [AuthController, 'login']);
+Route.middleware('auth').post('/logout', [AuthController, 'logout']);
+Route.middleware('auth').get('/me', [AuthController, 'me']);
+Route.middleware('guest').post('/forgot-password', [AuthController, 'forgotPassword']);
+Route.middleware('guest').post('/reset-password', [AuthController, 'resetPassword']);
+Route.middleware('auth').post('/tokens', [AuthController, 'createToken']);
+Route.middleware('guest').get('/auth/:provider/redirect', [AuthController, 'oauthRedirect']);
+Route.middleware('guest').get('/auth/:provider/callback', [AuthController, 'oauthCallback']);
+`;
+}
+
+export function appServiceProviderWithAuth(): string {
+  return `import { ServiceProvider } from '@tyravel/core';
+import { AuthController } from '../controllers/AuthController.js';
+
+export class AppServiceProvider extends ServiceProvider {
+  override register() {
+    this.app.instance('app.name', 'Tyravel');
+    this.app.bind(AuthController, () => new AuthController(this.app));
+  }
+}
 `;
 }
 
@@ -545,6 +741,8 @@ export function mainEntryWithAuth(): string {
   QueueServiceProvider,
   setAuthApplication,
   setEventApplication,
+  setGateApplication,
+  setPasswordApplication,
   setQueueApplication,
   setRouteApplication,
   setViewApplication,
@@ -561,6 +759,8 @@ setViewApplication(app);
 setQueueApplication(app);
 setEventApplication(app);
 setAuthApplication(app);
+setGateApplication(app);
+setPasswordApplication(app);
 
 app.register(ConfigServiceProvider);
 app.register(DatabaseServiceProvider);

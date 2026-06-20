@@ -469,29 +469,34 @@ Register `QueueServiceProvider` **before** `EventServiceProvider`, run `tyravel 
 
 ### Authentication
 
-Session-based **web guard** with Eloquent user provider, scrypt password hashing, and Laravel-style middleware:
+Session-based **web guard** plus **API token guard** (`auth:api`), policies, password reset, and OAuth (GitHub + Google):
 
 ```bash
 tyravel auth:install
 tyravel migrate
 ```
 
-`AuthServiceProvider` registers global **StartSession** middleware plus named **`auth`** and **`guest`** aliases.
+Register facades in `main.ts`: `setAuthApplication`, `setGateApplication`, `setPasswordApplication`.
+
+`AuthServiceProvider` registers **StartSession**, **`auth`**, **`auth:api`**, and **`guest`** middleware.
 
 ```typescript
-import { Auth } from '@tyravel/core';
+import { Auth, Gate, Password } from '@tyravel/core';
 
 await Auth.attempt({ email, password });
-const user = Auth.user();
-await Auth.logout();
+const token = await Auth.createToken('mobile', ['*']);
+await Password.sendResetLink(email);
+await Gate.authorize(Auth.user(), 'update', post);
 ```
 
-Routes (from `auth:install`):
+| Feature | Notes |
+|---------|--------|
+| **Policies** | Map models in `config/auth.ts` `policies`; `Gate.authorize(user, ability, model)` |
+| **Password reset** | `password_reset_tokens` table; `Password.sendResetLink` / `Password.reset` |
+| **API tokens** | `personal_access_tokens`; `Authorization: Bearer <token>` on `api` guard |
+| **OAuth** | `GET /auth/:provider/redirect` and `/callback`; env `GITHUB_*` / `GOOGLE_*` |
 
-- `POST /login` — `guest` middleware
-- `POST /logout`, `GET /me` — `auth` middleware
-
-`request.user` is set after the session middleware runs. Unauthenticated access to `auth` routes returns **401**.
+Routes from `auth:install` include login, tokens, forgot/reset password, and OAuth redirects.
 
 ### Service providers
 
@@ -538,7 +543,7 @@ npm run typecheck # Type-check via project references
 - [x] **Blade-like templating** — TS-native view layer with layouts and components
 - [x] **Queue and jobs** — background job dispatch with typed payloads
 - [x] **Event bus** — typed domain events and listeners
-- [x] **Auth** — session guard, `Auth` facade, `auth` / `guest` middleware (`tyravel auth:install`)
+- [x] **Auth** — session + API token guards, policies, password reset, OAuth, `auth:install`
 - [ ] **Testing utilities** — `TestCase`, HTTP test client, container fakes
 - [ ] **Package ecosystem** — publishable first-party packages (cache, mail, notifications)
 

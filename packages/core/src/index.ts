@@ -17,6 +17,10 @@ export { Route, setRouteApplication } from './route.js';
 export type { RouteFacade } from './route.js';
 export { Auth, setAuthApplication } from './auth.js';
 export type { AuthFacade } from './auth.js';
+export { Gate, setGateApplication } from './gate.js';
+export type { GateFacade } from './gate.js';
+export { Password, setPasswordApplication } from './password.js';
+export type { PasswordFacade } from './password.js';
 export { Events, fire, setEventApplication } from './event.js';
 export type { EventsFacade } from './event.js';
 export { Queue, dispatch, setQueueApplication } from './queue.js';
@@ -34,5 +38,15 @@ export type {
   ListenerConstructor,
   ListenerHandler,
 } from '@tyravel/events';
-export type { Authenticatable, AuthConfig } from '@tyravel/auth';
-export { AuthenticationException, InvalidCredentialsException } from '@tyravel/auth';
+export type { Authenticatable, AuthConfig, NewAccessToken } from '@tyravel/auth';
+export {
+  AuthenticationException,
+  InvalidCredentialsException,
+  AuthorizationException,
+  InvalidResetTokenException,
+  Policy,
+  OAuthManager,
+  PasswordResetBroker,
+  PersonalAccessTokenRepository,
+  Gate as AuthorizationGate,
+} from '@tyravel/auth';

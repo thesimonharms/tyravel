@@ -3,6 +3,8 @@ import { Response } from '@tyravel/http';
 import { ValidationException } from '@tyravel/validation';
 import { AuthenticationException } from '@tyravel/auth';
 import { InvalidCredentialsException } from '@tyravel/auth';
+import { AuthorizationException } from '@tyravel/auth';
+import { InvalidResetTokenException } from '@tyravel/auth';
 import type { Application } from './application.js';
 
 export class HttpKernel {
@@ -33,6 +35,14 @@ export class HttpKernel {
 
       if (error instanceof InvalidCredentialsException) {
         return Response.json({ message: error.message }, { status: 401 });
+      }
+
+      if (error instanceof AuthorizationException) {
+        return Response.json({ message: error.message }, { status: 403 });
+      }
+
+      if (error instanceof InvalidResetTokenException) {
+        return Response.json({ message: error.message }, { status: 422 });
       }
 
       console.error(error);
