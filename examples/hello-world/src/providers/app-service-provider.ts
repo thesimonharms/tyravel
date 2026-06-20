@@ -1,9 +1,11 @@
 import { ServiceProvider } from '@tyravel/core';
 import { ConfigRepository } from '@tyravel/config';
+import { AuthController } from '../controllers/auth-controller.js';
 import { UserController } from '../controllers/user-controller.js';
 
 export class AppServiceProvider extends ServiceProvider {
   override register() {
+    this.app.bind(AuthController, () => new AuthController(this.app));
     this.app.bind(UserController, () => new UserController());
 
     this.app.middleware('json', async (_request, next) => {

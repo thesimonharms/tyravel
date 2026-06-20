@@ -100,9 +100,12 @@ await serve(kernel);
 }
 
 export function appConfig(name: string): string {
-  return `export default {
-  name: '${name}',
-  debug: true,
+  return `import { env } from '@tyravel/config';
+
+export default {
+  name: env('APP_NAME', '${name}'),
+  debug: env('APP_DEBUG', true),
+  url: env('APP_URL', 'http://127.0.0.1:3000'),
 } as const;
 `;
 }
@@ -116,28 +119,30 @@ export function viewsConfig(): string {
 }
 
 export function databaseConfig(): string {
-  return `export default {
-  default: 'sqlite',
+  return `import { env, envInt } from '@tyravel/config';
+
+export default {
+  default: env('DB_CONNECTION', 'sqlite'),
   connections: {
     sqlite: {
       driver: 'sqlite',
-      database: 'database/database.sqlite',
+      database: env('DB_DATABASE', 'database/database.sqlite'),
     },
     postgres: {
       driver: 'postgres',
-      host: '127.0.0.1',
-      port: 5432,
-      database: 'tyravel',
-      username: 'postgres',
-      password: '',
+      host: env('DB_HOST', '127.0.0.1'),
+      port: envInt('DB_PORT', 5432),
+      database: env('DB_DATABASE', 'tyravel'),
+      username: env('DB_USERNAME', 'postgres'),
+      password: env('DB_PASSWORD', ''),
     },
     mysql: {
       driver: 'mysql',
-      host: '127.0.0.1',
-      port: 3306,
-      database: 'tyravel',
-      username: 'root',
-      password: '',
+      host: env('DB_HOST', '127.0.0.1'),
+      port: envInt('DB_PORT', 3306),
+      database: env('DB_DATABASE', 'tyravel'),
+      username: env('DB_USERNAME', 'root'),
+      password: env('DB_PASSWORD', ''),
     },
   },
 } as const;
@@ -400,6 +405,7 @@ export class ${name} extends EventSubscriber {
 
 export function authConfig(): string {
   return `import type { AuthConfig } from '@tyravel/auth';
+import { env } from '@tyravel/config';
 import { User } from '../src/models/User.js';
 
 export default {
@@ -445,15 +451,15 @@ export default {
     connection: 'sqlite',
     providers: {
       github: {
-        clientId: process.env.GITHUB_CLIENT_ID ?? '',
-        clientSecret: process.env.GITHUB_CLIENT_SECRET ?? '',
-        redirectUri: process.env.GITHUB_REDIRECT_URI ?? 'http://127.0.0.1:3000/auth/github/callback',
+        clientId: env('GITHUB_CLIENT_ID', ''),
+        clientSecret: env('GITHUB_CLIENT_SECRET', ''),
+        redirectUri: env('GITHUB_REDIRECT_URI', 'http://127.0.0.1:3000/auth/github/callback'),
         scopes: ['user:email'],
       },
       google: {
-        clientId: process.env.GOOGLE_CLIENT_ID ?? '',
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
-        redirectUri: process.env.GOOGLE_REDIRECT_URI ?? 'http://127.0.0.1:3000/auth/google/callback',
+        clientId: env('GOOGLE_CLIENT_ID', ''),
+        clientSecret: env('GOOGLE_CLIENT_SECRET', ''),
+        redirectUri: env('GOOGLE_REDIRECT_URI', 'http://127.0.0.1:3000/auth/google/callback'),
       },
     },
   },

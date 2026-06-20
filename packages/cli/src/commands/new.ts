@@ -22,6 +22,7 @@ import {
   viewsConfig,
   webRoutes,
 } from '../stubs.js';
+import { envExample } from '../stubs-env.js';
 import { featureTestStub, projectVitestConfig } from '../stubs-testing.js';
 import {
   optionString,
@@ -57,6 +58,9 @@ export class NewCommand extends Command {
     }
 
     writeFile(projectPath(targetDir, 'package.json'), projectPackageJson(name));
+    const envContents = envExample(name);
+    writeFile(projectPath(targetDir, '.env.example'), envContents);
+    writeFile(projectPath(targetDir, '.env'), envContents);
     writeFile(projectPath(targetDir, 'tyravel.json'), projectConfig(name));
     writeFile(projectPath(targetDir, 'config/app.ts'), appConfig(name));
     writeFile(projectPath(targetDir, 'config/database.ts'), databaseConfig());

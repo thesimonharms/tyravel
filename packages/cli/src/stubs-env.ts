@@ -1,0 +1,30 @@
+export function envExample(name: string): string {
+  return `# ${name} environment variables
+APP_NAME=${name}
+APP_DEBUG=true
+APP_URL=http://127.0.0.1:3000
+
+DB_CONNECTION=sqlite
+DB_DATABASE=database/database.sqlite
+# DB_HOST=127.0.0.1
+# DB_PORT=5432
+# DB_USERNAME=postgres
+# DB_PASSWORD=
+
+MAIL_MAILER=log
+MAIL_FROM_ADDRESS=hello@example.com
+MAIL_FROM_NAME=Tyravel
+# MAIL_HOST=127.0.0.1
+# MAIL_PORT=587
+# MAIL_USERNAME=
+# MAIL_PASSWORD=
+# MAIL_ENCRYPTION=tls
+
+# GITHUB_CLIENT_ID=
+# GITHUB_CLIENT_SECRET=
+# GITHUB_REDIRECT_URI=http://127.0.0.1:3000/auth/github/callback
+# GOOGLE_CLIENT_ID=
+# GOOGLE_CLIENT_SECRET=
+# GOOGLE_REDIRECT_URI=http://127.0.0.1:3000/auth/google/callback
+`;
+}

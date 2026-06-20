@@ -153,17 +153,27 @@ Route.middleware('auth').get('/profile', handler);
 
 ### Config
 
+`ConfigServiceProvider` loads `.env` from the application root before importing `config/*.ts`. Use `env()` in config files:
+
 ```typescript
+// .env
+APP_NAME=Tyravel
+APP_DEBUG=true
+
 // config/app.ts
+import { env } from '@tyravel/config';
+
 export default {
-  name: 'Tyravel',
-  debug: true,
+  name: env('APP_NAME', 'Tyravel'),
+  debug: env('APP_DEBUG', true),
 } as const;
 
 // src/main.ts
 app.register(ConfigServiceProvider);
 const name = app.make<ConfigRepository>('config').get<string>('app.name');
 ```
+
+New apps scaffold `.env` and `.env.example`. Existing shell variables are not overwritten unless you pass `{ override: true }` to `loadEnv()`.
 
 ### Validation
 

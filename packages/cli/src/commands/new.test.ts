@@ -23,6 +23,8 @@ describe('NewCommand', () => {
 
     expect(code).toBe(0);
     expect(existsSync(join(projectDir, 'package.json'))).toBe(true);
+    expect(existsSync(join(projectDir, '.env'))).toBe(true);
+    expect(existsSync(join(projectDir, '.env.example'))).toBe(true);
     expect(existsSync(join(projectDir, 'tyravel.json'))).toBe(true);
     expect(existsSync(join(projectDir, 'config/app.ts'))).toBe(true);
     expect(existsSync(join(projectDir, 'src/main.ts'))).toBe(true);

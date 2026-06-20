@@ -4,17 +4,26 @@
   "type": "module",
   "scripts": {
     "dev": "tyravel serve",
-    "start": "tyravel serve"
+    "start": "tyravel serve",
+    "test": "vitest run"
   },
   "dependencies": {
+    "@tyravel/auth": "0.1.0",
+    "@tyravel/cache": "0.1.0",
     "@tyravel/config": "0.1.0",
-    "@tyravel/database": "0.1.0",
     "@tyravel/core": "0.1.0",
+    "@tyravel/database": "0.1.0",
+    "@tyravel/events": "0.1.0",
     "@tyravel/http": "0.1.0",
+    "@tyravel/mail": "0.1.0",
+    "@tyravel/notifications": "0.1.0",
+    "@tyravel/queue": "0.1.0",
     "@tyravel/validation": "0.1.0",
     "@tyravel/views": "0.1.0"
   },
   "devDependencies": {
-    "@tyravel/cli": "0.1.0"
+    "@tyravel/cli": "0.1.0",
+    "@tyravel/testing": "0.1.0",
+    "vitest": "^3.2.4"
   }
 }
