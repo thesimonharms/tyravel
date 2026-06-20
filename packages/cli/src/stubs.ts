@@ -284,7 +284,7 @@ export class ${name} extends Job<${name}Payload> {
 
 export function queueConfig(): string {
   return `export default {
-  default: 'sync',
+  default: 'database',
   connections: {
     sync: { driver: 'sync' },
     database: {

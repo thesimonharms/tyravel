@@ -2,15 +2,31 @@ import { ArrayMailTransport, LogMailTransport, type MailTransport } from './tran
 import { SmtpMailTransport } from './smtp-transport.js';
 import type { MailAddress, MailConfig, MailConnectionConfig, MailMessage } from './types.js';
 import { Mailable } from './mailable.js';
+import type { MailQueueBridge } from './queue-bridge.js';
+import { SendMailable } from './send-mailable.js';
 
 export class MailManager {
   private readonly transports = new Map<string, MailTransport>();
+  private queueDefaults: { connection?: string; queue?: string } = {};
 
-  constructor(private readonly config: MailConfig) {}
+  constructor(
+    private readonly config: MailConfig,
+    private readonly queue?: MailQueueBridge,
+  ) {}
+
+  setQueueDefaults(options: { connection?: string; queue?: string }): void {
+    this.queueDefaults = options;
+  }
 
   mailer(name?: string): Mailer {
     const connection = name ?? this.config.default;
-    return new Mailer(this.resolveTransport(connection), this.config.from);
+    return new Mailer(
+      this.resolveTransport(connection),
+      this.config.from,
+      connection,
+      this.queue,
+      this.queueDefaults,
+    );
   }
 
   transport(name?: string): MailTransport {
@@ -53,6 +69,9 @@ export class Mailer {
   constructor(
     private readonly transport: MailTransport,
     private readonly defaultFrom: MailAddress,
+    private readonly mailConnection: string,
+    private readonly queue?: MailQueueBridge,
+    private readonly queueDefaults: { connection?: string; queue?: string } = {},
   ) {}
 
   to(address: string | MailAddress | Array<string | MailAddress>): this {
@@ -64,6 +83,22 @@ export class Mailer {
   }
 
   async send(mailable: Mailable | MailMessage): Promise<void> {
+    const merged = await this.mergeMessage(mailable);
+
+    if (mailable instanceof Mailable && mailable.shouldQueue?.() === true && this.queue) {
+      const job = new SendMailable({
+        mailConnection: this.mailConnection,
+        message: merged,
+      });
+      const options = this.resolveQueueOptions(mailable);
+      await this.queue.dispatch(job, options);
+      return;
+    }
+
+    await this.transport.send(merged);
+  }
+
+  private async mergeMessage(mailable: Mailable | MailMessage): Promise<MailMessage> {
     const resolved: MailMessage =
       mailable instanceof Mailable ? await mailable.toMessage() : mailable;
     const merged: MailMessage = {
@@ -80,7 +115,19 @@ export class Mailer {
     if (merged.to.length === 0) {
       throw new Error('Mail message requires at least one recipient.');
     }
-    await this.transport.send(merged);
+    return merged;
+  }
+
+  private resolveQueueOptions(mailable: Mailable): {
+    connection?: string;
+    queue?: string;
+    delaySeconds?: number;
+  } {
+    return {
+      connection: mailable.connection ?? this.queueDefaults.connection,
+      queue: mailable.queue ?? this.queueDefaults.queue,
+      delaySeconds: mailable.delaySeconds,
+    };
   }
 }
 
@@ -89,4 +136,8 @@ function normalizeAddress(entry: string | MailAddress): MailAddress {
     return { address: entry };
   }
   return entry;
+}
+
+export function shouldQueueMailable(mailable: Mailable): boolean {
+  return mailable.shouldQueue?.() === true;
 }

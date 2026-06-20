@@ -40,4 +40,6 @@ export interface MailConfig {
   default: string;
   from: MailAddress;
   connections: Record<string, MailConnectionConfig>;
+  queue?: string;
+  queueConnection?: string;
 }

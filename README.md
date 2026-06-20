@@ -559,14 +559,18 @@ await Notifications.send(user, new InvoicePaidNotification());
 | Facade | Drivers / channels |
 |--------|-------------------|
 | `Cache` | `array`, `file` (`storage/framework/cache`) |
-| `Mail` | `log`, `array` (tests), **`smtp`** (STARTTLS / SSL, AUTH LOGIN) |
-| `Notifications` | `mail`, `database`; **`shouldQueue()`** dispatches `SendQueuedNotification` |
+| `Mail` | `log`, `array` (tests), **`smtp`**; **`shouldQueue()`** → `SendMailable` job |
+| `Notifications` | `mail`, `database`; **`shouldQueue()`** → `SendQueuedNotification` (default **`database`** queue) |
 
 Use the **array** mail connection in tests to assert `mail.transport('array').messages`.
 
 **SMTP** (`config/mail.ts` → `smtp` connection): set `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, then `default: 'smtp'`.
 
-**Queued notifications**: override `shouldQueue()` on your `Notification` class; Tyravel pushes `SendQueuedNotification` via the app queue (`notifications.queueConnection` / `queue` in config).
+**Queued mailables**: override `shouldQueue()` on your `Mailable`; Tyravel serializes the built message into `SendMailable` (`mail.queueConnection` / `queue` in config, default **`database`**).
+
+**Queued notifications**: override `shouldQueue()` on your `Notification` class; Tyravel pushes `SendQueuedNotification` via the app queue (`notifications.queueConnection` / `queue` — default **`database`**). Run `tyravel queue:work` to process the `jobs` table.
+
+New apps scaffold `jobs`, `failed_jobs`, and `notifications` migrations and set `config/queue.ts` default to **`database`**.
 
 ### Service providers
 

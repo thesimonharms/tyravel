@@ -17,6 +17,8 @@ import {
   projectConfig,
   projectPackageJson,
   queueConfig,
+  jobsTableMigration,
+  failedJobsTableMigration,
   viewsConfig,
   webRoutes,
 } from '../stubs.js';
@@ -71,7 +73,15 @@ export class NewCommand extends Command {
     writeFile(projectPath(targetDir, 'database/migrations/.gitkeep'), '');
     const ts = Date.now();
     writeFile(
-      projectPath(targetDir, `database/migrations/${ts}_create_notifications_table.ts`),
+      projectPath(targetDir, `database/migrations/${ts}_create_jobs_table.ts`),
+      jobsTableMigration(),
+    );
+    writeFile(
+      projectPath(targetDir, `database/migrations/${ts + 1}_create_failed_jobs_table.ts`),
+      failedJobsTableMigration(),
+    );
+    writeFile(
+      projectPath(targetDir, `database/migrations/${ts + 2}_create_notifications_table.ts`),
       notificationsTableMigration(),
     );
     writeFile(projectPath(targetDir, 'src/main.ts'), mainEntry());

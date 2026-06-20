@@ -59,5 +59,5 @@ export {
   PersonalAccessTokenRepository,
   Gate as AuthorizationGate,
 } from '@tyravel/auth';
-export { Mailable } from '@tyravel/mail';
+export { Mailable, SendMailable } from '@tyravel/mail';
 export { Notification, type Notifiable, NotificationRegistry } from '@tyravel/notifications';

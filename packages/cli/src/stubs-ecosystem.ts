@@ -36,6 +36,8 @@ export default {
       encryption: 'tls',
     },
   },
+  queue: 'default',
+  queueConnection: 'database',
 } satisfies MailConfig;
 `;
 }
@@ -47,7 +49,7 @@ export default {
   table: 'notifications',
   connection: 'sqlite',
   queue: 'default',
-  queueConnection: 'sync',
+  queueConnection: 'database',
 } satisfies NotificationsConfig;
 `;
 }
