@@ -61,8 +61,12 @@ tyravel make:view <name>                 # Create resources/views/<name>.tyr
 tyravel make:job <Name>                  # Create src/jobs/<Name>.ts
 tyravel make:event <Name>                # Create src/events/<Name>.ts
 tyravel make:listener <Name>             # Create src/listeners/<Name>.ts
+tyravel make:subscriber <Name>           # Create src/subscribers/<Name>.ts
 tyravel queue:table                      # Migration for the jobs table
+tyravel queue:failed-table               # Migration for failed_jobs
 tyravel queue:work [--queue=default]     # Process database queue jobs
+tyravel queue:failed                     # List failed jobs
+tyravel queue:retry <id>                 # Re-queue a failed job
 tyravel migrate                        # Run pending migrations
 tyravel version                      # Show CLI version
 ```
@@ -334,6 +338,15 @@ tyravel migrate
 tyravel queue:work --connection=database --queue=default
 ```
 
+Jobs that exhaust retries are written to `failed_jobs` (when the table exists and `queue.failed` is configured). Inspect and retry:
+
+```bash
+tyravel queue:failed-table
+tyravel migrate
+tyravel queue:failed
+tyravel queue:retry 1
+```
+
 `config/queue.ts` supports `sync` (immediate, great for local dev) and `database` (persistent, worker-driven):
 
 ```typescript
@@ -400,6 +413,30 @@ export class SendWelcomeEmail extends Listener<UserRegistered> {
 ```
 
 Listeners resolve from the container when registered as classes, so constructor dependencies work like controllers.
+
+**Event subscribers** group listener registration in one class (Laravel-style):
+
+```typescript
+import { EventSubscriber } from '@tyravel/events';
+import type { EventDispatcher } from '@tyravel/events';
+
+export class AuthEventSubscriber extends EventSubscriber {
+  subscribe(dispatcher: EventDispatcher): void {
+    dispatcher.listen(UserRegistered, SendWelcomeEmail);
+  }
+}
+```
+
+Register in `config/events.ts`:
+
+```typescript
+import { AuthEventSubscriber } from '../src/subscribers/auth-event-subscriber.js';
+
+export default {
+  listen: [],
+  subscribers: [AuthEventSubscriber],
+} satisfies import('@tyravel/events').EventsConfig;
+```
 
 **Queued listeners** extend `QueuedListener` (Laravel's `ShouldQueue`). They are serialized to a `CallQueuedListener` job instead of running inline:
 

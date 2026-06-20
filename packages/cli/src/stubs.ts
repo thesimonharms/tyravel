@@ -275,6 +275,9 @@ export function queueConfig(): string {
       retryAfter: 90,
     },
   },
+  failed: {
+    table: 'failed_jobs',
+  },
 } as const;
 `;
 }
@@ -332,8 +335,46 @@ export function eventsConfig(): string {
 
 export default {
   listen: [],
+  subscribers: [],
   queueConnection: 'database',
   queue: 'default',
 } satisfies EventsConfig;
+`;
+}
+
+export function failedJobsTableMigration(): string {
+  return `import { Migration } from '@tyravel/database';
+import type { DatabaseConnection } from '@tyravel/database';
+import type { SchemaBuilder } from '@tyravel/database';
+
+export default class CreateFailedJobsTable extends Migration {
+  override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
+    await schema.create('failed_jobs', (table) => {
+      table.id();
+      table.string('uuid');
+      table.string('connection');
+      table.string('queue');
+      table.text('payload');
+      table.text('exception');
+      table.integer('failed_at');
+    });
+  }
+
+  override async down(_connection: DatabaseConnection, schema: SchemaBuilder) {
+    await schema.drop('failed_jobs');
+  }
+}
+`;
+}
+
+export function eventSubscriber(name: string): string {
+  return `import { EventSubscriber } from '@tyravel/events';
+import type { EventDispatcher } from '@tyravel/events';
+
+export class ${name} extends EventSubscriber {
+  subscribe(dispatcher: EventDispatcher): void {
+    // dispatcher.listen(SomeEvent, SomeListener);
+  }
+}
 `;
 }

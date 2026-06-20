@@ -21,10 +21,11 @@ export type { QueueConnectionFacade, QueueFacade } from './queue.js';
 export { serve } from './server.js';
 export type { ServeOptions } from './server.js';
 export { ServiceProvider } from './service-provider.js';
-export { Event, Listener, EventDispatcher, QueuedListener } from '@tyravel/events';
+export { Event, EventSubscriber, Listener, EventDispatcher, QueuedListener } from '@tyravel/events';
 export type {
   EventConstructor,
   EventListenerRegistration,
+  EventSubscriberConstructor,
   EventsConfig,
   ListenerCallback,
   ListenerConstructor,

@@ -40,8 +40,16 @@ export type EventListenerRegistration = [
   ListenerHandler[],
 ];
 
+export abstract class EventSubscriber {
+  abstract subscribe(dispatcher: import('./event-dispatcher.js').EventDispatcher): void;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type EventSubscriberConstructor = new (...args: any[]) => EventSubscriber;
+
 export interface EventsConfig {
   listen: EventListenerRegistration[];
+  subscribers?: EventSubscriberConstructor[];
   queueConnection?: string;
   queue?: string;
 }

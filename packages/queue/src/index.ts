@@ -29,6 +29,11 @@ export function createQueueStack(options: {
 
 export { DatabaseQueue } from './database-queue.js';
 export { Dispatcher } from './dispatcher.js';
+export {
+  FailedJobRepository,
+  formatJobException,
+  newFailedJobUuid,
+} from './failed-job-repository.js';
 export { Job } from './job.js';
 export { JobNotFoundException, JobRegistry } from './registry.js';
 export { decodePayload, encodePayload, serializeJob } from './payload.js';
@@ -38,6 +43,8 @@ export { QueueProcessor } from './queue-processor.js';
 export { SyncQueue } from './sync-queue.js';
 export type {
   DatabaseQueueConnectionConfig,
+  FailedJobRecord,
+  FailedJobsConfig,
   QueueConfig,
   QueueConnectionConfig,
   QueueJobRecord,

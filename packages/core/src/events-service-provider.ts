@@ -51,7 +51,7 @@ export class EventServiceProvider extends ServiceProvider {
       queue: eventsConfig.queue,
     });
 
-    registerEventsConfig(dispatcher, eventsConfig);
+    registerEventsConfig(dispatcher, eventsConfig, this.app);
   }
 
   private registerQueuedListenerJob(): void {

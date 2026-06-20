@@ -31,6 +31,10 @@ export class QueueManager {
     return queue;
   }
 
+  getDefaultConnection(): string {
+    return this.config.default;
+  }
+
   private createConnection(config: QueueConnectionConfig): QueueContract {
     switch (config.driver) {
       case 'sync':

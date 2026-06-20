@@ -1,3 +1,5 @@
+import type { FailedJobsConfig } from './failed-job-types.js';
+
 export type QueueDriver = 'sync' | 'database';
 
 export interface SyncQueueConnectionConfig {
@@ -18,7 +20,10 @@ export type QueueConnectionConfig =
 export interface QueueConfig {
   default: string;
   connections: Record<string, QueueConnectionConfig>;
+  failed?: FailedJobsConfig;
 }
+
+export type { FailedJobsConfig, FailedJobRecord, RecordFailedJobInput } from './failed-job-types.js';
 
 export interface SerializedJobPayload {
   job: string;

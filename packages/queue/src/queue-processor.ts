@@ -1,6 +1,9 @@
-import type { ContainerLike } from '@tyravel/container';
-import type { DatabaseManager } from '@tyravel/database';
 import { DatabaseQueue } from './database-queue.js';
+import type { FailedJobRepository } from './failed-job-repository.js';
+import {
+  formatJobException,
+  newFailedJobUuid,
+} from './failed-job-repository.js';
 import { JobRegistry } from './registry.js';
 import { QueueManager } from './queue-manager.js';
 import { QueueWorker } from './worker.js';
@@ -12,15 +15,20 @@ export interface QueueWorkerRunOptions {
   maxJobs?: number;
 }
 
+export interface QueueProcessorOptions {
+  failedJobs?: FailedJobRepository;
+}
+
 export class QueueProcessor {
   constructor(
     private readonly manager: QueueManager,
     private readonly registry: JobRegistry,
     private readonly worker: QueueWorker,
+    private readonly options: QueueProcessorOptions = {},
   ) {}
 
   async run(options: QueueWorkerRunOptions = {}): Promise<number> {
-    const connectionName = options.connection;
+    const connectionName = options.connection ?? this.manager.getDefaultConnection();
     const queueName = options.queue ?? 'default';
     const sleepSeconds = options.sleepSeconds ?? 1;
     const maxJobs = options.maxJobs;
@@ -48,6 +56,15 @@ export class QueueProcessor {
         await connection.deleteJob(record.id);
       } catch (error) {
         if (record.attempts + 1 >= this.worker.getMaxAttempts()) {
+          if (this.options.failedJobs) {
+            await this.options.failedJobs.record({
+              uuid: newFailedJobUuid(),
+              connection: connectionName,
+              queue: queueName,
+              payload: record.payload,
+              exception: formatJobException(error),
+            });
+          }
           await connection.deleteJob(record.id);
           process.stderr.write(`Job ${record.id} failed permanently: ${String(error)}\n`);
         } else {

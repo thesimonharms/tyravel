@@ -1,29 +1,10 @@
 import type { Container } from '@tyravel/container';
 import { EventDispatcher } from './event-dispatcher.js';
-import type {
-  EventListenerRegistration,
-  EventsConfig,
-} from './types.js';
-
-export abstract class EventSubscriber {
-  abstract subscribe(dispatcher: EventDispatcher): void;
-}
-
-export function registerEventListeners(
-  dispatcher: EventDispatcher,
-  registrations: EventListenerRegistration[],
-): void {
-  for (const [event, handlers] of registrations) {
-    dispatcher.listenMany(event, handlers);
-  }
-}
-
-export function registerEventsConfig(
-  dispatcher: EventDispatcher,
-  config: EventsConfig,
-): void {
-  registerEventListeners(dispatcher, config.listen);
-}
+import {
+  registerEventListeners,
+  registerEventSubscribers,
+  registerEventsConfig,
+} from './subscribers.js';
 
 export function createEventDispatcher(
   options: import('./dispatcher-options.js').EventDispatcherOptions = {},
@@ -43,6 +24,11 @@ export {
 } from './queued-listener-context.js';
 export type { QueuedListenerContext } from './queued-listener-context.js';
 export {
+  registerEventListeners,
+  registerEventSubscribers,
+  registerEventsConfig,
+} from './subscribers.js';
+export {
   QueuedListener,
   buildCallQueuedListenerJob,
   listenerShouldQueue,
@@ -52,10 +38,11 @@ export type {
   QueuedListenerBridge,
 } from './dispatcher-options.js';
 export type { EventDispatcherOptions } from './dispatcher-options.js';
-export { Event, Listener } from './types.js';
+export { Event, EventSubscriber, Listener } from './types.js';
 export type {
   EventConstructor,
   EventListenerRegistration,
+  EventSubscriberConstructor,
   EventsConfig,
   ListenerCallback,
   ListenerConstructor,
