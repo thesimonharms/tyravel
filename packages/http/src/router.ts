@@ -1,6 +1,9 @@
 import { TyravelRequest } from './request.js';
 import { Response } from './response.js';
 import {
+  MethodNotAllowedException,
+} from './http-exception.js';
+import {
   joinRoutePaths,
   RouteGroupBuilder,
   type Groupable,
@@ -201,13 +204,20 @@ export class Router implements Routable {
     const url = new URL(request.url);
     const method = request.method.toUpperCase() as HttpMethod;
 
+    let pathMatched = false;
+    const allowedMethods: string[] = [];
+
     for (const route of compiled) {
-      if (route.definition.method !== method) {
+      const match = route.regex.exec(url.pathname);
+      if (!match) {
         continue;
       }
 
-      const match = route.regex.exec(url.pathname);
-      if (!match) {
+      if (route.definition.method !== method) {
+        pathMatched = true;
+        if (!allowedMethods.includes(route.definition.method)) {
+          allowedMethods.push(route.definition.method);
+        }
         continue;
       }
 
@@ -219,6 +229,10 @@ export class Router implements Routable {
       );
 
       return this.runPipeline(tyravelRequest, route.definition);
+    }
+
+    if (pathMatched) {
+      throw new MethodNotAllowedException(method, url.pathname, allowedMethods);
     }
 
     throw new RouteNotFoundException(method, url.pathname);

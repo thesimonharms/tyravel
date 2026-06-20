@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { MethodNotAllowedException } from './http-exception.js';
 import { MiddlewareRegistry } from './middleware-registry.js';
 import { Response } from './response.js';
 import { RouteNotFoundException, Router } from './router.js';
@@ -112,5 +113,35 @@ describe('Router', () => {
     await expect(
       router.dispatch(new Request('http://localhost/missing')),
     ).rejects.toThrow(RouteNotFoundException);
+  });
+
+  it('throws MethodNotAllowedException when path matches but method does not', async () => {
+    const router = new Router();
+
+    router.get('/users', () => Response.text('ok'));
+    router.post('/users', () => Response.text('created'));
+
+    await expect(
+      router.dispatch(new Request('http://localhost/users', { method: 'DELETE' })),
+    ).rejects.toThrow(MethodNotAllowedException);
+  });
+
+  it('includes allowed methods in 405 error', async () => {
+    const router = new Router();
+
+    router.get('/users', () => Response.text('ok'));
+    router.post('/users', () => Response.text('created'));
+
+    try {
+      await router.dispatch(new Request('http://localhost/users', { method: 'DELETE' }));
+      expect.unreachable('Should have thrown');
+    } catch (error) {
+      expect(error).toBeInstanceOf(MethodNotAllowedException);
+      const e = error as MethodNotAllowedException;
+      expect(e.status).toBe(405);
+      expect(e.allowedMethods).toEqual(expect.arrayContaining(['GET', 'POST']));
+      expect(e.headers.get('allow')).toContain('GET');
+      expect(e.headers.get('allow')).toContain('POST');
+    }
   });
 });

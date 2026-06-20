@@ -1,4 +1,6 @@
-export { TyravelRequest } from './request.js';
+export {
+  TyravelRequest,
+} from './request.js';
 export type { SessionContract } from './session-contract.js';
 export { Response, ResponseFactory } from './response.js';
 export {
@@ -6,6 +8,11 @@ export {
   RouteNotFoundException,
   Router,
 } from './router.js';
+export {
+  HttpException,
+  MethodNotAllowedException,
+  NotFoundHttpException,
+} from './http-exception.js';
 export type {
   Groupable,
   MiddlewareGroupable,

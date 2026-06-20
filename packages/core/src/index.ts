@@ -16,6 +16,7 @@ export {
 } from './controller.js';
 export type { ControllerAction, ControllerConstructor } from './controller.js';
 export { HttpKernel } from './http-kernel.js';
+export { ExceptionHandler } from './exception-handler.js';
 export { Route, setRouteApplication } from './route.js';
 export type { RouteFacade } from './route.js';
 export { Auth, setAuthApplication } from './auth.js';
