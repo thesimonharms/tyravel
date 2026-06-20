@@ -16,6 +16,11 @@ export {
   isControllerAction,
 } from './controller.js';
 export type { ControllerAction, ControllerConstructor } from './controller.js';
+export {
+  FormRequest,
+  isFormRequestConstructor,
+} from './form-request.js';
+export type { FormRequestConstructor } from './form-request.js';
 export { HttpKernel } from './http-kernel.js';
 export { ExceptionHandler } from './exception-handler.js';
 export { Route, setRouteApplication } from './route.js';

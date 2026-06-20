@@ -1,0 +1,44 @@
+import { existsSync } from 'node:fs';
+import { Command } from '../command.js';
+import { requireProjectRoot } from '../project.js';
+import { formRequest } from '../stubs.js';
+import {
+  parseOptions,
+  positionalArgs,
+  projectPath,
+  toPascalCase,
+  writeFile,
+} from '../utils.js';
+
+export class MakeRequestCommand extends Command {
+  override readonly name = 'make:request';
+  override readonly description = 'Create a new form request class';
+  override readonly usage = 'tyravel make:request <Name>';
+
+  async handle(args: string[]): Promise<number> {
+    parseOptions(args);
+    const [rawName] = positionalArgs(args);
+
+    if (!rawName) {
+      console.error('Request name is required.');
+      console.error('Usage: tyravel make:request <Name>');
+      return 1;
+    }
+
+    const root = requireProjectRoot();
+    const baseName = toPascalCase(rawName.replace(/Request$/i, ''));
+    const className = `${baseName}Request`;
+    const fileName = `${className}.ts`;
+    const target = projectPath(root, 'src/requests', fileName);
+
+    if (existsSync(target)) {
+      console.error(`Form request already exists: src/requests/${fileName}`);
+      return 1;
+    }
+
+    writeFile(target, formRequest(className));
+    console.log(`Form request created: src/requests/${fileName}`);
+
+    return 0;
+  }
+}

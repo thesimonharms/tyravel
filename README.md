@@ -61,6 +61,7 @@ tyravel list                         # List available commands
 tyravel new <name> [--path=<dir>]    # Scaffold a new application
 tyravel serve [--port=3000] [--host=127.0.0.1]
 tyravel make:controller <Name>       # Create src/controllers/<Name>Controller.ts
+tyravel make:request <Name>          # Create src/requests/<Name>Request.ts
 tyravel make:provider <Name>           # Create src/providers/<Name>ServiceProvider.ts
 tyravel make:model <Name>              # Create src/models/<Name>.ts
 tyravel make:factory <Model>             # Create database/factories/<model>-factory.ts
@@ -191,6 +192,45 @@ const data = await validateRequest(request, {
 ```
 
 Invalid requests return HTTP 422 with a structured `errors` object.
+
+### Form requests
+
+Form requests combine validation and authorization for controller actions:
+
+```typescript
+import { FormRequest } from '@tyravel/core';
+import { Gate } from '@tyravel/core';
+
+export class StoreUserRequest extends FormRequest<{ email: string; name: string }> {
+  async authorize(): Promise<boolean> {
+    return this.authorizePolicy('create', User);
+  }
+
+  rules() {
+    return {
+      email: ['required', 'email'],
+      name: ['required', 'min_length:2'],
+    };
+  }
+}
+```
+
+Wire a form request into a route by passing it as the third element of a controller tuple:
+
+```typescript
+Route.post('/users', [UserController, 'store', StoreUserRequest]);
+```
+
+The controller receives the validated form request as its first argument (or as the second argument when the action also needs the raw `TyravelRequest`):
+
+```typescript
+store(form: StoreUserRequest) {
+  const { email, name } = form.validated();
+  // ...
+}
+```
+
+Generate a scaffold with `tyravel make:request StoreUser`.
 
 ### Database / ORM
 

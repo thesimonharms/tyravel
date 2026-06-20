@@ -198,6 +198,25 @@ export class ${className} {
 `;
 }
 
+export function formRequest(name: string): string {
+  const className = name.endsWith('Request') ? name : `${name}Request`;
+
+  return `import { FormRequest } from '@tyravel/core';
+
+export class ${className} extends FormRequest {
+  authorize(): boolean {
+    return true;
+  }
+
+  rules() {
+    return {
+      //
+    };
+  }
+}
+`;
+}
+
 export function model(name: string): string {
   const table = `${name.charAt(0).toLowerCase()}${name.slice(1)}s`;
 
