@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/notifications",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,13 +15,27 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/database": "0.0.1",
-    "@tyravel/mail": "0.0.1",
-    "@tyravel/queue": "0.0.1"
+    "@tyravel/database": "0.1.0",
+    "@tyravel/mail": "0.1.0",
+    "@tyravel/queue": "0.1.0"
   },
-  "files": ["dist"],
-  "engines": { "node": ">=22" },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
   "devDependencies": {
     "@types/node": "^22.15.30"
+  },
+  "description": "Multi-channel notifications for Tyravel",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "directory": "packages/notifications"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

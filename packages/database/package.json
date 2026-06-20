@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/database",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -14,7 +14,9 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=22"
   },
@@ -24,5 +26,15 @@
   },
   "devDependencies": {
     "@types/pg": "^8.15.4"
+  },
+  "description": "Database ORM, query builder, and migrations for Tyravel",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "directory": "packages/database"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

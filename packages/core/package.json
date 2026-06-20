@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/core",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,18 +15,33 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/auth": "0.0.1",
-    "@tyravel/cache": "0.0.1",
-    "@tyravel/config": "0.0.1",
-    "@tyravel/database": "0.0.1",
-    "@tyravel/events": "0.0.1",
-    "@tyravel/container": "0.0.1",
-    "@tyravel/http": "0.0.1",
-    "@tyravel/mail": "0.0.1",
-    "@tyravel/notifications": "0.0.1",
-    "@tyravel/queue": "0.0.1",
-    "@tyravel/validation": "0.0.1",
-    "@tyravel/views": "0.0.1"
+    "@tyravel/auth": "0.1.0",
+    "@tyravel/cache": "0.1.0",
+    "@tyravel/config": "0.1.0",
+    "@tyravel/database": "0.1.0",
+    "@tyravel/events": "0.1.0",
+    "@tyravel/container": "0.1.0",
+    "@tyravel/http": "0.1.0",
+    "@tyravel/mail": "0.1.0",
+    "@tyravel/notifications": "0.1.0",
+    "@tyravel/queue": "0.1.0",
+    "@tyravel/validation": "0.1.0",
+    "@tyravel/views": "0.1.0"
   },
-  "files": ["dist"]
+  "files": [
+    "dist"
+  ],
+  "description": "Tyravel application kernel, providers, and facades",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "directory": "packages/core"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22"
+  }
 }

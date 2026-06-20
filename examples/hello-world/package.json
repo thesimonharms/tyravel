@@ -7,14 +7,14 @@
     "start": "tyravel serve"
   },
   "dependencies": {
-    "@tyravel/config": "0.0.1",
-    "@tyravel/database": "0.0.1",
-    "@tyravel/core": "0.0.1",
-    "@tyravel/http": "0.0.1",
-    "@tyravel/validation": "0.0.1",
-    "@tyravel/views": "0.0.1"
+    "@tyravel/config": "0.1.0",
+    "@tyravel/database": "0.1.0",
+    "@tyravel/core": "0.1.0",
+    "@tyravel/http": "0.1.0",
+    "@tyravel/validation": "0.1.0",
+    "@tyravel/views": "0.1.0"
   },
   "devDependencies": {
-    "@tyravel/cli": "0.0.1"
+    "@tyravel/cli": "0.1.0"
   }
 }

@@ -1,6 +1,8 @@
 # Tyravel
 
-A TypeScript-native web framework with the ergonomics of Laravel — service container, expressive routing, middleware, and an Artisan-style CLI — built on standard Web APIs.
+**v0.1.0** — TypeScript-native web framework with Laravel-style ergonomics (service container, routing, middleware, queues, auth, and an Artisan-like CLI) on standard Web APIs.
+
+Requires **Node.js ≥ 22**.
 
 ## Packages
 
@@ -587,39 +589,34 @@ export class AppServiceProvider extends ServiceProvider {
 ## Development
 
 ```bash
-npm test          # Run all package tests
+npm test          # Run all package tests (78 tests)
 npm run build     # Build all packages
 npm run typecheck # Type-check via project references
 ```
 
+## Publishing (`@tyravel/*` v0.1.0)
+
+From the monorepo root after `npm run build`:
+
+```bash
+# Publish in dependency order (container → … → core → cli)
+npm publish -w @tyravel/container --access public
+# … repeat for each package, or use your preferred release script
+npm publish -w @tyravel/cli --access public
+```
+
+See [CHANGELOG.md](./CHANGELOG.md) for release notes.
+
 ## Roadmap
 
-### Now (v0.1)
+**v0.1.0** ships the full stack below. Future releases will focus on polish, adapters, and ecosystem packages on npm.
 
-- [x] Service container (`bind`, `singleton`, `alias`, `call`)
-- [x] HTTP router with middleware and named routes
-- [x] Application kernel and service provider lifecycle
-- [x] `Route` facade
-- [x] CLI: `new`, `serve`, `make:controller`, `make:provider`
+### Shipped in v0.1.0
 
-### Next (v0.2) — done
-
-- [x] **Route groups** — `Route.prefix('api').middleware('auth').group(...)`
-- [x] **Controller resolution** — route-to-controller binding with container injection
-- [x] **Config system** — typed `config/*.ts` loaded by a `ConfigServiceProvider`
-- [x] **Middleware registry** — named middleware aliases (`auth`, `guest`, etc.)
-- [x] **Node HTTP adapter** — first-class `serve()` without requiring Bun
-- [x] **Validation** — request validation with typed rules and error responses
-
-### Later
-
-- [x] **Eloquent-style ORM** — typed models, query builder, and migrations
-- [x] **Blade-like templating** — TS-native view layer with layouts and components
-- [x] **Queue and jobs** — background job dispatch with typed payloads
-- [x] **Event bus** — typed domain events and listeners
-- [x] **Auth** — session + API token guards, policies, password reset, OAuth, `auth:install`
-- [x] **Testing utilities** — `TestCase`, HTTP test client, container fakes (`@tyravel/testing`)
-- [x] **Package ecosystem** — `@tyravel/cache`, `@tyravel/mail`, `@tyravel/notifications`
+- [x] Service container, HTTP router, kernel, `Route` facade, CLI scaffolding
+- [x] Route groups, controllers, config, middleware registry, validation, Node `serve()`
+- [x] Eloquent-style ORM, views, queue/events, auth (session, tokens, OAuth, policies)
+- [x] `@tyravel/testing`, cache, mail (SMTP + queued mailables), notifications (queued, database queue default)
 
 ## License
 

@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/testing",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,20 +15,32 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/auth": "0.0.1",
-    "@tyravel/container": "0.0.1",
-    "@tyravel/core": "0.0.1",
-    "@tyravel/http": "0.0.1"
+    "@tyravel/auth": "0.1.0",
+    "@tyravel/container": "0.1.0",
+    "@tyravel/core": "0.1.0",
+    "@tyravel/http": "0.1.0"
   },
   "peerDependencies": {
     "vitest": ">=2.0.0"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=22"
   },
   "devDependencies": {
     "@types/node": "^22.15.30",
     "vitest": "^3.2.4"
+  },
+  "description": "Testing utilities for Tyravel applications",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "directory": "packages/testing"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

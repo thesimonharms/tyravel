@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/auth",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,15 +15,27 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/container": "0.0.1",
-    "@tyravel/database": "0.0.1",
-    "@tyravel/http": "0.0.1"
+    "@tyravel/container": "0.1.0",
+    "@tyravel/database": "0.1.0",
+    "@tyravel/http": "0.1.0"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=22"
   },
   "devDependencies": {
     "@types/node": "^22.15.30"
+  },
+  "description": "Authentication and authorization for Tyravel",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "directory": "packages/auth"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
