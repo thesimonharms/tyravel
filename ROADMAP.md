@@ -114,6 +114,62 @@ Make `.tyr` feel as productive as Blade for full-stack apps — TypeScript-nativ
 - [x] **`make:component`** — scaffold component templates with slot stubs and optional class binding.
 - [x] **@once** — render a block only once per request (useful for push/stack deduplication).
 
+### P3 — Forms & everyday UI
+
+Day-two ergonomics for server-rendered apps: forms, validation feedback, and control-flow sugar.
+
+- [ ] **Form directives** — `@csrf`, `@method('PUT')`, and hidden `_token` / `_method` fields wired to session and routing.
+- [ ] **Validation error blocks** — `@error('field')` … `@enderror` and `@if ($errors->any())` style access to validation messages in context.
+- [ ] **Form state helpers** — `@checked`, `@selected`, `@disabled`, and `@readonly` driven by `old()` and submitted values.
+- [ ] **`@json` directive** — safely embed JSON in `<script>` tags without manual `JSON.stringify` + escaping mistakes.
+- [ ] **`@switch` / `@case`** — cleaner multi-branch UI than nested `@if` / `@elseif` chains.
+
+### P4 — Component depth
+
+Move anonymous components from "included partials" toward first-class, reusable UI primitives.
+
+- [ ] **`@props` declaration** — top-of-file `@props(['title', 'count' => 0])` merges defaults into child component context.
+- [ ] **Attribute bag** — `$attributes` in component templates; merge classes/styles onto the root element.
+- [ ] **`@class` / `@style` helpers** — conditional class lists and inline style maps (Tailwind-friendly).
+- [ ] **Class-based component data** — `make:component --class` providers auto-merge `data()` into render context when a binding exists.
+- [ ] **Default slot content** — fallback markup inside `@slot('name')` … `@endslot` when the parent omits that slot.
+- [ ] **`@aware`** — child components inherit selected props from a parent component context.
+
+### P5 — Ecosystem & integration
+
+Templating that works across packages, environments, and outbound channels.
+
+- [ ] **View namespaces** — `vendor::view.name` syntax for package-published templates (e.g. `@include('admin::partials.nav')`).
+- [ ] **Environment directives** — `@env`, `@production`, and `@local` for environment-specific markup without `config()` noise.
+- [ ] **Localization** — `@lang('messages.welcome')` / `__()` helpers in expression context; optional JSON locale files.
+- [ ] **Mail & notification views** — render `.tyr` templates from `@tyravel/mail` and `@tyravel/notifications` (HTML + plain-text layouts).
+- [ ] **Build manifest integration** — `@vite` or `@mix`-style helper reading a manifest for versioned CSS/JS in layouts.
+- [ ] **`@includeFirst`** — try a list of partials and include the first view that exists.
+
+### P6 — DX, performance & debugging
+
+Make large apps maintainable: faster compiles, clearer errors, and better local iteration.
+
+- [ ] **`@pushOnce` / `@prepend`** — stack variants for deduplicated or head-prepended assets.
+- [ ] **`@inject`** — `@inject('stats', 'PostStats')` resolves a container binding into the view context.
+- [ ] **Fragment caching** — `@fragment('sidebar')` … `@endfragment` with TTL/store-backed cache for expensive partials.
+- [ ] **Compile error locations** — parse failures report view path and line/column (not opaque regex misses).
+- [ ] **`tyravel view:watch`** — recompile changed `.tyr` files during `tyravel serve` (dev-only file watcher).
+- [ ] **`tyravel view:lint`** — static pass for unclosed directives, unknown components, and unsafe `{!! !!}` usage.
+- [ ] **Production compile mode** — `config/views.ts` `compiled: true` by default in production; skip source reads when cache is warm.
+
+### P7 — Typed, testable, advanced rendering
+
+Longer-horizon bets that keep Tyravel TypeScript-native while closing the gap with mature Blade/Livewire workflows.
+
+- [ ] **Typed view props** — `View.render<WelcomeProps>('welcome', props)` with generated or hand-authored prop interfaces per view.
+- [ ] **Component catalog** — auto-discovered registry of `resources/views/components/*` with names, props, and slots (feeds docs/IDE).
+- [ ] **View factories in tests** — `renderView('posts.index', data)` test helper with composers/directives pre-wired like HTTP tests.
+- [ ] **Streaming layouts** — flush early `<head>` / shell HTML while slow sections resolve (chunked `Response.html` integration).
+- [ ] **Partial hydration hooks** — stable `data-tyr-island` markers + manifest for progressive client enhancement (optional, no Livewire dependency).
+- [ ] **Programmatic views** — `.tyr.ts` views that export a `render(ctx)` function for logic-heavy UI without stringly directives.
+- [ ] **Custom escape contexts** — `View::escape('url' | 'js' | 'css', fn)` for context-specific escaping beyond HTML.
+
 ## Tier X — Production-ready project
 
 Open-ended tier: done when Tyravel is a framework teams can adopt with confidence in production — not tied to a version number. Items land here when the core framework depth (Tier 4+) is in place.
