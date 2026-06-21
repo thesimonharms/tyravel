@@ -220,6 +220,110 @@ describe('ViewEngine', () => {
     expect(hidden).not.toContain('No tags yet');
   });
 
+  it('renders custom directives, composers, and expression helpers', async () => {
+    const { basePath, engine } = createFixture();
+
+    engine.directive('badge', (expression, context) => {
+      const label = expression || 'default';
+      const value = (context as Record<string, unknown>)[label];
+      return `<span class="badge">${String(value ?? '')}</span>`;
+    });
+
+    engine.composer('posts.*', () => ({ section: 'News' }));
+    engine.share({ appName: 'Tyravel' });
+    engine.setBindings({
+      route: (name) => `/${name}`,
+      asset: (path) => `/assets${path}`,
+      config: (key) => (key === 'app.name' ? 'Tyravel' : ''),
+      old: (key, defaultValue) => (key === 'email' ? 'ada@example.com' : defaultValue),
+    });
+
+    mkdirSync(join(basePath, 'resources/views/posts'), { recursive: true });
+    writeFileSync(
+      join(basePath, 'resources/views/posts/show.tyr'),
+      `<h1>{{ section }} / {{ appName }}</h1>
+<p>{{ config('app.name') }}</p>
+<a href="{{ route('home') }}">Home</a>
+<img src="{{ asset('/logo.png') }}">
+<input value="{{ old('email', '') }}">
+@badge(status)
+`,
+    );
+
+    const html = await engine.render('posts.show', { status: 'live' });
+
+    expect(html).toContain('<h1>News / Tyravel</h1>');
+    expect(html).toContain('<p>Tyravel</p>');
+    expect(html).toContain('href="/home"');
+    expect(html).toContain('src="/assets/logo.png"');
+    expect(html).toContain('value="ada@example.com"');
+    expect(html).toContain('<span class="badge">live</span>');
+  });
+
+  it('renders includeIf and includeWhen partials', async () => {
+    const { basePath, engine } = createFixture();
+
+    mkdirSync(join(basePath, 'resources/views/partials'), { recursive: true });
+    writeFileSync(
+      join(basePath, 'resources/views/partials/header.tyr'),
+      `<header>{{ title }}</header>`,
+    );
+    writeFileSync(
+      join(basePath, 'resources/views/partials/footer.tyr'),
+      `<footer>Footer</footer>`,
+    );
+    writeFileSync(
+      join(basePath, 'resources/views/partials-page.tyr'),
+      `@includeIf('partials.header', { title: 'Home' })
+@includeIf('partials.missing')
+@includeWhen(showFooter, 'partials.footer')
+`,
+    );
+
+    const html = await engine.render('partials-page', { showFooter: true });
+
+    expect(html).toContain('<header>Home</header>');
+    expect(html).toContain('<footer>Footer</footer>');
+    expect(html).not.toContain('partials.missing');
+  });
+
+  it('renders auth directives from bindings', async () => {
+    const { basePath, engine } = createFixture();
+
+    engine.setAuth({
+      check: () => true,
+      user: () => ({ name: 'Ada' }),
+      can: (ability) => ability === 'edit',
+    });
+
+    writeFileSync(
+      join(basePath, 'resources/views/auth-page.tyr'),
+      `@auth
+  <p>Welcome</p>
+@endauth
+
+@guest
+  <p>Sign in</p>
+@endguest
+
+@can('edit', post)
+  <button>Edit</button>
+@endcan
+
+@can('delete', post)
+  <button>Delete</button>
+@endcan
+`,
+    );
+
+    const html = await engine.render('auth-page', { post: { id: 1 } });
+
+    expect(html).toContain('<p>Welcome</p>');
+    expect(html).not.toContain('Sign in');
+    expect(html).toContain('<button>Edit</button>');
+    expect(html).not.toContain('<button>Delete</button>');
+  });
+
   it('escapes echoed values by default', async () => {
     const { basePath, engine } = createFixture();
     writeFileSync(

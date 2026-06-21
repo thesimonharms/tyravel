@@ -1,10 +1,61 @@
-import type { CompiledTemplate, TemplateOp } from './types.js';
+import type { CompiledTemplate, ConditionalMode, TemplateOp } from './types.js';
+
+export interface CompileOptions {
+  customDirectives?: ReadonlySet<string>;
+}
+
+const BUILTIN_DIRECTIVES = new Set([
+  'layout',
+  'section',
+  'endsection',
+  'yield',
+  'include',
+  'includeIf',
+  'includeWhen',
+  'component',
+  'endcomponent',
+  'slot',
+  'endslot',
+  'if',
+  'elseif',
+  'else',
+  'endif',
+  'unless',
+  'endunless',
+  'isset',
+  'endisset',
+  'empty',
+  'endempty',
+  'foreach',
+  'endforeach',
+  'forelse',
+  'endforelse',
+  'push',
+  'endpush',
+  'stack',
+  'auth',
+  'endauth',
+  'guest',
+  'endguest',
+  'can',
+  'endcan',
+]);
 
 const LAYOUT_RE = /^@layout\(\s*['"]([^'"]+)['"]\s*\)\s*$/m;
 const SECTION_START_RE = /^@section\(\s*['"]([^'"]+)['"]\s*\)\s*$/;
 const SECTION_END_RE = /^@endsection\s*$/;
 const YIELD_RE = /^@yield\(\s*['"]([^'"]+)['"]\s*(?:,\s*['"]([^'"]*)['"]\s*)?\)\s*$/;
 const INCLUDE_RE = /^@include\(\s*['"]([^'"]+)['"]\s*(?:,\s*(.+))?\)\s*$/;
+const INCLUDE_IF_RE = /^@includeIf\(\s*['"]([^'"]+)['"]\s*(?:,\s*(.+))?\)\s*$/;
+const INCLUDE_WHEN_RE =
+  /^@includeWhen\(\s*(.+?)\s*,\s*['"]([^'"]+)['"]\s*(?:,\s*(.+))?\)\s*$/;
+const AUTH_RE = /^@auth\s*$/;
+const ENDAUTH_RE = /^@endauth\s*$/;
+const GUEST_RE = /^@guest\s*$/;
+const ENDGUEST_RE = /^@endguest\s*$/;
+const CAN_RE = /^@can\s*\((.+)\)\s*$/;
+const ENDCAN_RE = /^@endcan\s*$/;
+const CUSTOM_DIRECTIVE_RE = /^@([A-Za-z_][\w]*)\((.*)\)\s*$/;
 const COMPONENT_RE = /^@component\(\s*['"]([^'"]+)['"]\s*(?:,\s*(.+))?\)\s*$/;
 const ENDCOMPONENT_RE = /^@endcomponent\s*$/;
 const SLOT_START_RE = /^@slot\(\s*['"]([^'"]+)['"]\s*\)\s*$/;
@@ -30,18 +81,18 @@ const STACK_RE = /^@stack\(\s*['"]([^'"]+)['"]\s*(?:,\s*['"]([^'"]*)['"]\s*)?\)\
 const ECHO_RE = /\{\{\s*(.+?)\s*\}\}/g;
 const RAW_ECHO_RE = /\{!!\s*(.+?)\s*!!\}/g;
 
-export function compile(source: string): CompiledTemplate {
+export function compile(source: string, options: CompileOptions = {}): CompiledTemplate {
   const layoutMatch = source.match(LAYOUT_RE);
   const layout = layoutMatch?.[1];
   const body = layout ? source.replace(LAYOUT_RE, '').trimStart() : source;
 
   return {
     layout,
-    ops: parseOps(body),
+    ops: parseOps(body, options),
   };
 }
 
-function parseOps(source: string): TemplateOp[] {
+function parseOps(source: string, options: CompileOptions = {}): TemplateOp[] {
   const ops: TemplateOp[] = [];
   let cursor = 0;
 
@@ -82,9 +133,39 @@ function parseOps(source: string): TemplateOp[] {
     const line = takeLine(source, cursor);
     const trimmed = line.trim();
 
+    const authMatch = trimmed.match(AUTH_RE);
+    if (authMatch) {
+      const block = parseModeConditionalBlock(source, cursor, AUTH_RE, ENDAUTH_RE, 'auth');
+      ops.push(block.op);
+      cursor = block.end;
+      continue;
+    }
+
+    const guestMatch = trimmed.match(GUEST_RE);
+    if (guestMatch) {
+      const block = parseModeConditionalBlock(source, cursor, GUEST_RE, ENDGUEST_RE, 'guest');
+      ops.push(block.op);
+      cursor = block.end;
+      continue;
+    }
+
+    const canMatch = trimmed.match(CAN_RE);
+    if (canMatch) {
+      const block = parseSimpleConditionalBlock(
+        source,
+        cursor,
+        CAN_RE,
+        ENDCAN_RE,
+        'can',
+      );
+      ops.push(block.op);
+      cursor = block.end;
+      continue;
+    }
+
     const ifMatch = trimmed.match(IF_RE);
     if (ifMatch) {
-      const block = parseConditionalBlock(source, cursor);
+      const block = parseConditionalBlock(source, cursor, options);
       ops.push(block.op);
       cursor = block.end;
       continue;
@@ -98,6 +179,7 @@ function parseOps(source: string): TemplateOp[] {
         UNLESS_RE,
         ENDUNLESS_RE,
         'unless',
+        options,
       );
       ops.push(block.op);
       cursor = block.end;
@@ -112,6 +194,7 @@ function parseOps(source: string): TemplateOp[] {
         ISSET_RE,
         ENDISSET_RE,
         'isset',
+        options,
       );
       ops.push(block.op);
       cursor = block.end;
@@ -126,6 +209,7 @@ function parseOps(source: string): TemplateOp[] {
         EMPTY_RE,
         ENDEMPTY_RE,
         'empty',
+        options,
       );
       ops.push(block.op);
       cursor = block.end;
@@ -134,7 +218,7 @@ function parseOps(source: string): TemplateOp[] {
 
     const forelseMatch = trimmed.match(FORELSE_RE);
     if (forelseMatch) {
-      const block = parseForelseBlock(source, cursor);
+      const block = parseForelseBlock(source, cursor, options);
       ops.push(block.op);
       cursor = block.end;
       continue;
@@ -142,7 +226,7 @@ function parseOps(source: string): TemplateOp[] {
 
     const foreachMatch = trimmed.match(FOREACH_RE);
     if (foreachMatch) {
-      const block = parseForeachBlock(source, cursor);
+      const block = parseForeachBlock(source, cursor, options);
       ops.push(block.op);
       cursor = block.end;
       continue;
@@ -150,7 +234,7 @@ function parseOps(source: string): TemplateOp[] {
 
     const pushMatch = trimmed.match(PUSH_START_RE);
     if (pushMatch) {
-      const block = parsePushBlock(source, cursor, pushMatch[1]!);
+      const block = parsePushBlock(source, cursor, pushMatch[1]!, options);
       ops.push(block.op);
       cursor = block.end;
       continue;
@@ -169,7 +253,7 @@ function parseOps(source: string): TemplateOp[] {
 
     const sectionMatch = trimmed.match(SECTION_START_RE);
     if (sectionMatch) {
-      const block = parseSectionBlock(source, cursor, sectionMatch[1]!);
+      const block = parseSectionBlock(source, cursor, sectionMatch[1]!, options);
       ops.push(block.op);
       cursor = block.end;
       continue;
@@ -197,6 +281,46 @@ function parseOps(source: string): TemplateOp[] {
       continue;
     }
 
+    const includeIfMatch = trimmed.match(INCLUDE_IF_RE);
+    if (includeIfMatch) {
+      ops.push({
+        type: 'includeIf',
+        name: includeIfMatch[1]!,
+        dataExpression: includeIfMatch[2]?.trim(),
+      });
+      cursor += line.length;
+      continue;
+    }
+
+    const includeWhenMatch = trimmed.match(INCLUDE_WHEN_RE);
+    if (includeWhenMatch) {
+      ops.push({
+        type: 'includeWhen',
+        conditionExpression: includeWhenMatch[1]!.trim(),
+        name: includeWhenMatch[2]!,
+        dataExpression: includeWhenMatch[3]?.trim(),
+      });
+      cursor += line.length;
+      continue;
+    }
+
+    const customMatch = trimmed.match(CUSTOM_DIRECTIVE_RE);
+    if (customMatch) {
+      const directiveName = customMatch[1]!;
+      if (
+        options.customDirectives?.has(directiveName) &&
+        !BUILTIN_DIRECTIVES.has(directiveName)
+      ) {
+        ops.push({
+          type: 'custom',
+          name: directiveName,
+          expression: customMatch[2]!.trim(),
+        });
+        cursor += line.length;
+        continue;
+      }
+    }
+
     const componentMatch = trimmed.match(COMPONENT_RE);
     if (componentMatch) {
       const closeAt = findPartnerEndComponent(source, cursor + line.length);
@@ -207,6 +331,7 @@ function parseOps(source: string): TemplateOp[] {
           componentMatch[1]!,
           componentMatch[2]?.trim(),
           closeAt,
+          options,
         );
         ops.push(block.op);
         cursor = block.end;
@@ -229,16 +354,41 @@ function parseOps(source: string): TemplateOp[] {
   return ops;
 }
 
+function parseModeConditionalBlock(
+  source: string,
+  start: number,
+  startRe: RegExp,
+  endRe: RegExp,
+  mode: ConditionalMode,
+  options: CompileOptions = {},
+): { op: TemplateOp; end: number } {
+  const firstLine = takeLine(source, start);
+  const contentStart = start + firstLine.length;
+  const contentEnd = findNestedEnd(source, contentStart, startRe, endRe);
+  const endLine = takeLine(source, contentEnd);
+
+  return {
+    op: {
+      type: 'if',
+      mode,
+      expression: '',
+      body: parseOps(source.slice(contentStart, contentEnd), options),
+    },
+    end: contentEnd + endLine.length,
+  };
+}
+
 function parseConditionalBlock(
   source: string,
   start: number,
+  options: CompileOptions = {},
 ): { op: TemplateOp; end: number } {
   const firstLine = takeLine(source, start);
   const expression = firstLine.trim().match(IF_RE)?.[1] ?? 'false';
   const contentStart = start + firstLine.length;
   const contentEnd = findNestedEnd(source, contentStart, IF_RE, ENDIF_RE);
   const endifLine = takeLine(source, contentEnd);
-  const branches = splitConditionalBranches(source.slice(contentStart, contentEnd));
+  const branches = splitConditionalBranches(source.slice(contentStart, contentEnd), options);
   const [first, ...rest] = branches;
   const elseBody = rest.length > 0 ? flattenBranches(rest) : undefined;
 
@@ -255,6 +405,7 @@ function parseConditionalBlock(
 
 function splitConditionalBranches(
   content: string,
+  options: CompileOptions = {},
 ): Array<{ expression?: string; body: TemplateOp[] }> {
   const branches: Array<{ expression?: string; body: TemplateOp[] }> = [{ body: [] }];
   let cursor = 0;
@@ -283,7 +434,7 @@ function splitConditionalBranches(
     const current = branches[branches.length - 1];
 
     if (current && chunk.length > 0) {
-      current.body.push(...parseOps(chunk));
+      current.body.push(...parseOps(chunk, options));
     }
 
     if (end <= cursor) {
@@ -329,7 +480,8 @@ function parseSimpleConditionalBlock(
   start: number,
   startRe: RegExp,
   endRe: RegExp,
-  mode: 'unless' | 'isset' | 'empty',
+  mode: ConditionalMode,
+  options: CompileOptions = {},
 ): { op: TemplateOp; end: number } {
   const firstLine = takeLine(source, start);
   const expression = firstLine.trim().match(startRe)?.[1] ?? '';
@@ -342,7 +494,7 @@ function parseSimpleConditionalBlock(
       type: 'if',
       mode,
       expression,
-      body: parseOps(source.slice(contentStart, contentEnd)),
+      body: parseOps(source.slice(contentStart, contentEnd), options),
     },
     end: contentEnd + endLine.length,
   };
@@ -351,6 +503,7 @@ function parseSimpleConditionalBlock(
 function parseForelseBlock(
   source: string,
   start: number,
+  options: CompileOptions = {},
 ): { op: TemplateOp; end: number } {
   const firstLine = takeLine(source, start);
   const expression = firstLine.trim().match(FORELSE_RE)?.[1] ?? '[]';
@@ -364,8 +517,8 @@ function parseForelseBlock(
     op: {
       type: 'forelse',
       expression,
-      body: parseOps(content.slice(0, emptyBoundary.start)),
-      emptyBody: parseOps(content.slice(emptyBoundary.end)),
+      body: parseOps(content.slice(0, emptyBoundary.start), options),
+      emptyBody: parseOps(content.slice(emptyBoundary.end), options),
     },
     end: contentEnd + endLine.length,
   };
@@ -402,6 +555,7 @@ function parsePushBlock(
   source: string,
   start: number,
   name: string,
+  options: CompileOptions = {},
 ): { op: TemplateOp; end: number } {
   const headerLine = takeLine(source, start);
   const contentStart = start + headerLine.length;
@@ -412,7 +566,7 @@ function parsePushBlock(
     op: {
       type: 'push',
       name,
-      body: parseOps(source.slice(contentStart, contentEnd)),
+      body: parseOps(source.slice(contentStart, contentEnd), options),
     },
     end: contentEnd + endLine.length,
   };
@@ -421,6 +575,7 @@ function parsePushBlock(
 function parseForeachBlock(
   source: string,
   start: number,
+  options: CompileOptions = {},
 ): { op: TemplateOp; end: number } {
   const firstLine = takeLine(source, start);
   const expression = firstLine.trim().match(FOREACH_RE)?.[1] ?? '[]';
@@ -432,7 +587,7 @@ function parseForeachBlock(
     op: {
       type: 'foreach',
       expression,
-      body: parseOps(source.slice(contentStart, contentEnd)),
+      body: parseOps(source.slice(contentStart, contentEnd), options),
     },
     end: contentEnd + endLine.length,
   };
@@ -444,12 +599,13 @@ function parseComponentBlock(
   name: string,
   dataExpression: string | undefined,
   closeAt: number,
+  options: CompileOptions = {},
 ): { op: TemplateOp; end: number } {
   const headerLine = takeLine(source, start);
   const bodyStart = start + headerLine.length;
   const body = source.slice(bodyStart, closeAt);
   const closeLine = takeLine(source, closeAt);
-  const { defaultSlot, namedSlots } = parseSlotAwareBody(body);
+  const { defaultSlot, namedSlots } = parseSlotAwareBody(body, options);
 
   return {
     op: {
@@ -488,7 +644,10 @@ function findPartnerEndComponent(source: string, searchStart: number): number {
   return -1;
 }
 
-function parseSlotAwareBody(content: string): {
+function parseSlotAwareBody(
+  content: string,
+  options: CompileOptions = {},
+): {
   defaultSlot: TemplateOp[];
   namedSlots: Record<string, TemplateOp[]>;
 } {
@@ -510,7 +669,10 @@ function parseSlotAwareBody(content: string): {
         SLOT_END_RE,
       );
       const endLine = takeLine(content, slotContentEnd);
-      namedSlots[slotMatch[1]!] = parseOps(content.slice(slotContentStart, slotContentEnd));
+      namedSlots[slotMatch[1]!] = parseOps(
+        content.slice(slotContentStart, slotContentEnd),
+        options,
+      );
       cursor = slotContentEnd + endLine.length;
       continue;
     }
@@ -520,7 +682,7 @@ function parseSlotAwareBody(content: string): {
     const chunk = content.slice(cursor, chunkEnd);
 
     if (chunk.trim().length > 0) {
-      defaultSlot.push(...parseOps(chunk));
+      defaultSlot.push(...parseOps(chunk, options));
     }
 
     cursor = nextSlot === -1 ? content.length : nextSlot;
@@ -547,6 +709,7 @@ function parseSectionBlock(
   source: string,
   start: number,
   name: string,
+  options: CompileOptions = {},
 ): { op: TemplateOp; end: number } {
   const headerLine = takeLine(source, start);
   const contentStart = start + headerLine.length;
@@ -557,7 +720,7 @@ function parseSectionBlock(
     op: {
       type: 'section',
       name,
-      body: parseOps(source.slice(contentStart, contentEnd)),
+      body: parseOps(source.slice(contentStart, contentEnd), options),
     },
     end: contentEnd + endLine.length,
   };

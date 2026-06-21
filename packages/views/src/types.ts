@@ -10,7 +10,7 @@ export interface CompiledTemplate {
   ops: TemplateOp[];
 }
 
-export type ConditionalMode = 'if' | 'unless' | 'isset' | 'empty';
+export type ConditionalMode = 'if' | 'unless' | 'isset' | 'empty' | 'auth' | 'guest' | 'can';
 
 export type TemplateOp =
   | { type: 'text'; value: string }
@@ -29,6 +29,9 @@ export type TemplateOp =
   | { type: 'push'; name: string; body: TemplateOp[] }
   | { type: 'stack'; name: string; defaultValue?: string }
   | { type: 'include'; name: string; dataExpression?: string }
+  | { type: 'includeIf'; name: string; dataExpression?: string }
+  | { type: 'includeWhen'; name: string; conditionExpression: string; dataExpression?: string }
+  | { type: 'custom'; name: string; expression: string }
   | {
       type: 'component';
       name: string;

@@ -1,4 +1,24 @@
+import type { ViewExpressionBindings } from './view-registry.js';
 import type { ViewContext } from './types.js';
+
+export function mergeEvaluationContext(
+  context: ViewContext,
+  bindings?: ViewExpressionBindings,
+): ViewContext {
+  if (!bindings) {
+    return context;
+  }
+
+  const merged: ViewContext = { ...context };
+
+  for (const [key, value] of Object.entries(bindings)) {
+    if (typeof value === 'function') {
+      merged[key] = value;
+    }
+  }
+
+  return merged;
+}
 
 export function evaluateExpression(expression: string, context: ViewContext): unknown {
   const trimmed = expression.trim();

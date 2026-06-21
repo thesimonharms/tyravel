@@ -139,6 +139,41 @@ describe('compile', () => {
     });
   });
 
+  it('parses includeIf, includeWhen, auth directives, and custom directives', () => {
+    const source = `@includeIf('partials.missing')
+@includeWhen(showHeader, 'partials.header', { title: 'Home' })
+
+@auth
+  <p>Authenticated</p>
+@endauth
+
+@guest
+  <p>Guest</p>
+@endguest
+
+@can('edit', post)
+  <button>Edit</button>
+@endcan
+
+@datetime(createdAt)
+`;
+
+    const template = compile(source, { customDirectives: new Set(['datetime']) });
+
+    expect(template.ops.some((op) => op.type === 'includeIf')).toBe(true);
+    expect(template.ops.some((op) => op.type === 'includeWhen')).toBe(true);
+    expect(template.ops.some((op) => op.type === 'if' && op.mode === 'auth')).toBe(
+      true,
+    );
+    expect(template.ops.some((op) => op.type === 'if' && op.mode === 'guest')).toBe(
+      true,
+    );
+    expect(template.ops.some((op) => op.type === 'if' && op.mode === 'can')).toBe(true);
+    expect(template.ops.some((op) => op.type === 'custom' && op.name === 'datetime')).toBe(
+      true,
+    );
+  });
+
   it('parses nested component blocks', () => {
     const source = `@component('components.shell')
   @component('components.alert', { message: 'Nested' })

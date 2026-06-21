@@ -24,7 +24,7 @@ export async function renderOps(
       }
 
       case 'if': {
-        const result = evaluateConditional(op, context);
+        const result = await evaluateConditional(op, context, engine);
         if (result) {
           await renderOps(op.body, context, helpers, engine);
         } else if (op.elseBody) {
@@ -69,17 +69,37 @@ export async function renderOps(
         helpers.append(helpers.yield(op.name, op.defaultValue ?? ''));
         break;
 
-      case 'include': {
-        const data = op.dataExpression
-          ? (evaluateExpression(op.dataExpression, context) as ViewContext)
-          : context;
-        const html = await engine.render(
-          op.name,
-          data,
-          helpers.getSections(),
-          helpers.getStacks(),
+      case 'include':
+        helpers.append(
+          await renderInclude(op.name, op.dataExpression, context, helpers, engine),
         );
-        helpers.append(html);
+        break;
+
+      case 'includeIf':
+        if (engine.exists(op.name)) {
+          helpers.append(
+            await renderInclude(op.name, op.dataExpression, context, helpers, engine),
+          );
+        }
+        break;
+
+      case 'includeWhen': {
+        const shouldInclude = Boolean(evaluateExpression(op.conditionExpression, context));
+        if (shouldInclude) {
+          helpers.append(
+            await renderInclude(op.name, op.dataExpression, context, helpers, engine),
+          );
+        }
+        break;
+      }
+
+      case 'custom': {
+        const handler = engine.getRegistry().getDirective(op.name);
+        if (!handler) {
+          break;
+        }
+        const output = await handler(op.expression, context);
+        helpers.append(String(output ?? ''));
         break;
       }
 
@@ -119,10 +139,13 @@ export async function renderOps(
   }
 }
 
-function evaluateConditional(
+async function evaluateConditional(
   op: Extract<TemplateOp, { type: 'if' }>,
   context: ViewContext,
-): boolean {
+  engine: ViewEngine,
+): Promise<boolean> {
+  const auth = engine.getRegistry().getAuth();
+
   switch (op.mode) {
     case 'unless':
       return !Boolean(evaluateExpression(op.expression, context));
@@ -130,9 +153,68 @@ function evaluateConditional(
       return isViewSet(op.expression, context);
     case 'empty':
       return isViewEmpty(evaluateExpression(op.expression, context));
+    case 'auth': {
+      if (!auth) {
+        return false;
+      }
+      const result = auth.check();
+      return result instanceof Promise ? result : result;
+    }
+    case 'guest': {
+      if (!auth) {
+        return true;
+      }
+      const result = auth.check();
+      const checked = result instanceof Promise ? await result : result;
+      return !checked;
+    }
+    case 'can': {
+      if (!auth) {
+        return false;
+      }
+      const parsed = parseCanExpression(op.expression);
+      const model =
+        parsed.modelExpression === undefined
+          ? undefined
+          : evaluateExpression(parsed.modelExpression, context);
+      const result = auth.can(parsed.ability, model);
+      return result instanceof Promise ? result : result;
+    }
     default:
       return Boolean(evaluateExpression(op.expression, context));
   }
+}
+
+function parseCanExpression(expression: string): {
+  ability: string;
+  modelExpression?: string;
+} {
+  const quoted = expression.match(/^['"]([^'"]+)['"]\s*(?:,\s*(.+))?$/);
+  if (quoted) {
+    return {
+      ability: quoted[1]!,
+      modelExpression: quoted[2]?.trim(),
+    };
+  }
+
+  const [ability, ...rest] = expression.split(',').map((part) => part.trim());
+  return {
+    ability: ability ?? '',
+    modelExpression: rest.length > 0 ? rest.join(', ') : undefined,
+  };
+}
+
+async function renderInclude(
+  name: string,
+  dataExpression: string | undefined,
+  context: ViewContext,
+  helpers: ViewHelpers,
+  engine: ViewEngine,
+): Promise<string> {
+  const data = dataExpression
+    ? (evaluateExpression(dataExpression, context) as ViewContext)
+    : context;
+  return engine.render(name, data, helpers.getSections(), helpers.getStacks());
 }
 
 async function renderForeachBody(

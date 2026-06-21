@@ -100,11 +100,11 @@ Make `.tyr` feel as productive as Blade for full-stack apps — TypeScript-nativ
 
 ### P1 — Strong want
 
-- [ ] **Custom directives** — `View::directive('datetime', handler)` to register project-specific `@datetime(...)` tags without forking the compiler.
-- [ ] **View composers** — attach shared data to named views or wildcards (`View::composer('posts.*', fn => ...)`).
-- [ ] **Conditional includes** — `@includeIf`, `@includeWhen` for partials.
-- [ ] **Auth-aware directives** — `@auth`, `@guest`, `@can` wired to `@tyravel/auth` (optional when auth provider is registered).
-- [ ] **View helpers in templates** — `route()`, `asset()`, `config()` (and `old()` for forms) available in expression context.
+- [x] **Custom directives** — `View::directive('datetime', handler)` to register project-specific `@datetime(...)` tags without forking the compiler.
+- [x] **View composers** — attach shared data to named views or wildcards (`View::composer('posts.*', fn => ...)`).
+- [x] **Conditional includes** — `@includeIf`, `@includeWhen` for partials.
+- [x] **Auth-aware directives** — `@auth`, `@guest`, `@can` wired to `@tyravel/auth` (optional when auth provider is registered).
+- [x] **View helpers in templates** — `route()`, `asset()`, `config()` (and `old()` for forms) available in expression context.
 
 ### P2 — If scope allows
 
