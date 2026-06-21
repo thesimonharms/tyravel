@@ -10,3 +10,4 @@ export type { SendQueuedNotificationData } from './send-queued-notification.js';
 export { setQueuedNotificationContext } from './queued-notification-context.js';
 export { SerializedNotifiable, serializeNotifiable } from './serialized-notifiable.js';
 export type { NotificationQueueBridge } from './queue-bridge.js';
+export { NOTIFICATIONS_VIEWS_PATH } from './views-path.js';

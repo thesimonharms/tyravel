@@ -36,6 +36,10 @@ export interface ViewComponentBinding {
   ): Record<string, unknown> | Promise<Record<string, unknown>>;
 }
 
+export interface ViewLocaleBindings {
+  translate(key: string, replacements?: Record<string, string | number>): string;
+}
+
 interface ComposerEntry {
   pattern: RegExp;
   handler: ViewComposerHandler;
@@ -49,6 +53,8 @@ export class ViewRegistry {
   private bindings: ViewExpressionBindings = {};
   private auth?: ViewAuthBindings;
   private form?: ViewFormBindings;
+  private locale?: ViewLocaleBindings;
+  private environment = 'production';
   private compileVersion = 0;
 
   directive(name: string, handler: CustomDirectiveHandler): this {
@@ -83,6 +89,24 @@ export class ViewRegistry {
   setForm(form: ViewFormBindings | undefined): this {
     this.form = form;
     return this;
+  }
+
+  setLocale(locale: ViewLocaleBindings | undefined): this {
+    this.locale = locale;
+    return this;
+  }
+
+  setEnvironment(environment: string): this {
+    this.environment = environment;
+    return this;
+  }
+
+  getLocale(): ViewLocaleBindings | undefined {
+    return this.locale;
+  }
+
+  getEnvironment(): string {
+    return this.environment;
   }
 
   component(name: string, binding: ViewComponentBinding): this {

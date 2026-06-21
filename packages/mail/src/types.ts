@@ -12,6 +12,9 @@ export interface MailMessage {
   replyTo?: MailAddress;
   text?: string;
   html?: string;
+  htmlView?: string;
+  textView?: string;
+  viewData?: Record<string, unknown>;
   tags?: string[];
 }
 

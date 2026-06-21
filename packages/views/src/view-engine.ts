@@ -1,4 +1,4 @@
-import { readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   cacheFileForView,
@@ -9,8 +9,15 @@ import {
 } from './compiled-cache.js';
 import { compile, type CompileOptions } from './compiler.js';
 import { mergeEvaluationContext } from './evaluate.js';
+import {
+  flattenTranslations,
+  loadLocaleFile,
+  resolveLocalePath,
+  translate,
+} from './locale.js';
 import { renderOps } from './renderer.js';
 import type { CompiledTemplate, ViewConfig, ViewContext } from './types.js';
+import { parseViewName } from './view-namespaces.js';
 import {
   ViewRegistry,
   type CustomDirectiveHandler,
@@ -19,8 +26,10 @@ import {
   type ViewComposerHandler,
   type ViewExpressionBindings,
   type ViewFormBindings,
+  type ViewLocaleBindings,
 } from './view-registry.js';
 import { ViewHelpers } from './view-helpers.js';
+import { readViteManifest, renderViteTags, type ViteManifest } from './vite-helpers.js';
 
 interface CacheEntry {
   mtimeMs: number;
@@ -29,12 +38,22 @@ interface CacheEntry {
 }
 
 const DEFAULT_COMPILED_PATH = 'storage/framework/views';
+const DEFAULT_LOCALES_PATH = 'resources/lang';
+const DEFAULT_MANIFEST_PATH = 'public/build/manifest.json';
+const DEFAULT_VITE_BASE = '/build';
 
 export class ViewEngine {
   private readonly cache = new Map<string, CacheEntry>();
   private readonly extension: string;
   private readonly registry = new ViewRegistry();
   private readonly viewsRoot: string;
+  private readonly namespaces = new Map<string, string>();
+  private readonly localesPath: string;
+  private readonly manifestPath: string;
+  private readonly viteBase: string;
+  private localeCode: string;
+  private translations: Record<string, string> = {};
+  private viteManifest?: ViteManifest;
   private compiledCacheDirectory?: string;
 
   constructor(
@@ -50,6 +69,24 @@ export class ViewEngine {
         config.compiledPath ?? DEFAULT_COMPILED_PATH,
       );
     }
+
+    this.localesPath = config.localesPath ?? DEFAULT_LOCALES_PATH;
+    this.manifestPath = join(this.basePath, config.manifestPath ?? DEFAULT_MANIFEST_PATH);
+    this.viteBase = config.viteBase ?? DEFAULT_VITE_BASE;
+    this.localeCode = config.locale ?? 'en';
+
+    if (config.namespaces) {
+      for (const [name, path] of Object.entries(config.namespaces)) {
+        this.namespaces.set(name, this.resolveNamespacePath(path));
+      }
+    }
+
+    if (config.env) {
+      this.registry.setEnvironment(config.env);
+    }
+
+    this.reloadLocale();
+    this.syncTranslatorBinding();
   }
 
   directive(name: string, handler: CustomDirectiveHandler): this {
@@ -88,6 +125,23 @@ export class ViewEngine {
     return this;
   }
 
+  namespace(name: string, path: string): this {
+    this.namespaces.set(name, this.resolveNamespacePath(path));
+    return this;
+  }
+
+  setLocale(locale: string): this {
+    this.localeCode = locale;
+    this.reloadLocale();
+    this.syncTranslatorBinding();
+    return this;
+  }
+
+  setEnvironment(environment: string): this {
+    this.registry.setEnvironment(environment);
+    return this;
+  }
+
   getCompiledTemplate(name: string): CompiledTemplate {
     return this.loadTemplate(this.resolveName(name));
   }
@@ -106,6 +160,15 @@ export class ViewEngine {
   }
 
   resolveName(name: string): string {
+    const parsed = parseViewName(name);
+
+    if (parsed.namespace) {
+      if (this.existsAt(name)) {
+        return name;
+      }
+      return name;
+    }
+
     if (this.existsAt(name)) {
       return name;
     }
@@ -126,8 +189,9 @@ export class ViewEngine {
     parentOnceRendered?: Set<string>,
     parentComponentPropsStack?: Record<string, unknown>[],
   ): Promise<string> {
-    const template = this.loadTemplate(name);
-    const composed = await this.registry.applyComposers(name, context);
+    const resolved = this.resolveName(name);
+    const template = this.loadTemplate(resolved);
+    const composed = await this.registry.applyComposers(resolved, context);
     const renderContext = this.buildEvaluationContext(this.mergeFormContext(composed));
     const helpers = new ViewHelpers(
       parentStacks,
@@ -161,7 +225,30 @@ export class ViewEngine {
   }
 
   exists(name: string): boolean {
-    return this.existsAt(name) || this.existsAt(`components.${name}`);
+    if (this.existsAt(name)) {
+      return true;
+    }
+
+    const parsed = parseViewName(name);
+    if (!parsed.namespace) {
+      return this.existsAt(`components.${name}`);
+    }
+
+    return false;
+  }
+
+  renderVite(entry: string): string {
+    if (!this.viteManifest) {
+      this.viteManifest = readViteManifest(this.manifestPath);
+    }
+    return renderViteTags(this.viteManifest, entry, this.viteBase);
+  }
+
+  translate(
+    key: string,
+    replacements: Record<string, string | number> = {},
+  ): string {
+    return translate(key, this.translations, replacements);
   }
 
   async warmCompiledCache(): Promise<number> {
@@ -187,7 +274,13 @@ export class ViewEngine {
   }
 
   listViewNames(): string[] {
-    return discoverViewNames(this.viewsRoot, this.extension);
+    const names = discoverViewNames(this.viewsRoot, this.extension);
+    for (const [namespace, root] of this.namespaces.entries()) {
+      for (const view of discoverViewNames(root, this.extension)) {
+        names.push(`${namespace}::${view}`);
+      }
+    }
+    return names;
   }
 
   private existsAt(name: string): boolean {
@@ -260,7 +353,55 @@ export class ViewEngine {
   }
 
   private resolvePath(name: string): string {
-    const relative = name.replace(/\./g, '/');
-    return join(this.viewsRoot, `${relative}${this.extension}`);
+    const parsed = parseViewName(name);
+    const relative = parsed.view.replace(/\./g, '/');
+    const root = this.resolveNamespaceRoot(parsed.namespace);
+    return join(root, `${relative}${this.extension}`);
+  }
+
+  private resolveNamespaceRoot(namespace?: string): string {
+    if (!namespace) {
+      return this.viewsRoot;
+    }
+
+    const configured = this.namespaces.get(namespace);
+    if (configured) {
+      return configured;
+    }
+
+    return join(this.viewsRoot, 'vendor', namespace);
+  }
+
+  private resolveNamespacePath(path: string): string {
+    return path.startsWith('/') || /^[A-Za-z]:[\\/]/.test(path)
+      ? path
+      : join(this.basePath, path);
+  }
+
+  private reloadLocale(): void {
+    const localePath = resolveLocalePath(this.basePath, this.localesPath, this.localeCode);
+    if (!existsSync(localePath)) {
+      this.translations = {};
+      this.registry.setLocale(undefined);
+      return;
+    }
+
+    const tree = loadLocaleFile(localePath);
+    this.translations = flattenTranslations(tree);
+    const localeBindings: ViewLocaleBindings = {
+      translate: (key, replacements = {}) => this.translate(key, replacements),
+    };
+    this.registry.setLocale(localeBindings);
+  }
+
+  private syncTranslatorBinding(): void {
+    this.registry.setBindings({
+      ...this.registry.getBindings(),
+      __: (key, replacements = {}) =>
+        this.translate(
+          String(key),
+          replacements as Record<string, string | number>,
+        ),
+    });
   }
 }

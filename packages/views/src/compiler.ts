@@ -3,6 +3,7 @@ import {
   parseAwareExpression,
   parsePropsExpression,
 } from './component-helpers.js';
+import { parseQuotedViewList } from './directive-parsers.js';
 import type {
   CompiledTemplate,
   ConditionalMode,
@@ -23,6 +24,15 @@ const BUILTIN_DIRECTIVES = new Set([
   'include',
   'includeIf',
   'includeWhen',
+  'includeFirst',
+  'env',
+  'endenv',
+  'production',
+  'endproduction',
+  'local',
+  'endlocal',
+  'lang',
+  'vite',
   'component',
   'endcomponent',
   'slot',
@@ -80,12 +90,23 @@ const INCLUDE_RE = /^@include\(\s*['"]([^'"]+)['"]\s*(?:,\s*(.+))?\)\s*$/;
 const INCLUDE_IF_RE = /^@includeIf\(\s*['"]([^'"]+)['"]\s*(?:,\s*(.+))?\)\s*$/;
 const INCLUDE_WHEN_RE =
   /^@includeWhen\(\s*(.+?)\s*,\s*['"]([^'"]+)['"]\s*(?:,\s*(.+))?\)\s*$/;
+const INCLUDE_FIRST_RE =
+  /^@includeFirst\(\s*\[([^\]]+)\]\s*(?:,\s*(.+))?\)\s*$/;
+const VIEW_NAME_RE = "['\"]([^'\"]+)['\"]";
 const AUTH_RE = /^@auth\s*$/;
 const ENDAUTH_RE = /^@endauth\s*$/;
 const GUEST_RE = /^@guest\s*$/;
 const ENDGUEST_RE = /^@endguest\s*$/;
 const CAN_RE = /^@can\s*\((.+)\)\s*$/;
 const ENDCAN_RE = /^@endcan\s*$/;
+const ENV_RE = /^@env\s*\((.+)\)\s*$/;
+const ENDENV_RE = /^@endenv\s*$/;
+const PRODUCTION_RE = /^@production\s*$/;
+const ENDPRODUCTION_RE = /^@endproduction\s*$/;
+const LOCAL_RE = /^@local\s*$/;
+const ENDLOCAL_RE = /^@endlocal\s*$/;
+const LANG_RE = new RegExp(`^@lang\\(\\s*${VIEW_NAME_RE}\\s*(?:,\\s*(.+))?\\s*\\)`);
+const VITE_RE = new RegExp(`^@vite\\(\\s*${VIEW_NAME_RE}\\s*\\)`);
 const CUSTOM_DIRECTIVE_RE = /^@([A-Za-z_][\w]*)\((.*)\)\s*$/;
 const COMPONENT_RE = /^@component\(\s*['"]([^'"]+)['"]\s*(?:,\s*(.+))?\)\s*$/;
 const ENDCOMPONENT_RE = /^@endcomponent\s*$/;
@@ -268,6 +289,49 @@ function parseOps(source: string, options: CompileOptions = {}): TemplateOp[] {
         CAN_RE,
         ENDCAN_RE,
         'can',
+      );
+      ops.push(block.op);
+      cursor = block.end;
+      continue;
+    }
+
+    const envMatch = trimmed.match(ENV_RE);
+    if (envMatch) {
+      const block = parseSimpleConditionalBlock(
+        source,
+        cursor,
+        ENV_RE,
+        ENDENV_RE,
+        'env',
+        options,
+      );
+      ops.push(block.op);
+      cursor = block.end;
+      continue;
+    }
+
+    const productionMatch = trimmed.match(PRODUCTION_RE);
+    if (productionMatch) {
+      const block = parseModeConditionalBlock(
+        source,
+        cursor,
+        PRODUCTION_RE,
+        ENDPRODUCTION_RE,
+        'production',
+      );
+      ops.push(block.op);
+      cursor = block.end;
+      continue;
+    }
+
+    const localMatch = trimmed.match(LOCAL_RE);
+    if (localMatch) {
+      const block = parseModeConditionalBlock(
+        source,
+        cursor,
+        LOCAL_RE,
+        ENDLOCAL_RE,
+        'local',
       );
       ops.push(block.op);
       cursor = block.end;
@@ -505,6 +569,17 @@ function parseOps(source: string, options: CompileOptions = {}): TemplateOp[] {
         conditionExpression: includeWhenMatch[1]!.trim(),
         name: includeWhenMatch[2]!,
         dataExpression: includeWhenMatch[3]?.trim(),
+      });
+      cursor += line.length;
+      continue;
+    }
+
+    const includeFirstMatch = trimmed.match(INCLUDE_FIRST_RE);
+    if (includeFirstMatch) {
+      ops.push({
+        type: 'includeFirst',
+        names: parseQuotedViewList(includeFirstMatch[1]!),
+        dataExpression: includeFirstMatch[2]?.trim(),
       });
       cursor += line.length;
       continue;
@@ -1254,6 +1329,26 @@ function parseInlineDirective(
     return {
       op: { type: 'style', expression: styleDirective.expression },
       length: styleDirective.length,
+    };
+  }
+
+  const langMatch = source.match(LANG_RE);
+  if (langMatch) {
+    return {
+      op: {
+        type: 'lang',
+        key: langMatch[1]!,
+        replaceExpression: langMatch[2]?.trim(),
+      },
+      length: langMatch[0].length,
+    };
+  }
+
+  const viteMatch = source.match(VITE_RE);
+  if (viteMatch) {
+    return {
+      op: { type: 'vite', entry: viteMatch[1]! },
+      length: viteMatch[0].length,
     };
   }
 

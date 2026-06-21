@@ -532,4 +532,69 @@ describe('ViewEngine', () => {
     expect(html).toContain('style="color: blue"');
     expect(html).not.toContain('hidden');
   });
+
+  it('renders P5 namespaces, env directives, localization, vite, and includeFirst', async () => {
+    const { basePath, engine } = createFixture();
+
+    engine.namespace('admin', join(basePath, 'resources/views/vendor/admin'));
+    engine.setEnvironment('local');
+
+    mkdirSync(join(basePath, 'resources/views/vendor/admin/partials'), { recursive: true });
+    mkdirSync(join(basePath, 'resources/lang'), { recursive: true });
+    mkdirSync(join(basePath, 'public/build'), { recursive: true });
+
+    writeFileSync(
+      join(basePath, 'resources/views/vendor/admin/partials/nav.tyr'),
+      '<nav>Admin nav</nav>',
+    );
+    mkdirSync(join(basePath, 'resources/views/partials'), { recursive: true });
+    writeFileSync(
+      join(basePath, 'resources/views/partials/fallback-nav.tyr'),
+      '<nav>Fallback</nav>',
+    );
+    writeFileSync(
+      join(basePath, 'resources/lang/en.json'),
+      JSON.stringify({ messages: { welcome: 'Hello :name' } }),
+    );
+    writeFileSync(
+      join(basePath, 'public/build/manifest.json'),
+      JSON.stringify({
+        'resources/js/app.ts': {
+          file: 'assets/app.js',
+          css: ['assets/app.css'],
+        },
+      }),
+    );
+    writeFileSync(
+      join(basePath, 'resources/views/p5.tyr'),
+      `@include('admin::partials.nav')
+@includeFirst(['partials.missing-nav', 'partials.fallback-nav'])
+@production
+  <p>Prod only</p>
+@endproduction
+@local
+  <p>Local only</p>
+@endlocal
+@env('staging', 'local')
+  <p>Non-production env</p>
+@endenv
+<p>@lang('messages.welcome', { name: 'Ada' })</p>
+<p>{{ __('messages.welcome', { name: 'Grace' }) }}</p>
+@vite('resources/js/app.ts')
+`,
+    );
+
+    engine.setLocale('en');
+    const html = await engine.render('p5', {});
+
+    expect(html).toContain('<nav>Admin nav</nav>');
+    expect(html).toContain('<nav>Fallback</nav>');
+    expect(html).not.toContain('Prod only');
+    expect(html).toContain('<p>Local only</p>');
+    expect(html).toContain('<p>Non-production env</p>');
+    expect(html).toContain('<p>Hello Ada</p>');
+    expect(html).toContain('<p>Hello Grace</p>');
+    expect(html).toContain('/build/assets/app.js');
+    expect(html).toContain('/build/assets/app.css');
+  });
 });

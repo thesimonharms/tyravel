@@ -4,6 +4,7 @@ import {
   renderClassDirective,
   renderStyleDirective,
 } from './component-helpers.js';
+import { parseQuotedStrings } from './directive-parsers.js';
 import { isIterableEmpty, isViewEmpty, isViewSet } from './conditions.js';
 import { escapeHtml } from './escape.js';
 import { evaluateExpression, parseForeachExpression } from './evaluate.js';
@@ -187,6 +188,34 @@ export async function renderOps(
         break;
       }
 
+      case 'includeFirst': {
+        for (const name of op.names) {
+          if (!engine.exists(name)) {
+            continue;
+          }
+          helpers.append(
+            await renderInclude(name, op.dataExpression, context, helpers, engine),
+          );
+          break;
+        }
+        break;
+      }
+
+      case 'lang': {
+        const replacements = op.replaceExpression
+          ? ((evaluateExpression(op.replaceExpression, context) as Record<
+              string,
+              string | number
+            >) ?? {})
+          : {};
+        helpers.append(escapeHtml(engine.translate(op.key, replacements)));
+        break;
+      }
+
+      case 'vite':
+        helpers.append(engine.renderVite(op.entry));
+        break;
+
       case 'custom': {
         const handler = engine.getRegistry().getDirective(op.name);
         if (!handler) {
@@ -330,6 +359,15 @@ async function evaluateConditional(
       const errors = resolveErrorBag(context);
       return errors.has(op.expression);
     }
+    case 'env': {
+      const current = engine.getRegistry().getEnvironment();
+      const allowed = parseQuotedStrings(op.expression);
+      return allowed.includes(current);
+    }
+    case 'production':
+      return engine.getRegistry().getEnvironment() === 'production';
+    case 'local':
+      return engine.getRegistry().getEnvironment() === 'local';
     default:
       return Boolean(evaluateExpression(op.expression, context));
   }

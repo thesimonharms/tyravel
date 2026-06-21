@@ -1,4 +1,6 @@
 export type { MailAddress, MailConfig, MailConnectionConfig, MailMessage, SmtpMailConfig } from './types.js';
+export { renderMailViews } from './render-views.js';
+export { MAIL_VIEWS_PATH } from './views-path.js';
 export { SmtpMailTransport } from './smtp-transport.js';
 export { buildMimeMessage } from './mime.js';
 export { Mailable } from './mailable.js';

@@ -14,6 +14,7 @@ import { setViewApplication, setViewRequest } from './view.js';
 const DEFAULT_VIEW_CONFIG: ViewConfig = {
   path: 'resources/views',
   extension: '.tyr',
+  env: process.env.NODE_ENV ?? 'production',
 };
 
 function joinAssetUrl(base: string, path: string): string {
@@ -71,6 +72,15 @@ export class ViewServiceProvider extends ServiceProvider {
     const engine = this.app.make<ViewEngine>('view');
     const config = this.app.make<ConfigRepository>('config');
 
+    const environment = String(
+      viewConfig.env ?? config.get('app.env', process.env.NODE_ENV ?? 'production'),
+    );
+    engine.setEnvironment(environment);
+
+    if (viewConfig.locale) {
+      engine.setLocale(viewConfig.locale);
+    }
+
     const applyBindings = (request?: TyravelRequest) => {
       engine.setBindings({
         route: (name, params = {}) => {
@@ -83,6 +93,11 @@ export class ViewServiceProvider extends ServiceProvider {
           joinAssetUrl(String(config.get('app.asset_url', '') ?? ''), path),
         config: (key, defaultValue) => config.get(key, defaultValue),
         old: (key, defaultValue) => readOldInput(request, key, defaultValue),
+        __: (key, replacements = {}) =>
+          engine.translate(
+            String(key),
+            replacements as Record<string, string | number>,
+          ),
       });
       engine.setForm({
         csrfToken: () => ensureCsrfToken(request),

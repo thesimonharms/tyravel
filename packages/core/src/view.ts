@@ -43,6 +43,9 @@ export interface ViewFacade {
   setBindings(bindings: ViewExpressionBindings): ViewFacade;
   setAuth(auth: ViewAuthBindings | undefined): ViewFacade;
   component(name: string, binding: ViewComponentBinding): ViewFacade;
+  namespace(name: string, path: string): ViewFacade;
+  setLocale(locale: string): ViewFacade;
+  setEnvironment(environment: string): ViewFacade;
 }
 
 export const View: ViewFacade = {
@@ -70,6 +73,18 @@ export const View: ViewFacade = {
   },
   component: (name, binding) => {
     viewEngine().component(name, binding);
+    return View;
+  },
+  namespace: (name, path) => {
+    viewEngine().namespace(name, path);
+    return View;
+  },
+  setLocale: (locale) => {
+    viewEngine().setLocale(locale);
+    return View;
+  },
+  setEnvironment: (environment) => {
+    viewEngine().setEnvironment(environment);
     return View;
   },
 };

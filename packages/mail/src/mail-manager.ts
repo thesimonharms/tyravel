@@ -1,18 +1,26 @@
+import type { ViewEngine } from '@tyravel/views';
 import { ArrayMailTransport, LogMailTransport, type MailTransport } from './transport.js';
 import { SmtpMailTransport } from './smtp-transport.js';
 import type { MailAddress, MailConfig, MailConnectionConfig, MailMessage } from './types.js';
 import { Mailable } from './mailable.js';
 import type { MailQueueBridge } from './queue-bridge.js';
+import { renderMailViews } from './render-views.js';
 import { SendMailable } from './send-mailable.js';
 
 export class MailManager {
   private readonly transports = new Map<string, MailTransport>();
   private queueDefaults: { connection?: string; queue?: string } = {};
+  private viewEngine?: ViewEngine;
 
   constructor(
     private readonly config: MailConfig,
     private readonly queue?: MailQueueBridge,
   ) {}
+
+  setViewEngine(engine: ViewEngine | undefined): this {
+    this.viewEngine = engine;
+    return this;
+  }
 
   setQueueDefaults(options: { connection?: string; queue?: string }): void {
     this.queueDefaults = options;
@@ -26,6 +34,7 @@ export class MailManager {
       connection,
       this.queue,
       this.queueDefaults,
+      this.viewEngine,
     );
   }
 
@@ -72,6 +81,7 @@ export class Mailer {
     private readonly mailConnection: string,
     private readonly queue?: MailQueueBridge,
     private readonly queueDefaults: { connection?: string; queue?: string } = {},
+    private readonly viewEngine?: ViewEngine,
   ) {}
 
   to(address: string | MailAddress | Array<string | MailAddress>): this {
@@ -101,7 +111,7 @@ export class Mailer {
   private async mergeMessage(mailable: Mailable | MailMessage): Promise<MailMessage> {
     const resolved: MailMessage =
       mailable instanceof Mailable ? await mailable.toMessage() : mailable;
-    const merged: MailMessage = {
+    let merged: MailMessage = {
       subject: resolved.subject,
       from: resolved.from ?? this.defaultFrom,
       to: resolved.to.length > 0 ? resolved.to : this.recipients,
@@ -110,8 +120,16 @@ export class Mailer {
       replyTo: resolved.replyTo,
       text: resolved.text,
       html: resolved.html,
+      htmlView: resolved.htmlView,
+      textView: resolved.textView,
+      viewData: resolved.viewData,
       tags: resolved.tags,
     };
+
+    if (this.viewEngine && (merged.htmlView || merged.textView)) {
+      merged = await renderMailViews(this.viewEngine, merged);
+    }
+
     if (merged.to.length === 0) {
       throw new Error('Mail message requires at least one recipient.');
     }

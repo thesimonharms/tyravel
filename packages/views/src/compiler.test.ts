@@ -284,4 +284,31 @@ describe('compile', () => {
       true,
     );
   });
+
+  it('parses P5 includeFirst, env, lang, and vite directives', () => {
+    const source = `@includeFirst(['admin::partials.nav', 'partials.nav'])
+@env('local', 'staging')
+  <p>Dev</p>
+@endenv
+@production
+  <p>Prod</p>
+@endproduction
+@local
+  <p>Local</p>
+@endlocal
+<p>@lang('messages.welcome', { name: 'Ada' })</p>
+@vite('resources/js/app.ts')
+`;
+
+    const template = compile(source);
+
+    expect(template.ops.find((op) => op.type === 'includeFirst')).toMatchObject({
+      names: ['admin::partials.nav', 'partials.nav'],
+    });
+    expect(template.ops.some((op) => op.type === 'if' && op.mode === 'env')).toBe(true);
+    expect(template.ops.some((op) => op.type === 'if' && op.mode === 'production')).toBe(true);
+    expect(template.ops.some((op) => op.type === 'if' && op.mode === 'local')).toBe(true);
+    expect(template.ops.some((op) => op.type === 'lang')).toBe(true);
+    expect(template.ops.some((op) => op.type === 'vite')).toBe(true);
+  });
 });

@@ -1,7 +1,15 @@
 import { ConfigRepository } from '@tyravel/config';
-import { MailManager, SendMailable, setQueuedMailContext, type MailConfig, type MailQueueBridge } from '@tyravel/mail';
+import {
+  MAIL_VIEWS_PATH,
+  MailManager,
+  SendMailable,
+  setQueuedMailContext,
+  type MailConfig,
+  type MailQueueBridge,
+} from '@tyravel/mail';
 import { Dispatcher, JobRegistry, QueueManager } from '@tyravel/queue';
 import type { Job } from '@tyravel/queue';
+import { ViewEngine } from '@tyravel/views';
 import { ServiceProvider } from './service-provider.js';
 
 export class MailServiceProvider extends ServiceProvider {
@@ -21,6 +29,17 @@ export class MailServiceProvider extends ServiceProvider {
     setQueuedMailContext({ manager });
 
     this.registerSendMailableJob();
+  }
+
+  override boot() {
+    try {
+      const view = this.app.make<ViewEngine>('view');
+      const mail = this.app.make<MailManager>('mail');
+      mail.setViewEngine(view);
+      view.namespace('mail', MAIL_VIEWS_PATH);
+    } catch {
+      // View provider not registered.
+    }
   }
 
   private createQueueBridge(): MailQueueBridge | undefined {

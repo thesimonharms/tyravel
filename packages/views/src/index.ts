@@ -10,6 +10,18 @@ export { compile, type CompileOptions } from './compiler.js';
 export { escapeHtml } from './escape.js';
 export { evaluateExpression, mergeEvaluationContext } from './evaluate.js';
 export { ViewEngine } from './view-engine.js';
+export { parseViewName } from './view-namespaces.js';
+export {
+  flattenTranslations,
+  loadLocaleFile,
+  translate,
+} from './locale.js';
+export {
+  readViteManifest,
+  renderViteTags,
+  type ViteManifest,
+  type ViteManifestEntry,
+} from './vite-helpers.js';
 export {
   ViewRegistry,
   type CustomDirectiveHandler,
@@ -18,6 +30,7 @@ export {
   type ViewComposerHandler,
   type ViewExpressionBindings,
   type ViewFormBindings,
+  type ViewLocaleBindings,
 } from './view-registry.js';
 export { ViewAttributeBag } from './view-attributes.js';
 export {

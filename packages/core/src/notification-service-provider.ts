@@ -3,6 +3,7 @@ import { DatabaseManager } from '@tyravel/database';
 import { MailManager } from '@tyravel/mail';
 import { Dispatcher, JobRegistry, QueueManager } from '@tyravel/queue';
 import {
+  NOTIFICATIONS_VIEWS_PATH,
   NotificationManager,
   NotificationRegistry,
   SendQueuedNotification,
@@ -13,6 +14,7 @@ import {
   type NotificationsConfig,
 } from '@tyravel/notifications';
 import type { Job } from '@tyravel/queue';
+import { ViewEngine } from '@tyravel/views';
 import { ServiceProvider } from './service-provider.js';
 
 export class NotificationServiceProvider extends ServiceProvider {
@@ -48,6 +50,15 @@ export class NotificationServiceProvider extends ServiceProvider {
     });
 
     this.registerQueuedNotificationJob();
+  }
+
+  override boot() {
+    try {
+      const view = this.app.make<ViewEngine>('view');
+      view.namespace('notifications', NOTIFICATIONS_VIEWS_PATH);
+    } catch {
+      // View provider not registered.
+    }
   }
 
   private resolveDatabase(): DatabaseManager | undefined {

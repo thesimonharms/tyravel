@@ -139,12 +139,12 @@ Move anonymous components from "included partials" toward first-class, reusable 
 
 Templating that works across packages, environments, and outbound channels.
 
-- [ ] **View namespaces** — `vendor::view.name` syntax for package-published templates (e.g. `@include('admin::partials.nav')`).
-- [ ] **Environment directives** — `@env`, `@production`, and `@local` for environment-specific markup without `config()` noise.
-- [ ] **Localization** — `@lang('messages.welcome')` / `__()` helpers in expression context; optional JSON locale files.
-- [ ] **Mail & notification views** — render `.tyr` templates from `@tyravel/mail` and `@tyravel/notifications` (HTML + plain-text layouts).
-- [ ] **Build manifest integration** — `@vite` or `@mix`-style helper reading a manifest for versioned CSS/JS in layouts.
-- [ ] **`@includeFirst`** — try a list of partials and include the first view that exists.
+- [x] **View namespaces** — `vendor::view.name` syntax for package-published templates (e.g. `@include('admin::partials.nav')`).
+- [x] **Environment directives** — `@env`, `@production`, and `@local` for environment-specific markup without `config()` noise.
+- [x] **Localization** — `@lang('messages.welcome')` / `__()` helpers in expression context; optional JSON locale files.
+- [x] **Mail & notification views** — render `.tyr` templates from `@tyravel/mail` and `@tyravel/notifications` (HTML + plain-text layouts).
+- [x] **Build manifest integration** — `@vite` or `@mix`-style helper reading a manifest for versioned CSS/JS in layouts.
+- [x] **`@includeFirst`** — try a list of partials and include the first view that exists.
 
 ### P6 — DX, performance & debugging
 

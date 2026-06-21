@@ -5,6 +5,12 @@ export interface ViewConfig {
   extension?: string;
   compiled?: boolean;
   compiledPath?: string;
+  namespaces?: Record<string, string>;
+  locale?: string;
+  localesPath?: string;
+  manifestPath?: string;
+  viteBase?: string;
+  env?: string;
 }
 
 export interface CompiledTemplate {
@@ -23,7 +29,10 @@ export type ConditionalMode =
   | 'auth'
   | 'guest'
   | 'can'
-  | 'error';
+  | 'error'
+  | 'env'
+  | 'production'
+  | 'local';
 
 export type FormAttribute = 'checked' | 'selected' | 'disabled' | 'readonly';
 
@@ -47,6 +56,9 @@ export type TemplateOp =
   | { type: 'include'; name: string; dataExpression?: string }
   | { type: 'includeIf'; name: string; dataExpression?: string }
   | { type: 'includeWhen'; name: string; conditionExpression: string; dataExpression?: string }
+  | { type: 'includeFirst'; names: string[]; dataExpression?: string }
+  | { type: 'lang'; key: string; replaceExpression?: string }
+  | { type: 'vite'; entry: string }
   | { type: 'custom'; name: string; expression: string }
   | { type: 'csrf' }
   | { type: 'method'; verb: string }
