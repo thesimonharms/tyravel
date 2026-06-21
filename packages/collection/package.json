@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/collection",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Fluent, typed collection pipeline for Tyravel",
   "license": "MIT",
   "type": "module",

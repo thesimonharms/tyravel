@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/core",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,21 +15,21 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/auth": "0.6.1",
-    "@tyravel/cache": "0.6.1",
-    "@tyravel/config": "0.6.1",
-    "@tyravel/database": "0.6.1",
-    "@tyravel/events": "0.6.1",
-    "@tyravel/container": "0.6.1",
-    "@tyravel/http": "0.6.1",
-    "@tyravel/log": "0.6.1",
-    "@tyravel/mail": "0.6.1",
-    "@tyravel/notifications": "0.6.1",
-    "@tyravel/queue": "0.6.1",
-    "@tyravel/redis": "0.6.1",
-    "@tyravel/storage": "0.6.1",
-    "@tyravel/validation": "0.6.1",
-    "@tyravel/views": "0.6.1"
+    "@tyravel/auth": "0.7.0",
+    "@tyravel/cache": "0.7.0",
+    "@tyravel/config": "0.7.0",
+    "@tyravel/database": "0.7.0",
+    "@tyravel/events": "0.7.0",
+    "@tyravel/container": "0.7.0",
+    "@tyravel/http": "0.7.0",
+    "@tyravel/log": "0.7.0",
+    "@tyravel/mail": "0.7.0",
+    "@tyravel/notifications": "0.7.0",
+    "@tyravel/queue": "0.7.0",
+    "@tyravel/redis": "0.7.0",
+    "@tyravel/storage": "0.7.0",
+    "@tyravel/validation": "0.7.0",
+    "@tyravel/views": "0.7.0"
   },
   "files": [
     "dist"
