@@ -1,3 +1,4 @@
+import { CacheLock } from './cache-lock.js';
 import { CacheManager } from './cache-manager.js';
 import type { CacheStore } from './types.js';
 
@@ -23,6 +24,10 @@ export class CacheRepository implements CacheStore {
     await this.store().put(this.key(key), value, ttlSeconds);
   }
 
+  async add(key: string, value: unknown, ttlSeconds?: number): Promise<boolean> {
+    return this.store().add(this.key(key), value, ttlSeconds);
+  }
+
   async forget(key: string): Promise<boolean> {
     return this.store().forget(this.key(key));
   }
@@ -43,5 +48,9 @@ export class CacheRepository implements CacheStore {
     const value = await callback();
     await this.put(key, value, ttlSeconds);
     return value;
+  }
+
+  lock(name: string, seconds = 0): CacheLock {
+    return new CacheLock(this.store(), this.key(`lock:${name}`), seconds);
   }
 }

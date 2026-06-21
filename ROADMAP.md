@@ -193,8 +193,8 @@ Make Tyravel deployable with confidence. Builds on Tier 6.1 hardening.
 Rich developer tooling, async utilities, and real-time operations.
 
 - [ ] **Broadcasting** — real-time event broadcasting over WebSockets (Socket.io) or Pusher with dynamic channel authorization
-- [ ] **HTTP Client** — fluent, chainable HTTP wrapper around fetch with request/response mocking for testing
-- [ ] **Queue depth** — job chaining, job batching, and cache-backed atomic locks
+- [x] **HTTP Client** — fluent, chainable HTTP wrapper around fetch with request/response mocking for testing
+- [x] **Queue depth** — job chaining, job batching, and cache-backed atomic locks
 - [ ] **ORM enhancements** — polymorphic relations morphTo/morphMany, query profiling, and pivot table attribute casting
 - [ ] **Storage depth** — Cloudflare R2 storage driver and secure time-limited temporary URLs
 

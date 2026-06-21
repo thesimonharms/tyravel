@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type { Job } from './job.js';
-import { decodePayload, encodePayload, serializeJob } from './payload.js';
+import { serializeJob } from './payload.js';
 import type { QueueContract } from './queue-contract.js';
 import type { SerializedJobPayload } from './types.js';
 import type { QueueWorker } from './worker.js';
@@ -12,9 +12,15 @@ export class SyncQueue implements QueueContract {
     return this.pushRaw(serializeJob(job), _queue);
   }
 
-  async pushRaw(payload: SerializedJobPayload, _queue = 'default'): Promise<string> {
+  async pushRaw(payload: SerializedJobPayload, queue = 'default'): Promise<string> {
     const id = randomUUID();
-    await this.worker.process(decodePayload(encodePayload(payload)));
+    await this.worker.process(
+      payload,
+      async (next) => {
+        await this.pushRaw(next, queue);
+      },
+      queue,
+    );
     return id;
   }
 

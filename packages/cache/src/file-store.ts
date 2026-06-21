@@ -35,6 +35,14 @@ export class FileStore implements CacheStore {
     await writeFile(path, JSON.stringify(payload), 'utf8');
   }
 
+  async add(key: string, value: unknown, ttlSeconds?: number): Promise<boolean> {
+    if (await this.has(key)) {
+      return false;
+    }
+    await this.put(key, value, ttlSeconds);
+    return true;
+  }
+
   async forget(key: string): Promise<boolean> {
     const path = this.pathFor(key);
     try {

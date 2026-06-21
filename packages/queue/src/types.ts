@@ -38,6 +38,8 @@ export interface SerializedJobPayload {
   job: string;
   data: Record<string, unknown>;
   displayName?: string;
+  chain?: SerializedJobPayload[];
+  batchId?: string;
 }
 
 export interface QueueJobRecord {
