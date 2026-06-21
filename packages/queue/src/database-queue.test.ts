@@ -88,4 +88,49 @@ describe('DatabaseQueue', () => {
     expect(processed).toBe(1);
     expect(PersistedJob.values).toEqual(['queued']);
   });
+
+  it('gracefully shuts down on SIGTERM', async () => {
+    class ShutdownJob extends Job<{ value: string }> {
+      override async handle(): Promise<void> {
+        PersistedJob.values.push(this.data.value);
+        if (typeof process !== 'undefined') {
+          process.emit('SIGTERM');
+        }
+      }
+    }
+
+    PersistedJob.values = [];
+    const connection = new SqliteConnection(':memory:');
+    await createJobsTable(connection);
+
+    const registry = new JobRegistry().register(PersistedJob).register(ShutdownJob);
+    const worker = new QueueWorker(registry);
+    const config: QueueConfig = {
+      default: 'database',
+      connections: {
+        database: { driver: 'database', table: 'jobs' },
+      },
+    };
+
+    const manager = new QueueManager(config, worker, asDatabaseManager(connection));
+    const queue = manager.connection('database') as DatabaseQueue;
+
+    await queue.push(new ShutdownJob({ value: 'first' }));
+    await queue.push(new PersistedJob({ value: 'second' }));
+
+    const processor = new QueueProcessor(manager, registry, worker);
+    const processed = await processor.run({
+      connection: 'database',
+      sleepSeconds: 0,
+    });
+
+    expect(processed).toBe(1);
+    expect(PersistedJob.values).toEqual(['first']);
+
+    // Verify the second job is still in the queue
+    const remaining = await queue.pop('default');
+    expect(remaining).not.toBeNull();
+    const payload = queue.decode(remaining!);
+    expect(payload.job).toBe(PersistedJob.name);
+  });
 });

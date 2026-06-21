@@ -39,41 +39,71 @@ export class QueueProcessor {
     }
 
     let processed = 0;
+    let shouldQuit = false;
+    let wakeup: (() => void) | undefined;
 
-    while (maxJobs === undefined || processed < maxJobs) {
-      const record = await connection.pop(queueName);
-      if (!record) {
-        await sleep(sleepSeconds * 1000);
-        continue;
+    const shutdown = () => {
+      shouldQuit = true;
+      if (wakeup) {
+        wakeup();
       }
+    };
 
-      try {
-        const payload = connection.decode(record);
-        if (!this.registry.has(payload.job)) {
-          throw new Error(`Job class not registered: ${payload.job}`);
-        }
-        await this.worker.process(payload);
-        await connection.deleteJob(record.id);
-      } catch (error) {
-        if (record.attempts + 1 >= this.worker.getMaxAttempts()) {
-          if (this.options.failedJobs) {
-            await this.options.failedJobs.record({
-              uuid: newFailedJobUuid(),
-              connection: connectionName,
-              queue: queueName,
-              payload: record.payload,
-              exception: formatJobException(error),
+    if (typeof process !== 'undefined') {
+      process.on('SIGTERM', shutdown);
+      process.on('SIGINT', shutdown);
+    }
+
+    try {
+      while (!shouldQuit && (maxJobs === undefined || processed < maxJobs)) {
+        const record = await connection.pop(queueName);
+        if (!record) {
+          if (sleepSeconds > 0) {
+            await new Promise<void>((resolve) => {
+              const timeout = setTimeout(resolve, sleepSeconds * 1000);
+              wakeup = () => {
+                clearTimeout(timeout);
+                resolve();
+              };
             });
+            wakeup = undefined;
           }
-          await connection.deleteJob(record.id);
-          process.stderr.write(`Job ${record.id} failed permanently: ${String(error)}\n`);
-        } else {
-          await connection.release(record.id, connection.getRetryAfter());
-          process.stderr.write(`Job ${record.id} failed, released for retry: ${String(error)}\n`);
+          continue;
         }
-      }
 
-      processed += 1;
+        try {
+          const payload = connection.decode(record);
+          if (!this.registry.has(payload.job)) {
+            throw new Error(`Job class not registered: ${payload.job}`);
+          }
+          await this.worker.process(payload);
+          await connection.deleteJob(record.id);
+        } catch (error) {
+          if (record.attempts + 1 >= this.worker.getMaxAttempts()) {
+            if (this.options.failedJobs) {
+              await this.options.failedJobs.record({
+                uuid: newFailedJobUuid(),
+                connection: connectionName,
+                queue: queueName,
+                payload: record.payload,
+                exception: formatJobException(error),
+              });
+            }
+            await connection.deleteJob(record.id);
+            process.stderr.write(`Job ${record.id} failed permanently: ${String(error)}\n`);
+          } else {
+            await connection.release(record.id, connection.getRetryAfter());
+            process.stderr.write(`Job ${record.id} failed, released for retry: ${String(error)}\n`);
+          }
+        }
+
+        processed += 1;
+      }
+    } finally {
+      if (typeof process !== 'undefined') {
+        process.off('SIGTERM', shutdown);
+        process.off('SIGINT', shutdown);
+      }
     }
 
     return processed;

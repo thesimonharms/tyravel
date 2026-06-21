@@ -184,8 +184,8 @@ Close the polish gaps found during the Tier 6 audit. Ship before v0.7.0 producti
 
 Make Tyravel deployable with confidence. Builds on Tier 6.1 hardening.
 
-- [x] **Config validation** — fail fast at boot when required environment variables are missing or invalid; typed schema per config file.
-- [ ] **Graceful shutdown** — drain in-flight HTTP requests and queue workers on `SIGTERM` / `SIGINT`; cooperative timeout before force exit.
+- [X] **Config validation** — fail fast at boot when required environment variables are missing or invalid; typed schema per config file.
+- [x] **Graceful shutdown** — drain in-flight HTTP requests and queue workers on `SIGTERM` / `SIGINT`; cooperative timeout before force exit.
 - [ ] **API stability policy** — documented semver guarantees for public `@tyravel/*` surfaces (what is stable, what is experimental, deprecation window).
 
 ## Tier X — Production-ready project
