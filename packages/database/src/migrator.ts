@@ -5,25 +5,34 @@ import type { DatabaseConnection } from './connection.js';
 import type { Migration } from './migration.js';
 import { migrationsTableSql, SchemaBuilder } from './schema/schema-builder.js';
 
+interface MigrationFile {
+  name: string;
+  directory: string;
+}
+
 export class Migrator {
+  private readonly migrationDirectories: string[];
+
   constructor(
     private readonly connection: DatabaseConnection,
-    private readonly migrationsPath: string,
-  ) {}
+    migrationsPath: string | string[],
+  ) {
+    this.migrationDirectories = Array.isArray(migrationsPath)
+      ? migrationsPath
+      : [migrationsPath];
+  }
 
   async ensureMigrationsTable(): Promise<void> {
     await this.connection.exec(migrationsTableSql(this.connection.grammar));
   }
 
   async pending(): Promise<string[]> {
-    await this.ensureMigrationsTable();
-    const executed = await this.executed();
-    return this.files().filter((file) => !executed.includes(file));
+    const files = await this.pendingFiles();
+    return files.map((file) => file.name);
   }
 
   async run(): Promise<string[]> {
-    await this.ensureMigrationsTable();
-    const pending = await this.pending();
+    const pending = await this.pendingFiles();
     if (pending.length === 0) {
       return [];
     }
@@ -36,11 +45,17 @@ export class Migrator {
       const MigrationClass = await this.load(file);
       const migration = new MigrationClass();
       await migration.up(this.connection, schema);
-      await this.record(file, batch);
-      ran.push(file);
+      await this.record(file.name, batch);
+      ran.push(file.name);
     }
 
     return ran;
+  }
+
+  private async pendingFiles(): Promise<MigrationFile[]> {
+    await this.ensureMigrationsTable();
+    const executed = await this.executed();
+    return this.files().filter((file) => !executed.includes(file.name));
   }
 
   private async executed(): Promise<string[]> {
@@ -61,25 +76,39 @@ export class Migrator {
     return typeof batch === 'number' ? batch : 0;
   }
 
-  private files(): string[] {
-    try {
-      return readdirSync(this.migrationsPath)
-        .filter((file) => file.endsWith('.ts') || file.endsWith('.js'))
-        .sort();
-    } catch {
-      return [];
+  private files(): MigrationFile[] {
+    const files: MigrationFile[] = [];
+    const seen = new Set<string>();
+
+    for (const directory of this.migrationDirectories) {
+      try {
+        for (const name of readdirSync(directory)) {
+          if (!name.endsWith('.ts') && !name.endsWith('.js')) {
+            continue;
+          }
+          if (seen.has(name)) {
+            continue;
+          }
+          seen.add(name);
+          files.push({ name, directory });
+        }
+      } catch {
+        continue;
+      }
     }
+
+    return files.sort((left, right) => left.name.localeCompare(right.name));
   }
 
-  private async load(file: string): Promise<new () => Migration> {
-    const moduleUrl = pathToFileURL(join(this.migrationsPath, file)).href;
+  private async load(file: MigrationFile): Promise<new () => Migration> {
+    const moduleUrl = pathToFileURL(join(file.directory, file.name)).href;
     const loaded = await import(moduleUrl);
     const MigrationClass = loaded.default ?? Object.values(loaded).find(
       (value) => typeof value === 'function',
     );
 
     if (typeof MigrationClass !== 'function') {
-      throw new Error(`Migration class not found in ${file}`);
+      throw new Error(`Migration class not found in ${file.name}`);
     }
 
     return MigrationClass as new () => Migration;

@@ -355,6 +355,24 @@ await schema.create('users', (table) => {
 });
 ```
 
+Packages can contribute migrations via `ServiceProvider.loadMigrationsFrom()`. Register the package provider from `AppServiceProvider` so `tyravel migrate` picks them up:
+
+```typescript
+import { join } from 'node:path';
+import { ServiceProvider } from '@tyravel/core';
+
+export class LontarServiceProvider extends ServiceProvider {
+  override register() {
+    this.loadMigrationsFrom(join(import.meta.dirname, 'database/migrations'));
+  }
+}
+
+// AppServiceProvider.register()
+this.app.register(LontarServiceProvider);
+```
+
+`tyravel migrate` boots `AppServiceProvider` and runs all registered migration paths in filename order.
+
 **Drivers:** SQLite (Node 22.5+ via `node:sqlite`), PostgreSQL (`pg`), and MySQL (`mysql2`).
 
 **Query scopes:** define `scopeName(builder, ...args)` on a model and call `Model.scope('name', ...args)`. Global scopes use `Model.addGlobalScope((builder) => ...)`.

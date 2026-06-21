@@ -65,10 +65,7 @@ export class ReferenceTestCase extends TestCase {
     this.http = new HttpTestClient(this.kernel);
 
     const db = this.app.make(DatabaseManager);
-    const migrator = new Migrator(
-      db.connection(),
-      join(this.app.basePath, 'database/migrations'),
-    );
+    const migrator = new Migrator(db.connection(), this.app.migrationPaths());
     await migrator.run();
   }
 }

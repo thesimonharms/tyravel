@@ -16,6 +16,7 @@ export class Application extends Container {
   private providers: ProviderConstructor[] = [];
   private booted = false;
   private readonly middlewareRegistry = new MiddlewareRegistry();
+  private readonly registeredMigrationPaths: string[] = [];
 
   constructor(public readonly basePath: string = process.cwd()) {
     super();
@@ -48,6 +49,17 @@ export class Application extends Container {
   register(provider: ProviderConstructor): this {
     this.providers.push(provider);
     return this;
+  }
+
+  addMigrationPath(path: string): this {
+    if (!this.registeredMigrationPaths.includes(path)) {
+      this.registeredMigrationPaths.push(path);
+    }
+    return this;
+  }
+
+  migrationPaths(): string[] {
+    return [...this.registeredMigrationPaths];
   }
 
   async boot(): Promise<void> {
