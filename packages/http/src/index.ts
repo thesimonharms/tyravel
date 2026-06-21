@@ -58,3 +58,12 @@ export type {
   RouteHandler,
   RouteParams,
 } from './types.js';
+export {
+  Http,
+  HttpFactory,
+  ClientResponse,
+  ClientRequest,
+  ResponseStub,
+  ResponseSequence,
+  PendingRequest,
+} from './client.js';

@@ -188,6 +188,16 @@ Make Tyravel deployable with confidence. Builds on Tier 6.1 hardening.
 - [x] **Graceful shutdown** — drain in-flight HTTP requests and queue workers on `SIGTERM` / `SIGINT`; cooperative timeout before force exit.
 - [x] **API stability policy** — documented semver guarantees for public `@tyravel/*` surfaces (what is stable, what is experimental, deprecation window). See [STABILITY.md](STABILITY.md).
 
+## Tier 8 — Ecosystem & advanced capabilities (v0.8.0)
+
+Rich developer tooling, async utilities, and real-time operations.
+
+- [ ] **Broadcasting** — real-time event broadcasting over WebSockets (Socket.io) or Pusher with dynamic channel authorization
+- [ ] **HTTP Client** — fluent, chainable HTTP wrapper around fetch with request/response mocking for testing
+- [ ] **Queue depth** — job chaining, job batching, and cache-backed atomic locks
+- [ ] **ORM enhancements** — polymorphic relations morphTo/morphMany, query profiling, and pivot table attribute casting
+- [ ] **Storage depth** — Cloudflare R2 storage driver and secure time-limited temporary URLs
+
 ## Tier X — Production-ready project
 
 Open-ended tier: done when Tyravel is a framework teams can adopt with confidence in production — not tied to a version number. Items land here when Tiers 1–7 are in place.
