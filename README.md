@@ -343,6 +343,22 @@ await schema.create('users', (table) => {
 
 **Query scopes:** define `scopeName(builder, ...args)` on a model and call `Model.scope('name', ...args)`. Global scopes use `Model.addGlobalScope((builder) => ...)`.
 
+**Computed attributes:** whitelist accessors for JSON serialization with `static appends`, Laravel-style. Use either a class getter or a `getRenderedBodyAttribute()` method for `rendered_body`:
+
+```typescript
+export class Post extends Model<PostAttributes> {
+  static override appends = ['rendered_body'];
+
+  get rendered_body(): string {
+    return markdownToHtml(this.getAttribute('body') ?? '');
+  }
+}
+
+post.toJSON(); // includes body + rendered_body
+```
+
+Loaded relations can be appended too: `post.append('author')` or `static appends = ['author']`.
+
 **Pagination:** paginate query builder or model results with total counts and page metadata:
 
 ```typescript

@@ -7,6 +7,10 @@ import { HasManyRelation } from './relations/has-many.js';
 import { HasOneRelation } from './relations/has-one.js';
 import type { DatabaseConnection } from './connection.js';
 import type { GlobalScope } from './scopes.js';
+import {
+  readAccessorValue,
+  serializeAppendedValue,
+} from './model-serialization.js';
 import type { Row, RowValue } from './types.js';
 import { singularSnakeCase } from './utils.js';
 
@@ -15,11 +19,13 @@ type ModelAttributes = Record<string, unknown>;
 export class Model<T extends ModelAttributes = ModelAttributes> {
   static table = '';
   static primaryKey = 'id';
+  static appends: string[] = [];
   private static resolver: (() => DatabaseConnection) | undefined;
   private static globalScopes: GlobalScope[] = [];
 
   protected attributes: Partial<T>;
   private relations: Record<string, unknown> = {};
+  private runtimeAppends: string[] = [];
 
   constructor(attributes: Partial<T> = {}) {
     this.attributes = { ...attributes };
@@ -202,8 +208,37 @@ export class Model<T extends ModelAttributes = ModelAttributes> {
     this.attributes[key] = value;
   }
 
-  toJSON(): Partial<T> {
-    return { ...this.attributes };
+  append(...attributes: string[]): this {
+    this.runtimeAppends.push(...attributes);
+    return this;
+  }
+
+  setAppends(attributes: string[]): this {
+    this.runtimeAppends = [...attributes];
+    return this;
+  }
+
+  getAppends(): string[] {
+    const model = this.constructor as typeof Model;
+    return [...new Set([...model.appends, ...this.runtimeAppends])];
+  }
+
+  toJSON(): Record<string, unknown> {
+    const result: Record<string, unknown> = { ...this.attributes };
+
+    for (const name of this.getAppends()) {
+      if (this.relationLoaded(name)) {
+        result[name] = serializeAppendedValue(this.getRelation(name));
+        continue;
+      }
+
+      const { found, value } = readAccessorValue(this, name, Model.prototype);
+      if (found) {
+        result[name] = serializeAppendedValue(value);
+      }
+    }
+
+    return result;
   }
 
   async save(): Promise<this> {
