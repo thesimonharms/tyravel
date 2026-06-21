@@ -1,7 +1,14 @@
-export { env, envBool, envInt } from './env.js';
-export { loadConfig } from './loader.js';
+export { ConfigValidationError, formatConfigValidationFailures } from './config-validation-error.js';
+export type { ConfigValidationFailure } from './config-validation-error.js';
+export { env, envBool, envInt, requiredEnv } from './env.js';
+export { loadConfig, loadConfigWithSchemas } from './loader.js';
+export type { LoadConfigOptions, LoadedConfig } from './loader.js';
 export { loadEnv, parseEnv } from './load-env.js';
 export type { LoadEnvOptions } from './load-env.js';
 export { mergeConfig } from './merge.js';
 export { ConfigRepository } from './repository.js';
 export type { ConfigTree } from './repository.js';
+export { s } from './schema.js';
+export type { ConfigSchema } from './schema.js';
+export { collectConfigValidationFailures, validateConfig } from './validate-config.js';
+export type { ConfigSchemaMap } from './validate-config.js';

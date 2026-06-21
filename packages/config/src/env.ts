@@ -1,3 +1,5 @@
+import { ConfigValidationError } from './config-validation-error.js';
+
 type EnvDefault = string | number | boolean | null | undefined;
 
 export function env(key: string): string | undefined;
@@ -27,6 +29,20 @@ export function envBool(key: string, defaultValue = false): boolean {
     return defaultValue;
   }
   return parseBool(value);
+}
+
+export function requiredEnv(key: string): string {
+  const raw = process.env[key];
+  if (raw === undefined || raw === '') {
+    throw new ConfigValidationError([
+      {
+        config: 'env',
+        path: key,
+        message: 'is required but missing or empty',
+      },
+    ]);
+  }
+  return raw;
 }
 
 export function envInt(key: string, defaultValue: number): number {
