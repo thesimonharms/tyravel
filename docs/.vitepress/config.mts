@@ -65,10 +65,22 @@ export default defineConfig({
         text: 'Platform features',
         items: [
           { text: 'Authentication', link: '/guide/auth' },
+          { text: 'Cache', link: '/guide/cache' },
+          { text: 'Mail', link: '/guide/mail' },
+          { text: 'Notifications', link: '/guide/notifications' },
+          { text: 'Storage', link: '/guide/storage' },
           { text: 'Queues & jobs', link: '/guide/queues' },
           { text: 'Events', link: '/guide/events' },
           { text: 'Views & templating', link: '/guide/views' },
           { text: 'Testing', link: '/guide/testing' },
+        ],
+      },
+      {
+        text: 'Packages',
+        items: [
+          { text: 'Service container', link: '/guide/container' },
+          { text: 'Collections', link: '/guide/collection' },
+          { text: 'Support utilities', link: '/guide/support' },
         ],
       },
     ],
