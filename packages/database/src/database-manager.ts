@@ -1,17 +1,26 @@
 import type { DatabaseConnection } from './connection.js';
 import { runWithConnection } from './connection-context.js';
-import { MysqlConnection } from './mysql-connection.js';
-import { PostgresConnection } from './postgres-connection.js';
 import { SqliteConnection } from './sqlite-connection.js';
-import type { ConnectionConfig, DatabaseConfig } from './types.js';
+import type {
+  ConnectionConfig,
+  DatabaseConfig,
+  DatabaseDriverFactory,
+  SqliteConnectionConfig,
+} from './types.js';
 
 export class DatabaseManager {
+  private static readonly drivers = new Map<string, DatabaseDriverFactory>();
+
   private readonly connections = new Map<string, DatabaseConnection>();
 
   constructor(
     private readonly config: DatabaseConfig,
     private readonly basePath = process.cwd(),
   ) {}
+
+  static extend(name: string, factory: DatabaseDriverFactory): void {
+    DatabaseManager.drivers.set(name, factory);
+  }
 
   connection(name?: string): DatabaseConnection {
     const connectionName = name ?? this.config.default;
@@ -57,13 +66,19 @@ export class DatabaseManager {
   private createConnection(config: ConnectionConfig): DatabaseConnection {
     switch (config.driver) {
       case 'sqlite':
-        return new SqliteConnection(config.database, this.basePath);
-      case 'postgres':
-        return new PostgresConnection(config);
-      case 'mysql':
-        return new MysqlConnection(config);
-      default:
-        throw new Error(`Unsupported database driver: ${(config as ConnectionConfig).driver}`);
+        return new SqliteConnection(
+          (config as SqliteConnectionConfig).database,
+          this.basePath,
+        );
+      default: {
+        const factory = DatabaseManager.drivers.get(config.driver);
+        if (factory) {
+          return factory(config, this.basePath);
+        }
+        throw new Error(
+          `Unsupported database driver [${config.driver}]. Register it with DatabaseManager.extend() or install a driver package.`,
+        );
+      }
     }
   }
 }

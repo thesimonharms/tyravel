@@ -1,39 +1,4 @@
-export function projectPackageJson(name: string): string {
-  return JSON.stringify(
-    {
-      name,
-      private: true,
-      type: 'module',
-      scripts: {
-        dev: 'tyravel serve',
-        start: 'tyravel serve',
-        test: 'vitest run',
-      },
-      dependencies: {
-        '@tyravel/auth': '^0.3.0',
-        '@tyravel/cache': '^0.3.0',
-        '@tyravel/config': '^0.3.0',
-        '@tyravel/core': '^0.3.0',
-        '@tyravel/database': '^0.3.0',
-        '@tyravel/events': '^0.3.0',
-        '@tyravel/http': '^0.3.0',
-        '@tyravel/log': '^0.3.0',
-        '@tyravel/mail': '^0.3.0',
-        '@tyravel/notifications': '^0.3.0',
-        '@tyravel/queue': '^0.3.0',
-        '@tyravel/validation': '^0.3.0',
-        '@tyravel/views': '^0.3.0',
-      },
-      devDependencies: {
-        '@tyravel/cli': '^0.3.0',
-        '@tyravel/testing': '^0.3.0',
-        vitest: '^3.2.4',
-      },
-    },
-    null,
-    2,
-  );
-}
+export { projectPackageJson } from './stubs-project.js';
 
 export function projectConfig(name: string): string {
   return JSON.stringify(
@@ -50,69 +15,7 @@ export function projectConfig(name: string): string {
   );
 }
 
-export function mainEntry(): string {
-  return `import {
-  Application,
-  CacheServiceProvider,
-  ConfigRepository,
-  ConfigServiceProvider,
-  LogServiceProvider,
-  DatabaseServiceProvider,
-  RedisServiceProvider,
-  EventServiceProvider,
-  HttpKernel,
-  MailServiceProvider,
-  NotificationServiceProvider,
-  QueueServiceProvider,
-  StorageServiceProvider,
-  registerHttpMiddleware,
-  setCacheApplication,
-  setEventApplication,
-  setLogApplication,
-  setMailApplication,
-  setNotificationApplication,
-  setQueueApplication,
-  setRouteApplication,
-  setStorageApplication,
-  setViewApplication,
-  ViewServiceProvider,
-  serve,
-} from '@tyravel/core';
-import { AppServiceProvider } from './providers/app-service-provider.js';
-import './routes/web.js';
-
-const app = new Application(import.meta.dir);
-setRouteApplication(app);
-setViewApplication(app);
-setQueueApplication(app);
-setEventApplication(app);
-setCacheApplication(app);
-setStorageApplication(app);
-setLogApplication(app);
-setMailApplication(app);
-setNotificationApplication(app);
-
-app.register(ConfigServiceProvider);
-app.register(RedisServiceProvider);
-app.register(DatabaseServiceProvider);
-app.register(CacheServiceProvider);
-app.register(StorageServiceProvider);
-app.register(LogServiceProvider);
-app.register(MailServiceProvider);
-app.register(NotificationServiceProvider);
-app.register(QueueServiceProvider);
-app.register(EventServiceProvider);
-app.register(ViewServiceProvider);
-app.register(AppServiceProvider);
-
-await app.boot();
-
-registerHttpMiddleware(app, app.make(ConfigRepository));
-
-const kernel = new HttpKernel(app);
-await serve(kernel);
-`;
-}
+export { mainEntry } from './stubs-project.js';
 
 export function middleware(name: string): string {
   return `import type { Middleware } from '@tyravel/http';
@@ -156,36 +59,7 @@ export function viewsConfig(): string {
 `;
 }
 
-export function databaseConfig(): string {
-  return `import { env, envInt } from '@tyravel/config';
-
-export default {
-  default: env('DB_CONNECTION', 'sqlite'),
-  connections: {
-    sqlite: {
-      driver: 'sqlite',
-      database: env('DB_DATABASE', 'database/database.sqlite'),
-    },
-    postgres: {
-      driver: 'postgres',
-      host: env('DB_HOST', '127.0.0.1'),
-      port: envInt('DB_PORT', 5432),
-      database: env('DB_DATABASE', 'tyravel'),
-      username: env('DB_USERNAME', 'postgres'),
-      password: env('DB_PASSWORD', ''),
-    },
-    mysql: {
-      driver: 'mysql',
-      host: env('DB_HOST', '127.0.0.1'),
-      port: envInt('DB_PORT', 3306),
-      database: env('DB_DATABASE', 'tyravel'),
-      username: env('DB_USERNAME', 'root'),
-      password: env('DB_PASSWORD', ''),
-    },
-  },
-} as const;
-`;
-}
+export { databaseConfig } from './stubs-project.js';
 
 export function appServiceProvider(): string {
   return `import { ServiceProvider } from '@tyravel/core';
@@ -396,31 +270,7 @@ export class ${name} extends Job<${name}Payload> {
 `;
 }
 
-export function queueConfig(): string {
-  return `import { env } from '@tyravel/config';
-
-export default {
-  default: env('QUEUE_CONNECTION', 'database'),
-  connections: {
-    sync: { driver: 'sync' },
-    database: {
-      driver: 'database',
-      table: 'jobs',
-      connection: 'sqlite',
-      retryAfter: 90,
-    },
-    redis: {
-      driver: 'redis',
-      connection: 'default',
-      retryAfter: 90,
-    },
-  },
-  failed: {
-    table: 'failed_jobs',
-  },
-} as const;
-`;
-}
+export { queueConfig } from './stubs-project.js';
 
 export function jobsTableMigration(): string {
   return `import { Migration } from '@tyravel/database';

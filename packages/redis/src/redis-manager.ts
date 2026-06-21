@@ -1,11 +1,16 @@
-import { createClient } from 'redis';
-import type { RedisClient, RedisConfig, RedisConnectionConfig } from './types.js';
+import type { RedisClient, RedisClientFactory, RedisConfig, RedisConnectionConfig } from './types.js';
 
 export class RedisManager {
+  private static clientFactory: RedisClientFactory | null = null;
+
   private readonly clients = new Map<string, RedisClient>();
   private readonly connecting = new Map<string, Promise<RedisClient>>();
 
   constructor(private readonly config: RedisConfig) {}
+
+  static useClientFactory(factory: RedisClientFactory): void {
+    RedisManager.clientFactory = factory;
+  }
 
   async connection(name?: string): Promise<RedisClient> {
     const connectionName = name ?? this.config.default;
@@ -53,27 +58,12 @@ export class RedisManager {
   }
 
   private async createClient(config: RedisConnectionConfig): Promise<RedisClient> {
-    const client = createClient(buildClientOptions(config));
-    client.on('error', (error) => {
-      process.stderr.write(`Redis error: ${String(error)}\n`);
-    });
-    await client.connect();
-    return client as unknown as RedisClient;
-  }
-}
+    if (!RedisManager.clientFactory) {
+      throw new Error(
+        'No Redis client factory registered. Install @tyravel/redis-node and register NodeRedisServiceProvider, or call RedisManager.useClientFactory().',
+      );
+    }
 
-function buildClientOptions(config: RedisConnectionConfig) {
-  if (config.url) {
-    return { url: config.url };
+    return RedisManager.clientFactory(config);
   }
-
-  return {
-    socket: {
-      host: config.host ?? '127.0.0.1',
-      port: config.port ?? 6379,
-    },
-    username: config.username,
-    password: config.password,
-    database: config.database,
-  };
 }

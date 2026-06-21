@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/storage",
+  "name": "@tyravel/database-mysql",
   "version": "0.3.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -9,6 +9,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
+  },
+  "dependencies": {
+    "@tyravel/database": "0.3.0",
+    "mysql2": "^3.14.1"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -23,12 +27,12 @@
   "devDependencies": {
     "@types/node": "^22.15.30"
   },
-  "description": "Filesystem storage and repository for Tyravel",
+  "description": "MySQL database driver for Tyravel",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thesimonharms/tyravel.git",
-    "directory": "packages/storage"
+    "directory": "packages/database-mysql"
   },
   "publishConfig": {
     "access": "public"

@@ -1,4 +1,4 @@
-import { existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -18,7 +18,12 @@ describe('NewCommand', () => {
     tempDir = mkdtempSync(join(tmpdir(), 'tyravel-new-'));
     const command = new NewCommand();
 
-    const code = await command.handle(['my-app', `--path=${tempDir}`]);
+    const code = await command.handle([
+      'my-app',
+      `--path=${tempDir}`,
+      '--db=sqlite',
+      '--no-redis',
+    ]);
     const projectDir = join(tempDir, 'my-app');
 
     expect(code).toBe(0);
@@ -32,5 +37,33 @@ describe('NewCommand', () => {
     expect(
       existsSync(join(projectDir, 'src/providers/app-service-provider.ts')),
     ).toBe(true);
+    expect(existsSync(join(projectDir, 'config/redis.ts'))).toBe(false);
+  });
+
+  it('scaffolds mysql and redis driver packages when requested', async () => {
+    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-new-'));
+    const command = new NewCommand();
+
+    const code = await command.handle([
+      'driver-app',
+      `--path=${tempDir}`,
+      '--db=mysql',
+      '--redis',
+    ]);
+    const projectDir = join(tempDir, 'driver-app');
+    const pkg = JSON.parse(readFileSync(join(projectDir, 'package.json'), 'utf8')) as {
+      dependencies: Record<string, string>;
+    };
+
+    expect(code).toBe(0);
+    expect(pkg.dependencies['@tyravel/database-mysql']).toBeDefined();
+    expect(pkg.dependencies['@tyravel/redis-node']).toBeDefined();
+    expect(existsSync(join(projectDir, 'config/redis.ts'))).toBe(true);
+    expect(readFileSync(join(projectDir, 'src/main.ts'), 'utf8')).toContain(
+      'MysqlDatabaseServiceProvider',
+    );
+    expect(readFileSync(join(projectDir, 'src/main.ts'), 'utf8')).toContain(
+      'NodeRedisServiceProvider',
+    );
   });
 });

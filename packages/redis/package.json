@@ -14,9 +14,6 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
-  "dependencies": {
-    "redis": "^4.7.1"
-  },
   "files": [
     "dist"
   ],

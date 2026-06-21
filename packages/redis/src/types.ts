@@ -28,3 +28,5 @@ export interface RedisConfig {
   prefix?: string;
   connections: Record<string, RedisConnectionConfig>;
 }
+
+export type RedisClientFactory = (config: RedisConnectionConfig) => Promise<RedisClient>;

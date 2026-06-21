@@ -14,7 +14,6 @@ import {
   MailServiceProvider,
   NotificationServiceProvider,
   QueueServiceProvider,
-  RedisServiceProvider,
   StorageServiceProvider,
   registerHttpMiddleware,
   setAuthApplication,
@@ -51,7 +50,6 @@ setGateApplication(app);
 setPasswordApplication(app);
 
 app.register(ConfigServiceProvider);
-app.register(RedisServiceProvider);
 app.register(DatabaseServiceProvider);
 app.register(CacheServiceProvider);
 app.register(StorageServiceProvider);

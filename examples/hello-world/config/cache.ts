@@ -10,9 +10,5 @@ export default {
       path: 'storage/framework/cache',
     },
     array: { driver: 'array' },
-    redis: {
-      driver: 'redis',
-      connection: 'default',
-    },
   },
 } satisfies CacheConfig;

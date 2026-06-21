@@ -1,11 +1,22 @@
 import { LocalDisk } from './local-disk.js';
-import { S3Disk } from './s3-disk.js';
-import type { DiskConfig, Filesystem, StorageConfig } from './types.js';
+import type {
+  DiskConfig,
+  Filesystem,
+  LocalDiskConfig,
+  StorageConfig,
+  StorageDriverFactory,
+} from './types.js';
 
 export class StorageManager {
+  private static readonly drivers = new Map<string, StorageDriverFactory>();
+
   private readonly disks = new Map<string, Filesystem>();
 
   constructor(private readonly config: StorageConfig) {}
+
+  static extend(name: string, factory: StorageDriverFactory): void {
+    StorageManager.drivers.set(name, factory);
+  }
 
   disk(name?: string): Filesystem {
     const diskName = name ?? this.config.default;
@@ -27,11 +38,16 @@ export class StorageManager {
   private buildDisk(config: DiskConfig): Filesystem {
     switch (config.driver) {
       case 'local':
-        return new LocalDisk(config.root);
-      case 's3':
-        return new S3Disk(config);
-      default:
-        throw new Error('Unsupported storage driver.');
+        return new LocalDisk((config as LocalDiskConfig).root);
+      default: {
+        const factory = StorageManager.drivers.get(config.driver);
+        if (factory) {
+          return factory(config);
+        }
+        throw new Error(
+          `Unsupported storage driver [${config.driver}]. Register it with StorageManager.extend() or install a driver package.`,
+        );
+      }
     }
   }
 }

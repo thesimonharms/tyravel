@@ -5,7 +5,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
-import type { Filesystem } from './types.js';
+import type { Filesystem } from '@tyravel/storage';
 import type { S3DiskConfig } from './types.js';
 
 export class S3Disk implements Filesystem {

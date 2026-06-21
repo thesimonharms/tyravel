@@ -21,12 +21,7 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@tyravel/support": "0.3.0",
-    "mysql2": "^3.14.1",
-    "pg": "^8.16.0"
-  },
-  "devDependencies": {
-    "@types/pg": "^8.15.4"
+    "@tyravel/support": "0.3.0"
   },
   "description": "Database ORM, query builder, and migrations for Tyravel",
   "license": "MIT",

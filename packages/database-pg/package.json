@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/storage",
+  "name": "@tyravel/database-pg",
   "version": "0.3.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -9,6 +9,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
+  },
+  "dependencies": {
+    "@tyravel/database": "0.3.0",
+    "pg": "^8.16.0"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -21,14 +25,15 @@
     "node": ">=22"
   },
   "devDependencies": {
-    "@types/node": "^22.15.30"
+    "@types/node": "^22.15.30",
+    "@types/pg": "^8.15.4"
   },
-  "description": "Filesystem storage and repository for Tyravel",
+  "description": "PostgreSQL database driver for Tyravel",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thesimonharms/tyravel.git",
-    "directory": "packages/storage"
+    "directory": "packages/database-pg"
   },
   "publishConfig": {
     "access": "public"

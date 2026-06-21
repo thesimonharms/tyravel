@@ -11,19 +11,13 @@ export interface LocalDiskConfig {
   root: string;
 }
 
-export interface S3DiskConfig {
-  driver: 's3';
-  key: string;
-  secret: string;
-  region: string;
-  bucket: string;
-  url?: string;
-  endpoint?: string;
-}
-
-export type DiskConfig = LocalDiskConfig | S3DiskConfig;
+export type DiskConfig =
+  | LocalDiskConfig
+  | ({ driver: string } & Record<string, unknown>);
 
 export interface StorageConfig {
   default: string;
   disks: Record<string, DiskConfig>;
 }
+
+export type StorageDriverFactory = (config: DiskConfig) => Filesystem;

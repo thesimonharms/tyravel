@@ -19,6 +19,7 @@ export default {
 `;
 }
 
+/** Local disk by default. For S3, add @tyravel/storage-aws-s3 and AwsS3StorageServiceProvider. */
 export function filesystemsConfig(): string {
   return `import type { StorageConfig } from '@tyravel/storage';
 import { env } from '@tyravel/config';
@@ -29,15 +30,6 @@ export default {
     local: {
       driver: 'local',
       root: 'storage/app',
-    },
-    s3: {
-      driver: 's3',
-      key: env('AWS_ACCESS_KEY_ID', ''),
-      secret: env('AWS_SECRET_ACCESS_KEY', ''),
-      region: env('AWS_DEFAULT_REGION', 'us-east-1'),
-      bucket: env('AWS_BUCKET', ''),
-      url: env('AWS_URL', ''),
-      endpoint: env('AWS_ENDPOINT', ''),
     },
   },
 } satisfies StorageConfig;
@@ -85,27 +77,7 @@ export default {
 `;
 }
 
-export function cacheConfig(): string {
-  return `import type { CacheConfig } from '@tyravel/cache';
-import { env } from '@tyravel/config';
-
-export default {
-  default: env('CACHE_STORE', 'file'),
-  prefix: 'tyravel',
-  connections: {
-    file: {
-      driver: 'file',
-      path: 'storage/framework/cache',
-    },
-    array: { driver: 'array' },
-    redis: {
-      driver: 'redis',
-      connection: 'default',
-    },
-  },
-} satisfies CacheConfig;
-`;
-}
+export { cacheConfig } from './stubs-project.js';
 
 export function redisConfig(): string {
   return `import type { RedisConfig } from '@tyravel/redis';
@@ -155,12 +127,12 @@ export default {
 `;
 }
 
-export function notificationsConfig(): string {
+export function notificationsConfig(connection = 'sqlite'): string {
   return `import type { NotificationsConfig } from '@tyravel/notifications';
 
 export default {
   table: 'notifications',
-  connection: 'sqlite',
+  connection: '${connection}',
   queue: 'default',
   queueConnection: 'database',
 } satisfies NotificationsConfig;

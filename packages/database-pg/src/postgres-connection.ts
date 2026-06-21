@@ -1,15 +1,17 @@
 import pg from 'pg';
-import type { DatabaseConnection, QueryResult } from './connection.js';
-import { PostgresGrammar, type SqlGrammar } from './grammar.js';
-import type { PostgresConnectionConfig, RowValue } from './types.js';
+import type { DatabaseConnection, QueryResult } from '@tyravel/database';
+import { PostgresGrammar, type SqlGrammar } from '@tyravel/database';
+import type { PgConnectionConfig } from './types.js';
 
 const { Pool } = pg;
+
+type RowValue = string | number | bigint | boolean | null | undefined;
 
 export class PostgresConnection implements DatabaseConnection {
   readonly grammar: SqlGrammar = new PostgresGrammar();
   private readonly pool: pg.Pool;
 
-  constructor(config: PostgresConnectionConfig) {
+  constructor(config: PgConnectionConfig) {
     this.pool = new Pool({
       host: config.host,
       port: config.port ?? 5432,

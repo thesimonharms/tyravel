@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/storage",
+  "name": "@tyravel/storage-aws-s3",
   "version": "0.3.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -9,6 +9,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.840.0",
+    "@tyravel/storage": "0.3.0"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -23,12 +27,12 @@
   "devDependencies": {
     "@types/node": "^22.15.30"
   },
-  "description": "Filesystem storage and repository for Tyravel",
+  "description": "AWS S3 storage driver for Tyravel",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thesimonharms/tyravel.git",
-    "directory": "packages/storage"
+    "directory": "packages/storage-aws-s3"
   },
   "publishConfig": {
     "access": "public"

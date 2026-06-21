@@ -1,7 +1,9 @@
 import mysql from 'mysql2/promise';
-import type { DatabaseConnection, QueryResult } from './connection.js';
-import { MysqlGrammar, type SqlGrammar } from './grammar.js';
-import type { MysqlConnectionConfig, RowValue } from './types.js';
+import type { DatabaseConnection, QueryResult } from '@tyravel/database';
+import { MysqlGrammar, type SqlGrammar } from '@tyravel/database';
+import type { MysqlConnectionConfig } from './types.js';
+
+type RowValue = string | number | bigint | boolean | null | undefined;
 
 export class MysqlConnection implements DatabaseConnection {
   readonly grammar: SqlGrammar = new MysqlGrammar();

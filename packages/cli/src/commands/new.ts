@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { Command } from '../command.js';
+import { resolveNewProjectOptions } from '../new-project-options.js';
 import {
   cacheConfig,
   corsConfig,
@@ -29,7 +30,7 @@ import {
   viewsConfig,
   webRoutes,
 } from '../stubs.js';
-import { envExample } from '../stubs-env.js';
+import { envExample } from '../stubs-project.js';
 import { featureTestStub, projectVitestConfig } from '../stubs-testing.js';
 import {
   optionString,
@@ -43,7 +44,8 @@ import {
 export class NewCommand extends Command {
   override readonly name = 'new';
   override readonly description = 'Create a new Tyravel application';
-  override readonly usage = 'tyravel new <name> [--path=<directory>]';
+  override readonly usage =
+    'tyravel new <name> [--path=<directory>] [--db=sqlite|mysql|postgres] [--redis] [--no-redis]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -51,7 +53,15 @@ export class NewCommand extends Command {
 
     if (!rawName) {
       console.error('Project name is required.');
-      console.error('Usage: tyravel new <name> [--path=<directory>]');
+      console.error(this.usage);
+      return 1;
+    }
+
+    let projectOptions;
+    try {
+      projectOptions = await resolveNewProjectOptions(options);
+    } catch (error) {
+      console.error(error instanceof Error ? error.message : String(error));
       return 1;
     }
 
@@ -64,25 +74,30 @@ export class NewCommand extends Command {
       return 1;
     }
 
-    writeFile(projectPath(targetDir, 'package.json'), projectPackageJson(name));
-    const envContents = envExample(name);
+    writeFile(projectPath(targetDir, 'package.json'), projectPackageJson(name, projectOptions));
+    const envContents = envExample(name, projectOptions);
     writeFile(projectPath(targetDir, '.env.example'), envContents);
     writeFile(projectPath(targetDir, '.env'), envContents);
     writeFile(projectPath(targetDir, 'tyravel.json'), projectConfig(name));
     writeFile(projectPath(targetDir, 'config/app.ts'), appConfig(name));
-    writeFile(projectPath(targetDir, 'config/database.ts'), databaseConfig());
+    writeFile(projectPath(targetDir, 'config/database.ts'), databaseConfig(projectOptions));
     writeFile(projectPath(targetDir, 'config/views.ts'), viewsConfig());
-    writeFile(projectPath(targetDir, 'config/queue.ts'), queueConfig());
+    writeFile(projectPath(targetDir, 'config/queue.ts'), queueConfig(projectOptions));
     writeFile(projectPath(targetDir, 'config/events.ts'), eventsConfig());
-    writeFile(projectPath(targetDir, 'config/cache.ts'), cacheConfig());
+    writeFile(projectPath(targetDir, 'config/cache.ts'), cacheConfig(projectOptions));
     writeFile(projectPath(targetDir, 'config/filesystems.ts'), filesystemsConfig());
     writeFile(projectPath(targetDir, 'config/cors.ts'), corsConfig());
     writeFile(projectPath(targetDir, 'config/http.ts'), httpConfig());
     writeFile(projectPath(targetDir, 'config/log.ts'), logConfig());
     writeFile(projectPath(targetDir, 'config/health.ts'), healthConfig());
-    writeFile(projectPath(targetDir, 'config/redis.ts'), redisConfig());
+    if (projectOptions.redis) {
+      writeFile(projectPath(targetDir, 'config/redis.ts'), redisConfig());
+    }
     writeFile(projectPath(targetDir, 'config/mail.ts'), mailConfig());
-    writeFile(projectPath(targetDir, 'config/notifications.ts'), notificationsConfig());
+    writeFile(
+      projectPath(targetDir, 'config/notifications.ts'),
+      notificationsConfig(projectOptions.database),
+    );
     writeFile(
       projectPath(targetDir, 'resources/views/layouts/app.tyr'),
       layoutView(),
@@ -106,7 +121,7 @@ export class NewCommand extends Command {
       projectPath(targetDir, `database/migrations/${ts + 2}_create_notifications_table.ts`),
       notificationsTableMigration(),
     );
-    writeFile(projectPath(targetDir, 'src/main.ts'), mainEntry());
+    writeFile(projectPath(targetDir, 'src/main.ts'), mainEntry(projectOptions));
     writeFile(
       projectPath(targetDir, 'src/providers/app-service-provider.ts'),
       appServiceProvider(),
@@ -119,6 +134,9 @@ export class NewCommand extends Command {
     );
 
     console.log(`Tyravel application created successfully.`);
+    console.log('');
+    console.log(`  Database: ${projectOptions.database}`);
+    console.log(`  Redis: ${projectOptions.redis ? 'yes' : 'no'}`);
     console.log('');
     console.log(`  cd ${name}`);
     console.log('  npm install');

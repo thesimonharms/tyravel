@@ -15,31 +15,16 @@ export interface SqliteConnectionConfig {
   database: string;
 }
 
-export interface PostgresConnectionConfig {
-  driver: 'postgres';
-  host: string;
-  port?: number;
-  database: string;
-  username: string;
-  password: string;
-  ssl?: boolean;
-}
-
-export interface MysqlConnectionConfig {
-  driver: 'mysql';
-  host: string;
-  port?: number;
-  database: string;
-  username: string;
-  password: string;
-}
-
 export type ConnectionConfig =
   | SqliteConnectionConfig
-  | PostgresConnectionConfig
-  | MysqlConnectionConfig;
+  | ({ driver: string } & Record<string, unknown>);
 
 export interface DatabaseConfig {
   default: string;
   connections: Record<string, ConnectionConfig>;
 }
+
+export type DatabaseDriverFactory = (
+  config: ConnectionConfig,
+  basePath: string,
+) => import('./connection.js').DatabaseConnection;

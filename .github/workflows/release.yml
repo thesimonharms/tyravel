@@ -47,13 +47,17 @@ jobs:
             @tyravel/http
             @tyravel/validation
             @tyravel/database
+            @tyravel/database-mysql
+            @tyravel/database-pg
             @tyravel/redis
+            @tyravel/redis-node
             @tyravel/views
             @tyravel/queue
             @tyravel/events
             @tyravel/auth
             @tyravel/cache
             @tyravel/storage
+            @tyravel/storage-aws-s3
             @tyravel/mail
             @tyravel/notifications
             @tyravel/testing
