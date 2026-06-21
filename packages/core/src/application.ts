@@ -1,5 +1,6 @@
 import { Container } from '@tyravel/container';
 import type { Abstract, Constructor, Factory } from '@tyravel/container';
+import type { ConfigRepository } from '@tyravel/config';
 import {
   createRouter,
   MiddlewareRegistry,
@@ -60,6 +61,11 @@ export class Application extends Container {
 
   migrationPaths(): string[] {
     return [...this.registeredMigrationPaths];
+  }
+
+  mergeConfig(key: string, defaults: unknown): this {
+    this.make<ConfigRepository>('config').merge(key, defaults);
+    return this;
   }
 
   async boot(): Promise<void> {
