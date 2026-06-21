@@ -30,6 +30,17 @@ export class RedisStore implements CacheStore {
     await client.set(this.prefixed(key), serialized);
   }
 
+  async add(key: string, value: unknown, ttlSeconds?: number): Promise<boolean> {
+    const client = await this.redis.connection(this.connectionName);
+    const serialized = JSON.stringify(value);
+    const options: { EX?: number; NX?: boolean } = { NX: true };
+    if (ttlSeconds && ttlSeconds > 0) {
+      options.EX = ttlSeconds;
+    }
+    const result = await client.set(this.prefixed(key), serialized, options);
+    return result === 'OK';
+  }
+
   async forget(key: string): Promise<boolean> {
     const client = await this.redis.connection(this.connectionName);
     const removed = await client.del(this.prefixed(key));

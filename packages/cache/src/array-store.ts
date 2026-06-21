@@ -26,6 +26,14 @@ export class ArrayStore implements CacheStore {
     this.data.set(key, { value, expiresAt });
   }
 
+  async add(key: string, value: unknown, ttlSeconds?: number): Promise<boolean> {
+    if (await this.has(key)) {
+      return false;
+    }
+    await this.put(key, value, ttlSeconds);
+    return true;
+  }
+
   async forget(key: string): Promise<boolean> {
     return this.data.delete(key);
   }

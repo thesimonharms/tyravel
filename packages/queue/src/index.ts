@@ -1,6 +1,8 @@
+import type { CacheStore } from '@tyravel/cache';
 import type { Container } from '@tyravel/container';
 import type { DatabaseManager } from '@tyravel/database';
 import type { RedisManager } from '@tyravel/redis';
+import { BatchRepository } from './batch.js';
 import { Dispatcher } from './dispatcher.js';
 import { JobRegistry } from './registry.js';
 import { QueueManager } from './queue-manager.js';
@@ -14,25 +16,30 @@ export function createQueueStack(options: {
   database?: DatabaseManager;
   redis?: RedisManager;
   container?: Container;
+  cache?: CacheStore;
 }): {
   manager: QueueManager;
   dispatcher: Dispatcher;
   processor: QueueProcessor;
   registry: JobRegistry;
+  batchRepository?: BatchRepository;
 } {
   const registry = options.registry;
-  const worker = new QueueWorker(registry, options.container);
+  const batchRepository = options.cache ? new BatchRepository(options.cache) : undefined;
+  const worker = new QueueWorker(registry, options.container, { batchRepository });
   const manager = new QueueManager(options.config, worker, options.database, options.redis);
-  const dispatcher = new Dispatcher(manager.connection());
+  const dispatcher = new Dispatcher(manager.connection(), batchRepository);
   const processor = new QueueProcessor(manager, registry, worker);
 
-  return { manager, dispatcher, processor, registry };
+  return { manager, dispatcher, processor, registry, batchRepository };
 }
 
 export { DatabaseQueue } from './database-queue.js';
 export { RedisQueue } from './redis-queue.js';
 export { isWorkerQueue } from './worker-queue.js';
 export type { WorkerQueue } from './worker-queue.js';
+export { BatchRepository, PendingBatch, type BatchState } from './batch.js';
+export { Chain } from './chain.js';
 export { Dispatcher } from './dispatcher.js';
 export {
   FailedJobRepository,

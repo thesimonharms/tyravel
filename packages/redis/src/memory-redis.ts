@@ -11,7 +11,10 @@ export class MemoryRedis implements RedisClient {
     return this.strings.get(key) ?? null;
   }
 
-  async set(key: string, value: string, options?: { EX?: number }): Promise<string | null> {
+  async set(key: string, value: string, options?: { EX?: number; NX?: boolean }): Promise<string | null> {
+    if (options?.NX && this.strings.has(key)) {
+      return null;
+    }
     this.strings.set(key, value);
     if (options?.EX) {
       setTimeout(() => this.strings.delete(key), options.EX * 1000).unref?.();

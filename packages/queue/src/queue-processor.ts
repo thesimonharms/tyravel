@@ -76,7 +76,13 @@ export class QueueProcessor {
           if (!this.registry.has(payload.job)) {
             throw new Error(`Job class not registered: ${payload.job}`);
           }
-          await this.worker.process(payload);
+          await this.worker.process(
+            payload,
+            async (next) => {
+              await connection.pushRaw(next, queueName);
+            },
+            queueName,
+          );
           await connection.deleteJob(record.id);
         } catch (error) {
           if (record.attempts + 1 >= this.worker.getMaxAttempts()) {

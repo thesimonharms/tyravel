@@ -1,6 +1,7 @@
 export interface CacheStore {
   get<T = unknown>(key: string): Promise<T | null>;
   put(key: string, value: unknown, ttlSeconds?: number): Promise<void>;
+  add(key: string, value: unknown, ttlSeconds?: number): Promise<boolean>;
   forget(key: string): Promise<boolean>;
   has(key: string): Promise<boolean>;
   flush(): Promise<void>;

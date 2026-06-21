@@ -1,6 +1,6 @@
 export interface RedisClient {
   get(key: string): Promise<string | null>;
-  set(key: string, value: string, options?: { EX?: number }): Promise<string | null>;
+  set(key: string, value: string, options?: { EX?: number; NX?: boolean }): Promise<string | null>;
   del(...keys: string[]): Promise<number>;
   exists(...keys: string[]): Promise<number>;
   scanIterator(options: { MATCH: string; COUNT: number }): AsyncIterable<string>;
