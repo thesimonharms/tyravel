@@ -44,18 +44,25 @@ export interface OAuthProviderConfig {
   scopes?: string[];
 }
 
+export type SessionDriver = 'array' | 'database' | 'redis';
+
+export interface AuthSessionConfig {
+  driver?: SessionDriver;
+  cookie: string;
+  lifetimeMinutes: number;
+  table?: string;
+  connection?: string;
+  redisConnection?: string;
+  prefix?: string;
+}
+
 export interface AuthConfig {
   defaults: {
     guard: string;
   };
   guards: Record<string, GuardConfig>;
   providers: Record<string, EloquentUserProviderConfig>;
-  session: {
-    cookie: string;
-    lifetimeMinutes: number;
-    table: string;
-    connection?: string;
-  };
+  session: AuthSessionConfig;
   passwords?: Record<string, PasswordBrokerConfig>;
   oauth?: {
     providers: Record<string, OAuthProviderConfig>;

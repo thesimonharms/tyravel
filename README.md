@@ -767,9 +767,19 @@ npm publish -w @tyravel/cli --access public
 
 See [CHANGELOG.md](./CHANGELOG.md) for release notes.
 
+## Documentation
+
+Tutorial guides live in the [docs site](./docs/). Run locally:
+
+```bash
+npm run docs:dev
+```
+
+Build static output with `npm run docs:build`.
+
 ## Roadmap
 
-**v0.1.0** ships the full stack below. Future releases will focus on polish, adapters, and ecosystem packages on npm.
+See [ROADMAP.md](./ROADMAP.md) for release tiers. **v0.1.0** ships the full stack below.
 
 ### Shipped in v0.1.0
 

@@ -26,8 +26,8 @@ Grow the ecosystem and Laravel parity for API-heavy apps.
 
 - [x] **Form requests** — Validation + authorization on controller actions
 - [x] **API resources / transformers** — Structured JSON serialization
-- [ ] **Documentation site** — Tutorials beyond the monorepo README
-- [ ] **More auth adapters** — Redis/database session drivers, additional OAuth providers
+- [x] **Documentation site** — Tutorials beyond the monorepo README
+- [x] **More auth adapters** — Redis/database session drivers, additional OAuth providers
 
 ## Shipped in v0.1.0
 

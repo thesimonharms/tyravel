@@ -113,7 +113,12 @@ export class SessionGuard implements Guard {
   async logout(): Promise<void> {
     this.currentUser = null;
     if (this.session) {
-      this.session.forget(sessionKey(this.name));
+      await this.store.destroy(this.session.id);
+      const newId = randomBytes(32).toString('base64url');
+      this.session = new Session(newId, {});
+      if (this.request) {
+        this.request.session = this.session;
+      }
     }
     if (this.request) {
       this.request.user = null;

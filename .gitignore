@@ -7,3 +7,5 @@ dist/
 *.sqlite
 terminals/
 my-app/
+docs/.vitepress/dist/
+docs/.vitepress/cache/

@@ -10,12 +10,16 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc -b",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
     "tyravel": "node packages/cli/dist/bin/tyravel.js",
     "release:prepare": "node scripts/prepare-release.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.15.30",
     "typescript": "^5.8.3",
+    "vitepress": "^1.6.3",
     "vitest": "^3.2.4"
   }
 }

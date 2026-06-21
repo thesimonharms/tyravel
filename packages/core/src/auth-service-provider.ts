@@ -11,12 +11,13 @@ import {
   createAuthMiddleware,
   createGuestMiddleware,
   createStartSessionMiddleware,
-  DatabaseSessionStore,
   EloquentUserProvider,
+  SessionManager,
   type AuthConfig,
   type EloquentUserProviderConfig,
   type GuardConfig,
 } from '@tyravel/auth';
+import { RedisManager } from '@tyravel/redis';
 import { ServiceProvider } from './service-provider.js';
 
 export class AuthServiceProvider extends ServiceProvider {
@@ -25,11 +26,12 @@ export class AuthServiceProvider extends ServiceProvider {
     const authConfig = config.get<AuthConfig>('auth');
     const database = this.app.make<DatabaseManager>('db');
 
-    const sessionConnection = database.connection(authConfig.session.connection);
-    const sessionStore = new DatabaseSessionStore(
-      sessionConnection,
-      authConfig.session.table,
+    const sessionManager = new SessionManager(
+      authConfig.session,
+      database,
+      this.resolveRedisManager(),
     );
+    const sessionStore = sessionManager.driver();
 
     const providers = new Map<string, EloquentUserProvider>();
     for (const [name, providerConfig] of Object.entries(
@@ -122,5 +124,13 @@ export class AuthServiceProvider extends ServiceProvider {
     this.app.middleware('auth', createAuthMiddleware(auth));
     this.app.middleware('auth:api', createAuthMiddleware(auth, 'api'));
     this.app.middleware('guest', createGuestMiddleware(auth));
+  }
+
+  private resolveRedisManager(): RedisManager | undefined {
+    try {
+      return this.app.make<RedisManager>('redis');
+    } catch {
+      return undefined;
+    }
   }
 }

@@ -509,6 +509,7 @@ export default {
     },
   },
   session: {
+    driver: 'database',
     cookie: 'tyravel_session',
     lifetimeMinutes: 120,
     table: 'sessions',
@@ -540,6 +541,17 @@ export default {
         clientId: env('GOOGLE_CLIENT_ID', ''),
         clientSecret: env('GOOGLE_CLIENT_SECRET', ''),
         redirectUri: env('GOOGLE_REDIRECT_URI', 'http://127.0.0.1:3000/auth/google/callback'),
+      },
+      discord: {
+        clientId: env('DISCORD_CLIENT_ID', ''),
+        clientSecret: env('DISCORD_CLIENT_SECRET', ''),
+        redirectUri: env('DISCORD_REDIRECT_URI', 'http://127.0.0.1:3000/auth/discord/callback'),
+        scopes: ['identify', 'email'],
+      },
+      microsoft: {
+        clientId: env('MICROSOFT_CLIENT_ID', ''),
+        clientSecret: env('MICROSOFT_CLIENT_SECRET', ''),
+        redirectUri: env('MICROSOFT_REDIRECT_URI', 'http://127.0.0.1:3000/auth/microsoft/callback'),
       },
     },
   },

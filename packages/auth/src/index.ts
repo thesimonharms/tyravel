@@ -8,8 +8,16 @@ export { SessionGuard } from './session-guard.js';
 export { TokenGuard } from './token-guard.js';
 export { Gate, createAuthorizeMiddleware } from './gate.js';
 export { Policy } from './policy.js';
-export { OAuthManager, GithubOAuthDriver, GoogleOAuthDriver } from './oauth.js';
+export {
+  OAuthManager,
+  GithubOAuthDriver,
+  GoogleOAuthDriver,
+  DiscordOAuthDriver,
+  MicrosoftOAuthDriver,
+} from './oauth.js';
 export type { OAuthUserProfile, OAuthDriver } from './oauth.js';
+export { RedisSessionStore } from './redis-session-store.js';
+export { SessionManager } from './session-manager.js';
 export { PasswordResetBroker } from './password-reset-broker.js';
 export { PersonalAccessTokenRepository } from './personal-access-token-repository.js';
 export { AuthenticationException, InvalidCredentialsException } from './exceptions.js';
@@ -25,6 +33,8 @@ export type { UserProvider } from './user-provider.js';
 export type {
   Authenticatable,
   AuthConfig,
+  AuthSessionConfig,
+  SessionDriver,
   EloquentUserProviderConfig,
   Guard,
   GuardConfig,
