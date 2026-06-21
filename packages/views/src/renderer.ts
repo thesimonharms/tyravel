@@ -201,10 +201,19 @@ export async function renderOps(
 
       case 'inject': {
         const injector = engine.getRegistry().getInjector();
-        if (injector) {
-          const value = await injector(op.binding);
-          context[op.varName] = value;
+        if (!injector) {
+          const environment = engine.getRegistry().getEnvironment();
+          if (environment === 'local' || environment === 'development') {
+            throw new Error(
+              `@inject('${op.varName}', '${op.binding}') requires a view injector. ` +
+                'Register ViewServiceProvider or call engine.setInjector().',
+            );
+          }
+          break;
         }
+
+        const value = await injector(op.binding);
+        context[op.varName] = value;
         break;
       }
 

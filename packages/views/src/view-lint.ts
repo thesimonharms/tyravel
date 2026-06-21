@@ -1,9 +1,11 @@
+import { BUILTIN_VIEW_DIRECTIVES } from './compiler.js';
 import { BUILTIN_ESCAPE_CONTEXTS } from './escape.js';
 import { lineColumnAt } from './view-compile-error.js';
 
 export type ViewLintRule =
   | 'unclosed-directive'
   | 'unknown-component'
+  | 'unknown-custom-directive'
   | 'unknown-escape-context'
   | 'duplicate-island'
   | 'unsafe-raw-echo';
@@ -19,6 +21,7 @@ export interface ViewLintOptions {
   viewPath?: string;
   componentExists?: (name: string) => boolean;
   escapeContexts?: ReadonlySet<string>;
+  customDirectives?: ReadonlySet<string>;
 }
 
 interface DirectivePair {
@@ -55,6 +58,7 @@ const DIRECTIVE_PAIRS: DirectivePair[] = [
 ];
 
 const COMPONENT_RE = /^@component\(\s*['"]([^'"]+)['"]/;
+const CUSTOM_DIRECTIVE_RE = /^@([A-Za-z_][\w]*)\(.*\)\s*$/;
 const ISLAND_RE = /^@island\(\s*['"]([^'"]+)['"]/;
 const ESCAPE_RE = /^@escape\(\s*['"]([^'"]+)['"]/;
 const RAW_ECHO_RE = /\{!!\s*(.+?)\s*!!\}/g;
@@ -67,6 +71,7 @@ export function lintViewSource(
   const issues: ViewLintIssue[] = [];
   issues.push(...lintUnclosedDirectives(source, options.viewPath));
   issues.push(...lintUnknownComponents(source, options.componentExists));
+  issues.push(...lintUnknownCustomDirectives(source, options.customDirectives));
   issues.push(...lintDuplicateIslands(source));
   issues.push(...lintUnknownEscapeContexts(source, escapeContexts));
   issues.push(...lintUnsafeRawEchoes(source));
@@ -147,6 +152,42 @@ function lintUnknownComponents(
         issues.push({
           rule: 'unknown-component',
           message: `Unknown component "${name}"`,
+          line: location.line,
+          column: location.column,
+        });
+      }
+    }
+
+    cursor += line.length;
+  }
+
+  return issues;
+}
+
+function lintUnknownCustomDirectives(
+  source: string,
+  customDirectives?: ReadonlySet<string>,
+): ViewLintIssue[] {
+  if (!customDirectives) {
+    return [];
+  }
+
+  const issues: ViewLintIssue[] = [];
+  let cursor = 0;
+
+  while (cursor < source.length) {
+    const line = takeLine(source, cursor);
+    const trimmed = line.trim();
+    const match = trimmed.match(CUSTOM_DIRECTIVE_RE);
+
+    if (match) {
+      const name = match[1]!;
+      if (!BUILTIN_VIEW_DIRECTIVES.has(name) && !customDirectives.has(name)) {
+        const lineStart = cursor + line.indexOf(trimmed);
+        const location = lineColumnAt(source, lineStart);
+        issues.push({
+          rule: 'unknown-custom-directive',
+          message: `Unknown custom directive @${name}(); register with View.directive('${name}', ...)`,
           line: location.line,
           column: location.column,
         });

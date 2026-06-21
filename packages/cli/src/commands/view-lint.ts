@@ -3,7 +3,7 @@ import { lintViewSource, type ViewLintIssue } from '@tyravel/views';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { parseOptions, positionalArgs } from '../utils.js';
-import { createViewEngine, loadViewConfig } from '../view-config.js';
+import { bootViewApplication } from '../view-bootstrap.js';
 
 export class ViewLintCommand extends Command {
   override readonly name = 'view:lint';
@@ -15,8 +15,7 @@ export class ViewLintCommand extends Command {
     positionalArgs(args);
 
     const root = requireProjectRoot();
-    const viewConfig = await loadViewConfig(root);
-    const engine = createViewEngine(root, viewConfig);
+    const { engine } = await bootViewApplication(root);
 
     const issues: Array<ViewLintIssue & { view: string }> = [];
 
@@ -27,6 +26,7 @@ export class ViewLintCommand extends Command {
         viewPath: filePath,
         componentExists: (component) => engine.exists(component),
         escapeContexts: new Set(engine.getRegistry().getEscapeContexts().keys()),
+        customDirectives: engine.getRegistry().getDirectiveNames(),
       });
 
       for (const issue of found) {

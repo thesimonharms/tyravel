@@ -18,7 +18,7 @@ export interface CompileOptions {
   viewPath?: string;
 }
 
-const BUILTIN_DIRECTIVES = new Set([
+export const BUILTIN_VIEW_DIRECTIVES = new Set([
   'layout',
   'section',
   'endsection',
@@ -730,7 +730,7 @@ function parseOps(source: string, options: CompileOptions = {}): TemplateOp[] {
       const directiveName = customMatch[1]!;
       if (
         options.customDirectives?.has(directiveName) &&
-        !BUILTIN_DIRECTIVES.has(directiveName)
+        !BUILTIN_VIEW_DIRECTIVES.has(directiveName)
       ) {
         ops.push({
           type: 'custom',

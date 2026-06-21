@@ -1,7 +1,7 @@
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { parseOptions, positionalArgs } from '../utils.js';
-import { createViewEngine, loadViewConfig } from '../view-config.js';
+import { bootViewApplication, enableCompiledCache } from '../view-bootstrap.js';
 
 export class ViewCacheCommand extends Command {
   override readonly name = 'view:cache';
@@ -13,12 +13,8 @@ export class ViewCacheCommand extends Command {
     positionalArgs(args);
 
     const root = requireProjectRoot();
-    const viewConfig = await loadViewConfig(root);
-    const engine = createViewEngine(root, {
-      ...viewConfig,
-      compiled: true,
-      compiledPath: viewConfig.compiledPath ?? 'storage/framework/views',
-    });
+    const { engine, viewConfig } = await bootViewApplication(root);
+    enableCompiledCache(engine, root, viewConfig);
 
     const count = await engine.warmCompiledCache();
     console.log(`Compiled ${count} view(s) to ${viewConfig.compiledPath ?? 'storage/framework/views'}.`);
@@ -37,12 +33,8 @@ export class ViewClearCommand extends Command {
     positionalArgs(args);
 
     const root = requireProjectRoot();
-    const viewConfig = await loadViewConfig(root);
-    const engine = createViewEngine(root, {
-      ...viewConfig,
-      compiled: true,
-      compiledPath: viewConfig.compiledPath ?? 'storage/framework/views',
-    });
+    const { engine, viewConfig } = await bootViewApplication(root);
+    enableCompiledCache(engine, root, viewConfig);
 
     const count = engine.clearCompiledCache();
     console.log(`Cleared ${count} compiled view file(s).`);

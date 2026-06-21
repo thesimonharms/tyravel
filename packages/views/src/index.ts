@@ -7,7 +7,7 @@ export {
 } from './compiled-cache.js';
 export type { SerializedCacheEntry } from './compiled-cache.js';
 export { DEFAULT_VIEW_CONFIG } from './default-config.js';
-export { compile, type CompileOptions } from './compiler.js';
+export { BUILTIN_VIEW_DIRECTIVES, compile, type CompileOptions } from './compiler.js';
 export { ViewCompileError, formatCompileLocation } from './view-compile-error.js';
 export {
   InMemoryFragmentCache,

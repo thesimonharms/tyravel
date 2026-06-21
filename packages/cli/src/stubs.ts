@@ -79,9 +79,6 @@ export class ${className} {
     return {};
   }
 }
-
-// Register in a service provider boot method:
-// View.component('${tagName}', app.make(${className}));
 `;
 }
 

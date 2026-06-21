@@ -1,8 +1,10 @@
 import { randomBytes } from 'node:crypto';
+import { join } from 'node:path';
 import { ConfigRepository } from '@tyravel/config';
 import type { AuthManager, Gate } from '@tyravel/auth';
 import type { TyravelRequest } from '@tyravel/http';
 import {
+  createViewWatcher,
   DEFAULT_VIEW_CONFIG,
   ViewEngine,
   ViewErrorBag,
@@ -125,5 +127,39 @@ export class ViewServiceProvider extends ServiceProvider {
     } catch {
       // Auth provider not registered — auth directives render as guest/no-op.
     }
+
+    this.startViewWatcherIfRequested(engine, viewConfig, environment);
+  }
+
+  private startViewWatcherIfRequested(
+    engine: ViewEngine,
+    viewConfig: ViewConfig,
+    environment: string,
+  ): void {
+    if (process.env.TYRAVEL_VIEW_WATCH !== '1' || environment === 'production') {
+      return;
+    }
+
+    const cachePath = join(
+      this.app.basePath,
+      viewConfig.compiledPath ?? 'storage/framework/views',
+    );
+    engine.setCompiledCachePath(cachePath);
+
+    const watcher = createViewWatcher(engine, {
+      onRecompiled: (viewName) => {
+        console.log(`[views] Recompiled ${viewName}`);
+      },
+      onError: (error) => {
+        console.error(`[views] ${error.message}`);
+      },
+    });
+
+    const closeWatcher = (): void => {
+      watcher.close();
+    };
+
+    process.once('SIGINT', closeWatcher);
+    process.once('SIGTERM', closeWatcher);
   }
 }

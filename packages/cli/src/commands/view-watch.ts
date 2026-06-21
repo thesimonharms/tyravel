@@ -2,7 +2,7 @@ import { createViewWatcher } from '@tyravel/views';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { parseOptions, positionalArgs } from '../utils.js';
-import { createViewEngine, loadViewConfig } from '../view-config.js';
+import { bootViewApplication, enableCompiledCache } from '../view-bootstrap.js';
 
 export class ViewWatchCommand extends Command {
   override readonly name = 'view:watch';
@@ -14,12 +14,8 @@ export class ViewWatchCommand extends Command {
     positionalArgs(args);
 
     const root = requireProjectRoot();
-    const viewConfig = await loadViewConfig(root);
-    const engine = createViewEngine(root, {
-      ...viewConfig,
-      compiled: true,
-      compiledPath: viewConfig.compiledPath ?? 'storage/framework/views',
-    });
+    const { engine, viewConfig } = await bootViewApplication(root);
+    enableCompiledCache(engine, root, viewConfig);
 
     console.log('Watching Tyr templates for changes...');
 

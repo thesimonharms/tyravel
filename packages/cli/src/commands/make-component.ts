@@ -2,6 +2,7 @@ import { existsSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
+import { registerComponentInProvider } from '../component-provider.js';
 import { componentClass, componentView } from '../stubs.js';
 import {
   optionFlag,
@@ -53,6 +54,14 @@ export class MakeComponentCommand extends Command {
 
       writeFile(classTarget, componentClass(className, kebab));
       console.log(`Component class created: src/components/${className}.ts`);
+
+      if (registerComponentInProvider(root, className, kebab)) {
+        console.log(`Registered View.component('${kebab}') in AppServiceProvider`);
+      } else {
+        console.log(
+          `Add to AppServiceProvider boot(): View.component('${kebab}', this.app.make(${className}));`,
+        );
+      }
     }
 
     return 0;
