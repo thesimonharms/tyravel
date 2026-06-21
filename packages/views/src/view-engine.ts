@@ -16,8 +16,22 @@ import {
   resolveLocalePath,
   translate,
 } from './locale.js';
+import {
+  buildComponentCatalog,
+  type ComponentCatalogEntry,
+} from './component-catalog.js';
+import { loadProgrammaticView } from './programmatic-view.js';
 import { renderOps } from './renderer.js';
-import type { CompiledTemplate, ViewConfig, ViewContext } from './types.js';
+import { collectStreamSections } from './streaming.js';
+import type {
+  CompiledTemplate,
+  RenderOptions,
+  TemplateOp,
+  ViewConfig,
+  ViewContext,
+} from './types.js';
+import type { ViewPropsFor } from './view-props.js';
+import type { EscapeHandler } from './escape.js';
 import { parseViewName } from './view-namespaces.js';
 import {
   ViewRegistry,
@@ -149,6 +163,15 @@ export class ViewEngine {
     return this;
   }
 
+  escape(context: string, handler: EscapeHandler): this {
+    this.registry.escape(context, handler);
+    return this;
+  }
+
+  getComponentCatalog(): ComponentCatalogEntry[] {
+    return buildComponentCatalog(this.basePath, this.config, this.namespaces);
+  }
+
   getCompiledTemplate(name: string): CompiledTemplate {
     return this.loadTemplate(this.resolveName(name));
   }
@@ -217,19 +240,113 @@ export class ViewEngine {
     return name;
   }
 
-  async render(
-    name: string,
-    context: ViewContext = {},
+  async render<TName extends string>(
+    name: TName,
+    context: ViewPropsFor<TName> = {} as ViewPropsFor<TName>,
     parentSections?: ReadonlyMap<string, string>,
     parentStacks?: Map<string, string[]>,
     parentOnceRendered?: Set<string>,
     parentComponentPropsStack?: Record<string, unknown>[],
     parentStackOncePushed?: Set<string>,
+    renderOptions: RenderOptions = {},
   ): Promise<string> {
     const resolved = this.resolveName(name);
+    const composed = await this.registry.applyComposers(resolved, context as ViewContext);
+    const renderContext = this.buildEvaluationContext(
+      this.mergeFormContext(composed as ViewContext),
+    );
+
+    if (!parentSections && renderOptions.mode !== 'stream-shell') {
+      this.registry.resetHydrationManifest();
+    }
+
+    if (this.isProgrammatic(resolved)) {
+      return this.renderProgrammatic(resolved, renderContext);
+    }
+
+    return this.renderCompiled(
+      resolved,
+      renderContext,
+      parentSections,
+      parentStacks,
+      parentOnceRendered,
+      parentComponentPropsStack,
+      parentStackOncePushed,
+      renderOptions,
+    );
+  }
+
+  async *renderStream<TName extends string>(
+    name: TName,
+    context: ViewPropsFor<TName> = {} as ViewPropsFor<TName>,
+    handlers: Record<string, (ctx: ViewContext) => Promise<string>> = {},
+  ): AsyncGenerator<string> {
+    const resolved = this.resolveName(name);
+    const composed = await this.registry.applyComposers(resolved, context as ViewContext);
+    const renderContext = this.buildEvaluationContext(
+      this.mergeFormContext(composed as ViewContext),
+    );
+
+    this.registry.resetHydrationManifest();
+    yield await this.render(resolved, renderContext, undefined, undefined, undefined, undefined, undefined, {
+      mode: 'stream-shell',
+    });
+
     const template = this.loadTemplate(resolved);
-    const composed = await this.registry.applyComposers(resolved, context);
-    const renderContext = this.buildEvaluationContext(this.mergeFormContext(composed));
+    const sections = collectStreamSections(template);
+    if (template.layout) {
+      sections.push(...collectStreamSections(this.loadTemplate(template.layout)));
+    }
+
+    const seen = new Set<string>();
+    for (const section of sections) {
+      if (seen.has(section.name)) {
+        continue;
+      }
+      seen.add(section.name);
+
+      const handler = handlers[section.name];
+      if (handler) {
+        yield await handler(renderContext);
+        continue;
+      }
+
+      yield await this.renderStreamSection(section.body, renderContext);
+    }
+  }
+
+  getHydrationManifest(): { islands: import('./hydration.js').HydrationIsland[] } {
+    return this.registry.getHydrationManifest().toJSON();
+  }
+
+  exists(name: string): boolean {
+    if (this.existsAt(name)) {
+      return true;
+    }
+
+    if (this.isProgrammatic(this.resolveName(name))) {
+      return true;
+    }
+
+    const parsed = parseViewName(name);
+    if (!parsed.namespace) {
+      return this.existsAt(`components.${name}`);
+    }
+
+    return false;
+  }
+
+  private async renderCompiled(
+    resolved: string,
+    renderContext: ViewContext,
+    parentSections?: ReadonlyMap<string, string>,
+    parentStacks?: Map<string, string[]>,
+    parentOnceRendered?: Set<string>,
+    parentComponentPropsStack?: Record<string, unknown>[],
+    parentStackOncePushed?: Set<string>,
+    renderOptions: RenderOptions = {},
+  ): Promise<string> {
+    const template = this.loadTemplate(resolved);
     const helpers = new ViewHelpers(
       parentStacks,
       parentOnceRendered,
@@ -241,7 +358,7 @@ export class ViewEngine {
       helpers.importSections(parentSections);
     }
 
-    await renderOps(template.ops, renderContext, helpers, this);
+    await renderOps(template.ops, renderContext, helpers, this, renderOptions);
 
     if (template.layout) {
       const layoutHelpers = new ViewHelpers(
@@ -256,6 +373,7 @@ export class ViewEngine {
         renderContext,
         layoutHelpers,
         this,
+        renderOptions,
       );
       return layoutHelpers.toString();
     }
@@ -263,17 +381,36 @@ export class ViewEngine {
     return helpers.toString();
   }
 
-  exists(name: string): boolean {
-    if (this.existsAt(name)) {
-      return true;
-    }
+  private async renderStreamSection(
+    body: TemplateOp[],
+    context: ViewContext,
+  ): Promise<string> {
+    const helpers = new ViewHelpers();
+    await renderOps(body, context, helpers, this);
+    return helpers.toString();
+  }
 
-    const parsed = parseViewName(name);
-    if (!parsed.namespace) {
-      return this.existsAt(`components.${name}`);
-    }
+  private async renderProgrammatic(name: string, context: ViewContext): Promise<string> {
+    const filePath = this.programmaticPathFor(this.resolvePath(name));
+    const module = await loadProgrammaticView(filePath);
+    const output = await module.render(context);
+    return String(output ?? '');
+  }
 
-    return false;
+  private isProgrammatic(name: string): boolean {
+    try {
+      return existsSync(this.programmaticPathFor(this.resolvePath(name)));
+    } catch {
+      return false;
+    }
+  }
+
+  private programmaticPathFor(tyrPath: string): string {
+    const programmaticExtension = this.config.programmaticExtension ?? '.tyr.ts';
+    if (tyrPath.endsWith(this.extension)) {
+      return `${tyrPath.slice(0, -this.extension.length)}${programmaticExtension}`;
+    }
+    return `${tyrPath}${programmaticExtension}`;
   }
 
   renderVite(entry: string): string {

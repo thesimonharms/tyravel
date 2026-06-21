@@ -63,6 +63,11 @@ const BUILTIN_DIRECTIVES = new Set([
   'inject',
   'fragment',
   'endfragment',
+  'escape',
+  'stream',
+  'endstream',
+  'island',
+  'endisland',
   'auth',
   'endauth',
   'guest',
@@ -150,6 +155,12 @@ const INJECT_RE = /^@inject\(\s*['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]\s*\)\s*$
 const FRAGMENT_START_RE =
   /^@fragment\(\s*['"]([^'"]+)['"]\s*(?:,\s*(\d+))?\s*\)\s*$/;
 const FRAGMENT_END_RE = /^@endfragment\s*$/;
+const ESCAPE_RE = /^@escape\(\s*['"]([^'"]+)['"]\s*,\s*(.+)\s*\)\s*$/;
+const STREAM_START_RE = /^@stream\(\s*['"]([^'"]+)['"]\s*\)\s*$/;
+const STREAM_END_RE = /^@endstream\s*$/;
+const ISLAND_START_RE =
+  /^@island\(\s*['"]([^'"]+)['"]\s*(?:,\s*(.+))?\s*\)\s*$/;
+const ISLAND_END_RE = /^@endisland\s*$/;
 const UNKNOWN_DIRECTIVE_RE = /^@([A-Za-z_][\w]*)\b/;
 const CSRF_RE = /^@csrf\s*$/;
 const METHOD_RE = /^@method\(\s*['"]([^'"]+)['"]\s*\)\s*$/;
@@ -521,6 +532,39 @@ function parseOps(source: string, options: CompileOptions = {}): TemplateOp[] {
       );
       ops.push(block.op);
       cursor = block.end;
+      continue;
+    }
+
+    const streamMatch = trimmed.match(STREAM_START_RE);
+    if (streamMatch) {
+      const block = parseStreamBlock(source, cursor, streamMatch[1]!, options);
+      ops.push(block.op);
+      cursor = block.end;
+      continue;
+    }
+
+    const islandMatch = trimmed.match(ISLAND_START_RE);
+    if (islandMatch) {
+      const block = parseIslandBlock(
+        source,
+        cursor,
+        islandMatch[1]!,
+        islandMatch[2]?.trim(),
+        options,
+      );
+      ops.push(block.op);
+      cursor = block.end;
+      continue;
+    }
+
+    const escapeMatch = trimmed.match(ESCAPE_RE);
+    if (escapeMatch) {
+      ops.push({
+        type: 'escape',
+        context: escapeMatch[1]!,
+        expression: escapeMatch[2]!.trim(),
+      });
+      cursor += line.length;
       continue;
     }
 
@@ -1184,6 +1228,66 @@ function parsePrependBlock(
   };
 }
 
+function parseStreamBlock(
+  source: string,
+  start: number,
+  name: string,
+  options: CompileOptions = {},
+): { op: TemplateOp; end: number } {
+  const headerLine = takeLine(source, start);
+  const contentStart = start + headerLine.length;
+  const contentEnd = findNestedEnd(
+    source,
+    contentStart,
+    STREAM_START_RE,
+    STREAM_END_RE,
+    start,
+    '@endstream',
+    options,
+  );
+  const endLine = takeLine(source, contentEnd);
+
+  return {
+    op: {
+      type: 'stream',
+      name,
+      body: parseOps(source.slice(contentStart, contentEnd), options),
+    },
+    end: contentEnd + endLine.length,
+  };
+}
+
+function parseIslandBlock(
+  source: string,
+  start: number,
+  id: string,
+  propsExpression: string | undefined,
+  options: CompileOptions = {},
+): { op: TemplateOp; end: number } {
+  const headerLine = takeLine(source, start);
+  const contentStart = start + headerLine.length;
+  const contentEnd = findNestedEnd(
+    source,
+    contentStart,
+    ISLAND_START_RE,
+    ISLAND_END_RE,
+    start,
+    '@endisland',
+    options,
+  );
+  const endLine = takeLine(source, contentEnd);
+
+  return {
+    op: {
+      type: 'island',
+      id,
+      propsExpression,
+      body: parseOps(source.slice(contentStart, contentEnd), options),
+    },
+    end: contentEnd + endLine.length,
+  };
+}
+
 function parseFragmentBlock(
   source: string,
   start: number,
@@ -1564,6 +1668,18 @@ function parseInlineDirective(
     return {
       op: { type: 'style', expression: styleDirective.expression },
       length: styleDirective.length,
+    };
+  }
+
+  const escapeMatch = source.match(/^@escape\(\s*['"]([^'"]+)['"]\s*,\s*(.+)\s*\)/);
+  if (escapeMatch) {
+    return {
+      op: {
+        type: 'escape',
+        context: escapeMatch[1]!,
+        expression: escapeMatch[2]!.trim(),
+      },
+      length: escapeMatch[0].length,
     };
   }
 

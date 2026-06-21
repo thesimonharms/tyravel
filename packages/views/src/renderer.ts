@@ -7,6 +7,8 @@ import {
 import { parseQuotedStrings } from './directive-parsers.js';
 import { isIterableEmpty, isViewEmpty, isViewSet } from './conditions.js';
 import { escapeHtml } from './escape.js';
+import { renderIslandWrapper } from './hydration.js';
+import { streamPlaceholder } from './streaming.js';
 import { evaluateExpression, parseForeachExpression } from './evaluate.js';
 import {
   encodeJsonForHtml,
@@ -15,7 +17,7 @@ import {
   renderMethodField,
   switchMatches,
 } from './form-helpers.js';
-import type { TemplateOp, ViewContext } from './types.js';
+import type { RenderOptions, TemplateOp, ViewContext } from './types.js';
 import { ViewAttributeBag } from './view-attributes.js';
 import { ViewErrorBag } from './view-errors.js';
 import type { ViewEngine } from './view-engine.js';
@@ -26,6 +28,7 @@ export async function renderOps(
   context: ViewContext,
   helpers: ViewHelpers,
   engine: ViewEngine,
+  renderOptions: RenderOptions = {},
 ): Promise<void> {
   for (const op of ops) {
     switch (op.type) {
@@ -46,9 +49,9 @@ export async function renderOps(
       case 'if': {
         const result = await evaluateConditional(op, context, engine);
         if (result) {
-          await renderOps(op.body, context, helpers, engine);
+          await renderOps(op.body, context, helpers, engine, renderOptions);
         } else if (op.elseBody) {
-          await renderOps(op.elseBody, context, helpers, engine);
+          await renderOps(op.elseBody, context, helpers, engine, renderOptions);
         }
         break;
       }
@@ -64,14 +67,14 @@ export async function renderOps(
 
           const caseValue = evaluateExpression(switchCase.labelExpression, context);
           if (switchMatches(switchValue, caseValue)) {
-            await renderOps(switchCase.body, context, helpers, engine);
+            await renderOps(switchCase.body, context, helpers, engine, renderOptions);
             matched = true;
             break;
           }
         }
 
         if (!matched && op.defaultBody) {
-          await renderOps(op.defaultBody, context, helpers, engine);
+          await renderOps(op.defaultBody, context, helpers, engine, renderOptions);
         }
         break;
       }
@@ -114,22 +117,36 @@ export async function renderOps(
 
       case 'forelse': {
         if (isIterableEmpty(op.expression, context)) {
-          await renderOps(op.emptyBody, context, helpers, engine);
+          await renderOps(op.emptyBody, context, helpers, engine, renderOptions);
         } else {
-          await renderForeachBody(op.expression, op.body, context, helpers, engine);
+          await renderForeachBody(
+            op.expression,
+            op.body,
+            context,
+            helpers,
+            engine,
+            renderOptions,
+          );
         }
         break;
       }
 
       case 'foreach': {
-        await renderForeachBody(op.expression, op.body, context, helpers, engine);
+        await renderForeachBody(
+          op.expression,
+          op.body,
+          context,
+          helpers,
+          engine,
+          renderOptions,
+        );
         break;
       }
 
       case 'once': {
         if (!helpers.hasRenderedOnce(op.id)) {
           helpers.markOnceRendered(op.id);
-          await renderOps(op.body, context, helpers, engine);
+          await renderOps(op.body, context, helpers, engine, renderOptions);
         }
         break;
       }
@@ -141,7 +158,7 @@ export async function renderOps(
           helpers.getComponentPropsStack(),
           helpers.getStackOncePushed(),
         );
-        await renderOps(op.body, context, sectionHelpers, engine);
+        await renderOps(op.body, context, sectionHelpers, engine, renderOptions);
         helpers.setSection(op.name, sectionHelpers.toString());
         break;
       }
@@ -153,7 +170,7 @@ export async function renderOps(
           helpers.getComponentPropsStack(),
           helpers.getStackOncePushed(),
         );
-        await renderOps(op.body, context, pushHelpers, engine);
+        await renderOps(op.body, context, pushHelpers, engine, renderOptions);
         helpers.pushStack(op.name, pushHelpers.toString());
         break;
       }
@@ -165,7 +182,7 @@ export async function renderOps(
           helpers.getComponentPropsStack(),
           helpers.getStackOncePushed(),
         );
-        await renderOps(op.body, context, pushHelpers, engine);
+        await renderOps(op.body, context, pushHelpers, engine, renderOptions);
         helpers.pushStackOnce(op.name, op.id, pushHelpers.toString());
         break;
       }
@@ -177,7 +194,7 @@ export async function renderOps(
           helpers.getComponentPropsStack(),
           helpers.getStackOncePushed(),
         );
-        await renderOps(op.body, context, prependHelpers, engine);
+        await renderOps(op.body, context, prependHelpers, engine, renderOptions);
         helpers.prependStack(op.name, prependHelpers.toString());
         break;
       }
@@ -206,10 +223,54 @@ export async function renderOps(
           helpers.getComponentPropsStack(),
           helpers.getStackOncePushed(),
         );
-        await renderOps(op.body, context, fragmentHelpers, engine);
+        await renderOps(op.body, context, fragmentHelpers, engine, renderOptions);
         const rendered = fragmentHelpers.toString();
         await cache.put(cacheKey, rendered, op.ttlSeconds);
         helpers.append(rendered);
+        break;
+      }
+
+      case 'escape': {
+        const handler =
+          engine.getRegistry().getEscapeHandler(op.context) ?? escapeHtml;
+        const value = evaluateExpression(op.expression, context);
+        helpers.append(handler(value));
+        break;
+      }
+
+      case 'stream': {
+        if (renderOptions.mode === 'stream-shell') {
+          helpers.append(streamPlaceholder(op.name));
+          break;
+        }
+
+        const streamHelpers = new ViewHelpers(
+          helpers.getStacks(),
+          helpers.getOnceRendered(),
+          helpers.getComponentPropsStack(),
+          helpers.getStackOncePushed(),
+        );
+        await renderOps(op.body, context, streamHelpers, engine, renderOptions);
+        helpers.append(streamHelpers.toString());
+        break;
+      }
+
+      case 'island': {
+        const props = op.propsExpression
+          ? ((evaluateExpression(op.propsExpression, context) as Record<string, unknown>) ??
+            {})
+          : {};
+        const islandContext: ViewContext = { ...context, ...props };
+        const islandHelpers = new ViewHelpers(
+          helpers.getStacks(),
+          helpers.getOnceRendered(),
+          helpers.getComponentPropsStack(),
+          helpers.getStackOncePushed(),
+        );
+        await renderOps(op.body, islandContext, islandHelpers, engine, renderOptions);
+        const inner = islandHelpers.toString();
+        engine.getRegistry().getHydrationManifest().register(op.id, inner, props);
+        helpers.append(renderIslandWrapper(op.id, inner, props));
         break;
       }
 
@@ -320,7 +381,7 @@ export async function renderOps(
             helpers.getComponentPropsStack(),
             helpers.getStackOncePushed(),
           );
-          await renderOps(op.defaultSlot, context, slotHelpers, engine);
+          await renderOps(op.defaultSlot, context, slotHelpers, engine, renderOptions);
           childContext.$slot = slotHelpers.toString();
         }
 
@@ -332,7 +393,7 @@ export async function renderOps(
               helpers.getComponentPropsStack(),
               helpers.getStackOncePushed(),
             );
-            await renderOps(slotOps, context, slotHelpers, engine);
+            await renderOps(slotOps, context, slotHelpers, engine, renderOptions);
             childContext[`$${slotName}`] = slotHelpers.toString();
           }
         }
@@ -349,7 +410,7 @@ export async function renderOps(
               helpers.getComponentPropsStack(),
               helpers.getStackOncePushed(),
             );
-            await renderOps(slotOps, childContext, slotHelpers, engine);
+            await renderOps(slotOps, childContext, slotHelpers, engine, renderOptions);
             childContext[`$${slotName}`] = slotHelpers.toString();
           }
         }
@@ -489,6 +550,7 @@ async function renderForeachBody(
   context: ViewContext,
   helpers: ViewHelpers,
   engine: ViewEngine,
+  renderOptions: RenderOptions = {},
 ): Promise<void> {
   const parsed = parseForeachExpression(expression);
   if (!parsed) {
@@ -514,6 +576,6 @@ async function renderForeachBody(
       loopContext[parsed.keyName] = key;
     }
 
-    await renderOps(body, loopContext, helpers, engine);
+    await renderOps(body, loopContext, helpers, engine, renderOptions);
   }
 }

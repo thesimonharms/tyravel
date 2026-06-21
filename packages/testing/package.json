@@ -18,7 +18,8 @@
     "@tyravel/auth": "0.5.0",
     "@tyravel/container": "0.5.0",
     "@tyravel/core": "0.5.0",
-    "@tyravel/http": "0.5.0"
+    "@tyravel/http": "0.5.0",
+    "@tyravel/views": "0.5.0"
   },
   "peerDependencies": {
     "vitest": ">=2.0.0"

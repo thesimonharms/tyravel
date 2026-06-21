@@ -49,6 +49,19 @@ describe('Response', () => {
     expect(await response.text()).toBe(body);
   });
 
+  it('streams chunked html from an async iterable', async () => {
+    async function* chunks(): AsyncGenerator<string> {
+      yield '<html><head><title>Stream</title></head>';
+      yield '<body><main>Ready</main></body></html>';
+    }
+
+    const response = Response.streamHtml(chunks());
+    expect(response.headers.get('content-type')).toBe('text/html; charset=utf-8');
+    expect(await response.text()).toBe(
+      '<html><head><title>Stream</title></head><body><main>Ready</main></body></html>',
+    );
+  });
+
   it('forwards status and extra headers', async () => {
     const response = Response.make('created', {
       status: 201,

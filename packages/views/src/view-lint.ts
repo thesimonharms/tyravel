@@ -29,6 +29,8 @@ const DIRECTIVE_PAIRS: DirectivePair[] = [
   { open: /^@pushOnce\(/, close: /^@endpushOnce\s*$/, label: '@pushOnce' },
   { open: /^@prepend\(/, close: /^@endprepend\s*$/, label: '@prepend' },
   { open: /^@fragment\(/, close: /^@endfragment\s*$/, label: '@fragment' },
+  { open: /^@stream\(/, close: /^@endstream\s*$/, label: '@stream' },
+  { open: /^@island\(/, close: /^@endisland\s*$/, label: '@island' },
   { open: /^@if\s*\(/, close: /^@endif\s*$/, label: '@if' },
   { open: /^@unless\s*\(/, close: /^@endunless\s*$/, label: '@unless' },
   { open: /^@isset\s*\(/, close: /^@endisset\s*$/, label: '@isset' },

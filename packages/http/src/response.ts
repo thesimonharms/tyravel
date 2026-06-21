@@ -25,6 +25,26 @@ export class ResponseFactory {
     });
   }
 
+  streamHtml(
+    source: AsyncIterable<string> | ReadableStream<string>,
+    init: ResponseInit = {},
+  ): Response {
+    const headers = new Headers(init.headers);
+    if (!headers.has('content-type')) {
+      headers.set('content-type', 'text/html; charset=utf-8');
+    }
+
+    const stream =
+      source instanceof ReadableStream
+        ? source
+        : ReadableStream.from(encodeHtmlChunks(source));
+
+    return new WebResponse(stream, {
+      ...init,
+      headers,
+    });
+  }
+
   text(body: string, init: ResponseInit = {}): Response {
     const headers = new Headers(init.headers);
     if (!headers.has('content-type')) {
@@ -66,3 +86,12 @@ export class ResponseFactory {
 }
 
 export const Response = new ResponseFactory();
+
+async function* encodeHtmlChunks(
+  source: AsyncIterable<string>,
+): AsyncGenerator<Uint8Array> {
+  const encoder = new TextEncoder();
+  for await (const chunk of source) {
+    yield encoder.encode(chunk);
+  }
+}

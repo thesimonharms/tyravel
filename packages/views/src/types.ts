@@ -13,6 +13,14 @@ export interface ViewConfig {
   env?: string;
   /** When true, warm disk cache is trusted without reading source templates. */
   trustCompiledCache?: boolean;
+  /** Extension for programmatic TypeScript views (e.g. `.tyr.ts`). */
+  programmaticExtension?: string;
+}
+
+export type RenderMode = 'full' | 'stream-shell';
+
+export interface RenderOptions {
+  mode?: RenderMode;
 }
 
 export interface CompiledTemplate {
@@ -59,6 +67,9 @@ export type TemplateOp =
   | { type: 'stack'; name: string; defaultValue?: string }
   | { type: 'inject'; varName: string; binding: string }
   | { type: 'fragment'; name: string; ttlSeconds?: number; body: TemplateOp[] }
+  | { type: 'escape'; context: string; expression: string }
+  | { type: 'stream'; name: string; body: TemplateOp[] }
+  | { type: 'island'; id: string; propsExpression?: string; body: TemplateOp[] }
   | { type: 'include'; name: string; dataExpression?: string }
   | { type: 'includeIf'; name: string; dataExpression?: string }
   | { type: 'includeWhen'; name: string; conditionExpression: string; dataExpression?: string }

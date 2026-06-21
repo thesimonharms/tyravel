@@ -3,6 +3,7 @@ export { HttpTestClient } from './http-test-client.js';
 export type { HttpTestOptions } from './http-test-client.js';
 export { TestResponse } from './test-response.js';
 export { RenderedView, assertDontSee, assertSee } from './view-assertions.js';
+export { renderView } from './render-view.js';
 export { CookieJar } from './cookie-jar.js';
 export { jsonContains } from './json-match.js';
 export type { JsonValue } from './json-match.js';

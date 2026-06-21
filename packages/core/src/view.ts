@@ -1,11 +1,14 @@
 import type { TyravelRequest } from '@tyravel/http';
 import type {
+  ComponentCatalogEntry,
   CustomDirectiveHandler,
+  EscapeHandler,
   ViewAuthBindings,
   ViewComponentBinding,
   ViewComposerHandler,
   ViewContext,
   ViewExpressionBindings,
+  ViewPropsFor,
 } from '@tyravel/views';
 import { ViewEngine } from '@tyravel/views';
 import type { Application } from './application.js';
@@ -35,8 +38,19 @@ function viewEngine(): ViewEngine {
 }
 
 export interface ViewFacade {
-  render(name: string, context?: ViewContext): Promise<string>;
+  render<TName extends string>(
+    name: TName,
+    context?: ViewPropsFor<TName>,
+  ): Promise<string>;
+  renderStream<TName extends string>(
+    name: TName,
+    context?: ViewPropsFor<TName>,
+    handlers?: Record<string, (ctx: ViewContext) => Promise<string>>,
+  ): AsyncGenerator<string>;
   exists(name: string): boolean;
+  catalog(): ComponentCatalogEntry[];
+  escape(context: string, handler: EscapeHandler): ViewFacade;
+  getHydrationManifest(): { islands: Array<{ id: string; html: string; props: Record<string, unknown> }> };
   directive(name: string, handler: CustomDirectiveHandler): ViewFacade;
   composer(pattern: string, handler: ViewComposerHandler): ViewFacade;
   share(data: ViewContext): ViewFacade;
@@ -49,8 +63,16 @@ export interface ViewFacade {
 }
 
 export const View: ViewFacade = {
-  render: (name, context) => viewEngine().render(name, context),
+  render: (name, context) => viewEngine().render(name, context ?? {}),
+  renderStream: (name, context, handlers) =>
+    viewEngine().renderStream(name, context ?? {}, handlers),
   exists: (name) => viewEngine().exists(name),
+  catalog: () => viewEngine().getComponentCatalog(),
+  escape: (context, handler) => {
+    viewEngine().escape(context, handler);
+    return View;
+  },
+  getHydrationManifest: () => viewEngine().getHydrationManifest(),
   directive: (name, handler) => {
     viewEngine().directive(name, handler);
     return View;

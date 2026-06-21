@@ -162,13 +162,13 @@ Make large apps maintainable: faster compiles, clearer errors, and better local 
 
 Longer-horizon bets that keep Tyravel TypeScript-native while closing the gap with mature Blade/Livewire workflows.
 
-- [ ] **Typed view props** — `View.render<WelcomeProps>('welcome', props)` with generated or hand-authored prop interfaces per view.
-- [ ] **Component catalog** — auto-discovered registry of `resources/views/components/*` with names, props, and slots (feeds docs/IDE).
-- [ ] **View factories in tests** — `renderView('posts.index', data)` test helper with composers/directives pre-wired like HTTP tests.
-- [ ] **Streaming layouts** — flush early `<head>` / shell HTML while slow sections resolve (chunked `Response.html` integration).
-- [ ] **Partial hydration hooks** — stable `data-tyr-island` markers + manifest for progressive client enhancement (optional, no Livewire dependency).
-- [ ] **Programmatic views** — `.tyr.ts` views that export a `render(ctx)` function for logic-heavy UI without stringly directives.
-- [ ] **Custom escape contexts** — `View::escape('url' | 'js' | 'css', fn)` for context-specific escaping beyond HTML.
+- [x] **Typed view props** — `View.render<WelcomeProps>('welcome', props)` with generated or hand-authored prop interfaces per view.
+- [x] **Component catalog** — auto-discovered registry of `resources/views/components/*` with names, props, and slots (feeds docs/IDE).
+- [x] **View factories in tests** — `renderView('posts.index', data)` test helper with composers/directives pre-wired like HTTP tests.
+- [x] **Streaming layouts** — flush early `<head>` / shell HTML while slow sections resolve (chunked `Response.html` integration).
+- [x] **Partial hydration hooks** — stable `data-tyr-island` markers + manifest for progressive client enhancement (optional, no Livewire dependency).
+- [x] **Programmatic views** — `.tyr.ts` views that export a `render(ctx)` function for logic-heavy UI without stringly directives.
+- [x] **Custom escape contexts** — `View::escape('url' | 'js' | 'css', fn)` for context-specific escaping beyond HTML.
 
 ## Tier X — Production-ready project
 

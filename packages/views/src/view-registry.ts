@@ -1,5 +1,10 @@
 import type { FragmentCacheStore } from './fragment-cache.js';
 import { InMemoryFragmentCache } from './fragment-cache.js';
+import {
+  BUILTIN_ESCAPE_CONTEXTS,
+  type EscapeHandler,
+} from './escape.js';
+import { HydrationManifest } from './hydration.js';
 import type { ViewErrorBag } from './view-errors.js';
 import type { ViewContext } from './types.js';
 
@@ -64,6 +69,10 @@ export class ViewRegistry {
   private compileVersion = 0;
   private injector?: ViewInjector;
   private fragmentCache: FragmentCacheStore = new InMemoryFragmentCache();
+  private readonly escapeContexts = new Map<string, EscapeHandler>(
+    Object.entries(BUILTIN_ESCAPE_CONTEXTS),
+  );
+  private hydrationManifest = new HydrationManifest();
 
   directive(name: string, handler: CustomDirectiveHandler): this {
     this.directives.set(name, handler);
@@ -125,6 +134,28 @@ export class ViewRegistry {
 
   getFragmentCache(): FragmentCacheStore {
     return this.fragmentCache;
+  }
+
+  escape(context: string, handler: EscapeHandler): this {
+    this.escapeContexts.set(context, handler);
+    return this;
+  }
+
+  getEscapeHandler(context: string): EscapeHandler | undefined {
+    return this.escapeContexts.get(context);
+  }
+
+  getEscapeContexts(): ReadonlyMap<string, EscapeHandler> {
+    return this.escapeContexts;
+  }
+
+  resetHydrationManifest(): HydrationManifest {
+    this.hydrationManifest.clear();
+    return this.hydrationManifest;
+  }
+
+  getHydrationManifest(): HydrationManifest {
+    return this.hydrationManifest;
   }
 
   getLocale(): ViewLocaleBindings | undefined {

@@ -19,7 +19,27 @@ export {
   type ViewLintRule,
 } from './view-lint.js';
 export { createViewWatcher, type ViewWatcher, type ViewWatcherOptions } from './view-watcher.js';
-export { escapeHtml } from './escape.js';
+export {
+  BUILTIN_ESCAPE_CONTEXTS,
+  escapeCss,
+  escapeHtml,
+  escapeJs,
+  escapeUrl,
+  type EscapeHandler,
+} from './escape.js';
+export {
+  buildComponentCatalog,
+  inspectComponent,
+  type ComponentCatalogEntry,
+} from './component-catalog.js';
+export {
+  HydrationManifest,
+  renderIslandWrapper,
+  type HydrationIsland,
+} from './hydration.js';
+export { loadProgrammaticView, type ProgrammaticViewModule } from './programmatic-view.js';
+export { collectStreamSections, streamPlaceholder, type StreamSection } from './streaming.js';
+export type { ViewPropsFor, ViewPropsMap } from './view-props.js';
 export { evaluateExpression, mergeEvaluationContext } from './evaluate.js';
 export { ViewEngine } from './view-engine.js';
 export { parseViewName } from './view-namespaces.js';
@@ -63,6 +83,8 @@ export {
 export type {
   CompiledTemplate,
   ConditionalMode,
+  RenderMode,
+  RenderOptions,
   TemplateOp,
   ViewConfig,
   ViewContext,
