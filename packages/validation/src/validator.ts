@@ -1,5 +1,5 @@
 import type { TyravelRequest } from '@tyravel/http';
-import { parseRule, type ValidationRules } from './rules.js';
+import { parseRuleSet, type ValidationRules } from './rules.js';
 
 export interface ValidationErrors {
   [field: string]: string[];
@@ -28,9 +28,12 @@ export class Validator<T extends Record<string, unknown>> {
         continue;
       }
 
-      const normalizedRules = Array.isArray(ruleSet)
-        ? ruleSet.flatMap((rule) => parseRule(rule))
-        : parseRule(ruleSet);
+      const { sometimes, rules: normalizedRules } = parseRuleSet(ruleSet);
+      const fieldPresent = Object.hasOwn(this.data, field);
+
+      if (sometimes && !fieldPresent) {
+        continue;
+      }
 
       const value = this.data[field];
       const fieldErrors: string[] = [];

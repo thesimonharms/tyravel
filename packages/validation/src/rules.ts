@@ -76,10 +76,30 @@ export function integer(): ValidationRule {
   };
 }
 
+export function string(): ValidationRule {
+  return {
+    validate(value, field) {
+      if (value === undefined || value === null || value === '') {
+        return undefined;
+      }
+      if (typeof value !== 'string') {
+        return `The ${field} field must be a string.`;
+      }
+      return undefined;
+    },
+  };
+}
+
 export function min(minimum: number): ValidationRule {
   return {
     validate(value, field) {
       if (value === undefined || value === null || value === '') {
+        return undefined;
+      }
+      if (typeof value === 'string') {
+        if (value.length < minimum) {
+          return `The ${field} field must be at least ${minimum} characters.`;
+        }
         return undefined;
       }
       const parsed = Number(value);
@@ -97,6 +117,12 @@ export function max(maximum: number): ValidationRule {
       if (value === undefined || value === null || value === '') {
         return undefined;
       }
+      if (typeof value === 'string') {
+        if (value.length > maximum) {
+          return `The ${field} field must not be greater than ${maximum} characters.`;
+        }
+        return undefined;
+      }
       const parsed = Number(value);
       if (!Number.isFinite(parsed) || parsed > maximum) {
         return `The ${field} field must not be greater than ${maximum}.`;
@@ -109,6 +135,7 @@ export function max(maximum: number): ValidationRule {
 const BUILT_IN_RULES: Record<string, (arg?: string) => ValidationRule> = {
   required: () => required(),
   email: () => email(),
+  string: () => string(),
   integer: () => integer(),
   min: (arg) => min(Number(arg)),
   max: (arg) => max(Number(arg)),
@@ -116,17 +143,57 @@ const BUILT_IN_RULES: Record<string, (arg?: string) => ValidationRule> = {
   max_length: (arg) => maxLength(Number(arg)),
 };
 
+export interface ParsedRuleSet {
+  sometimes: boolean;
+  rules: ValidationRule[];
+}
+
+function splitRuleSegments(rule: string): string[] {
+  return rule
+    .split('|')
+    .map((segment) => segment.trim())
+    .filter((segment) => segment.length > 0);
+}
+
+export function parseRuleSet(rule: Rule | Rule[]): ParsedRuleSet {
+  const entries = Array.isArray(rule) ? rule : [rule];
+  let sometimes = false;
+  const concrete: Rule[] = [];
+
+  for (const entry of entries) {
+    if (typeof entry === 'string') {
+      for (const segment of splitRuleSegments(entry)) {
+        if (segment === 'sometimes') {
+          sometimes = true;
+        } else {
+          concrete.push(segment);
+        }
+      }
+      continue;
+    }
+
+    concrete.push(entry);
+  }
+
+  return {
+    sometimes,
+    rules: concrete.flatMap((entry) => parseRule(entry)),
+  };
+}
+
 export function parseRule(rule: Rule): ValidationRule[] {
   if (typeof rule !== 'string') {
     return [rule];
   }
 
-  return rule.split('|').map((segment) => {
-    const [name, arg] = segment.split(':');
-    const factory = BUILT_IN_RULES[name ?? ''];
-    if (!factory) {
-      throw new Error(`Unknown validation rule: ${name}`);
-    }
-    return factory(arg);
-  });
+  return splitRuleSegments(rule)
+    .filter((segment) => segment !== 'sometimes')
+    .map((segment) => {
+      const [name, arg] = segment.split(':');
+      const factory = BUILT_IN_RULES[name ?? ''];
+      if (!factory) {
+        throw new Error(`Unknown validation rule: ${name}`);
+      }
+      return factory(arg);
+    });
 }
