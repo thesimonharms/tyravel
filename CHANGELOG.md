@@ -5,6 +5,10 @@ All notable changes to Tyravel are documented in this file.
 
 
 
+
+## [0.4.0] - 2026-06-21
+
+See [v0.4.0 release notes](https://github.com/thesimonharms/tyravel/releases/tag/v0.4.0).
 ## [0.3.0] - 2026-06-21
 
 See [v0.3.0 release notes](https://github.com/thesimonharms/tyravel/releases/tag/v0.3.0).
@@ -45,3 +49,4 @@ First public release of the `@tyravel/*` monorepo.
 [0.2.0]: https://github.com/thesimonharms/tyravel/releases/tag/v0.2.0
 [0.2.1]: https://github.com/thesimonharms/tyravel/releases/tag/v0.2.1
 [0.3.0]: https://github.com/thesimonharms/tyravel/releases/tag/v0.3.0
+[0.4.0]: https://github.com/thesimonharms/tyravel/releases/tag/v0.4.0

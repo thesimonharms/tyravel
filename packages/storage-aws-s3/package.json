@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/storage-aws-s3",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.840.0",
-    "@tyravel/storage": "0.3.0"
+    "@tyravel/storage": "0.4.0"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
