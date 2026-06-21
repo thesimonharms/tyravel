@@ -198,6 +198,21 @@ export class ${className} {
 `;
 }
 
+export function apiResource(name: string): string {
+  const className = name.endsWith('Resource') ? name : `${name}Resource`;
+
+  return `import { JsonResource } from '@tyravel/http';
+
+export class ${className} extends JsonResource {
+  toArray() {
+    return {
+      id: (this.resource as { id?: unknown }).id,
+    };
+  }
+}
+`;
+}
+
 export function formRequest(name: string): string {
   const className = name.endsWith('Request') ? name : `${name}Request`;
 

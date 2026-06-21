@@ -6,6 +6,7 @@ import { MakeSeederCommand } from './commands/make-seeder.js';
 import { MakeTestCommand } from './commands/make-test.js';
 import { MakeControllerCommand } from './commands/make-controller.js';
 import { MakeRequestCommand } from './commands/make-request.js';
+import { MakeResourceCommand } from './commands/make-resource.js';
 import { MakeJobCommand } from './commands/make-job.js';
 import { MakeSubscriberCommand } from './commands/make-subscriber.js';
 import { MakeListenerCommand } from './commands/make-listener.js';
@@ -31,6 +32,7 @@ export function createKernel(): ConsoleKernel {
     new DbSeedCommand(),
     new MakeControllerCommand(),
     new MakeRequestCommand(),
+    new MakeResourceCommand(),
     new MakeModelCommand(),
     new MakeFactoryCommand(),
     new MakeSeederCommand(),

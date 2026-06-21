@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Response } from '@tyravel/http';
+import { JsonResource, Response } from '@tyravel/http';
 import type { TyravelRequest } from '@tyravel/http';
 import { Application } from './application.js';
 import { createControllerHandler } from './controller.js';
@@ -11,6 +11,14 @@ class CreateUserRequest extends FormRequest<{ email: string }> {
   rules() {
     return {
       email: ['required', 'email'],
+    };
+  }
+}
+
+class UserApiResource extends JsonResource<{ id: string }> {
+  toArray() {
+    return {
+      id: this.resource.id,
     };
   }
 }
@@ -33,6 +41,10 @@ class UserController {
       id: request.param('id'),
       email: form.input('email'),
     });
+  }
+
+  resource(request: TyravelRequest) {
+    return UserApiResource.make({ id: request.param('id')! });
   }
 }
 
@@ -89,6 +101,20 @@ describe('Controller resolution', () => {
     expect(await updateResponse.json()).toEqual({
       id: '9',
       email: 'updated@example.com',
+    });
+  });
+
+  it('resolves API resources returned from controller actions', async () => {
+    const app = new Application();
+    setRouteApplication(app);
+
+    Route.get('/users/:id/resource', [UserController, 'resource']);
+
+    const kernel = new HttpKernel(app);
+    const response = await kernel.handle(new Request('http://localhost/users/42/resource'));
+
+    expect(await response.json()).toEqual({
+      data: { id: '42' },
     });
   });
 });

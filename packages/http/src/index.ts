@@ -1,4 +1,16 @@
 export {
+  JsonResource,
+  ResourceCollection,
+  isJsonResource,
+  isPaginatorLike,
+  isResourceCollection,
+} from './api-resource.js';
+export type {
+  PaginatorLike,
+  ResourcePayload,
+} from './api-resource.js';
+export { resolveHttpResult } from './resolve-resource.js';
+export {
   TyravelRequest,
 } from './request.js';
 export type { SessionContract } from './session-contract.js';

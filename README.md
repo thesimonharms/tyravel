@@ -9,7 +9,7 @@ Requires **Node.js ≥ 22**.
 | Package | Description |
 |---------|-------------|
 | `@tyravel/container` | IoC container with bindings, singletons, aliases, and callable injection |
-| `@tyravel/http` | Router, route groups, middleware registry, request/response helpers |
+| `@tyravel/http` | Router, middleware, request/response helpers, API resources (`JsonResource`) |
 | `@tyravel/config` | Typed config loading and dotted-key `ConfigRepository` |
 | `@tyravel/validation` | Request validation with pipe rules and 422 error responses |
 | `@tyravel/database` | Eloquent-style models, query builder, schema, and migrations |
@@ -62,6 +62,7 @@ tyravel new <name> [--path=<dir>]    # Scaffold a new application
 tyravel serve [--port=3000] [--host=127.0.0.1]
 tyravel make:controller <Name>       # Create src/controllers/<Name>Controller.ts
 tyravel make:request <Name>          # Create src/requests/<Name>Request.ts
+tyravel make:resource <Name>         # Create src/resources/<Name>Resource.ts
 tyravel make:provider <Name>           # Create src/providers/<Name>ServiceProvider.ts
 tyravel make:model <Name>              # Create src/models/<Name>.ts
 tyravel make:factory <Model>             # Create database/factories/<model>-factory.ts
@@ -231,6 +232,37 @@ store(form: StoreUserRequest) {
 ```
 
 Generate a scaffold with `tyravel make:request StoreUser`.
+
+### API resources
+
+Transform models and paginated results into consistent JSON API responses:
+
+```typescript
+import { JsonResource } from '@tyravel/http';
+import type { TyravelRequest } from '@tyravel/http';
+
+export class UserResource extends JsonResource<User> {
+  toArray(_request?: TyravelRequest) {
+    return {
+      id: this.resource.getAttribute('id'),
+      name: this.resource.getAttribute('name'),
+      email: this.resource.getAttribute('email'),
+    };
+  }
+}
+
+// Single resource — wrapped in { data: ... } by default
+return UserResource.make(user);
+
+// Collection
+return UserResource.collection(users);
+
+// Paginated collection — preserves pagination metadata
+const page = await User.query().orderBy('id').paginateModels(request.perPage(), request.page());
+return UserResource.collection(page);
+```
+
+Set `static wrap = null` on a resource class to disable the default `data` envelope. Generate a scaffold with `tyravel make:resource User`.
 
 ### Database / ORM
 

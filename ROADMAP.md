@@ -25,7 +25,7 @@ Close gaps developers hit on day two of a real project.
 Grow the ecosystem and Laravel parity for API-heavy apps.
 
 - [x] **Form requests** — Validation + authorization on controller actions
-- [ ] **API resources / transformers** — Structured JSON serialization
+- [x] **API resources / transformers** — Structured JSON serialization
 - [ ] **Documentation site** — Tutorials beyond the monorepo README
 - [ ] **More auth adapters** — Redis/database session drivers, additional OAuth providers
 

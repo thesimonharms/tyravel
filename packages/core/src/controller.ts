@@ -1,6 +1,6 @@
 import type { Constructor } from '@tyravel/container';
 import type { RouteHandler, TyravelRequest } from '@tyravel/http';
-import { Response } from '@tyravel/http';
+import { resolveHttpResult } from '@tyravel/http';
 import type { Application } from './application.js';
 import {
   FormRequest,
@@ -58,20 +58,6 @@ export function createControllerHandler(
             formRequest,
           );
 
-    return normalizeControllerResult(result);
+    return resolveHttpResult(result, request);
   };
-}
-
-const WebResponse = globalThis.Response;
-
-function normalizeControllerResult(result: unknown): Response {
-  if (result instanceof WebResponse) {
-    return result;
-  }
-
-  if (result === undefined || result === null) {
-    return Response.noContent();
-  }
-
-  return Response.json(result);
 }
