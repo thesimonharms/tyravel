@@ -50,4 +50,23 @@ export default { name: env('APP_NAME', 'fallback') };`,
     const config = app.make<ConfigRepository>('config');
     expect(config.get<string>('app.name')).toBe('FromDotEnv');
   });
+
+  it('fails fast at boot when config schema validation fails', async () => {
+    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-config-'));
+    mkdirSync(join(tempDir, 'config'), { recursive: true });
+    writeFileSync(
+      join(tempDir, 'config', 'app.js'),
+      `import { s } from '@tyravel/config';
+
+export const schema = s.object({
+  name: s.string({ required: true, minLength: 1 }),
+});
+
+export default { name: '' };`,
+    );
+
+    const app = new Application(tempDir);
+    app.register(ConfigServiceProvider);
+    await expect(app.boot()).rejects.toThrow('Configuration validation failed');
+  });
 });

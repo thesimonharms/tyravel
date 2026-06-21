@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { env, envBool, envInt } from './env.js';
+import { ConfigValidationError } from './config-validation-error.js';
+import { env, envBool, envInt, requiredEnv } from './env.js';
 
 const ORIGINAL_ENV = { ...process.env };
 
@@ -21,6 +22,12 @@ describe('env', () => {
     expect(env('APP_DEBUG', false)).toBe(true);
     expect(env('APP_PORT', 8080)).toBe(3000);
     expect(env('EMPTY', 'default')).toBe('default');
+  });
+
+  it('throws when required env vars are missing', () => {
+    delete process.env.APP_KEY;
+    expect(() => requiredEnv('APP_KEY')).toThrow(ConfigValidationError);
+    expect(() => requiredEnv('APP_KEY')).toThrow(/APP_KEY/);
   });
 
   it('provides typed helpers', () => {

@@ -1,4 +1,10 @@
-import { env } from '@tyravel/config';
+import { env, s } from '@tyravel/config';
+
+export const schema = s.object({
+  name: s.string({ required: true, minLength: 1 }),
+  debug: s.boolean(),
+  url: s.string({ url: true }),
+});
 
 export default {
   name: env('APP_NAME', 'hello-world'),
