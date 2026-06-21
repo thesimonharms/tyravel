@@ -41,6 +41,7 @@ jobs:
           set -e
           PACKAGES=(
             @tyravel/container
+            @tyravel/collection
             @tyravel/support
             @tyravel/config
             @tyravel/log
@@ -62,6 +63,7 @@ jobs:
             @tyravel/notifications
             @tyravel/testing
             @tyravel/core
+            @tyravel/repl
             @tyravel/cli
           )
 
