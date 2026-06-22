@@ -72,6 +72,16 @@ export class Application extends Container {
     return this;
   }
 
+  /**
+   * Boot all registered service providers.
+   *
+   * Runs two phases, each in registration order, awaiting every hook:
+   * 1. `register()` on a fresh provider instance per registration
+   * 2. `boot()` on a fresh provider instance per registration
+   *
+   * Prefer `async register()` / `async boot()` for I/O; synchronous hooks are
+   * still supported when they do not block.
+   */
   async boot(): Promise<void> {
     if (this.booted) {
       return;

@@ -39,6 +39,29 @@ app.register(AppServiceProvider);
 
 `AppServiceProvider` is where application-specific bindings, middleware aliases, and route facades live.
 
+### Async-first `register()` / `boot()`
+
+`ServiceProvider.register()` and `ServiceProvider.boot()` may return `void` or `Promise<void>`. Tyravel is moving to an async-native runtime: **prefer `async register()` and `async boot()`** whenever a hook touches the filesystem, config, or other I/O.
+
+`Application.boot()` always `await`s each provider hook in registration order:
+
+1. Every provider's `register()` runs (in order) before any `boot()` runs.
+2. Every provider's `boot()` runs (in order) after all `register()` hooks finish.
+
+Synchronous hooks remain valid for quick, non-blocking setup (for example `this.app.instance(...)`). Do not call blocking sync FS or network APIs from provider hooks — use the async variants from `node:fs/promises` or driver APIs that return promises.
+
+```typescript
+export class AppServiceProvider extends ServiceProvider {
+  override async register() {
+    this.app.instance('app.name', 'Tyravel');
+  }
+
+  override async boot() {
+    // Route facades, middleware aliases, etc.
+  }
+}
+```
+
 ## Package contributions
 
 Packages can ship migrations and default config:

@@ -94,7 +94,7 @@ export function appServiceProvider(): string {
   return `import { ServiceProvider } from '@tyravel/core';
 
 export class AppServiceProvider extends ServiceProvider {
-  override register() {
+  override async register() {
     this.app.instance('app.name', 'Tyravel');
   }
 }
@@ -273,11 +273,11 @@ export function provider(name: string): string {
   return `import { ServiceProvider } from '@tyravel/core';
 
 export class ${className} extends ServiceProvider {
-  override register() {
+  override async register() {
     //
   }
 
-  override boot() {
+  override async boot() {
     //
   }
 }
