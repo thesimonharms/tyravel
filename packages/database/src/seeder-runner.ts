@@ -1,4 +1,4 @@
-import { readdirSync } from 'node:fs';
+import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import type { Seeder } from './seeder.js';
@@ -14,7 +14,7 @@ export class SeederRunner {
   }
 
   private async resolve(className: string): Promise<new () => Seeder> {
-    for (const file of this.files()) {
+    for (const file of await this.files()) {
       const loaded = await this.load(file);
       const SeederClass = this.findSeederExport(loaded, className);
       if (SeederClass) {
@@ -45,9 +45,10 @@ export class SeederRunner {
     return undefined;
   }
 
-  private files(): string[] {
+  private async files(): Promise<string[]> {
     try {
-      return readdirSync(this.seedersPath)
+      const entries = await readdir(this.seedersPath);
+      return entries
         .filter((file) => file.endsWith('.ts') || file.endsWith('.js'))
         .sort();
     } catch {
