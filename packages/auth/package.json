@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/auth",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,9 +15,9 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/container": "0.7.0",
-    "@tyravel/database": "0.7.0",
-    "@tyravel/http": "0.7.0"
+    "@tyravel/container": "0.8.0",
+    "@tyravel/database": "0.8.0",
+    "@tyravel/http": "0.8.0"
   },
   "files": [
     "dist"

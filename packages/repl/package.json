@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/repl",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Interactive Tyravel REPL (tyravel shell)",
   "license": "MIT",
   "type": "module",
@@ -31,8 +31,8 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@tyravel/core": "0.7.0",
-    "@tyravel/support": "0.7.0"
+    "@tyravel/core": "0.8.0",
+    "@tyravel/support": "0.8.0"
   },
   "devDependencies": {
     "typescript": "^5.7.0"
