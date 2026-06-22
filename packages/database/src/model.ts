@@ -5,6 +5,9 @@ import { BelongsToManyRelation } from './relations/belongs-to-many.js';
 import { BelongsToRelation } from './relations/belongs-to.js';
 import { HasManyRelation } from './relations/has-many.js';
 import { HasOneRelation } from './relations/has-one.js';
+import type { Pivot } from './pivot.js';
+import { MorphManyRelation } from './relations/morph-many.js';
+import { MorphToRelation } from './relations/morph-to.js';
 import { getContextConnection } from './connection-context.js';
 import type { DatabaseConnection } from './connection.js';
 import type { GlobalScope } from './scopes.js';
@@ -29,6 +32,7 @@ export class Model<T extends ModelAttributes = ModelAttributes> {
   static casts: ModelCastMap = {};
   static softDeletes = false;
   static deletedAt = 'deleted_at';
+  static morphName?: string;
   private static resolver: (() => DatabaseConnection) | undefined;
   private static globalScopes: GlobalScope[] = [];
 
@@ -223,6 +227,44 @@ export class Model<T extends ModelAttributes = ModelAttributes> {
       parentKey ?? parentModel.primaryKey,
       relatedKey ?? RelatedModel.primaryKey,
     );
+  }
+
+  morphMany<Related extends Model>(
+    RelatedModel: ModelStatic,
+    name?: string,
+    morphType?: string,
+    morphId?: string,
+    localKey?: string,
+  ): MorphManyRelation<Related> {
+    const relationName = name ?? singularSnakeCase(RelatedModel.name);
+    return new MorphManyRelation<Related>(
+      this,
+      RelatedModel,
+      relationName,
+      morphType,
+      morphId,
+      localKey,
+    );
+  }
+
+  morphTo<Related extends Model>(
+    name?: string,
+    morphType?: string,
+    morphId?: string,
+    ownerKey?: string,
+  ): MorphToRelation<Related> {
+    const relationName = name ?? 'parent';
+    return new MorphToRelation<Related>(
+      this,
+      relationName,
+      morphType,
+      morphId,
+      ownerKey,
+    );
+  }
+
+  getPivot(): Pivot | undefined {
+    return this.getRelation('pivot') as Pivot | undefined;
   }
 
   setRelation(name: string, value: unknown): void {

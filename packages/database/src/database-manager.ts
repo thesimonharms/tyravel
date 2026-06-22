@@ -1,5 +1,6 @@
 import type { DatabaseConnection } from './connection.js';
 import { runWithConnection } from './connection-context.js';
+import { wrapConnectionWithProfiler } from './query-profiler.js';
 import { SqliteConnection } from './sqlite-connection.js';
 import type {
   ConnectionConfig,
@@ -34,7 +35,9 @@ export class DatabaseManager {
       throw new Error(`Database connection not configured: ${connectionName}`);
     }
 
-    const connection = this.createConnection(connectionConfig);
+    const connection = wrapConnectionWithProfiler(
+      this.createConnection(connectionConfig),
+    );
     this.connections.set(connectionName, connection);
     return connection;
   }

@@ -9,6 +9,7 @@ export interface ModelStatic {
   name: string;
   table: string;
   primaryKey: string;
+  morphName?: string;
   getConnection(): DatabaseConnection;
   query(): ModelQueryBuilder;
   find(id: RowValue): Promise<unknown | null>;

@@ -30,7 +30,7 @@ export class EagerLoader {
         continue;
       }
 
-      const results = await relation.eagerLoad(keys);
+      const results = await relation.eagerLoad(keys, parents);
       relation.matchEager(parents, results, relationName);
     }
   }

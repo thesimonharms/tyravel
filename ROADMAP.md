@@ -195,7 +195,7 @@ Rich developer tooling, async utilities, and real-time operations.
 - [x] **Broadcasting** — real-time event broadcasting over WebSockets (Socket.io) or Pusher with dynamic channel authorization
 - [x] **HTTP Client** — fluent, chainable HTTP wrapper around fetch with request/response mocking for testing
 - [x] **Queue depth** — job chaining, job batching, and cache-backed atomic locks
-- [ ] **ORM enhancements** — polymorphic relations morphTo/morphMany, query profiling, and pivot table attribute casting
+- [x] **ORM enhancements** — polymorphic relations morphTo/morphMany, query profiling, and pivot table attribute casting
 - [ ] **Storage depth** — Cloudflare R2 storage driver and secure time-limited temporary URLs
 
 ## Tier 9 — Async-native platform (v0.9.0)

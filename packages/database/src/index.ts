@@ -39,10 +39,24 @@ export type {
   PaginatorMeta,
 } from './paginator.js';
 export { QueryBuilder } from './query-builder.js';
+export {
+  clearMorphMap,
+  registerMorphMap,
+  resolveMorphAlias,
+  resolveMorphModel,
+} from './morph-map.js';
+export { Pivot } from './pivot.js';
+export {
+  QueryProfiler,
+  wrapConnectionWithProfiler,
+} from './query-profiler.js';
+export type { QueryProfileEntry } from './query-profiler.js';
 export { BelongsToManyRelation } from './relations/belongs-to-many.js';
 export { BelongsToRelation } from './relations/belongs-to.js';
 export { HasManyRelation } from './relations/has-many.js';
 export { HasOneRelation } from './relations/has-one.js';
+export { MorphManyRelation } from './relations/morph-many.js';
+export { MorphToRelation } from './relations/morph-to.js';
 export { Relation } from './relations/relation.js';
 export { Blueprint } from './schema/blueprint.js';
 export { SchemaBuilder, migrationsTableSql } from './schema/schema-builder.js';

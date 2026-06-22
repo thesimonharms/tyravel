@@ -42,7 +42,9 @@ describe('DatabaseManager', () => {
       },
     });
 
-    expect(manager.connection()).toBeInstanceOf(EchoConnection);
+    const connection = manager.connection();
+    expect(connection.grammar).toBeInstanceOf(SqliteGrammar);
+    expect(connection.query).toBeTypeOf('function');
   });
 
   it('throws for unknown drivers with a helpful message', () => {

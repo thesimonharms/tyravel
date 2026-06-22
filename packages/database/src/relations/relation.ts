@@ -24,7 +24,7 @@ export abstract class Relation<Related extends Model = Model> {
     return null;
   }
 
-  async eagerLoad(_keys: RowValue[]): Promise<unknown> {
+  async eagerLoad(_keys: RowValue[], _parents?: Model[]): Promise<unknown> {
     return [];
   }
 

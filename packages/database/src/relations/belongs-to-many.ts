@@ -1,9 +1,14 @@
+import type { ModelCastMap } from '../model-casts.js';
 import type { Model } from '../model.js';
 import type { ModelStatic } from '../model-types.js';
+import { Pivot } from '../pivot.js';
 import type { RowValue } from '../types.js';
 import { Relation } from './relation.js';
 
 export class BelongsToManyRelation<Related extends Model = Model> extends Relation<Related> {
+  private pivotColumns: string[] = [];
+  private pivotCasts: ModelCastMap = {};
+
   constructor(
     parent: Model,
     relatedModel: ModelStatic,
@@ -16,6 +21,16 @@ export class BelongsToManyRelation<Related extends Model = Model> extends Relati
     super(parent, relatedModel);
   }
 
+  withPivot(...columns: string[]): this {
+    this.pivotColumns = [...new Set([...this.pivotColumns, ...columns])];
+    return this;
+  }
+
+  withPivotCasts(casts: ModelCastMap): this {
+    this.pivotCasts = { ...this.pivotCasts, ...casts };
+    return this;
+  }
+
   async get(): Promise<Related[]> {
     const parentId = this.parent.getAttribute(this.parentKey as never) as RowValue;
     if (parentId === undefined || parentId === null) {
@@ -26,9 +41,10 @@ export class BelongsToManyRelation<Related extends Model = Model> extends Relati
     const relatedTable = this.relatedModel.table;
     const pivot = grammar.wrapIdentifier(this.pivotTable);
     const related = grammar.wrapIdentifier(relatedTable);
+    const pivotSelect = this.buildPivotSelect(grammar, pivot);
 
     const sql = `
-      SELECT ${related}.*
+      SELECT ${related}.*${pivotSelect}
       FROM ${related}
       INNER JOIN ${pivot}
         ON ${related}.${grammar.wrapIdentifier(this.relatedKey)}
@@ -41,7 +57,7 @@ export class BelongsToManyRelation<Related extends Model = Model> extends Relati
       attributes?: Record<string, unknown>,
     ) => Related;
 
-    return result.rows.map((row) => new ModelClass(row));
+    return result.rows.map((row) => this.hydrateRelated(ModelClass, row));
   }
 
   override eagerLoadKeys(parents: Model[]): RowValue[] {
@@ -61,9 +77,10 @@ export class BelongsToManyRelation<Related extends Model = Model> extends Relati
     const related = grammar.wrapIdentifier(relatedTable);
     const parentPivotColumn = grammar.wrapIdentifier(this.foreignPivotKey);
     const placeholders = keys.map((_, index) => grammar.parameter(index + 1)).join(', ');
+    const pivotSelect = this.buildPivotSelect(grammar, pivot);
 
     const sql = `
-      SELECT ${related}.*, ${pivot}.${parentPivotColumn} AS "__eager_parent_key"
+      SELECT ${related}.*, ${pivot}.${parentPivotColumn} AS "__eager_parent_key"${pivotSelect}
       FROM ${related}
       INNER JOIN ${pivot}
         ON ${related}.${grammar.wrapIdentifier(this.relatedKey)}
@@ -80,7 +97,7 @@ export class BelongsToManyRelation<Related extends Model = Model> extends Relati
       const parentKey = row.__eager_parent_key as RowValue;
       const attributes = { ...row };
       delete attributes.__eager_parent_key;
-      return { parentKey, model: new ModelClass(attributes) };
+      return { parentKey, model: this.hydrateRelated(ModelClass, attributes) };
     });
   }
 
@@ -105,5 +122,48 @@ export class BelongsToManyRelation<Related extends Model = Model> extends Relati
       const key = parent.getAttribute(this.parentKey as never) as RowValue;
       parent.setRelation(relationName, dictionary.get(key) ?? []);
     }
+  }
+
+  private buildPivotSelect(
+    grammar: { wrapIdentifier: (name: string) => string },
+    pivot: string,
+  ): string {
+    if (this.pivotColumns.length === 0) {
+      return '';
+    }
+
+    return this.pivotColumns
+      .map(
+        (column) =>
+          `, ${pivot}.${grammar.wrapIdentifier(column)} AS "__pivot_${column}"`,
+      )
+      .join('');
+  }
+
+  private hydrateRelated(
+    ModelClass: new (attributes?: Record<string, unknown>) => Related,
+    row: Record<string, unknown>,
+  ): Related {
+    const attributes = { ...row };
+    const pivotAttributes: Record<string, unknown> = {};
+
+    for (const column of this.pivotColumns) {
+      const alias = `__pivot_${column}`;
+      if (Object.prototype.hasOwnProperty.call(attributes, alias)) {
+        pivotAttributes[column] = attributes[alias];
+        delete attributes[alias];
+      }
+    }
+
+    const model = new ModelClass(attributes);
+
+    if (this.pivotColumns.length > 0) {
+      model.setRelation(
+        'pivot',
+        Pivot.fromAttributes(pivotAttributes, this.pivotCasts),
+      );
+    }
+
+    return model;
   }
 }
