@@ -1,5 +1,4 @@
-import { mkdirSync } from 'node:fs';
-import { createRequire } from 'node:module';
+import { mkdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import type { DatabaseConnection, QueryResult } from './connection.js';
 import { SqliteGrammar, type SqlGrammar } from './grammar.js';
@@ -12,6 +11,7 @@ interface SqliteStatement {
 }
 
 interface SqliteDatabase {
+  close(): void;
   exec(sql: string): void;
   prepare(sql: string): SqliteStatement;
 }
@@ -22,23 +22,26 @@ type SqliteModule = {
 
 export class SqliteConnection implements DatabaseConnection {
   readonly grammar: SqlGrammar = new SqliteGrammar();
-  private readonly database: SqliteDatabase;
+  private readonly ready: Promise<void>;
+  private sqliteDb?: SqliteDatabase;
 
   constructor(databasePath: string, basePath = process.cwd()) {
-    const resolvedPath = databasePath === ':memory:'
-      ? ':memory:'
-      : resolve(basePath, databasePath);
+    this.ready = this.initialize(databasePath, basePath);
+  }
 
-    if (resolvedPath !== ':memory:') {
-      mkdirSync(dirname(resolvedPath), { recursive: true });
-    }
-
-    const sqlite = loadSqliteModule();
-    this.database = new sqlite.DatabaseSync(resolvedPath);
+  /** Open a SQLite connection after async directory setup. */
+  static async connect(
+    databasePath: string,
+    basePath = process.cwd(),
+  ): Promise<SqliteConnection> {
+    const connection = new SqliteConnection(databasePath, basePath);
+    await connection.ready;
+    return connection;
   }
 
   async query(sql: string, bindings: RowValue[] = []): Promise<QueryResult> {
-    const statement = this.database.prepare(sql);
+    const database = await this.getDatabase();
+    const statement = database.prepare(sql);
     const trimmed = sql.trim().toLowerCase();
 
     if (trimmed.startsWith('select') || trimmed.startsWith('pragma')) {
@@ -55,7 +58,8 @@ export class SqliteConnection implements DatabaseConnection {
   }
 
   async exec(sql: string): Promise<void> {
-    this.database.exec(sql);
+    const database = await this.getDatabase();
+    database.exec(sql);
   }
 
   async transaction<T>(
@@ -71,13 +75,38 @@ export class SqliteConnection implements DatabaseConnection {
       throw error;
     }
   }
+
+  async close(): Promise<void> {
+    await this.ready;
+    this.sqliteDb?.close();
+    this.sqliteDb = undefined;
+  }
+
+  private async initialize(databasePath: string, basePath: string): Promise<void> {
+    const resolvedPath = databasePath === ':memory:'
+      ? ':memory:'
+      : resolve(basePath, databasePath);
+
+    if (resolvedPath !== ':memory:') {
+      await mkdir(dirname(resolvedPath), { recursive: true });
+    }
+
+    const sqlite = await loadSqliteModule();
+    this.sqliteDb = new sqlite.DatabaseSync(resolvedPath);
+  }
+
+  private async getDatabase(): Promise<SqliteDatabase> {
+    await this.ready;
+    if (!this.sqliteDb) {
+      throw new Error('SQLite connection is closed.');
+    }
+    return this.sqliteDb;
+  }
 }
 
-const require = createRequire(import.meta.url);
-
-function loadSqliteModule(): SqliteModule {
+async function loadSqliteModule(): Promise<SqliteModule> {
   try {
-    return require('node:sqlite') as SqliteModule;
+    return (await import('node:sqlite')) as SqliteModule;
   } catch {
     throw new Error(
       'SQLite support requires Node.js 22.5+ with the built-in node:sqlite module.',
