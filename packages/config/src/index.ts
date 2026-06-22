@@ -3,7 +3,7 @@ export type { ConfigValidationFailure } from './config-validation-error.js';
 export { env, envBool, envInt, requiredEnv } from './env.js';
 export { loadConfig, loadConfigWithSchemas } from './loader.js';
 export type { LoadConfigOptions, LoadedConfig } from './loader.js';
-export { loadEnv, parseEnv } from './load-env.js';
+export { loadEnv, loadEnvSync, parseEnv } from './load-env.js';
 export type { LoadEnvOptions } from './load-env.js';
 export { mergeConfig } from './merge.js';
 export { ConfigRepository } from './repository.js';

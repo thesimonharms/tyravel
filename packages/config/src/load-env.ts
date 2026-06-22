@@ -1,4 +1,6 @@
+import { constants } from 'node:fs';
 import { existsSync, readFileSync } from 'node:fs';
+import { access, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 export interface LoadEnvOptions {
@@ -8,7 +10,30 @@ export interface LoadEnvOptions {
   override?: boolean;
 }
 
-export function loadEnv(basePath: string, options: LoadEnvOptions = {}): boolean {
+export async function loadEnv(
+  basePath: string,
+  options: LoadEnvOptions = {},
+): Promise<boolean> {
+  const envPath = options.path ?? join(basePath, '.env');
+
+  try {
+    await access(envPath, constants.F_OK);
+  } catch {
+    return false;
+  }
+
+  const content = await readFile(envPath, 'utf8');
+  applyEnvVariables(parseEnv(content), options.override);
+  return true;
+}
+
+/**
+ * @deprecated Use `await loadEnv()` instead. Removed in 1.0.0.
+ */
+export function loadEnvSync(
+  basePath: string,
+  options: LoadEnvOptions = {},
+): boolean {
   const envPath = options.path ?? join(basePath, '.env');
 
   if (!existsSync(envPath)) {
@@ -16,14 +41,7 @@ export function loadEnv(basePath: string, options: LoadEnvOptions = {}): boolean
   }
 
   const content = readFileSync(envPath, 'utf8');
-  const variables = parseEnv(content);
-
-  for (const [key, value] of Object.entries(variables)) {
-    if (options.override || process.env[key] === undefined) {
-      process.env[key] = value;
-    }
-  }
-
+  applyEnvVariables(parseEnv(content), options.override);
   return true;
 }
 
@@ -41,6 +59,17 @@ export function parseEnv(content: string): Record<string, string> {
   }
 
   return variables;
+}
+
+function applyEnvVariables(
+  variables: Record<string, string>,
+  override = false,
+): void {
+  for (const [key, value] of Object.entries(variables)) {
+    if (override || process.env[key] === undefined) {
+      process.env[key] = value;
+    }
+  }
 }
 
 function parseEnvLine(line: string): [string, string] | null {

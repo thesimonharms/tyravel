@@ -87,7 +87,14 @@ export {
   PersonalAccessTokenRepository,
   Gate as AuthorizationGate,
 } from '@tyravel/auth';
-export { ConfigRepository, env, envBool, envInt, loadEnv } from '@tyravel/config';
+export {
+  ConfigRepository,
+  env,
+  envBool,
+  envInt,
+  loadEnv,
+  loadEnvSync,
+} from '@tyravel/config';
 export { Mailable, SendMailable } from '@tyravel/mail';
 export { Notification, type Notifiable, NotificationRegistry } from '@tyravel/notifications';
 export { Http, ClientResponse, ClientRequest, ResponseStub, ResponseSequence } from '@tyravel/http';

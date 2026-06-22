@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { fileURLToPath } from 'node:url';
-import { loadEnv, parseEnv } from './load-env.js';
+import { loadEnv, loadEnvSync, parseEnv } from './load-env.js';
 
 const fixturePath = fileURLToPath(
   new URL('./fixtures/.env.sample', import.meta.url),
@@ -37,10 +37,10 @@ EMPTY=
 });
 
 describe('loadEnv', () => {
-  it('does not override existing environment variables by default', () => {
+  it('does not override existing environment variables by default', async () => {
     process.env.EXISTING = 'from-shell';
 
-    loadEnv(process.cwd(), {
+    await loadEnv(process.cwd(), {
       path: fixturePath,
       override: false,
     });
@@ -49,14 +49,34 @@ describe('loadEnv', () => {
     expect(process.env.APP_NAME).toBe('FixtureApp');
   });
 
-  it('can override existing variables when requested', () => {
+  it('can override existing variables when requested', async () => {
     process.env.APP_NAME = 'OldName';
 
-    loadEnv(process.cwd(), {
+    await loadEnv(process.cwd(), {
       path: fixturePath,
       override: true,
     });
 
+    expect(process.env.APP_NAME).toBe('FixtureApp');
+  });
+
+  it('returns false when the env file is missing', async () => {
+    await expect(
+      loadEnv(process.cwd(), { path: '/no/such/.env' }),
+    ).resolves.toBe(false);
+  });
+});
+
+describe('loadEnvSync', () => {
+  it('remains available for transitional sync callers', () => {
+    process.env.APP_NAME = 'OldName';
+
+    expect(
+      loadEnvSync(process.cwd(), {
+        path: fixturePath,
+        override: true,
+      }),
+    ).toBe(true);
     expect(process.env.APP_NAME).toBe('FixtureApp');
   });
 });
