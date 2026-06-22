@@ -1,4 +1,4 @@
-import { readdirSync } from 'node:fs';
+import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import type { DatabaseConnection } from './connection.js';
@@ -55,7 +55,7 @@ export class Migrator {
   private async pendingFiles(): Promise<MigrationFile[]> {
     await this.ensureMigrationsTable();
     const executed = await this.executed();
-    return this.files().filter((file) => !executed.includes(file.name));
+    return (await this.files()).filter((file) => !executed.includes(file.name));
   }
 
   private async executed(): Promise<string[]> {
@@ -76,13 +76,13 @@ export class Migrator {
     return typeof batch === 'number' ? batch : 0;
   }
 
-  private files(): MigrationFile[] {
+  private async files(): Promise<MigrationFile[]> {
     const files: MigrationFile[] = [];
     const seen = new Set<string>();
 
     for (const directory of this.migrationDirectories) {
       try {
-        for (const name of readdirSync(directory)) {
+        for (const name of await readdir(directory)) {
           if (!name.endsWith('.ts') && !name.endsWith('.js')) {
             continue;
           }
