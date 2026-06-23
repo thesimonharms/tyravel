@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/broadcasting-socket-io",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,8 +15,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/broadcasting": "0.8.0",
-    "@tyravel/redis": "0.8.0"
+    "@tyravel/broadcasting": "0.9.0",
+    "@tyravel/redis": "0.9.0"
   },
   "files": [
     "dist"
