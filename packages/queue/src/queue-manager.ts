@@ -3,7 +3,6 @@ import type { RedisManager } from '@tyravel/redis';
 import { DatabaseQueue } from './database-queue.js';
 import type { QueueContract } from './queue-contract.js';
 import { RedisQueue } from './redis-queue.js';
-import { SyncQueue } from './sync-queue.js';
 import type { QueueConfig, QueueConnectionConfig } from './types.js';
 import { QueueWorker } from './worker.js';
 
@@ -40,8 +39,6 @@ export class QueueManager {
 
   private createConnection(config: QueueConnectionConfig): QueueContract {
     switch (config.driver) {
-      case 'sync':
-        return new SyncQueue(this.worker);
       case 'database': {
         if (!this.database) {
           throw new Error('Database manager is required for the database queue driver');

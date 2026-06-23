@@ -4,17 +4,8 @@ import { BatchRepository } from './batch.js';
 import { Dispatcher } from './dispatcher.js';
 import { Job } from './job.js';
 import { JobRegistry } from './registry.js';
-import { QueueManager } from './queue-manager.js';
 import { SyncQueue } from './sync-queue.js';
-import type { QueueConfig } from './types.js';
 import { QueueWorker } from './worker.js';
-
-const queueConfig: QueueConfig = {
-  default: 'sync',
-  connections: {
-    sync: { driver: 'sync' },
-  },
-};
 
 class StepJob extends Job<{ step: number; log: number[] }> {
   override async handle(): Promise<void> {
@@ -33,8 +24,7 @@ function createSyncStack() {
   const cache = new ArrayStore();
   const batchRepository = new BatchRepository(cache);
   const worker = new QueueWorker(registry, undefined, { batchRepository });
-  const manager = new QueueManager(queueConfig, worker);
-  const queue = manager.connection() as SyncQueue;
+  const queue = new SyncQueue(worker);
   const dispatcher = new Dispatcher(queue, batchRepository);
   return { dispatcher, batchRepository, cache };
 }

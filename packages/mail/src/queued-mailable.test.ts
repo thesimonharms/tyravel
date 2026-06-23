@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ArrayMailTransport, MailManager, Mailable } from './index.js';
-import { JobRegistry, QueueManager, QueueWorker } from '@tyravel/queue';
+import { JobRegistry, QueueWorker, SyncQueue } from '@tyravel/queue';
 import { SendMailable } from './send-mailable.js';
 import { setQueuedMailContext } from './queued-mail-context.js';
 import type { MailMessage } from './types.js';
@@ -21,6 +21,11 @@ class QueuedWelcome extends Mailable {
 
 describe('queued mailables', () => {
   it('dispatches SendMailable on sync queue', async () => {
+    const jobs = new JobRegistry();
+    jobs.register(SendMailable);
+    const worker = new QueueWorker(jobs);
+    const queue = new SyncQueue(worker);
+
     const manager = new MailManager(
       {
         default: 'array',
@@ -29,17 +34,9 @@ describe('queued mailables', () => {
       },
       {
         dispatch: async (job) => {
-          await queueManager.connection('sync').push(job);
+          await queue.push(job);
         },
       },
-    );
-
-    const jobs = new JobRegistry();
-    jobs.register(SendMailable);
-    const worker = new QueueWorker(jobs);
-    const queueManager = new QueueManager(
-      { default: 'sync', connections: { sync: { driver: 'sync' } } },
-      worker,
     );
 
     setQueuedMailContext({ manager });

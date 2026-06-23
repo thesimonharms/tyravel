@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { MailManager, ArrayMailTransport } from '@tyravel/mail';
-import { JobRegistry, QueueManager, QueueWorker } from '@tyravel/queue';
+import { JobRegistry, QueueWorker, SyncQueue } from '@tyravel/queue';
 import { Notification } from './notification.js';
 import { NotificationManager } from './notification-manager.js';
 import { NotificationRegistry } from './notification-registry.js';
@@ -47,17 +47,14 @@ describe('queued notifications', () => {
     const jobs = new JobRegistry();
     jobs.register(SendQueuedNotification);
     const worker = new QueueWorker(jobs);
-    const queueManager = new QueueManager(
-      { default: 'sync', connections: { sync: { driver: 'sync' } } },
-      worker,
-    );
+    const queue = new SyncQueue(worker);
 
     const manager = new NotificationManager(
       mail,
       undefined,
       {
         dispatch: async (job) => {
-          await queueManager.connection('sync').push(job);
+          await queue.push(job);
         },
       },
       registry,
