@@ -1,14 +1,7 @@
-import { existsSync } from 'node:fs';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { formRequest } from '../stubs.js';
-import {
-  parseOptions,
-  positionalArgs,
-  projectPath,
-  toPascalCase,
-  writeFile,
-} from '../utils.js';
+import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pathExists } from '../utils.js';
 
 export class MakeRequestCommand extends Command {
   override readonly name = 'make:request';
@@ -25,18 +18,18 @@ export class MakeRequestCommand extends Command {
       return 1;
     }
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const baseName = toPascalCase(rawName.replace(/Request$/i, ''));
     const className = `${baseName}Request`;
     const fileName = `${className}.ts`;
     const target = projectPath(root, 'src/requests', fileName);
 
-    if (existsSync(target)) {
+    if (await pathExists(target)) {
       console.error(`Form request already exists: src/requests/${fileName}`);
       return 1;
     }
 
-    writeFile(target, formRequest(className));
+    await writeFile(target, formRequest(className));
     console.log(`Form request created: src/requests/${fileName}`);
 
     return 0;

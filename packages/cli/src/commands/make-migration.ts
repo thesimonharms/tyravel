@@ -1,15 +1,8 @@
-import { existsSync } from 'node:fs';
 import { snakeCase } from '@tyravel/support';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { migration } from '../stubs.js';
-import {
-  parseOptions,
-  positionalArgs,
-  projectPath,
-  toPascalCase,
-  writeFile,
-} from '../utils.js';
+import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pathExists } from '../utils.js';
 
 export class MakeMigrationCommand extends Command {
   override readonly name = 'make:migration';
@@ -26,17 +19,17 @@ export class MakeMigrationCommand extends Command {
       return 1;
     }
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const className = toPascalCase(rawName);
     const fileName = `${timestamp()}_${snakeCase(rawName)}.ts`;
     const target = projectPath(root, 'database/migrations', fileName);
 
-    if (existsSync(target)) {
+    if (await pathExists(target)) {
       console.error(`Migration already exists: database/migrations/${fileName}`);
       return 1;
     }
 
-    writeFile(target, migration(className));
+    await writeFile(target, migration(className));
     console.log(`Migration created: database/migrations/${fileName}`);
 
     return 0;

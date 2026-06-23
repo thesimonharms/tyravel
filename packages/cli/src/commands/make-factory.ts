@@ -1,15 +1,7 @@
-import { existsSync } from 'node:fs';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { factory } from '../stubs.js';
-import {
-  parseOptions,
-  positionalArgs,
-  projectPath,
-  toKebabCase,
-  toPascalCase,
-  writeFile,
-} from '../utils.js';
+import { parseOptions, positionalArgs, projectPath, toKebabCase, toPascalCase, writeFile, pathExists } from '../utils.js';
 
 export class MakeFactoryCommand extends Command {
   override readonly name = 'make:factory';
@@ -26,17 +18,17 @@ export class MakeFactoryCommand extends Command {
       return 1;
     }
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const modelName = toPascalCase(rawName);
     const fileName = `${toKebabCase(modelName)}-factory.ts`;
     const target = projectPath(root, 'database/factories', fileName);
 
-    if (existsSync(target)) {
+    if (await pathExists(target)) {
       console.error(`Factory already exists: database/factories/${fileName}`);
       return 1;
     }
 
-    writeFile(target, factory(modelName));
+    await writeFile(target, factory(modelName));
     console.log(`Factory created: database/factories/${fileName}`);
 
     return 0;

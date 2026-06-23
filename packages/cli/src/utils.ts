@@ -1,4 +1,6 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync as writeFileSyncFs } from 'node:fs';
+import { access, mkdir, writeFile as writeFileAsync } from 'node:fs/promises';
+import { constants } from 'node:fs';
 import { dirname, join } from 'node:path';
 
 export function toPascalCase(value: string): string {
@@ -19,9 +21,26 @@ export function toKebabCase(value: string): string {
     .toLowerCase();
 }
 
-export function writeFile(path: string, contents: string): void {
+export async function pathExists(path: string): Promise<boolean> {
+  try {
+    await access(path, constants.F_OK);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function writeFile(path: string, contents: string): Promise<void> {
+  await mkdir(dirname(path), { recursive: true });
+  await writeFileAsync(path, contents, 'utf8');
+}
+
+/**
+ * @deprecated Use `await writeFile()` instead. Removed in 1.0.0.
+ */
+export function writeFileSync(path: string, contents: string): void {
   mkdirSync(dirname(path), { recursive: true });
-  writeFileSync(path, contents, 'utf8');
+  writeFileSyncFs(path, contents, 'utf8');
 }
 
 export function projectPath(root: string, ...segments: string[]): string {

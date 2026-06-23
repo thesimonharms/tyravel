@@ -13,7 +13,7 @@ export class ViewWatchCommand extends Command {
     parseOptions(args);
     positionalArgs(args);
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const { engine, viewConfig } = await bootViewApplication(root);
     enableCompiledCache(engine, root, viewConfig);
 

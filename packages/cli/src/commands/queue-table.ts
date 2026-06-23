@@ -1,8 +1,7 @@
-import { existsSync } from 'node:fs';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { jobsTableMigration } from '../stubs.js';
-import { parseOptions, positionalArgs, projectPath, writeFile } from '../utils.js';
+import { parseOptions, positionalArgs, projectPath, writeFile, pathExists } from '../utils.js';
 
 export class QueueTableCommand extends Command {
   override readonly name = 'queue:table';
@@ -13,16 +12,16 @@ export class QueueTableCommand extends Command {
     parseOptions(args);
     positionalArgs(args);
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const fileName = `${timestamp()}_create_jobs_table.ts`;
     const target = projectPath(root, 'database/migrations', fileName);
 
-    if (existsSync(target)) {
+    if (await pathExists(target)) {
       console.error(`Migration already exists: database/migrations/${fileName}`);
       return 1;
     }
 
-    writeFile(target, jobsTableMigration());
+    await writeFile(target, jobsTableMigration());
     console.log(`Migration created: database/migrations/${fileName}`);
     console.log('Run tyravel migrate to create the jobs table.');
 

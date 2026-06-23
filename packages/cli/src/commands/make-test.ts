@@ -15,12 +15,12 @@ export class MakeTestCommand extends Command {
       return 1;
     }
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const className = name.endsWith('Test') ? name : `${name}Test`;
     const fileName = className.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
     const target = projectPath(root, `tests/feature/${fileName}.ts`);
 
-    writeFile(target, featureTestStub(className));
+    await writeFile(target, featureTestStub(className));
     console.log(`Created ${target}`);
     return 0;
   }

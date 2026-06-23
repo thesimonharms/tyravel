@@ -14,7 +14,7 @@ describe('findProjectRoot', () => {
     }
   });
 
-  it('finds the nearest directory with Tyravel markers', () => {
+  it('finds the nearest directory with Tyravel markers', async () => {
     tempDir = mkdtempSync(join(tmpdir(), 'tyravel-root-'));
     writeFileSync(join(tempDir, 'tyravel.json'), '{}');
     mkdirSync(join(tempDir, 'src'), { recursive: true });
@@ -23,6 +23,6 @@ describe('findProjectRoot', () => {
     const nested = join(tempDir, 'app', 'routes');
     mkdirSync(nested, { recursive: true });
 
-    expect(findProjectRoot(nested)).toBe(tempDir);
+    await expect(findProjectRoot(nested)).resolves.toBe(tempDir);
   });
 });

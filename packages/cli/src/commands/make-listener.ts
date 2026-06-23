@@ -1,14 +1,7 @@
-import { existsSync } from 'node:fs';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { eventListener } from '../stubs.js';
-import {
-  parseOptions,
-  positionalArgs,
-  projectPath,
-  toPascalCase,
-  writeFile,
-} from '../utils.js';
+import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pathExists } from '../utils.js';
 
 export class MakeListenerCommand extends Command {
   override readonly name = 'make:listener';
@@ -25,17 +18,17 @@ export class MakeListenerCommand extends Command {
       return 1;
     }
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const name = toPascalCase(rawName);
     const fileName = `${name}.ts`;
     const target = projectPath(root, 'src/listeners', fileName);
 
-    if (existsSync(target)) {
+    if (await pathExists(target)) {
       console.error(`Listener already exists: src/listeners/${fileName}`);
       return 1;
     }
 
-    writeFile(target, eventListener(name));
+    await writeFile(target, eventListener(name));
     console.log(`Listener created: src/listeners/${fileName}`);
     console.log('Register it in config/events.ts or with Events.listen(...)');
 

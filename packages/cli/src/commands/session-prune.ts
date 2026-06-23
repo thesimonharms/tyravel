@@ -23,7 +23,7 @@ export class SessionPruneCommand extends Command {
     parseOptions(args);
     positionalArgs(args);
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const config = await loadConfig(root);
 
     if (!config.auth) {

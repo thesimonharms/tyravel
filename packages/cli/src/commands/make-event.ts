@@ -1,14 +1,7 @@
-import { existsSync } from 'node:fs';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { domainEvent } from '../stubs.js';
-import {
-  parseOptions,
-  positionalArgs,
-  projectPath,
-  toPascalCase,
-  writeFile,
-} from '../utils.js';
+import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pathExists } from '../utils.js';
 
 export class MakeEventCommand extends Command {
   override readonly name = 'make:event';
@@ -25,17 +18,17 @@ export class MakeEventCommand extends Command {
       return 1;
     }
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const name = toPascalCase(rawName);
     const fileName = `${name}.ts`;
     const target = projectPath(root, 'src/events', fileName);
 
-    if (existsSync(target)) {
+    if (await pathExists(target)) {
       console.error(`Event already exists: src/events/${fileName}`);
       return 1;
     }
 
-    writeFile(target, domainEvent(name));
+    await writeFile(target, domainEvent(name));
     console.log(`Event created: src/events/${fileName}`);
 
     return 0;

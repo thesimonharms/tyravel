@@ -1,14 +1,7 @@
-import { existsSync } from 'node:fs';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { middleware } from '../stubs.js';
-import {
-  parseOptions,
-  positionalArgs,
-  projectPath,
-  toPascalCase,
-  writeFile,
-} from '../utils.js';
+import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pathExists } from '../utils.js';
 
 export class MakeMiddlewareCommand extends Command {
   override readonly name = 'make:middleware';
@@ -25,17 +18,17 @@ export class MakeMiddlewareCommand extends Command {
       return 1;
     }
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const name = toPascalCase(rawName.replace(/Middleware$/i, ''));
     const fileName = `${name}Middleware.ts`;
     const target = projectPath(root, 'src/middleware', fileName);
 
-    if (existsSync(target)) {
+    if (await pathExists(target)) {
       console.error(`Middleware already exists: src/middleware/${fileName}`);
       return 1;
     }
 
-    writeFile(target, middleware(name));
+    await writeFile(target, middleware(name));
     console.log(`Middleware created: src/middleware/${fileName}`);
     return 0;
   }

@@ -22,7 +22,7 @@ export class MigrateCommand extends Command {
     parseOptions(args);
     positionalArgs(args);
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const config = await loadConfig(root);
     const database = config.database as DatabaseConfig | undefined;
 

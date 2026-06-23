@@ -6,7 +6,7 @@ export class ShellCommand extends Command {
   override readonly description = 'Start an interactive Tyravel shell (REPL)';
 
   async handle(): Promise<number> {
-    const projectRoot = requireProjectRoot();
+    const projectRoot = await requireProjectRoot();
 
     try {
       const { startRepl } = await import('@tyravel/repl');

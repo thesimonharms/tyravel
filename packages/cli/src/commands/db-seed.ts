@@ -19,7 +19,7 @@ export class DbSeedCommand extends Command {
     const options = parseOptions(args);
     positionalArgs(args);
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     await loadConfig(root);
 
     const className = optionString(options, 'class', 'DatabaseSeeder') ?? 'DatabaseSeeder';

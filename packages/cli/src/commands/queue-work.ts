@@ -29,7 +29,7 @@ export class QueueWorkCommand extends Command {
     const options = parseOptions(args);
     positionalArgs(args);
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     await loadConfig(root);
 
     const app = new Application(root);

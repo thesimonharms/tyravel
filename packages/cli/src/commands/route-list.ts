@@ -19,7 +19,7 @@ export class RouteListCommand extends Command {
     parseOptions(args);
     positionalArgs(args);
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     await loadConfig(root);
 
     const app = new Application(root);

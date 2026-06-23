@@ -1,5 +1,4 @@
 import { spawn, spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { Command } from '../command.js';
 import { loadProjectConfig, requireProjectRoot } from '../project.js';
@@ -7,6 +6,7 @@ import {
   optionNumber,
   optionString,
   parseOptions,
+  pathExists,
   positionalArgs,
 } from '../utils.js';
 
@@ -20,11 +20,11 @@ export class ServeCommand extends Command {
     const options = parseOptions(args);
     positionalArgs(args);
 
-    const root = requireProjectRoot();
-    const config = loadProjectConfig(root);
+    const root = await requireProjectRoot();
+    const config = await loadProjectConfig(root);
     const entry = join(root, config.entry);
 
-    if (!existsSync(entry)) {
+    if (!(await pathExists(entry))) {
       console.error(`Entry file not found: ${config.entry}`);
       return 1;
     }

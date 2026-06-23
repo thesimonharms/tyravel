@@ -1,14 +1,7 @@
-import { existsSync } from 'node:fs';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { job } from '../stubs.js';
-import {
-  parseOptions,
-  positionalArgs,
-  projectPath,
-  toPascalCase,
-  writeFile,
-} from '../utils.js';
+import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pathExists } from '../utils.js';
 
 export class MakeJobCommand extends Command {
   override readonly name = 'make:job';
@@ -25,17 +18,17 @@ export class MakeJobCommand extends Command {
       return 1;
     }
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const name = toPascalCase(rawName);
     const fileName = `${name}.ts`;
     const target = projectPath(root, 'src/jobs', fileName);
 
-    if (existsSync(target)) {
+    if (await pathExists(target)) {
       console.error(`Job already exists: src/jobs/${fileName}`);
       return 1;
     }
 
-    writeFile(target, job(name));
+    await writeFile(target, job(name));
     console.log(`Job created: src/jobs/${fileName}`);
     console.log('Register it in AppServiceProvider with jobs.registry.register(...)');
 

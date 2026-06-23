@@ -1,17 +1,17 @@
-import { existsSync, readFileSync } from 'node:fs';
-import { projectPath, writeFile } from './utils.js';
+import { readFile } from 'node:fs/promises';
+import { pathExists, projectPath, writeFile } from './utils.js';
 
-export function registerComponentInProvider(
+export async function registerComponentInProvider(
   root: string,
   className: string,
   tagName: string,
-): boolean {
+): Promise<boolean> {
   const providerPath = projectPath(root, 'src/providers/app-service-provider.ts');
-  if (!existsSync(providerPath)) {
+  if (!(await pathExists(providerPath))) {
     return false;
   }
 
-  let source = readFileSync(providerPath, 'utf8');
+  let source = await readFile(providerPath, 'utf8');
   const componentImport = `import { ${className} } from '../components/${className}.js';`;
   const registration = `    View.component('${tagName}', this.app.make(${className}));`;
 
@@ -52,6 +52,6 @@ export function registerComponentInProvider(
     }
   }
 
-  writeFile(providerPath, source);
+  await writeFile(providerPath, source);
   return true;
 }

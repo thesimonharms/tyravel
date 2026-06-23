@@ -1,14 +1,7 @@
-import { existsSync } from 'node:fs';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { provider } from '../stubs.js';
-import {
-  parseOptions,
-  positionalArgs,
-  projectPath,
-  toPascalCase,
-  writeFile,
-} from '../utils.js';
+import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pathExists } from '../utils.js';
 
 export class MakeProviderCommand extends Command {
   override readonly name = 'make:provider';
@@ -25,17 +18,17 @@ export class MakeProviderCommand extends Command {
       return 1;
     }
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const name = toPascalCase(rawName.replace(/ServiceProvider$/i, ''));
     const fileName = `${name}ServiceProvider.ts`;
     const target = projectPath(root, 'src/providers', fileName);
 
-    if (existsSync(target)) {
+    if (await pathExists(target)) {
       console.error(`Provider already exists: src/providers/${fileName}`);
       return 1;
     }
 
-    writeFile(target, provider(name));
+    await writeFile(target, provider(name));
     console.log(`Provider created: src/providers/${fileName}`);
     console.log(`Register it in src/main.ts: app.register(${name}ServiceProvider);`);
 

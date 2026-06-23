@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { registerComponentInProvider } from './component-provider.js';
 
 describe('registerComponentInProvider', () => {
-  it('registers a class-based component in AppServiceProvider', () => {
+  it('registers a class-based component in AppServiceProvider', async () => {
     const root = join(tmpdir(), `tyravel-component-provider-${Date.now()}`);
     mkdirSync(join(root, 'src/providers'), { recursive: true });
 
@@ -18,7 +18,7 @@ export class AppServiceProvider extends ServiceProvider {
 `;
     writeFileSync(providerPath, initial);
 
-    const registered = registerComponentInProvider(root, 'AlertComponent', 'alert');
+    const registered = await registerComponentInProvider(root, 'AlertComponent', 'alert');
     expect(registered).toBe(true);
 
     const updated = readFileSync(providerPath, 'utf8');

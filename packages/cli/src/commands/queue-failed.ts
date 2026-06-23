@@ -12,7 +12,8 @@ import {
 import type { FailedJobRepository } from '@tyravel/queue';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
-import { parseOptions, positionalArgs } from '../utils.js';
+import { failedJobsTableMigration } from '../stubs.js';
+import { parseOptions, pathExists, positionalArgs, projectPath, writeFile } from '../utils.js';
 
 export class QueueFailedCommand extends Command {
   override readonly name = 'queue:failed';
@@ -109,19 +110,16 @@ export class QueueFailedTableCommand extends Command {
     parseOptions(args);
     positionalArgs(args);
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const fileName = `${timestamp()}_create_failed_jobs_table.ts`;
     const target = join(root, 'database/migrations', fileName);
 
-    const { existsSync } = await import('node:fs');
-    if (existsSync(target)) {
+    if (await pathExists(target)) {
       console.error(`Migration already exists: database/migrations/${fileName}`);
       return 1;
     }
 
-    const { writeFile, projectPath } = await import('../utils.js');
-    const { failedJobsTableMigration } = await import('../stubs.js');
-    writeFile(projectPath(root, 'database/migrations', fileName), failedJobsTableMigration());
+    await writeFile(projectPath(root, 'database/migrations', fileName), failedJobsTableMigration());
     console.log(`Migration created: database/migrations/${fileName}`);
     console.log('Run tyravel migrate to create the failed_jobs table.');
 
@@ -143,7 +141,7 @@ function timestamp(): string {
 }
 
 async function bootQueueApp(): Promise<Application | null> {
-  const root = requireProjectRoot();
+  const root = await requireProjectRoot();
   await loadConfig(root);
 
   const app = new Application(root);

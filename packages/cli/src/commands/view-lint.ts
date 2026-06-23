@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { lintViewSource, type ViewLintIssue } from '@tyravel/views';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
@@ -14,7 +14,7 @@ export class ViewLintCommand extends Command {
     parseOptions(args);
     positionalArgs(args);
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const { engine } = await bootViewApplication(root);
 
     const issues: Array<ViewLintIssue & { view: string }> = [];
@@ -23,7 +23,7 @@ export class ViewLintCommand extends Command {
 
     for (const name of viewNames) {
       const filePath = await engine.sourcePathFor(name);
-      const source = readFileSync(filePath, 'utf8');
+      const source = await readFile(filePath, 'utf8');
       const found = await lintViewSource(source, {
         viewPath: filePath,
         componentExists: (component) => engine.exists(component),

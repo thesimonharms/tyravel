@@ -1,4 +1,3 @@
-import { existsSync } from 'node:fs';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import {
@@ -15,7 +14,7 @@ import {
   userModel,
   usersTableMigration,
 } from '../stubs.js';
-import { projectPath, writeFile } from '../utils.js';
+import { projectPath, writeFile, pathExists } from '../utils.js';
 
 export class AuthInstallCommand extends Command {
   override readonly name = 'auth:install';
@@ -24,41 +23,41 @@ export class AuthInstallCommand extends Command {
   override readonly usage = 'tyravel auth:install';
 
   async handle(): Promise<number> {
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
 
     const configPath = projectPath(root, 'config/auth.ts');
-    if (existsSync(configPath)) {
+    if (await pathExists(configPath)) {
       console.error('config/auth.ts already exists.');
       return 1;
     }
 
-    writeFile(configPath, authConfig());
-    writeFile(projectPath(root, 'src/models/User.ts'), userModel());
-    writeFile(projectPath(root, 'src/controllers/AuthController.ts'), authController());
-    writeFile(projectPath(root, 'src/routes/auth.ts'), authRoutes());
-    writeFile(projectPath(root, 'src/policies/PostPolicy.ts'), postPolicyStub());
-    writeFile(projectPath(root, 'src/providers/app-service-provider.ts'), appServiceProviderWithAuth());
-    writeFile(
+    await writeFile(configPath, authConfig());
+    await writeFile(projectPath(root, 'src/models/User.ts'), userModel());
+    await writeFile(projectPath(root, 'src/controllers/AuthController.ts'), authController());
+    await writeFile(projectPath(root, 'src/routes/auth.ts'), authRoutes());
+    await writeFile(projectPath(root, 'src/policies/PostPolicy.ts'), postPolicyStub());
+    await writeFile(projectPath(root, 'src/providers/app-service-provider.ts'), appServiceProviderWithAuth());
+    await writeFile(
       projectPath(root, 'database/migrations/20260101000000_create_users_table.ts'),
       usersTableMigration(),
     );
-    writeFile(
+    await writeFile(
       projectPath(root, 'database/migrations/20260101000001_create_sessions_table.ts'),
       sessionsTableMigration(),
     );
-    writeFile(
+    await writeFile(
       projectPath(root, 'database/migrations/20260101000002_create_password_reset_tokens_table.ts'),
       passwordResetTokensMigration(),
     );
-    writeFile(
+    await writeFile(
       projectPath(root, 'database/migrations/20260101000003_create_personal_access_tokens_table.ts'),
       personalAccessTokensMigration(),
     );
-    writeFile(
+    await writeFile(
       projectPath(root, 'database/migrations/20260101000004_create_oauth_accounts_table.ts'),
       oauthAccountsMigration(),
     );
-    writeFile(projectPath(root, 'src/main.ts'), mainEntryWithAuth());
+    await writeFile(projectPath(root, 'src/main.ts'), mainEntryWithAuth());
 
     console.log('Auth scaffolding installed.');
     console.log('');

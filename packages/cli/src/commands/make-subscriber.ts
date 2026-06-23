@@ -1,14 +1,7 @@
-import { existsSync } from 'node:fs';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { eventSubscriber } from '../stubs.js';
-import {
-  parseOptions,
-  positionalArgs,
-  projectPath,
-  toPascalCase,
-  writeFile,
-} from '../utils.js';
+import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pathExists } from '../utils.js';
 
 export class MakeSubscriberCommand extends Command {
   override readonly name = 'make:subscriber';
@@ -25,15 +18,15 @@ export class MakeSubscriberCommand extends Command {
     }
 
     const className = toPascalCase(name);
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const target = projectPath(root, 'src/subscribers', `${className}.ts`);
 
-    if (existsSync(target)) {
+    if (await pathExists(target)) {
       console.error(`Subscriber already exists: src/subscribers/${className}.ts`);
       return 1;
     }
 
-    writeFile(target, eventSubscriber(className));
+    await writeFile(target, eventSubscriber(className));
     console.log(`Subscriber created: src/subscribers/${className}.ts`);
     console.log(`Register it in config/events.ts subscribers: [${className}]`);
 

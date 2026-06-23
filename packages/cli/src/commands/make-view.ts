@@ -1,15 +1,7 @@
-import { existsSync, mkdirSync } from 'node:fs';
-import { dirname } from 'node:path';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { view } from '../stubs.js';
-import {
-  parseOptions,
-  positionalArgs,
-  projectPath,
-  toKebabCase,
-  writeFile,
-} from '../utils.js';
+import { parseOptions, positionalArgs, projectPath, toKebabCase, writeFile, pathExists } from '../utils.js';
 
 export class MakeViewCommand extends Command {
   override readonly name = 'make:view';
@@ -26,7 +18,7 @@ export class MakeViewCommand extends Command {
       return 1;
     }
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const dotted = rawName.replace(/\\/g, '/').replace(/\/+/g, '.');
     const segments = dotted.split('.').map((segment) => toKebabCase(segment));
     const fileName = `${segments.at(-1)}.tyr`;
@@ -34,13 +26,12 @@ export class MakeViewCommand extends Command {
     const relativeDir = ['resources', 'views', ...directory].join('/');
     const target = projectPath(root, relativeDir, fileName);
 
-    if (existsSync(target)) {
+    if (await pathExists(target)) {
       console.error(`View already exists: ${relativeDir}/${fileName}`);
       return 1;
     }
 
-    mkdirSync(dirname(target), { recursive: true });
-    writeFile(target, view(segments.join('.')));
+    await writeFile(target, view(segments.join('.')));
     console.log(`View created: ${relativeDir}/${fileName}`);
 
     return 0;

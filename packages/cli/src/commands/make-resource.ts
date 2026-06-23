@@ -1,14 +1,7 @@
-import { existsSync } from 'node:fs';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { apiResource } from '../stubs.js';
-import {
-  parseOptions,
-  positionalArgs,
-  projectPath,
-  toPascalCase,
-  writeFile,
-} from '../utils.js';
+import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pathExists } from '../utils.js';
 
 export class MakeResourceCommand extends Command {
   override readonly name = 'make:resource';
@@ -25,18 +18,18 @@ export class MakeResourceCommand extends Command {
       return 1;
     }
 
-    const root = requireProjectRoot();
+    const root = await requireProjectRoot();
     const baseName = toPascalCase(rawName.replace(/Resource$/i, ''));
     const className = `${baseName}Resource`;
     const fileName = `${className}.ts`;
     const target = projectPath(root, 'src/resources', fileName);
 
-    if (existsSync(target)) {
+    if (await pathExists(target)) {
       console.error(`API resource already exists: src/resources/${fileName}`);
       return 1;
     }
 
-    writeFile(target, apiResource(className));
+    await writeFile(target, apiResource(className));
     console.log(`API resource created: src/resources/${fileName}`);
 
     return 0;

@@ -1,4 +1,3 @@
-import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { spawn } from 'node:child_process';
 import { Command } from '../command.js';
@@ -34,14 +33,7 @@ import {
 } from '../stubs.js';
 import { envExample } from '../stubs-project.js';
 import { featureTestStub, projectVitestConfig } from '../stubs-testing.js';
-import {
-  optionString,
-  parseOptions,
-  positionalArgs,
-  projectPath,
-  toKebabCase,
-  writeFile,
-} from '../utils.js';
+import { optionString, parseOptions, positionalArgs, projectPath, toKebabCase, writeFile, pathExists } from '../utils.js';
 
 export class NewCommand extends Command {
   override readonly name = 'new';
@@ -71,67 +63,67 @@ export class NewCommand extends Command {
     const parentDir = optionString(options, 'path', process.cwd()) ?? process.cwd();
     const targetDir = resolve(parentDir, name);
 
-    if (existsSync(targetDir)) {
+    if (await pathExists(targetDir)) {
       console.error(`Directory already exists: ${targetDir}`);
       return 1;
     }
 
-    writeFile(projectPath(targetDir, 'package.json'), projectPackageJson(name, projectOptions));
+    await writeFile(projectPath(targetDir, 'package.json'), projectPackageJson(name, projectOptions));
     const envContents = envExample(name, projectOptions);
-    writeFile(projectPath(targetDir, '.env.example'), envContents);
-    writeFile(projectPath(targetDir, '.env'), envContents);
-    writeFile(projectPath(targetDir, 'tyravel.json'), projectConfig(name));
-    writeFile(projectPath(targetDir, 'config/app.ts'), appConfig(name));
-    writeFile(projectPath(targetDir, 'config/database.ts'), databaseConfig(projectOptions));
-    writeFile(projectPath(targetDir, 'config/views.ts'), viewsConfig());
-    writeFile(projectPath(targetDir, 'config/queue.ts'), queueConfig(projectOptions));
-    writeFile(projectPath(targetDir, 'config/events.ts'), eventsConfig());
-    writeFile(projectPath(targetDir, 'config/broadcasting.ts'), broadcastingConfig());
-    writeFile(projectPath(targetDir, 'config/cache.ts'), cacheConfig(projectOptions));
-    writeFile(projectPath(targetDir, 'config/filesystems.ts'), filesystemsConfig());
-    writeFile(projectPath(targetDir, 'config/cors.ts'), corsConfig());
-    writeFile(projectPath(targetDir, 'config/http.ts'), httpConfig());
-    writeFile(projectPath(targetDir, 'config/log.ts'), logConfig());
-    writeFile(projectPath(targetDir, 'config/health.ts'), healthConfig());
+    await writeFile(projectPath(targetDir, '.env.example'), envContents);
+    await writeFile(projectPath(targetDir, '.env'), envContents);
+    await writeFile(projectPath(targetDir, 'tyravel.json'), projectConfig(name));
+    await writeFile(projectPath(targetDir, 'config/app.ts'), appConfig(name));
+    await writeFile(projectPath(targetDir, 'config/database.ts'), databaseConfig(projectOptions));
+    await writeFile(projectPath(targetDir, 'config/views.ts'), viewsConfig());
+    await writeFile(projectPath(targetDir, 'config/queue.ts'), queueConfig(projectOptions));
+    await writeFile(projectPath(targetDir, 'config/events.ts'), eventsConfig());
+    await writeFile(projectPath(targetDir, 'config/broadcasting.ts'), broadcastingConfig());
+    await writeFile(projectPath(targetDir, 'config/cache.ts'), cacheConfig(projectOptions));
+    await writeFile(projectPath(targetDir, 'config/filesystems.ts'), filesystemsConfig());
+    await writeFile(projectPath(targetDir, 'config/cors.ts'), corsConfig());
+    await writeFile(projectPath(targetDir, 'config/http.ts'), httpConfig());
+    await writeFile(projectPath(targetDir, 'config/log.ts'), logConfig());
+    await writeFile(projectPath(targetDir, 'config/health.ts'), healthConfig());
     if (projectOptions.redis) {
-      writeFile(projectPath(targetDir, 'config/redis.ts'), redisConfig());
+      await writeFile(projectPath(targetDir, 'config/redis.ts'), redisConfig());
     }
-    writeFile(projectPath(targetDir, 'config/mail.ts'), mailConfig());
-    writeFile(
+    await writeFile(projectPath(targetDir, 'config/mail.ts'), mailConfig());
+    await writeFile(
       projectPath(targetDir, 'config/notifications.ts'),
       notificationsConfig(projectOptions.database),
     );
-    writeFile(
+    await writeFile(
       projectPath(targetDir, 'resources/views/layouts/app.tyr'),
       layoutView(),
     );
-    writeFile(projectPath(targetDir, 'database/migrations/.gitkeep'), '');
-    writeFile(projectPath(targetDir, 'database/factories/.gitkeep'), '');
-    writeFile(
+    await writeFile(projectPath(targetDir, 'database/migrations/.gitkeep'), '');
+    await writeFile(projectPath(targetDir, 'database/factories/.gitkeep'), '');
+    await writeFile(
       projectPath(targetDir, 'database/seeders/database-seeder.ts'),
       databaseSeeder(),
     );
     const ts = Date.now();
-    writeFile(
+    await writeFile(
       projectPath(targetDir, `database/migrations/${ts}_create_jobs_table.ts`),
       jobsTableMigration(),
     );
-    writeFile(
+    await writeFile(
       projectPath(targetDir, `database/migrations/${ts + 1}_create_failed_jobs_table.ts`),
       failedJobsTableMigration(),
     );
-    writeFile(
+    await writeFile(
       projectPath(targetDir, `database/migrations/${ts + 2}_create_notifications_table.ts`),
       notificationsTableMigration(),
     );
-    writeFile(projectPath(targetDir, 'src/main.ts'), mainEntry(projectOptions));
-    writeFile(
+    await writeFile(projectPath(targetDir, 'src/main.ts'), mainEntry(projectOptions));
+    await writeFile(
       projectPath(targetDir, 'src/providers/app-service-provider.ts'),
       appServiceProvider(),
     );
-    writeFile(projectPath(targetDir, 'src/routes/web.ts'), webRoutes());
-    writeFile(projectPath(targetDir, 'vitest.config.ts'), projectVitestConfig());
-    writeFile(
+    await writeFile(projectPath(targetDir, 'src/routes/web.ts'), webRoutes());
+    await writeFile(projectPath(targetDir, 'vitest.config.ts'), projectVitestConfig());
+    await writeFile(
       projectPath(targetDir, 'tests/feature/example.test.ts'),
       featureTestStub('ExampleTest'),
     );
