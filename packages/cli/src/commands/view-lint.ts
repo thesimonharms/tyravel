@@ -19,10 +19,12 @@ export class ViewLintCommand extends Command {
 
     const issues: Array<ViewLintIssue & { view: string }> = [];
 
-    for (const name of engine.listViewNames()) {
-      const filePath = engine.sourcePathFor(name);
+    const viewNames = await engine.listViewNames();
+
+    for (const name of viewNames) {
+      const filePath = await engine.sourcePathFor(name);
       const source = readFileSync(filePath, 'utf8');
-      const found = lintViewSource(source, {
+      const found = await lintViewSource(source, {
         viewPath: filePath,
         componentExists: (component) => engine.exists(component),
         escapeContexts: new Set(engine.getRegistry().getEscapeContexts().keys()),
@@ -35,7 +37,7 @@ export class ViewLintCommand extends Command {
     }
 
     if (issues.length === 0) {
-      console.log(`No lint issues found in ${engine.listViewNames().length} view(s).`);
+      console.log(`No lint issues found in ${viewNames.length} view(s).`);
       return 0;
     }
 

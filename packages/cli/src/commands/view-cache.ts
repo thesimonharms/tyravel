@@ -36,7 +36,7 @@ export class ViewClearCommand extends Command {
     const { engine, viewConfig } = await bootViewApplication(root);
     enableCompiledCache(engine, root, viewConfig);
 
-    const count = engine.clearCompiledCache();
+    const count = await engine.clearCompiledCache();
     console.log(`Cleared ${count} compiled view file(s).`);
 
     return 0;

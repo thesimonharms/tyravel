@@ -301,7 +301,7 @@ export async function renderOps(
         break;
 
       case 'includeIf':
-        if (engine.exists(op.name)) {
+        if (await engine.exists(op.name)) {
           helpers.append(
             await renderInclude(op.name, op.dataExpression, context, helpers, engine),
           );
@@ -320,7 +320,7 @@ export async function renderOps(
 
       case 'includeFirst': {
         for (const name of op.names) {
-          if (!engine.exists(name)) {
+          if (!(await engine.exists(name))) {
             continue;
           }
           helpers.append(
@@ -357,8 +357,8 @@ export async function renderOps(
       }
 
       case 'component': {
-        const resolvedName = engine.resolveName(op.name);
-        const template = engine.getCompiledTemplate(op.name);
+        const resolvedName = await engine.resolveName(op.name);
+        const template = await engine.getCompiledTemplate(op.name);
         const passed = op.dataExpression
           ? ((evaluateExpression(op.dataExpression, context) as ViewContext) ?? {})
           : {};
@@ -546,7 +546,7 @@ async function renderInclude(
     ? (evaluateExpression(dataExpression, context) as ViewContext)
     : context;
   return engine.render(
-    engine.resolveName(name),
+    await engine.resolveName(name),
     data,
     helpers.getSections(),
     helpers.getStacks(),

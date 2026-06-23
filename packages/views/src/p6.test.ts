@@ -204,8 +204,8 @@ describe('P6 view features', () => {
     expect(html).not.toContain('Changed');
   });
 
-  it('lints unclosed directives, unknown components, and raw echoes', () => {
-    const issues = lintViewSource(
+  it('lints unclosed directives, unknown components, and raw echoes', async () => {
+    const issues = await lintViewSource(
       `@push('scripts')
 <script></script>
 @component('missing.alert')

@@ -86,8 +86,8 @@ describe('Tier 6 polish', () => {
     expect(manifest.islands[0]?.props).toEqual({ n: 2 });
   });
 
-  it('lints duplicate islands and unknown escape contexts', () => {
-    const issues = lintViewSource(
+  it('lints duplicate islands and unknown escape contexts', async () => {
+    const issues = await lintViewSource(
       `@island('dup')
 @endisland
 @island('dup')
@@ -120,6 +120,6 @@ describe('Tier 6 polish', () => {
 
     const html = await engine.render('hybrid', { message: 'Programmatic wins' });
     expect(html).toBe('<p>Programmatic wins</p>');
-    expect(engine.getCompiledTemplate('hybrid').props).toEqual({ title: undefined });
+    expect((await engine.getCompiledTemplate('hybrid')).props).toEqual({ title: undefined });
   });
 });

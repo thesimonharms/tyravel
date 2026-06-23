@@ -19,7 +19,7 @@ export interface ViewLintIssue {
 
 export interface ViewLintOptions {
   viewPath?: string;
-  componentExists?: (name: string) => boolean;
+  componentExists?: (name: string) => boolean | Promise<boolean>;
   escapeContexts?: ReadonlySet<string>;
   customDirectives?: ReadonlySet<string>;
 }
@@ -63,14 +63,14 @@ const ISLAND_RE = /^@island\(\s*['"]([^'"]+)['"]/;
 const ESCAPE_RE = /^@escape\(\s*['"]([^'"]+)['"]/;
 const RAW_ECHO_RE = /\{!!\s*(.+?)\s*!!\}/g;
 
-export function lintViewSource(
+export async function lintViewSource(
   source: string,
   options: ViewLintOptions = {},
-): ViewLintIssue[] {
+): Promise<ViewLintIssue[]> {
   const escapeContexts = options.escapeContexts ?? new Set(Object.keys(BUILTIN_ESCAPE_CONTEXTS));
   const issues: ViewLintIssue[] = [];
   issues.push(...lintUnclosedDirectives(source, options.viewPath));
-  issues.push(...lintUnknownComponents(source, options.componentExists));
+  issues.push(...(await lintUnknownComponents(source, options.componentExists)));
   issues.push(...lintUnknownCustomDirectives(source, options.customDirectives));
   issues.push(...lintDuplicateIslands(source));
   issues.push(...lintUnknownEscapeContexts(source, escapeContexts));
@@ -128,10 +128,10 @@ function lintUnclosedDirectives(source: string, viewPath?: string): ViewLintIssu
   return issues;
 }
 
-function lintUnknownComponents(
+async function lintUnknownComponents(
   source: string,
-  componentExists?: (name: string) => boolean,
-): ViewLintIssue[] {
+  componentExists?: (name: string) => boolean | Promise<boolean>,
+): Promise<ViewLintIssue[]> {
   if (!componentExists) {
     return [];
   }
@@ -146,7 +146,7 @@ function lintUnknownComponents(
 
     if (match) {
       const name = match[1]!;
-      if (!componentExists(name)) {
+      if (!(await componentExists(name))) {
         const lineStart = cursor + line.indexOf(trimmed);
         const location = lineColumnAt(source, lineStart);
         issues.push({

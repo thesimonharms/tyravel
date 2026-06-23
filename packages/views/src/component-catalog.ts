@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { compile } from './compiler.js';
-import { discoverViewNames } from './compiled-cache.js';
+import { discoverViewNamesSync } from './compiled-cache.js';
 import type { TemplateOp, ViewConfig } from './types.js';
 import { parseViewName } from './view-namespaces.js';
 
@@ -34,7 +34,7 @@ export function buildComponentCatalog(
   }
 
   for (const { prefix, root } of componentRoots) {
-    for (const relative of discoverViewNames(root, extension)) {
+    for (const relative of discoverViewNamesSync(root, extension)) {
       const name = `${prefix}.${relative}`;
       const path = join(root, `${relative.replace(/\./g, '/')}${extension}`);
       entries.push(inspectComponent(name, path));

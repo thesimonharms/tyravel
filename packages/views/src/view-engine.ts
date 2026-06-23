@@ -1,4 +1,5 @@
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync } from 'node:fs';
+import { access, readFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import {
   cacheFileForView,
@@ -172,8 +173,8 @@ export class ViewEngine {
     return buildComponentCatalog(this.basePath, this.config, this.namespaces);
   }
 
-  getCompiledTemplate(name: string): CompiledTemplate {
-    return this.loadTemplate(this.resolveName(name));
+  async getCompiledTemplate(name: string): Promise<CompiledTemplate> {
+    return this.loadTemplate(await this.resolveName(name));
   }
 
   setCompiledCachePath(path: string | null): this {
@@ -201,8 +202,8 @@ export class ViewEngine {
     return [this.viewsRoot, ...this.namespaces.values()];
   }
 
-  sourcePathFor(name: string): string {
-    return this.resolvePath(this.resolveName(name));
+  async sourcePathFor(name: string): Promise<string> {
+    return this.resolvePath(await this.resolveName(name));
   }
 
   viewNameFromPath(filePath: string, root: string): string {
@@ -229,19 +230,19 @@ export class ViewEngine {
     return mergeEvaluationContext(context, this.registry.getBindings());
   }
 
-  resolveName(name: string): string {
+  async resolveName(name: string): Promise<string> {
     const parsed = parseViewName(name);
 
     if (parsed.namespace) {
       return name;
     }
 
-    if (this.existsAt(name)) {
+    if (await this.existsAt(name)) {
       return name;
     }
 
     const anonymous = `components.${name}`;
-    if (this.existsAt(anonymous)) {
+    if (await this.existsAt(anonymous)) {
       return anonymous;
     }
 
@@ -258,7 +259,7 @@ export class ViewEngine {
     parentStackOncePushed?: Set<string>,
     renderOptions: RenderOptions = {},
   ): Promise<string> {
-    const resolved = this.resolveName(name);
+    const resolved = await this.resolveName(name);
     const composed = await this.registry.applyComposers(resolved, context as ViewContext);
     const renderContext = this.buildEvaluationContext(
       this.mergeFormContext(composed as ViewContext),
@@ -268,7 +269,7 @@ export class ViewEngine {
       this.registry.resetHydrationManifest();
     }
 
-    if (this.isProgrammatic(resolved)) {
+    if (await this.isProgrammatic(resolved)) {
       return this.renderProgrammatic(resolved, renderContext);
     }
 
@@ -289,7 +290,7 @@ export class ViewEngine {
     context: ViewPropsFor<TName> = {} as ViewPropsFor<TName>,
     handlers: Record<string, (ctx: ViewContext) => Promise<string>> = {},
   ): AsyncGenerator<string> {
-    const resolved = this.resolveName(name);
+    const resolved = await this.resolveName(name);
     const composed = await this.registry.applyComposers(resolved, context as ViewContext);
     const renderContext = this.buildEvaluationContext(
       this.mergeFormContext(composed as ViewContext),
@@ -297,7 +298,7 @@ export class ViewEngine {
 
     this.registry.resetHydrationManifest();
 
-    if (this.isProgrammatic(resolved)) {
+    if (await this.isProgrammatic(resolved)) {
       yield await this.renderProgrammatic(resolved, renderContext);
       return;
     }
@@ -343,18 +344,18 @@ export class ViewEngine {
     return this.registry.getHydrationManifest().toJSON();
   }
 
-  exists(name: string): boolean {
-    if (this.existsAt(name)) {
+  async exists(name: string): Promise<boolean> {
+    if (await this.existsAt(name)) {
       return true;
     }
 
-    if (this.isProgrammatic(this.resolveName(name))) {
+    if (await this.isProgrammatic(await this.resolveName(name))) {
       return true;
     }
 
     const parsed = parseViewName(name);
     if (!parsed.namespace) {
-      return this.existsAt(`components.${name}`);
+      return await this.existsAt(`components.${name}`);
     }
 
     return false;
@@ -370,7 +371,7 @@ export class ViewEngine {
     parentStackOncePushed?: Set<string>,
     renderOptions: RenderOptions = {},
   ): Promise<string> {
-    const template = this.loadTemplate(resolved);
+    const template = await this.loadTemplate(resolved);
     const helpers = new ViewHelpers(
       parentStacks,
       parentOnceRendered,
@@ -399,7 +400,7 @@ export class ViewEngine {
       );
       layoutHelpers.importSections(helpers.getSections());
       await renderOps(
-        this.loadTemplate(template.layout).ops,
+        (await this.loadTemplate(template.layout)).ops,
         renderContext,
         layoutHelpers,
         this,
@@ -430,20 +431,29 @@ export class ViewEngine {
     return String(output ?? '');
   }
 
-  private isProgrammatic(name: string): boolean {
+  private async isProgrammatic(name: string): Promise<boolean> {
     try {
-      return existsSync(this.programmaticPathFor(this.resolvePath(name)));
+      await access(this.programmaticPathFor(this.resolvePath(name)));
+      return true;
     } catch {
       return false;
     }
   }
 
-  private isProgrammaticOnly(name: string): boolean {
+  private async isProgrammaticOnly(name: string): Promise<boolean> {
     try {
       const tyrPath = this.resolvePath(name);
-      return (
-        existsSync(this.programmaticPathFor(tyrPath)) && !existsSync(tyrPath)
-      );
+      const [hasProgrammatic, hasTyr] = await Promise.all([
+        access(this.programmaticPathFor(tyrPath)).then(
+          () => true,
+          () => false,
+        ),
+        access(tyrPath).then(
+          () => true,
+          () => false,
+        ),
+      ]);
+      return hasProgrammatic && !hasTyr;
     } catch {
       return false;
     }
@@ -477,14 +487,14 @@ export class ViewEngine {
     }
 
     let warmed = 0;
-    for (const name of this.listViewNames()) {
-      this.loadTemplate(name);
+    for (const name of await this.listViewNames()) {
+      await this.loadTemplate(name);
       warmed += 1;
     }
     return warmed;
   }
 
-  clearCompiledCache(): number {
+  async clearCompiledCache(): Promise<number> {
     if (!this.compiledCacheDirectory) {
       return 0;
     }
@@ -493,19 +503,19 @@ export class ViewEngine {
     return clearCompiledCacheDir(this.compiledCacheDirectory);
   }
 
-  listViewNames(): string[] {
-    const names = discoverViewNames(this.viewsRoot, this.extension);
+  async listViewNames(): Promise<string[]> {
+    const names = await discoverViewNames(this.viewsRoot, this.extension);
     for (const [namespace, root] of this.namespaces.entries()) {
-      for (const view of discoverViewNames(root, this.extension)) {
+      for (const view of await discoverViewNames(root, this.extension)) {
         names.push(`${namespace}::${view}`);
       }
     }
     return names;
   }
 
-  private existsAt(name: string): boolean {
+  private async existsAt(name: string): Promise<boolean> {
     try {
-      statSync(this.resolvePath(name));
+      await stat(this.resolvePath(name));
       return true;
     } catch {
       return false;
@@ -517,13 +527,13 @@ export class ViewEngine {
     this.cache.delete(path);
   }
 
-  recompileTemplate(name: string): CompiledTemplate {
+  async recompileTemplate(name: string): Promise<CompiledTemplate> {
     this.invalidateTemplate(name);
-    return this.loadTemplate(this.resolveName(name));
+    return this.loadTemplate(await this.resolveName(name));
   }
 
-  private loadTemplate(name: string): CompiledTemplate {
-    if (this.isProgrammaticOnly(name)) {
+  private async loadTemplate(name: string): Promise<CompiledTemplate> {
+    if (await this.isProgrammaticOnly(name)) {
       throw new ViewCompileError(
         `View "${name}" is a programmatic .tyr.ts template and has no compiled ops. Use render() instead of getCompiledTemplate().`,
         { viewPath: this.programmaticPathFor(this.resolvePath(name)) },
@@ -539,7 +549,7 @@ export class ViewEngine {
 
     if (this.compiledCacheDirectory) {
       const cacheFile = cacheFileForView(this.compiledCacheDirectory, this.viewsRoot, path);
-      const diskEntry = readCompiledCache(cacheFile);
+      const diskEntry = await readCompiledCache(cacheFile);
 
       if (diskEntry && diskEntry.registryVersion === registryVersion) {
         if (this.shouldTrustDiskCache()) {
@@ -551,7 +561,7 @@ export class ViewEngine {
           return diskEntry.template;
         }
 
-        const stats = statSync(path);
+        const stats = await stat(path);
         if (diskEntry.mtimeMs === stats.mtimeMs) {
           this.cache.set(path, {
             mtimeMs: stats.mtimeMs,
@@ -564,7 +574,7 @@ export class ViewEngine {
     }
 
     const cached = this.cache.get(path);
-    const stats = statSync(path);
+    const stats = await stat(path);
 
     if (
       cached &&
@@ -574,14 +584,14 @@ export class ViewEngine {
       return cached.template;
     }
 
-    const source = readFileSync(path, 'utf8');
+    const source = await readFile(path, 'utf8');
     const template = this.compileSource(source, compileOptions);
     const memoryEntry = { mtimeMs: stats.mtimeMs, registryVersion, template };
     this.cache.set(path, memoryEntry);
 
     if (this.compiledCacheDirectory) {
       const cacheFile = cacheFileForView(this.compiledCacheDirectory, this.viewsRoot, path);
-      writeCompiledCache(cacheFile, memoryEntry);
+      await writeCompiledCache(cacheFile, memoryEntry);
     }
 
     return template;

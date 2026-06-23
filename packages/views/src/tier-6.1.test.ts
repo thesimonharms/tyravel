@@ -42,8 +42,8 @@ describe('Tier 6.1 hardening', () => {
     expect(html).toContain('<span>ok</span>');
   });
 
-  it('lints unknown custom directives', () => {
-    const issues = lintViewSource(`@datetime(value)\n`, {
+  it('lints unknown custom directives', async () => {
+    const issues = await lintViewSource(`@datetime(value)\n`, {
       customDirectives: new Set(['badge']),
     });
 
@@ -51,8 +51,8 @@ describe('Tier 6.1 hardening', () => {
     expect(issues.some((issue) => issue.message.includes('@datetime'))).toBe(true);
   });
 
-  it('allows registered custom directives during lint', () => {
-    const issues = lintViewSource(`@datetime(value)\n`, {
+  it('allows registered custom directives during lint', async () => {
+    const issues = await lintViewSource(`@datetime(value)\n`, {
       customDirectives: new Set(['datetime']),
     });
 

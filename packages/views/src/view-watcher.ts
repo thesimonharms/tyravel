@@ -34,7 +34,11 @@ export function createViewWatcher(
           const viewName = engine.viewNameFromPath(filePath, root);
           engine.invalidateTemplate(viewName);
           if (!filePath.endsWith(engine.getProgrammaticExtension())) {
-            engine.recompileTemplate(viewName);
+            void engine.recompileTemplate(viewName).catch((error) => {
+              if (error instanceof Error) {
+                options.onError?.(error);
+              }
+            });
           }
           options.onRecompiled?.(viewName);
         } catch (error) {

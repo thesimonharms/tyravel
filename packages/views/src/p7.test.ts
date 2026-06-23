@@ -173,6 +173,6 @@ describe('P7 view features', () => {
 
     const html = await engine.render('programmatic', { message: 'From TS' });
     expect(html).toBe('<p>From TS</p>');
-    expect(engine.exists('programmatic')).toBe(true);
+    expect(await engine.exists('programmatic')).toBe(true);
   });
 });

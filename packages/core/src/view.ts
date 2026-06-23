@@ -47,7 +47,7 @@ export interface ViewFacade {
     context?: ViewPropsFor<TName>,
     handlers?: Record<string, (ctx: ViewContext) => Promise<string>>,
   ): AsyncGenerator<string>;
-  exists(name: string): boolean;
+  exists(name: string): Promise<boolean>;
   catalog(): ComponentCatalogEntry[];
   escape(context: string, handler: EscapeHandler): ViewFacade;
   getHydrationManifest(): { islands: Array<{ id: string; html: string; props: Record<string, unknown> }> };
