@@ -15,6 +15,12 @@ import {
   setViewApplication,
 } from '@tyravel/core';
 import { DatabaseManager, Migrator } from '@tyravel/database';
+import {
+  JobRegistry,
+  QueueManager,
+  QueueWorker,
+  isWorkerQueue,
+} from '@tyravel/queue';
 import { TestCase, createHttpKernel, wireFacades } from '@tyravel/testing';
 import { HttpTestClient } from '@tyravel/testing';
 import { AppServiceProvider } from '../../src/providers/app-service-provider.js';
@@ -44,7 +50,7 @@ export class ReferenceTestCase extends TestCase {
   override async setUp(): Promise<void> {
     process.env.DB_DATABASE = ':memory:';
     process.env.MAIL_MAILER = 'array';
-    process.env.QUEUE_CONNECTION = 'sync';
+    process.env.QUEUE_CONNECTION = 'database';
 
     this.app = await this.createApplication();
 
@@ -67,5 +73,38 @@ export class ReferenceTestCase extends TestCase {
     const db = this.app.make(DatabaseManager);
     const migrator = new Migrator(db.connection(), this.app.migrationPaths());
     await migrator.run();
+  }
+
+  async drainQueue(queue = 'default'): Promise<number> {
+    const manager = this.app.make(QueueManager);
+    const registry = this.app.make(JobRegistry);
+    const worker = new QueueWorker(registry, this.app);
+    const connectionName = process.env.QUEUE_CONNECTION ?? 'database';
+    const connection = manager.connection(connectionName);
+
+    if (!isWorkerQueue(connection)) {
+      return 0;
+    }
+
+    let processed = 0;
+
+    while (true) {
+      const record = await connection.pop(queue);
+      if (!record) {
+        break;
+      }
+
+      await worker.process(
+        connection.decode(record),
+        async (next) => {
+          await connection.pushRaw(next, queue);
+        },
+        queue,
+      );
+      await connection.deleteJob(record.id);
+      processed += 1;
+    }
+
+    return processed;
   }
 }

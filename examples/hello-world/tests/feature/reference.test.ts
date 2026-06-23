@@ -26,6 +26,8 @@ describe('hello-world reference app', () => {
       user: { email: 'ada@example.com' },
     });
 
+    await t.drainQueue();
+
     const mail = t.app.make(MailManager);
     const transport = mail.transport('array') as ArrayMailTransport;
     expect(transport.messages).toHaveLength(1);

@@ -11,6 +11,33 @@ All notable changes to Tyravel are documented in this file.
 
 
 
+## [Unreleased]
+
+### Changed
+
+- **Async-native platform (Tier 9)** — Public filesystem and boot paths now use `fs/promises` instead of blocking `node:fs` on runtime code paths. This includes config loading (`loadEnv`, config `readdir`), provider discovery, view template/cache I/O, and CLI scaffold/project discovery.
+- **Queue defaults** — New apps and examples default to the `database` queue connection. The `sync` driver is no longer registered in `QueueManager` for production use (tests may still use `SyncQueue` directly).
+- **`View.exists()`** — Returns `Promise<boolean>`; callers must `await`.
+- **CLI project helpers** — `findProjectRoot()`, `loadProjectConfig()`, `requireProjectRoot()`, and `writeFile()` in `@tyravel/cli` are async.
+
+### Deprecated (removed in 1.0.0)
+
+| API | Replacement |
+|-----|-------------|
+| `loadEnvSync()` | `await loadEnv()` |
+| `findProjectRootSync()` | `await findProjectRoot()` |
+| `loadProjectConfigSync()` | `await loadProjectConfig()` |
+| `requireProjectRootSync()` | `await requireProjectRoot()` |
+| `writeFileSync()` (`@tyravel/cli` utils) | `await writeFile()` |
+| `readCompiledCacheSync()` / `writeCompiledCacheSync()` / `clearCompiledCacheDirSync()` / `discoverViewNamesSync()` | Async counterparts in `@tyravel/views` |
+| `sync` queue connection in app config | `database` or `redis` |
+
+### Migration
+
+- Add `await` to `View.exists()`, CLI `requireProjectRoot()`, and compiled-cache helpers if you call them directly.
+- Feature tests that relied on `QUEUE_CONNECTION=sync` for inline queued listeners should use `database` (or `redis`) and drain the queue after dispatch — see `examples/hello-world/tests/support/reference-test-case.ts` (`drainQueue()`).
+- Remove `sync: { driver: 'sync' }` from `config/queue.ts`; keep `database` and optional `redis` connections.
+
 ## [0.8.0] - 2026-06-22
 
 See [v0.8.0 release notes](https://github.com/thesimonharms/tyravel/releases/tag/v0.8.0).
