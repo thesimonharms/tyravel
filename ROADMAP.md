@@ -260,12 +260,12 @@ Browser-side channel subscriptions that mirror the server broadcasting API. Serv
 
 #### P0 — Must ship
 
-- [ ] **`@tyravel/echo` package** — TypeScript-first browser library published alongside core
-- [ ] **Channel API** — `echo.channel('orders')`, `echo.private('orders.${id}')`, `echo.join('chat')` with Laravel-compatible naming (`private-`, `presence-` prefixes)
-- [ ] **Event listeners** — `.listen('.OrderShipped', handler)` and `.stopListening()`; respect `broadcastAs()` dot-prefix convention
-- [ ] **Socket.io connector** — pairs with `@tyravel/broadcasting-socket-io` and Redis pub/sub; reads config from a small bootstrap snippet
-- [ ] **Pusher connector** — pairs with `@tyravel/broadcasting-pusher`; uses existing `/broadcasting/auth` endpoint for private/presence signing
-- [ ] **Auth transport** — cookie/session credentials on auth requests; CSRF token support for same-origin apps
+- [x] **`@tyravel/echo` package** — TypeScript-first browser library published alongside core
+- [x] **Channel API** — `echo.channel('orders')`, `echo.private('orders.${id}')`, `echo.join('chat')` with Laravel-compatible naming (`private-`, `presence-` prefixes)
+- [x] **Event listeners** — `.listen('.OrderShipped', handler)` and `.stopListening()`; respect `broadcastAs()` dot-prefix convention
+- [x] **Socket.io connector** — pairs with `@tyravel/broadcasting-socket-io` and Redis pub/sub; reads config from a small bootstrap snippet
+- [x] **Pusher connector** — pairs with `@tyravel/broadcasting-pusher`; uses existing `/broadcasting/auth` endpoint for private/presence signing
+- [x] **Auth transport** — cookie/session credentials on auth requests; CSRF token support for same-origin apps
 
 #### P1 — Strong want
 

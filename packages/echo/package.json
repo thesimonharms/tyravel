@@ -1,0 +1,49 @@
+{
+  "name": "@tyravel/echo",
+  "version": "0.9.1",
+  "description": "Laravel Echo-style browser client for Tyravel broadcasting",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "pusher-js": "^8.0.0",
+    "socket.io-client": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "pusher-js": {
+      "optional": true
+    },
+    "socket.io-client": {
+      "optional": true
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "directory": "packages/echo"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "vitest": "^3.2.4"
+  }
+}

@@ -117,6 +117,7 @@ export class BroadcastServiceProvider extends ServiceProvider {
         const body = await request.json() as {
           socket_id?: string;
           channel_name?: string;
+          channel_data?: string;
         };
 
         const socketId = body.socket_id;
@@ -144,9 +145,14 @@ export class BroadcastServiceProvider extends ServiceProvider {
           return Response.json({ auth: `${socketId}:${channelName}` });
         }
 
-        const auth = (connection as { signChannel(socketId: string, channel: string): string })
-          .signChannel(socketId, channelName);
-        return Response.json({ auth });
+        const signer = connection as {
+          signChannel(socketId: string, channel: string, channelData?: string): string;
+        };
+        const channelData = body.channel_data;
+        const auth = signer.signChannel(socketId, channelName, channelData);
+        return channelData
+          ? Response.json({ auth, channel_data: channelData })
+          : Response.json({ auth });
       });
     } catch {
       // Router not available.

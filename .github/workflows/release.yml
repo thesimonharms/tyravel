@@ -54,6 +54,7 @@ jobs:
             @tyravel/redis-node
             @tyravel/views
             @tyravel/ssr
+            @tyravel/echo
             @tyravel/queue
             @tyravel/events
             @tyravel/broadcasting
