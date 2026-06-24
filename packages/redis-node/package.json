@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/redis-node",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,7 +11,7 @@
     }
   },
   "dependencies": {
-    "@tyravel/redis": "0.11.0",
+    "@tyravel/redis": "0.12.0",
     "redis": "^4.7.1"
   },
   "scripts": {
