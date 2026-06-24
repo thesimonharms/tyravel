@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/auth-oauth",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,13 +15,13 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/auth": "0.12.1",
-    "@tyravel/crypto": "0.12.1",
-    "@tyravel/config": "0.12.1",
-    "@tyravel/container": "0.12.1",
-    "@tyravel/core": "0.12.1",
-    "@tyravel/database": "0.12.1",
-    "@tyravel/http": "0.12.1"
+    "@tyravel/auth": "0.13.0",
+    "@tyravel/crypto": "0.13.0",
+    "@tyravel/config": "0.13.0",
+    "@tyravel/container": "0.13.0",
+    "@tyravel/core": "0.13.0",
+    "@tyravel/database": "0.13.0",
+    "@tyravel/http": "0.13.0"
   },
   "files": [
     "dist"

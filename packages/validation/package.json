@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/validation",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,7 +15,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/http": "0.12.1"
+    "@tyravel/http": "0.13.0"
   },
   "files": [
     "dist"
