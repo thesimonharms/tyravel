@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/broadcasting-pusher",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,7 +15,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/broadcasting": "0.10.0"
+    "@tyravel/broadcasting": "0.11.0"
   },
   "files": [
     "dist"
