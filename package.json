@@ -1,6 +1,7 @@
 {
   "name": "tyravel",
   "private": true,
+  "type": "module",
   "workspaces": [
     "packages/*",
     "examples/*"
