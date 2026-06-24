@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/echo",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "description": "Laravel Echo-style browser client for Tyravel broadcasting",
   "license": "MIT",
   "type": "module",

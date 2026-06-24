@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/testing",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,11 +15,11 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/auth": "0.9.1",
-    "@tyravel/container": "0.9.1",
-    "@tyravel/core": "0.9.1",
-    "@tyravel/http": "0.9.1",
-    "@tyravel/views": "0.9.1"
+    "@tyravel/auth": "0.10.0",
+    "@tyravel/container": "0.10.0",
+    "@tyravel/core": "0.10.0",
+    "@tyravel/http": "0.10.0",
+    "@tyravel/views": "0.10.0"
   },
   "peerDependencies": {
     "vitest": ">=2.0.0"
