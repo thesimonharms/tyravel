@@ -68,7 +68,7 @@ export class SessionGuard implements Guard {
 
     const cookieName = this.sessionConfig.cookie;
     const maxAge = this.sessionConfig.lifetimeMinutes * 60;
-    return withCookie(response, cookieName, this.session.id, maxAge);
+    return withCookie(response, cookieName, this.session.id, maxAge, this.sessionConfig);
   }
 
   user(): Authenticatable | null {
@@ -147,11 +147,14 @@ function withCookie(
   name: string,
   value: string,
   maxAge: number,
+  sessionConfig: AuthConfig['session'],
 ): WebResponse {
   const headers = new Headers(response.headers);
+  const sameSite = sessionConfig.sameSite ?? 'Lax';
+  const secure = sessionConfig.secure ? '; Secure' : '';
   headers.append(
     'set-cookie',
-    `${name}=${encodeURIComponent(value)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}`,
+    `${name}=${encodeURIComponent(value)}; Path=/; HttpOnly; SameSite=${sameSite}; Max-Age=${maxAge}${secure}`,
   );
 
   return new globalThis.Response(response.body, {

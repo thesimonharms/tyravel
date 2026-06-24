@@ -10,9 +10,13 @@ export default class CreatePersonalAccessTokensTable extends Migration {
       table.integer('tokenable_id');
       table.string('name');
       table.string('token', 64);
+      table.string('token_prefix').nullable();
       table.text('abilities').nullable();
       table.integer('last_used_at').nullable();
+      table.string('last_used_ip').nullable();
       table.integer('expires_at').nullable();
+      table.integer('revoked_at').nullable();
+      table.text('ip_whitelist').nullable();
       table.integer('created_at').nullable();
     });
   }

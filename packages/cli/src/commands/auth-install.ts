@@ -66,6 +66,8 @@ export class AuthInstallCommand extends Command {
     console.log('  POST /login  |  POST /tokens (session)  |  Authorization: Bearer <token> (api guard)');
     console.log('  POST /forgot-password  |  POST /reset-password');
     console.log('  GET /auth/github/redirect  |  GET /auth/github/callback');
+    console.log('');
+    console.log('Optional hardening: tyravel crypto:install');
 
     return 0;
   }

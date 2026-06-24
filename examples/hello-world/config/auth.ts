@@ -28,6 +28,7 @@ export default {
     driver: 'database',
     cookie: 'tyravel_session',
     lifetimeMinutes: 120,
+    secure: env('SESSION_SECURE', 'false') === 'true',
     table: 'sessions',
     connection: 'sqlite',
   },
@@ -42,6 +43,8 @@ export default {
   tokens: {
     table: 'personal_access_tokens',
     connection: 'sqlite',
+    prefix: 'tyr_',
+    prefixLength: 8,
   },
   oauth: {
     accountsTable: 'oauth_accounts',
@@ -68,6 +71,29 @@ export default {
         clientId: env('MICROSOFT_CLIENT_ID', ''),
         clientSecret: env('MICROSOFT_CLIENT_SECRET', ''),
         redirectUri: env('MICROSOFT_REDIRECT_URI', 'http://127.0.0.1:3000/auth/microsoft/callback'),
+      },
+      x: {
+        clientId: env('X_CLIENT_ID', ''),
+        clientSecret: env('X_CLIENT_SECRET', ''),
+        redirectUri: env('X_REDIRECT_URI', 'http://127.0.0.1:3000/auth/x/callback'),
+      },
+      facebook: {
+        clientId: env('FACEBOOK_CLIENT_ID', ''),
+        clientSecret: env('FACEBOOK_CLIENT_SECRET', ''),
+        redirectUri: env('FACEBOOK_REDIRECT_URI', 'http://127.0.0.1:3000/auth/facebook/callback'),
+      },
+      linkedin: {
+        clientId: env('LINKEDIN_CLIENT_ID', ''),
+        clientSecret: env('LINKEDIN_CLIENT_SECRET', ''),
+        redirectUri: env('LINKEDIN_REDIRECT_URI', 'http://127.0.0.1:3000/auth/linkedin/callback'),
+      },
+      apple: {
+        clientId: env('APPLE_CLIENT_ID', ''),
+        clientSecret: env('APPLE_CLIENT_SECRET', ''),
+        redirectUri: env('APPLE_REDIRECT_URI', 'http://127.0.0.1:3000/auth/apple/callback'),
+        teamId: env('APPLE_TEAM_ID', ''),
+        keyId: env('APPLE_KEY_ID', ''),
+        privateKey: env('APPLE_PRIVATE_KEY', ''),
       },
     },
   },

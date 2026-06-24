@@ -75,7 +75,12 @@ export type {
   ListenerConstructor,
   ListenerHandler,
 } from '@tyravel/events';
-export type { Authenticatable, AuthConfig, NewAccessToken } from '@tyravel/auth';
+export type {
+  Authenticatable,
+  AuthConfig,
+  CreateTokenOptions,
+  NewAccessToken,
+} from '@tyravel/auth';
 export {
   AuthenticationException,
   InvalidCredentialsException,
@@ -85,6 +90,7 @@ export {
   OAuthManager,
   PasswordResetBroker,
   PersonalAccessTokenRepository,
+  createTokenAbilityMiddleware,
   Gate as AuthorizationGate,
 } from '@tyravel/auth';
 export {

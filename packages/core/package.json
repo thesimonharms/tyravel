@@ -19,6 +19,7 @@
     "@tyravel/broadcasting": "0.10.0",
     "@tyravel/cache": "0.10.0",
     "@tyravel/config": "0.10.0",
+    "@tyravel/crypto": "0.10.0",
     "@tyravel/database": "0.10.0",
     "@tyravel/events": "0.10.0",
     "@tyravel/container": "0.10.0",

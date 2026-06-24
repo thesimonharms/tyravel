@@ -1,6 +1,6 @@
 # Tyravel
 
-**v0.1.0** — TypeScript-native web framework with Laravel-style ergonomics (service container, routing, middleware, queues, auth, and an Artisan-like CLI) on standard Web APIs.
+**v0.10.0** — TypeScript-native web framework with Laravel-style ergonomics (service container, routing, middleware, queues, auth, post-quantum crypto, and an Artisan-like CLI) on standard Web APIs.
 
 Requires **Node.js ≥ 22**.
 
@@ -30,6 +30,11 @@ Published `@tyravel/*` packages follow the semver and deprecation rules in [STAB
 | `@tyravel/cache` | Array, file, and Redis cache stores, `Cache` facade, `remember()` |
 | `@tyravel/mail` | `Mailable` classes, log/array transports, `Mail` facade |
 | `@tyravel/notifications` | Multi-channel notifications (mail, database), `Notifications` facade |
+| `@tyravel/auth` | Session and token guards, social OAuth, CSRF, policies, password reset |
+| `@tyravel/auth-oauth` | OAuth2 authorization server (authorization code, client credentials, refresh) |
+| `@tyravel/crypto` | Post-quantum KEM/signatures, session encryption, signed OAuth tokens |
+| `@tyravel/broadcasting` | Real-time broadcasting with Pusher and Socket.IO drivers |
+| `@tyravel/storage` | File storage with local, S3, R2, and Supabase adapters |
 
 ## Quick start
 
@@ -88,6 +93,11 @@ tyravel queue:failed                     # List failed jobs
 tyravel queue:retry <id>                 # Re-queue a failed job
 tyravel make:test <Name>                 # Create tests/feature/<name>.ts
 tyravel auth:install                     # Scaffold session auth (User, routes, migrations)
+tyravel oauth:install                    # Scaffold OAuth2 authorization server
+tyravel oauth:client:create <name> --redirect=<uri>  # Register an OAuth2 client
+tyravel crypto:install                   # Scaffold config/crypto.ts
+tyravel crypto:generate-keys [--algorithm=ml-dsa-65] # Generate post-quantum key material
+tyravel make:social-driver <name>        # Scaffold a custom social OAuth provider
 tyravel migrate                        # Run pending migrations
 tyravel db:seed [--class=DatabaseSeeder]  # Seed the database
 tyravel version                      # Show CLI version
@@ -115,7 +125,10 @@ my-app/
 ├── tyravel.json
 ├── package.json
 ├── config/
-│   └── app.ts
+│   ├── app.ts
+│   ├── auth.ts          # after tyravel auth:install
+│   ├── crypto.ts        # optional — session encryption, OAuth signing
+│   └── oauthServer.ts   # after tyravel oauth:install
 └── src/
     ├── main.ts
     ├── routes/
@@ -645,7 +658,7 @@ Register `QueueServiceProvider` **before** `EventServiceProvider`, run `tyravel 
 
 ### Authentication
 
-Session-based **web guard** plus **API token guard** (`auth:api`), policies, password reset, and OAuth (GitHub + Google):
+Session-based **web guard**, **API token guard** (`auth:api`), policies, password reset, social OAuth, and an optional **OAuth2 authorization server**.
 
 ```bash
 tyravel auth:install
@@ -654,13 +667,14 @@ tyravel migrate
 
 Register facades in `main.ts`: `setAuthApplication`, `setGateApplication`, `setPasswordApplication`.
 
-`AuthServiceProvider` registers **StartSession**, **`auth`**, **`auth:api`**, and **`guest`** middleware.
+`AuthServiceProvider` registers **StartSession**, global **CSRF** (419 on failure), **`auth`**, **`auth:api`**, and **`guest`** middleware.
 
 ```typescript
 import { Auth, Gate, Password } from '@tyravel/core';
 
 await Auth.attempt({ email, password });
-const token = await Auth.createToken('mobile', ['*']);
+const token = await Auth.createToken('mobile', ['posts:read'], { expiresIn: '90d' });
+await Auth.revokeToken(token.id);
 await Password.sendResetLink(email);
 await Gate.authorize(Auth.user(), 'update', post);
 ```
@@ -668,11 +682,52 @@ await Gate.authorize(Auth.user(), 'update', post);
 | Feature | Notes |
 |---------|--------|
 | **Policies** | Map models in `config/auth.ts` `policies`; `Gate.authorize(user, ability, model)` |
-| **Password reset** | `password_reset_tokens` table; `Password.sendResetLink` / `Password.reset` |
-| **API tokens** | `personal_access_tokens`; `Authorization: Bearer <token>` on `api` guard |
-| **OAuth** | `GET /auth/:provider/redirect` and `/callback`; env `GITHUB_*` / `GOOGLE_*` |
+| **Password reset** | Timing-safe token comparison; `Password.sendResetLink` / `Password.reset` |
+| **API tokens** | `tyr_<secret>` format; hashed at rest; `token_prefix`, expiry, IP whitelist, revocation |
+| **Token abilities** | `createTokenAbilityMiddleware('ability')`; `request.tokenAbilities` on bearer auth |
+| **Social OAuth** | GitHub, Google, Discord, Microsoft, X, Facebook, LinkedIn, Apple — all with **PKCE** |
+| **Custom providers** | `tyravel make:social-driver acme` + `registerOAuthDriver()` |
+| **OAuth2 server** | `tyravel oauth:install`; grants: authorization_code (+ PKCE), client_credentials, refresh_token |
+| **Session drivers** | `array`, `database`, `redis`; `SESSION_SECURE` for production cookies |
 
-Routes from `auth:install` include login, tokens, forgot/reset password, and OAuth redirects.
+Full guide: [docs/guide/auth.md](./docs/guide/auth.md).
+
+#### OAuth2 authorization server
+
+```bash
+tyravel oauth:install
+npm install @tyravel/auth-oauth
+tyravel migrate
+tyravel oauth:client:create "My App" --redirect=http://127.0.0.1:3000/callback
+```
+
+Register `OAuthServerServiceProvider` in `src/main.ts` (done by `oauth:install`). Protect routes with `auth:oauth` middleware. Endpoints: `/oauth/authorize`, `/oauth/token`, `/oauth/revoke`, `/oauth/userinfo`.
+
+### Post-quantum cryptography
+
+`@tyravel/crypto` provides ML-KEM, ML-DSA, SLH-DSA, and hybrid X25519 + ML-KEM-768 encryption. Tyravel uses `@noble/post-quantum` on Node 22 and will prefer native OpenSSL PQC when available.
+
+```bash
+tyravel crypto:generate-keys --algorithm=hybrid-x25519-ml-kem-768
+tyravel crypto:generate-keys --algorithm=ml-dsa-65
+```
+
+Add `config/crypto.ts` to enable framework integrations:
+
+| Integration | Config | Effect |
+|-------------|--------|--------|
+| **Session encryption** | `session.encrypt: true` | AES-256-GCM encrypted session payloads in database/redis |
+| **OAuth token signing** | `oauth.signTokens: true` | ML-DSA signed `oat_<payload>.<signature>` access tokens |
+
+```typescript
+import { CryptoManager } from '@tyravel/crypto';
+
+const crypto = new CryptoManager();
+const keys = crypto.generateKeys('hybrid-x25519-ml-kem-768');
+const envelope = crypto.encrypt('secret', keys.publicKey);
+```
+
+Full guide: [docs/guide/crypto.md](./docs/guide/crypto.md).
 
 ### Testing
 
@@ -758,12 +813,12 @@ export class AppServiceProvider extends ServiceProvider {
 ## Development
 
 ```bash
-npm test          # Run all package tests (78 tests)
+npm test          # Run all package tests (574 tests)
 npm run build     # Build all packages
 npm run typecheck # Type-check via project references
 ```
 
-## Publishing (`@tyravel/*` v0.1.0)
+## Publishing (`@tyravel/*` v0.10.0)
 
 From the monorepo root after `npm run build`:
 
@@ -788,14 +843,18 @@ Build static output with `npm run docs:build`.
 
 ## Roadmap
 
-See [ROADMAP.md](./ROADMAP.md) for release tiers. **v0.1.0** ships the full stack below.
+See [ROADMAP.md](./ROADMAP.md) for release tiers.
 
-### Shipped in v0.1.0
+### Shipped highlights (v0.10.0)
 
 - [x] Service container, HTTP router, kernel, `Route` facade, CLI scaffolding
-- [x] Route groups, controllers, config, middleware registry, validation, Node `serve()`
-- [x] Eloquent-style ORM, views, queue/events, auth (session, tokens, OAuth, policies)
-- [x] `@tyravel/testing`, cache, mail (SMTP + queued mailables), notifications (queued, database queue default)
+- [x] Eloquent-style ORM, views, queue/events, cache, mail, notifications, broadcasting, storage
+- [x] Auth: session + API tokens, CSRF, social OAuth (PKCE), policies, password reset
+- [x] API token hardening: `tyr_` prefix, abilities, expiry, IP whitelist, revocation
+- [x] OAuth2 authorization server (`@tyravel/auth-oauth`)
+- [x] Post-quantum crypto (`@tyravel/crypto`): ML-KEM, ML-DSA, SLH-DSA, hybrid encryption
+- [x] Session encryption at rest and ML-DSA signed OAuth access tokens
+- [x] `@tyravel/testing` with HTTP test client and container fakes
 
 ## License
 

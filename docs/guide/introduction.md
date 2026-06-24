@@ -7,7 +7,8 @@ Tyravel is a TypeScript-native web framework that brings Laravel-style ergonomic
 - **Application kernel** — service container, providers, HTTP kernel, and facades (`Route`, `Auth`, `Queue`, …)
 - **HTTP layer** — router with groups and named routes, middleware registry, JSON/HTML/XML responses
 - **Database** — Eloquent-style models, query builder, migrations, factories, seeders, and pagination
-- **Auth** — session and token guards, OAuth (GitHub, Google, Discord, Microsoft), policies, password reset
+- **Auth** — session and token guards, social OAuth (GitHub, Google, X, Apple, …), OAuth2 server, CSRF, API token hardening, policies, password reset
+- **Crypto** — post-quantum KEM/signatures (`@tyravel/crypto`), session encryption at rest, signed OAuth tokens
 - **Async work** — typed jobs, database/redis queue drivers, domain events and listeners (async-native boot and I/O since v0.9.0)
 - **DX** — `tyravel` CLI for scaffolding, migrations, seeding, and a built-in dev server
 
@@ -23,7 +24,9 @@ Tyravel is a TypeScript-native web framework that brings Laravel-style ergonomic
 | `@tyravel/core` | Application kernel and facades |
 | `@tyravel/http` | Router, middleware, requests, responses |
 | `@tyravel/database` | ORM, migrations, pagination |
-| `@tyravel/auth` | Guards, sessions, OAuth, policies |
+| `@tyravel/auth` | Guards, sessions, social OAuth, policies |
+| `@tyravel/auth-oauth` | OAuth2 authorization server |
+| `@tyravel/crypto` | Post-quantum encryption and signatures |
 | `@tyravel/cli` | Project scaffolding and generators |
 
 See the [monorepo README](https://github.com/thesimonharms/tyravel#packages) for the full package list.

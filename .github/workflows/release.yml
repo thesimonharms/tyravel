@@ -60,6 +60,7 @@ jobs:
             @tyravel/broadcasting
             @tyravel/broadcasting-pusher
             @tyravel/broadcasting-socket-io
+            @tyravel/crypto
             @tyravel/auth
             @tyravel/cache
             @tyravel/storage
@@ -70,6 +71,7 @@ jobs:
             @tyravel/notifications
             @tyravel/testing
             @tyravel/core
+            @tyravel/auth-oauth
             @tyravel/repl
             @tyravel/cli
           )

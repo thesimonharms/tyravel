@@ -20,12 +20,17 @@ import { MakeModelCommand } from './commands/make-model.js';
 import { MakeProviderCommand } from './commands/make-provider.js';
 import { MakeComponentCommand } from './commands/make-component.js';
 import { MakeIslandCommand } from './commands/make-island.js';
+import { MakeSocialDriverCommand } from './commands/make-social-driver.js';
 import { MakeViewCommand } from './commands/make-view.js';
 import { ViewCacheCommand, ViewClearCommand } from './commands/view-cache.js';
 import { ViewLintCommand } from './commands/view-lint.js';
 import { ViewWatchCommand } from './commands/view-watch.js';
 import { MigrateCommand } from './commands/migrate.js';
 import { AuthInstallCommand } from './commands/auth-install.js';
+import { CryptoGenerateKeysCommand } from './commands/crypto-generate-keys.js';
+import { CryptoInstallCommand } from './commands/crypto-install.js';
+import { OAuthClientCreateCommand } from './commands/oauth-client-create.js';
+import { OAuthInstallCommand } from './commands/oauth-install.js';
 import { NewCommand } from './commands/new.js';
 import { QueueFailedCommand, QueueFailedTableCommand, QueueRetryCommand } from './commands/queue-failed.js';
 import { QueueTableCommand } from './commands/queue-table.js';
@@ -38,6 +43,10 @@ export function createKernel(): ConsoleKernel {
   return new ConsoleKernel([
     new NewCommand(),
     new AuthInstallCommand(),
+    new OAuthInstallCommand(),
+    new OAuthClientCreateCommand(),
+    new CryptoInstallCommand(),
+    new CryptoGenerateKeysCommand(),
     new ServeCommand(),
     new ShellCommand(),
     new MigrateCommand(),
@@ -53,6 +62,7 @@ export function createKernel(): ConsoleKernel {
     new MakeViewCommand(),
     new MakeComponentCommand(),
     new MakeIslandCommand(),
+    new MakeSocialDriverCommand(),
     new ViewCacheCommand(),
     new ViewClearCommand(),
     new ViewWatchCommand(),

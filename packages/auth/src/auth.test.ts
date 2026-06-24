@@ -77,6 +77,31 @@ describe('SessionGuard', () => {
     );
     expect(response.headers.get('set-cookie')).toContain('tyravel_session=');
   });
+
+  it('adds Secure when configured', async () => {
+    const hasher = new Hasher();
+    const guard = new SessionGuard(
+      'web',
+      new StubProvider(hasher),
+      new MemorySessionStore(),
+      {
+        ...config,
+        secure: true,
+        sameSite: 'Strict',
+      },
+    );
+    const request = new TyravelRequest(
+      new Request('http://localhost/login', { method: 'POST' }),
+    );
+    guard.setRequest(request);
+    await guard.startSession();
+    await guard.attempt({ email: 'a@b.c', password: 'secret' });
+
+    const response = await guard.persistSession(new globalThis.Response('ok', { status: 200 }));
+    const cookie = response.headers.get('set-cookie') ?? '';
+    expect(cookie).toContain('Secure');
+    expect(cookie).toContain('SameSite=Strict');
+  });
 });
 
 describe('Hasher', () => {

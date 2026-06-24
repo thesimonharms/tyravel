@@ -24,7 +24,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/introduction', activeMatch: '/guide/' },
       {
-        text: 'v0.6.0',
+        text: 'v0.10.0',
         items: [
           { text: 'Changelog', link: 'https://github.com/thesimonharms/tyravel/blob/main/CHANGELOG.md' },
           { text: 'API stability', link: '/guide/api-stability' },
@@ -65,6 +65,7 @@ export default defineConfig({
         text: 'Platform features',
         items: [
           { text: 'Authentication', link: '/guide/auth' },
+          { text: 'Post-quantum crypto', link: '/guide/crypto' },
           { text: 'Cache', link: '/guide/cache' },
           { text: 'Mail', link: '/guide/mail' },
           { text: 'Notifications', link: '/guide/notifications' },

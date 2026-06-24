@@ -477,6 +477,7 @@ export default {
     driver: 'database',
     cookie: 'tyravel_session',
     lifetimeMinutes: 120,
+    secure: env('SESSION_SECURE', 'false') === 'true',
     table: 'sessions',
     connection: 'sqlite',
   },
@@ -491,6 +492,8 @@ export default {
   tokens: {
     table: 'personal_access_tokens',
     connection: 'sqlite',
+    prefix: 'tyr_',
+    prefixLength: 8,
   },
   oauth: {
     accountsTable: 'oauth_accounts',
@@ -517,6 +520,29 @@ export default {
         clientId: env('MICROSOFT_CLIENT_ID', ''),
         clientSecret: env('MICROSOFT_CLIENT_SECRET', ''),
         redirectUri: env('MICROSOFT_REDIRECT_URI', 'http://127.0.0.1:3000/auth/microsoft/callback'),
+      },
+      x: {
+        clientId: env('X_CLIENT_ID', ''),
+        clientSecret: env('X_CLIENT_SECRET', ''),
+        redirectUri: env('X_REDIRECT_URI', 'http://127.0.0.1:3000/auth/x/callback'),
+      },
+      facebook: {
+        clientId: env('FACEBOOK_CLIENT_ID', ''),
+        clientSecret: env('FACEBOOK_CLIENT_SECRET', ''),
+        redirectUri: env('FACEBOOK_REDIRECT_URI', 'http://127.0.0.1:3000/auth/facebook/callback'),
+      },
+      linkedin: {
+        clientId: env('LINKEDIN_CLIENT_ID', ''),
+        clientSecret: env('LINKEDIN_CLIENT_SECRET', ''),
+        redirectUri: env('LINKEDIN_REDIRECT_URI', 'http://127.0.0.1:3000/auth/linkedin/callback'),
+      },
+      apple: {
+        clientId: env('APPLE_CLIENT_ID', ''),
+        clientSecret: env('APPLE_CLIENT_SECRET', ''),
+        redirectUri: env('APPLE_REDIRECT_URI', 'http://127.0.0.1:3000/auth/apple/callback'),
+        teamId: env('APPLE_TEAM_ID', ''),
+        keyId: env('APPLE_KEY_ID', ''),
+        privateKey: env('APPLE_PRIVATE_KEY', ''),
       },
     },
   },
@@ -634,9 +660,13 @@ export default class CreatePersonalAccessTokensTable extends Migration {
       table.integer('tokenable_id');
       table.string('name');
       table.string('token', 64);
+      table.string('token_prefix').nullable();
       table.text('abilities').nullable();
       table.integer('last_used_at').nullable();
+      table.string('last_used_ip').nullable();
       table.integer('expires_at').nullable();
+      table.integer('revoked_at').nullable();
+      table.text('ip_whitelist').nullable();
       table.integer('created_at').nullable();
     });
   }
@@ -669,6 +699,47 @@ export default class CreateOauthAccountsTable extends Migration {
 
   override async down(_connection: DatabaseConnection, schema: SchemaBuilder) {
     await schema.drop('oauth_accounts');
+  }
+}
+`;
+}
+
+export function socialDriverStub(providerName: string, className: string): string {
+  return `import type {
+  OAuthAuthorizeContext,
+  OAuthExchangeContext,
+  OAuthProviderConfig,
+  OAuthUserProfile,
+  SocialOAuthDriver,
+} from '@tyravel/auth';
+
+export class ${className} implements SocialOAuthDriver {
+  readonly name = '${providerName}';
+  readonly usesPkce = true;
+
+  constructor(private readonly config: OAuthProviderConfig) {}
+
+  authorizationUrl(state: string, context?: OAuthAuthorizeContext): string {
+    const params = new URLSearchParams({
+      client_id: this.config.clientId,
+      redirect_uri: this.config.redirectUri,
+      response_type: 'code',
+      scope: (this.config.scopes ?? ['openid', 'profile', 'email']).join(' '),
+      state,
+    });
+
+    if (context?.codeChallenge) {
+      params.set('code_challenge', context.codeChallenge);
+      params.set('code_challenge_method', context.codeChallengeMethod ?? 'S256');
+    }
+
+    return \`https://provider.example/oauth/authorize?\${params}\`;
+  }
+
+  async exchangeCode(code: string, context?: OAuthExchangeContext): Promise<OAuthUserProfile> {
+    void code;
+    void context;
+    throw new Error('Implement token exchange for ${className}.');
   }
 }
 `;
@@ -723,10 +794,9 @@ export class AuthController {
 
   async forgotPassword(request: TyravelRequest) {
     const body = await request.json<{ email?: string }>();
-    const token = await Password.sendResetLink(body.email ?? '');
+    await Password.sendResetLink(body.email ?? '');
     return Response.json({
-      message: 'Password reset link generated.',
-      token,
+      message: 'If that email exists, a reset link has been sent.',
     });
   }
 
@@ -745,13 +815,33 @@ export class AuthController {
   }
 
   async createToken(request: TyravelRequest) {
-    const body = await request.json<{ name?: string; abilities?: string[] }>();
-    const token = await Auth.createToken(body.name ?? 'api', body.abilities);
+    const body = await request.json<{
+      name?: string;
+      abilities?: string[];
+      expiresIn?: string;
+      ipWhitelist?: string[];
+    }>();
+    const token = await Auth.createToken(body.name ?? 'api', body.abilities, {
+      expiresIn: body.expiresIn,
+      ipWhitelist: body.ipWhitelist,
+    });
     return Response.json({
+      id: token.id,
       name: token.name,
+      tokenPrefix: token.tokenPrefix,
       plainTextToken: token.plainTextToken,
       abilities: token.abilities,
+      expiresAt: token.expiresAt?.toISOString() ?? null,
     });
+  }
+
+  async revokeToken(request: TyravelRequest) {
+    const tokenId = Number(request.param('id'));
+    const revoked = await Auth.revokeToken(tokenId);
+    if (!revoked) {
+      return Response.json({ message: 'Token not found.' }, { status: 404 });
+    }
+    return Response.json({ message: 'Token revoked.' });
   }
 
   oauthRedirect(request: TyravelRequest) {
@@ -759,7 +849,16 @@ export class AuthController {
     const oauth = this.app.make(OAuthManager);
     const state = oauth.createState();
     request.session?.put(\`oauth.\${provider}.state\`, state);
-    const url = oauth.redirectUrl(provider, state);
+
+    const authorize: { codeChallenge?: string; codeChallengeMethod?: 'S256' } = {};
+    if (oauth.driverUsesPkce(provider)) {
+      const pkce = oauth.createPkcePair();
+      request.session?.put(\`oauth.\${provider}.pkce_verifier\`, pkce.verifier);
+      authorize.codeChallenge = pkce.challenge;
+      authorize.codeChallengeMethod = pkce.method;
+    }
+
+    const url = oauth.redirectUrl(provider, state, authorize);
     return Response.redirect(url, 302);
   }
 
@@ -774,7 +873,8 @@ export class AuthController {
       return Response.json({ message: 'Invalid OAuth state.' }, { status: 422 });
     }
 
-    const profile = await oauth.handleCallback(provider, code, state);
+    const codeVerifier = request.session?.get<string>(\`oauth.\${provider}.pkce_verifier\`);
+    const profile = await oauth.handleCallback(provider, code, { codeVerifier });
     const user = await oauth.findOrCreateUser(provider, profile);
     await Auth.login(user);
     return Response.redirect('/', 302);
@@ -787,14 +887,229 @@ export function authRoutes(): string {
   return `import { Route } from '@tyravel/core';
 import { AuthController } from '../controllers/AuthController.js';
 
-Route.middleware('guest').post('/login', [AuthController, 'login']);
-Route.middleware('auth').post('/logout', [AuthController, 'logout']);
+Route.middleware(['csrf', 'guest']).post('/login', [AuthController, 'login']);
+Route.middleware(['csrf', 'auth']).post('/logout', [AuthController, 'logout']);
 Route.middleware('auth').get('/me', [AuthController, 'me']);
-Route.middleware('guest').post('/forgot-password', [AuthController, 'forgotPassword']);
-Route.middleware('guest').post('/reset-password', [AuthController, 'resetPassword']);
-Route.middleware('auth').post('/tokens', [AuthController, 'createToken']);
+Route.middleware(['csrf', 'guest']).post('/forgot-password', [AuthController, 'forgotPassword']);
+Route.middleware(['csrf', 'guest']).post('/reset-password', [AuthController, 'resetPassword']);
+Route.middleware(['csrf', 'auth']).post('/tokens', [AuthController, 'createToken']);
+Route.middleware(['csrf', 'auth']).delete('/tokens/:id', [AuthController, 'revokeToken']);
 Route.middleware('guest').get('/auth/:provider/redirect', [AuthController, 'oauthRedirect']);
 Route.middleware('guest').get('/auth/:provider/callback', [AuthController, 'oauthCallback']);
+`;
+}
+
+export function oauthServerMigration(): string {
+  return `import { Migration } from '@tyravel/database';
+import type { DatabaseConnection } from '@tyravel/database';
+import type { SchemaBuilder } from '@tyravel/database';
+
+export default class CreateOauthServerTables extends Migration {
+  override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
+    await schema.create('oauth_clients', (table) => {
+      table.id();
+      table.string('client_id');
+      table.string('name');
+      table.string('secret').nullable();
+      table.text('redirect_uris');
+      table.text('grants');
+      table.text('scopes');
+      table.integer('revoked').default(0);
+      table.integer('created_at').nullable();
+      table.unique(['client_id']);
+    });
+
+    await schema.create('oauth_auth_codes', (table) => {
+      table.id();
+      table.string('client_id');
+      table.integer('user_id');
+      table.text('scopes');
+      table.string('code', 64);
+      table.string('code_challenge').nullable();
+      table.string('code_challenge_method').nullable();
+      table.string('redirect_uri');
+      table.integer('expires_at');
+      table.integer('revoked_at').nullable();
+      table.integer('created_at').nullable();
+    });
+
+    await schema.create('oauth_access_tokens', (table) => {
+      table.id();
+      table.string('client_id');
+      table.integer('user_id').nullable();
+      table.text('scopes');
+      table.string('token', 64);
+      table.integer('expires_at');
+      table.integer('revoked_at').nullable();
+      table.integer('created_at').nullable();
+    });
+
+    await schema.create('oauth_refresh_tokens', (table) => {
+      table.id();
+      table.integer('access_token_id');
+      table.string('token', 64);
+      table.integer('expires_at');
+      table.integer('revoked_at').nullable();
+      table.integer('created_at').nullable();
+    });
+  }
+
+  override async down(_connection: DatabaseConnection, schema: SchemaBuilder) {
+    await schema.drop('oauth_refresh_tokens');
+    await schema.drop('oauth_access_tokens');
+    await schema.drop('oauth_auth_codes');
+    await schema.drop('oauth_clients');
+  }
+}
+`;
+}
+
+export function oauthServerConfig(): string {
+  return `import type { OAuthServerConfig } from '@tyravel/auth-oauth';
+import { env } from '@tyravel/config';
+
+export default {
+  connection: 'sqlite',
+  authorizationCodeTtlMinutes: 10,
+  accessTokenTtlMinutes: 60,
+  refreshTokenTtlDays: 30,
+  tokenPrefix: 'oat_',
+} satisfies OAuthServerConfig;
+`;
+}
+
+export function oauthServerController(): string {
+  return `import type { Application } from '@tyravel/core';
+import { Auth } from '@tyravel/core';
+import { createPkcePair } from '@tyravel/auth';
+import { OAuthServer } from '@tyravel/auth-oauth';
+import type { TyravelRequest } from '@tyravel/http';
+import { Response } from '@tyravel/http';
+
+export class OAuthServerController {
+  constructor(private readonly app: Application) {}
+
+  async showAuthorize(request: TyravelRequest) {
+    const oauth = this.app.make(OAuthServer);
+    const validation = await oauth.validateAuthorizationRequest({
+      clientId: request.query('client_id', '') ?? '',
+      redirectUri: request.query('redirect_uri', '') ?? '',
+      responseType: request.query('response_type', 'code') ?? 'code',
+      scope: request.query('scope') ?? undefined,
+      state: request.query('state') ?? undefined,
+      codeChallenge: request.query('code_challenge') ?? undefined,
+      codeChallengeMethod: (request.query('code_challenge_method') as 'S256' | undefined) ?? undefined,
+    });
+
+    return Response.json({
+      client: { name: validation.client.name },
+      scopes: validation.scopes,
+      state: request.query('state') ?? null,
+      redirect_uri: request.query('redirect_uri', '') ?? '',
+      requires_pkce: validation.requiresPkce,
+    });
+  }
+
+  async approveAuthorize(request: TyravelRequest) {
+    const body = await request.json<{
+      client_id?: string;
+      redirect_uri?: string;
+      scope?: string;
+      state?: string;
+      code_challenge?: string;
+      code_challenge_method?: 'S256';
+      approve?: boolean;
+    }>();
+
+    if (!body.approve) {
+      return Response.json({ message: 'Authorization denied.' }, { status: 403 });
+    }
+
+    const user = Auth.user();
+    if (!user) {
+      return Response.json({ message: 'Authentication required.' }, { status: 401 });
+    }
+
+    const oauth = this.app.make(OAuthServer);
+    const scopes = (body.scope ?? '*').split(/\\s+/).filter(Boolean);
+    const issued = await oauth.approveAuthorization({
+      userId: Number(user.getAuthIdentifier()),
+      clientId: body.client_id ?? '',
+      redirectUri: body.redirect_uri ?? '',
+      scopes,
+      codeChallenge: body.code_challenge,
+      codeChallengeMethod: body.code_challenge_method,
+    });
+
+    const redirect = oauth.buildAuthorizationRedirect(
+      issued.redirectUri,
+      issued.code,
+      body.state,
+    );
+
+    return Response.redirect(redirect, 302);
+  }
+
+  async token(request: TyravelRequest) {
+    const raw = await this.readTokenRequest(request);
+    const oauth = this.app.make(OAuthServer);
+    const tokenResponse = await oauth.issueToken({
+      grantType: (raw.grant_type ?? 'authorization_code') as 'authorization_code' | 'client_credentials' | 'refresh_token',
+      clientId: raw.client_id ?? '',
+      clientSecret: raw.client_secret,
+      code: raw.code,
+      redirectUri: raw.redirect_uri,
+      codeVerifier: raw.code_verifier,
+      refreshToken: raw.refresh_token,
+      scope: raw.scope,
+    });
+    return Response.json(tokenResponse);
+  }
+
+  async revoke(request: TyravelRequest) {
+    const raw = await this.readTokenRequest(request);
+    if (!raw.token) {
+      return Response.json({ error: 'invalid_request', message: 'token is required.' }, { status: 400 });
+    }
+
+    const oauth = this.app.make(OAuthServer);
+    await oauth.revokeToken(raw.token);
+    return new Response(null, { status: 200 });
+  }
+
+  async userInfo(request: TyravelRequest) {
+    return Response.json({ user: request.user ?? null, scopes: request.tokenAbilities ?? [] });
+  }
+
+  private async readTokenRequest(request: TyravelRequest): Promise<Record<string, string>> {
+    const contentType = request.header('content-type') ?? '';
+    if (contentType.includes('application/json')) {
+      const json = await request.json<Record<string, string>>();
+      return Object.fromEntries(
+        Object.entries(json).map(([key, value]) => [key, String(value)]),
+      );
+    }
+
+    const form = await request.formData();
+    const entries: Record<string, string> = {};
+    for (const [key, value] of form.entries()) {
+      entries[key] = String(value);
+    }
+    return entries;
+  }
+}
+`;
+}
+
+export function oauthServerRoutes(): string {
+  return `import { Route } from '@tyravel/core';
+import { OAuthServerController } from '../controllers/OAuthServerController.js';
+
+Route.middleware('auth').get('/oauth/authorize', [OAuthServerController, 'showAuthorize']);
+Route.middleware(['csrf', 'auth']).post('/oauth/authorize', [OAuthServerController, 'approveAuthorize']);
+Route.post('/oauth/token', [OAuthServerController, 'token']);
+Route.post('/oauth/revoke', [OAuthServerController, 'revoke']);
+Route.middleware('auth:oauth').get('/oauth/userinfo', [OAuthServerController, 'userInfo']);
 `;
 }
 
@@ -855,5 +1170,28 @@ await app.boot();
 
 const kernel = new HttpKernel(app);
 await serve(kernel);
+`;
+}
+
+export function cryptoConfig(): string {
+  return `import type { CryptoConfig } from '@tyravel/crypto';
+import { env } from '@tyravel/config';
+
+export default {
+  kem: 'hybrid-x25519-ml-kem-768',
+  signature: 'ml-dsa-65',
+  preferNative: true,
+  session: {
+    encrypt: env('SESSION_ENCRYPT', 'false') === 'true',
+    key: env('SESSION_ENCRYPTION_KEY', ''),
+    fallbackKey: env('APP_KEY', ''),
+  },
+  oauth: {
+    signTokens: env('OAUTH_SIGN_TOKENS', 'false') === 'true',
+    algorithm: 'ml-dsa-65',
+    publicKey: env('OAUTH_TOKEN_PUBLIC_KEY', ''),
+    secretKey: env('OAUTH_TOKEN_SECRET_KEY', ''),
+  },
+} satisfies CryptoConfig;
 `;
 }

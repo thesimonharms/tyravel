@@ -1,3 +1,4 @@
+import type { PayloadCipher } from '@tyravel/crypto';
 import type { RedisManager } from '@tyravel/redis';
 import type { SessionStore } from './session.js';
 
@@ -6,6 +7,7 @@ export class RedisSessionStore implements SessionStore {
     private readonly redis: RedisManager,
     private readonly connectionName: string,
     private readonly prefix = 'tyravel:session',
+    private readonly cipher?: PayloadCipher,
   ) {}
 
   async read(id: string): Promise<Record<string, unknown>> {
@@ -16,7 +18,8 @@ export class RedisSessionStore implements SessionStore {
     }
 
     try {
-      return JSON.parse(value) as Record<string, unknown>;
+      const decoded = this.cipher ? this.cipher.decrypt(value) : value;
+      return JSON.parse(decoded) as Record<string, unknown>;
     } catch {
       return {};
     }
@@ -28,7 +31,9 @@ export class RedisSessionStore implements SessionStore {
     lifetimeMinutes: number,
   ): Promise<void> {
     const client = await this.redis.connection(this.connectionName);
-    await client.set(this.key(id), JSON.stringify(data), {
+    const serialized = JSON.stringify(data);
+    const payload = this.cipher ? this.cipher.encrypt(serialized) : serialized;
+    await client.set(this.key(id), payload, {
       EX: lifetimeMinutes * 60,
     });
   }

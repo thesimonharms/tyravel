@@ -57,12 +57,17 @@ export class TokenGuard implements Guard {
       return;
     }
 
-    this.currentUser = await this.tokens.findUserIdByBearerToken(bearer, (id) =>
-      this.provider.retrieveById(id),
+    const resolved = await this.tokens.findUserIdByBearerToken(
+      bearer,
+      (id) => this.provider.retrieveById(id),
+      { ip: this.request.ip() },
     );
 
-    if (this.currentUser) {
-      this.request.user = this.currentUser;
+    if (resolved) {
+      this.currentUser = resolved.user;
+      this.request.user = resolved.user;
+      this.request.tokenAbilities = resolved.abilities;
+      this.request.tokenId = resolved.id;
     }
   }
 }

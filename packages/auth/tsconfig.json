@@ -6,6 +6,7 @@
     "rootDir": "src"
   },
   "references": [
+    { "path": "../crypto" },
     { "path": "../container" },
     { "path": "../database" },
     { "path": "../http" }

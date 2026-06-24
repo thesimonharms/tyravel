@@ -21,6 +21,8 @@
     { "path": "packages/broadcasting-pusher" },
     { "path": "packages/broadcasting-socket-io" },
     { "path": "packages/auth" },
+    { "path": "packages/auth-oauth" },
+    { "path": "packages/crypto" },
     { "path": "packages/storage" },
     { "path": "packages/storage-aws-s3" },
     { "path": "packages/storage-r2" },

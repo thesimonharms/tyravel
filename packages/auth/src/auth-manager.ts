@@ -1,7 +1,9 @@
 import type { TyravelRequest } from '@tyravel/http';
 import type { Middleware } from '@tyravel/http';
 import { Response as HttpResponse } from '@tyravel/http';
+import { AuthorizationException } from './authorization-exceptions.js';
 import { AuthenticationException } from './exceptions.js';
+import { tokenCanAny } from './token-abilities.js';
 import { SessionGuard } from './session-guard.js';
 import type { TokenGuard } from './token-guard.js';
 import type { Authenticatable, AuthConfig, Guard } from './types.js';
@@ -112,9 +114,23 @@ export function createAuthMiddleware(auth: AuthManager, guardName?: string): Mid
 
 export function createGuestMiddleware(auth: AuthManager, guardName?: string): Middleware {
   return async (_request, next) => {
-    const session = auth.sessionGuard();
-    if (session.check()) {
+    const guard = auth.guard(guardName);
+    const ok = guard.check();
+    const authenticated = ok instanceof Promise ? await ok : ok;
+    if (authenticated) {
       return HttpResponse.json({ message: 'Already authenticated.' }, { status: 409 });
+    }
+
+    return next();
+  };
+}
+
+export function createTokenAbilityMiddleware(
+  required: string | string[],
+): Middleware {
+  return async (request, next) => {
+    if (!tokenCanAny(required, request.tokenAbilities)) {
+      throw new AuthorizationException();
     }
 
     return next();

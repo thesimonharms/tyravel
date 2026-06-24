@@ -19,5 +19,7 @@ features:
   - title: TypeScript-first
     details: Typed config, models, jobs, events, and validation rules with full IDE support.
   - title: Production adapters
-    details: Redis cache and queue drivers, SMTP mail, database sessions, and OAuth providers.
+    details: Redis cache and queue drivers, SMTP mail, database sessions, social OAuth, and an OAuth2 server.
+  - title: Post-quantum ready
+    details: ML-KEM and ML-DSA via @tyravel/crypto — session encryption at rest and signed OAuth tokens.
 ---

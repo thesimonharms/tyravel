@@ -3,6 +3,7 @@ export {
   createAuthMiddleware,
   createGuestMiddleware,
   createStartSessionMiddleware,
+  createTokenAbilityMiddleware,
 } from './auth-manager.js';
 export { SessionGuard } from './session-guard.js';
 export { TokenGuard } from './token-guard.js';
@@ -14,12 +15,40 @@ export {
   GoogleOAuthDriver,
   DiscordOAuthDriver,
   MicrosoftOAuthDriver,
+  XOAuthDriver,
+  FacebookOAuthDriver,
+  LinkedInOAuthDriver,
+  AppleOAuthDriver,
+  registerOAuthDriver,
+  clearOAuthDriversForTesting,
+  createPkcePair,
 } from './oauth.js';
-export type { OAuthUserProfile, OAuthDriver } from './oauth.js';
+export type {
+  OAuthUserProfile,
+  OAuthDriver,
+  OAuthDriverConstructor,
+  OAuthAuthorizeContext,
+  OAuthExchangeContext,
+  PkcePair,
+} from './oauth.js';
+export type {
+  SocialOAuthDriver,
+  SocialOAuthDriverConstructor,
+} from './social/types.js';
+export {
+  createVerifyCsrfTokenMiddleware,
+  VerifyCsrfTokenException,
+} from './verify-csrf-token.js';
+export type { VerifyCsrfTokenOptions } from './verify-csrf-token.js';
+export { tokenCan, tokenCanAny, parseTokenAbilities } from './token-abilities.js';
 export { RedisSessionStore } from './redis-session-store.js';
 export { SessionManager } from './session-manager.js';
 export { PasswordResetBroker } from './password-reset-broker.js';
-export { PersonalAccessTokenRepository } from './personal-access-token-repository.js';
+export {
+  PersonalAccessTokenRepository,
+  type ResolvedAccessToken,
+  type TokenLookupContext,
+} from './personal-access-token-repository.js';
 export { AuthenticationException, InvalidCredentialsException } from './exceptions.js';
 export {
   AuthorizationException,
@@ -40,9 +69,12 @@ export type {
   GuardConfig,
   SessionGuardConfig,
   TokenGuardConfig,
+  TokenRepositoryConfig,
   UserModelConstructor,
   PasswordBrokerConfig,
   OAuthProviderConfig,
   PolicyConstructor,
   NewAccessToken,
+  CreateTokenOptions,
 } from './types.js';
+export { parseExpiresIn } from './token-expiry.js';

@@ -1,4 +1,4 @@
-import { createHash, randomBytes } from 'node:crypto';
+import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import type { DatabaseConnection } from '@tyravel/database';
 import { QueryBuilder } from '@tyravel/database';
 import { Hasher } from './hasher.js';
@@ -81,7 +81,13 @@ export class PasswordResetBroker {
       return false;
     }
 
-    return this.hashToken(plain) === row.token;
+    const expected = Buffer.from(this.hashToken(plain), 'utf8');
+    const stored = Buffer.from(row.token, 'utf8');
+    if (expected.length !== stored.length) {
+      return false;
+    }
+
+    return timingSafeEqual(expected, stored);
   }
 
   private hashToken(token: string): string {

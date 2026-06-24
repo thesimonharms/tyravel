@@ -1,3 +1,4 @@
+import type { PayloadCipher } from '@tyravel/crypto';
 import type { DatabaseManager } from '@tyravel/database';
 import type { RedisManager } from '@tyravel/redis';
 import { DatabaseSessionStore, MemorySessionStore } from './session-store.js';
@@ -12,6 +13,7 @@ export class SessionManager {
     private readonly config: AuthSessionConfig,
     private readonly database?: DatabaseManager,
     private readonly redis?: RedisManager,
+    private readonly cipher?: PayloadCipher,
   ) {}
 
   driver(): SessionStore {
@@ -32,6 +34,7 @@ export class SessionManager {
         this.store = new DatabaseSessionStore(
           connection,
           this.config.table ?? 'sessions',
+          this.cipher,
         );
         break;
       }
@@ -43,6 +46,7 @@ export class SessionManager {
           this.redis,
           this.config.redisConnection ?? 'default',
           this.config.prefix ?? 'tyravel:session',
+          this.cipher,
         );
         break;
       }

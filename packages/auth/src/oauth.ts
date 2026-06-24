@@ -1,14 +1,51 @@
 import { randomBytes } from 'node:crypto';
 import type { DatabaseConnection } from '@tyravel/database';
 import { QueryBuilder } from '@tyravel/database';
+import { Hasher } from './hasher.js';
+import { BUILTIN_SOCIAL_OAUTH_DRIVERS } from './social/builtin-drivers.js';
+import { createPkcePair } from './social/pkce.js';
+import type {
+  OAuthAuthorizeContext,
+  OAuthExchangeContext,
+  SocialOAuthDriver,
+  SocialOAuthDriverConstructor,
+} from './social/types.js';
 import type { OAuthProviderConfig } from './types.js';
 import type { Authenticatable, UserModelConstructor } from './types.js';
+import type { OAuthUserProfile } from './oauth-types.js';
 
-export interface OAuthUserProfile {
-  id: string;
-  email: string | null;
-  name: string | null;
-  avatar: string | null;
+export type { OAuthUserProfile } from './oauth-types.js';
+export type { OAuthAuthorizeContext, OAuthExchangeContext } from './social/types.js';
+export type { PkcePair } from './social/pkce.js';
+export { createPkcePair } from './social/pkce.js';
+
+export type OAuthDriver = SocialOAuthDriver;
+export type OAuthDriverConstructor = SocialOAuthDriverConstructor;
+
+export {
+  AppleOAuthDriver,
+  DiscordOAuthDriver,
+  FacebookOAuthDriver,
+  GithubOAuthDriver,
+  GoogleOAuthDriver,
+  LinkedInOAuthDriver,
+  MicrosoftOAuthDriver,
+  XOAuthDriver,
+} from './social/builtin-drivers.js';
+
+const customOAuthDrivers = new Map<string, SocialOAuthDriverConstructor>();
+
+export function registerOAuthDriver(name: string, ctor: SocialOAuthDriverConstructor): void {
+  customOAuthDrivers.set(name, ctor);
+}
+
+export function clearOAuthDriversForTesting(): void {
+  customOAuthDrivers.clear();
+}
+
+function resolveOAuthDriver(name: string, config: OAuthProviderConfig): SocialOAuthDriverConstructor | undefined {
+  const driverName = config.driver ?? name;
+  return customOAuthDrivers.get(driverName) ?? BUILTIN_SOCIAL_OAUTH_DRIVERS[driverName];
 }
 
 interface OAuthAccountRow {
@@ -19,255 +56,9 @@ interface OAuthAccountRow {
   [key: string]: unknown;
 }
 
-export interface OAuthDriver {
-  readonly name: string;
-  authorizationUrl(state: string): string;
-  exchangeCode(code: string): Promise<OAuthUserProfile>;
-}
-
-export class GithubOAuthDriver implements OAuthDriver {
-  readonly name = 'github';
-
-  constructor(private readonly config: OAuthProviderConfig) {}
-
-  authorizationUrl(state: string): string {
-    const params = new URLSearchParams({
-      client_id: this.config.clientId,
-      redirect_uri: this.config.redirectUri,
-      scope: (this.config.scopes ?? ['user:email']).join(' '),
-      state,
-    });
-    return `https://github.com/login/oauth/authorize?${params}`;
-  }
-
-  async exchangeCode(code: string): Promise<OAuthUserProfile> {
-    const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
-      method: 'POST',
-      headers: {
-        accept: 'application/json',
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        client_id: this.config.clientId,
-        client_secret: this.config.clientSecret,
-        code,
-        redirect_uri: this.config.redirectUri,
-      }),
-    });
-
-    const tokenJson = (await tokenRes.json()) as { access_token?: string; error?: string };
-    if (!tokenJson.access_token) {
-      throw new Error(tokenJson.error ?? 'OAuth token exchange failed');
-    }
-
-    const userRes = await fetch('https://api.github.com/user', {
-      headers: {
-        authorization: `Bearer ${tokenJson.access_token}`,
-        accept: 'application/json',
-        'user-agent': 'tyravel-auth',
-      },
-    });
-
-    const user = (await userRes.json()) as {
-      id: number;
-      login?: string;
-      email?: string | null;
-      name?: string | null;
-      avatar_url?: string | null;
-    };
-
-    return {
-      id: String(user.id),
-      email: user.email ?? null,
-      name: user.name ?? user.login ?? null,
-      avatar: user.avatar_url ?? null,
-    };
-  }
-}
-
-export class DiscordOAuthDriver implements OAuthDriver {
-  readonly name = 'discord';
-
-  constructor(private readonly config: OAuthProviderConfig) {}
-
-  authorizationUrl(state: string): string {
-    const params = new URLSearchParams({
-      client_id: this.config.clientId,
-      redirect_uri: this.config.redirectUri,
-      response_type: 'code',
-      scope: (this.config.scopes ?? ['identify', 'email']).join(' '),
-      state,
-    });
-    return `https://discord.com/api/oauth2/authorize?${params}`;
-  }
-
-  async exchangeCode(code: string): Promise<OAuthUserProfile> {
-    const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
-      method: 'POST',
-      headers: { 'content-type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        client_id: this.config.clientId,
-        client_secret: this.config.clientSecret,
-        grant_type: 'authorization_code',
-        code,
-        redirect_uri: this.config.redirectUri,
-      }),
-    });
-
-    const tokenJson = (await tokenRes.json()) as { access_token?: string; error?: string };
-    if (!tokenJson.access_token) {
-      throw new Error(tokenJson.error ?? 'OAuth token exchange failed');
-    }
-
-    const userRes = await fetch('https://discord.com/api/users/@me', {
-      headers: { authorization: `Bearer ${tokenJson.access_token}` },
-    });
-
-    const user = (await userRes.json()) as {
-      id: string;
-      email?: string | null;
-      username?: string;
-      global_name?: string | null;
-      avatar?: string | null;
-    };
-
-    const avatar = user.avatar
-      ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
-      : null;
-
-    return {
-      id: user.id,
-      email: user.email ?? null,
-      name: user.global_name ?? user.username ?? null,
-      avatar,
-    };
-  }
-}
-
-export class MicrosoftOAuthDriver implements OAuthDriver {
-  readonly name = 'microsoft';
-
-  constructor(private readonly config: OAuthProviderConfig) {}
-
-  authorizationUrl(state: string): string {
-    const params = new URLSearchParams({
-      client_id: this.config.clientId,
-      redirect_uri: this.config.redirectUri,
-      response_type: 'code',
-      scope: (this.config.scopes ?? ['openid', 'profile', 'email', 'User.Read']).join(' '),
-      state,
-    });
-    return `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?${params}`;
-  }
-
-  async exchangeCode(code: string): Promise<OAuthUserProfile> {
-    const tokenRes = await fetch(
-      'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-      {
-        method: 'POST',
-        headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          client_id: this.config.clientId,
-          client_secret: this.config.clientSecret,
-          grant_type: 'authorization_code',
-          code,
-          redirect_uri: this.config.redirectUri,
-        }),
-      },
-    );
-
-    const tokenJson = (await tokenRes.json()) as { access_token?: string; error?: string };
-    if (!tokenJson.access_token) {
-      throw new Error(tokenJson.error ?? 'OAuth token exchange failed');
-    }
-
-    const userRes = await fetch('https://graph.microsoft.com/v1.0/me', {
-      headers: { authorization: `Bearer ${tokenJson.access_token}` },
-    });
-
-    const user = (await userRes.json()) as {
-      id: string;
-      mail?: string | null;
-      userPrincipalName?: string;
-      displayName?: string | null;
-    };
-
-    return {
-      id: user.id,
-      email: user.mail ?? user.userPrincipalName ?? null,
-      name: user.displayName ?? null,
-      avatar: null,
-    };
-  }
-}
-
-export class GoogleOAuthDriver implements OAuthDriver {
-  readonly name = 'google';
-
-  constructor(private readonly config: OAuthProviderConfig) {}
-
-  authorizationUrl(state: string): string {
-    const params = new URLSearchParams({
-      client_id: this.config.clientId,
-      redirect_uri: this.config.redirectUri,
-      response_type: 'code',
-      scope: (this.config.scopes ?? ['openid', 'email', 'profile']).join(' '),
-      state,
-      access_type: 'online',
-    });
-    return `https://accounts.google.com/o/oauth2/v2/auth?${params}`;
-  }
-
-  async exchangeCode(code: string): Promise<OAuthUserProfile> {
-    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
-      method: 'POST',
-      headers: { 'content-type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        client_id: this.config.clientId,
-        client_secret: this.config.clientSecret,
-        code,
-        grant_type: 'authorization_code',
-        redirect_uri: this.config.redirectUri,
-      }),
-    });
-
-    const tokenJson = (await tokenRes.json()) as { access_token?: string; error?: string };
-    if (!tokenJson.access_token) {
-      throw new Error(tokenJson.error ?? 'OAuth token exchange failed');
-    }
-
-    const userRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-      headers: { authorization: `Bearer ${tokenJson.access_token}` },
-    });
-
-    const user = (await userRes.json()) as {
-      id: string;
-      email?: string;
-      name?: string;
-      picture?: string;
-    };
-
-    return {
-      id: user.id,
-      email: user.email ?? null,
-      name: user.name ?? null,
-      avatar: user.picture ?? null,
-    };
-  }
-}
-
-const BUILTIN_OAUTH_DRIVERS: Record<
-  string,
-  new (config: OAuthProviderConfig) => OAuthDriver
-> = {
-  github: GithubOAuthDriver,
-  google: GoogleOAuthDriver,
-  discord: DiscordOAuthDriver,
-  microsoft: MicrosoftOAuthDriver,
-};
-
 export class OAuthManager {
-  private readonly drivers = new Map<string, OAuthDriver>();
+  private readonly drivers = new Map<string, SocialOAuthDriver>();
+  private readonly hasher = new Hasher();
 
   constructor(
     providers: Record<string, OAuthProviderConfig>,
@@ -276,7 +67,7 @@ export class OAuthManager {
     private readonly userModel: UserModelConstructor,
   ) {
     for (const [name, config] of Object.entries(providers)) {
-      const Driver = BUILTIN_OAUTH_DRIVERS[name];
+      const Driver = resolveOAuthDriver(name, config);
       if (!Driver) {
         throw new Error(`Unsupported OAuth provider: ${name}`);
       }
@@ -288,22 +79,39 @@ export class OAuthManager {
     return randomBytes(24).toString('base64url');
   }
 
-  redirectUrl(provider: string, state: string): string {
-    const driver = this.drivers.get(provider);
-    if (!driver) {
-      throw new Error(`OAuth provider not configured: ${provider}`);
-    }
-
-    return driver.authorizationUrl(state);
+  createPkcePair() {
+    return createPkcePair();
   }
 
-  async handleCallback(provider: string, code: string): Promise<OAuthUserProfile> {
+  redirectUrl(
+    provider: string,
+    state: string,
+    authorize: OAuthAuthorizeContext = {},
+  ): string {
     const driver = this.drivers.get(provider);
     if (!driver) {
       throw new Error(`OAuth provider not configured: ${provider}`);
     }
 
-    return driver.exchangeCode(code);
+    return driver.authorizationUrl(state, authorize);
+  }
+
+  async handleCallback(
+    provider: string,
+    code: string,
+    exchange: OAuthExchangeContext = {},
+  ): Promise<OAuthUserProfile> {
+    const driver = this.drivers.get(provider);
+    if (!driver) {
+      throw new Error(`OAuth provider not configured: ${provider}`);
+    }
+
+    return driver.exchangeCode(code, exchange);
+  }
+
+  driverUsesPkce(provider: string): boolean {
+    const driver = this.drivers.get(provider);
+    return driver?.usesPkce === true;
   }
 
   async findOrCreateUser(
@@ -335,10 +143,11 @@ export class OAuthManager {
 
     if (!user) {
       const now = Math.floor(Date.now() / 1000);
+      const placeholder = randomBytes(32).toString('hex');
       const inserted = await ModelClass.query().insert({
         name: profile.name ?? 'User',
         email: profile.email ?? `${provider}-${profile.id}@oauth.local`,
-        password: randomBytes(32).toString('hex'),
+        password: this.hasher.make(placeholder),
         created_at: now,
         updated_at: now,
       });

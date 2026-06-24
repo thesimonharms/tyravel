@@ -1,6 +1,6 @@
 import type { Application } from './application.js';
 import type { AuthManager } from '@tyravel/auth';
-import type { Authenticatable, NewAccessToken } from '@tyravel/auth';
+import type { Authenticatable, CreateTokenOptions, NewAccessToken } from '@tyravel/auth';
 import { PersonalAccessTokenRepository } from '@tyravel/auth';
 
 let authApplication: Application | undefined;
@@ -27,6 +27,15 @@ function resolveTokens(): PersonalAccessTokenRepository {
   return authApplication.make<PersonalAccessTokenRepository>('auth.tokens');
 }
 
+function resolveCurrentUser(): Authenticatable {
+  const user = resolveAuth().user('api') ?? resolveAuth().user();
+  if (!user) {
+    throw new Error('This action requires an authenticated user.');
+  }
+
+  return user;
+}
+
 export interface AuthFacade {
   user(guard?: string): Authenticatable | null;
   id(guard?: string): string | number | null;
@@ -34,7 +43,13 @@ export interface AuthFacade {
   attempt(credentials: Record<string, string>): Promise<boolean>;
   login(user: Authenticatable): Promise<void>;
   logout(): Promise<void>;
-  createToken(name: string, abilities?: string[]): Promise<NewAccessToken>;
+  createToken(
+    name: string,
+    abilities?: string[],
+    options?: CreateTokenOptions,
+  ): Promise<NewAccessToken>;
+  revokeToken(tokenId: number): Promise<boolean>;
+  revokeAllTokens(userId?: number): Promise<number>;
 }
 
 export const Auth: AuthFacade = {
@@ -44,12 +59,17 @@ export const Auth: AuthFacade = {
   attempt: (credentials) => resolveAuth().attempt(credentials),
   login: (user) => resolveAuth().login(user),
   logout: () => resolveAuth().logout(),
-  createToken: async (name, abilities) => {
-    const user = resolveAuth().user('api') ?? resolveAuth().user();
-    if (!user) {
-      throw new Error('Cannot create API token without an authenticated user.');
-    }
-
-    return resolveTokens().createToken(user, name, abilities);
+  createToken: async (name, abilities, options) => {
+    const user = resolveCurrentUser();
+    return resolveTokens().createToken(user, name, abilities, options);
+  },
+  revokeToken: async (tokenId) => {
+    const user = resolveCurrentUser();
+    return resolveTokens().revokeToken(tokenId, Number(user.getAuthIdentifier()));
+  },
+  revokeAllTokens: async (userId) => {
+    const resolvedUserId =
+      userId ?? Number(resolveCurrentUser().getAuthIdentifier());
+    return resolveTokens().revokeTokensForUser(resolvedUserId);
   },
 };

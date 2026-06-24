@@ -11,6 +11,7 @@
     { "path": "../broadcasting" },
     { "path": "../cache" },
     { "path": "../config" },
+    { "path": "../crypto" },
     { "path": "../database" },
     { "path": "../events" },
     { "path": "../container" },

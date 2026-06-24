@@ -42,6 +42,10 @@ export interface OAuthProviderConfig {
   clientSecret: string;
   redirectUri: string;
   scopes?: string[];
+  driver?: string;
+  teamId?: string;
+  keyId?: string;
+  privateKey?: string;
 }
 
 export type SessionDriver = 'array' | 'database' | 'redis';
@@ -50,6 +54,8 @@ export interface AuthSessionConfig {
   driver?: SessionDriver;
   cookie: string;
   lifetimeMinutes: number;
+  secure?: boolean;
+  sameSite?: 'Lax' | 'Strict' | 'None';
   table?: string;
   connection?: string;
   redisConnection?: string;
@@ -70,10 +76,7 @@ export interface AuthConfig {
     connection?: string;
   };
   policies?: Record<string, PolicyConstructor>;
-  tokens?: {
-    table: string;
-    connection?: string;
-  };
+  tokens?: TokenRepositoryConfig;
 }
 
 export interface Guard {
@@ -86,8 +89,23 @@ export interface Guard {
 
 export type PolicyConstructor = Constructor<Policy>;
 
+export interface CreateTokenOptions {
+  expiresIn?: string | number | Date;
+  ipWhitelist?: string[];
+}
+
 export interface NewAccessToken {
+  id: number;
   plainTextToken: string;
+  tokenPrefix: string;
   name: string;
   abilities: string[];
+  expiresAt: Date | null;
+}
+
+export interface TokenRepositoryConfig {
+  table: string;
+  connection?: string;
+  prefix?: string;
+  prefixLength?: number;
 }

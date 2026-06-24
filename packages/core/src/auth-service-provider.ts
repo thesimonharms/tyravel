@@ -1,4 +1,9 @@
 import { ConfigRepository } from '@tyravel/config';
+import {
+  PayloadCipher,
+  resolveSessionCipherKey,
+  type CryptoConfig,
+} from '@tyravel/crypto';
 import { DatabaseManager } from '@tyravel/database';
 import {
   AuthManager,
@@ -11,6 +16,7 @@ import {
   createAuthMiddleware,
   createGuestMiddleware,
   createStartSessionMiddleware,
+  createVerifyCsrfTokenMiddleware,
   EloquentUserProvider,
   SessionManager,
   type AuthConfig,
@@ -26,10 +32,12 @@ export class AuthServiceProvider extends ServiceProvider {
     const authConfig = config.get<AuthConfig>('auth');
     const database = this.app.make<DatabaseManager>('db');
 
+    const sessionCipher = this.resolveSessionCipher();
     const sessionManager = new SessionManager(
       authConfig.session,
       database,
       this.resolveRedisManager(),
+      sessionCipher,
     );
 
     const providers = new Map<string, EloquentUserProvider>();
@@ -47,6 +55,11 @@ export class AuthServiceProvider extends ServiceProvider {
     const tokenRepository = new PersonalAccessTokenRepository(
       tokenConnection,
       tokenTable,
+      'users',
+      {
+        prefix: authConfig.tokens?.prefix,
+        prefixLength: authConfig.tokens?.prefixLength,
+      },
     );
     this.app.instance('auth.tokens', tokenRepository);
     this.app.singleton(PersonalAccessTokenRepository, () => tokenRepository);
@@ -116,6 +129,12 @@ export class AuthServiceProvider extends ServiceProvider {
     }
 
     this.app.use(createStartSessionMiddleware(auth));
+    this.app.use(
+      createVerifyCsrfTokenMiddleware({
+        except: ['/api/*', '/broadcasting/auth'],
+      }),
+    );
+    this.app.middleware('csrf', createVerifyCsrfTokenMiddleware());
     this.app.middleware('auth', createAuthMiddleware(auth));
     this.app.middleware('auth:api', createAuthMiddleware(auth, 'api'));
     this.app.middleware('guest', createGuestMiddleware(auth));
@@ -127,5 +146,31 @@ export class AuthServiceProvider extends ServiceProvider {
     } catch {
       return undefined;
     }
+  }
+
+  private resolveSessionCipher(): PayloadCipher | undefined {
+    const config = this.app.make<ConfigRepository>('config');
+    let cryptoConfig: CryptoConfig | undefined;
+    try {
+      cryptoConfig = config.get<CryptoConfig>('crypto');
+    } catch {
+      return undefined;
+    }
+
+    if (!cryptoConfig?.session?.encrypt) {
+      return undefined;
+    }
+
+    const key = resolveSessionCipherKey(
+      cryptoConfig.session.key,
+      cryptoConfig.session.fallbackKey,
+    );
+    if (!key) {
+      throw new Error(
+        'Session encryption is enabled but no SESSION_ENCRYPTION_KEY or fallback key is configured.',
+      );
+    }
+
+    return new PayloadCipher(key);
   }
 }

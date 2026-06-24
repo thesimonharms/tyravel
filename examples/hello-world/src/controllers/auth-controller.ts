@@ -72,10 +72,9 @@ export class AuthController {
 
   async forgotPassword(request: TyravelRequest) {
     const body = await request.json<{ email?: string }>();
-    const token = await Password.sendResetLink(body.email ?? '');
+    await Password.sendResetLink(body.email ?? '');
     return Response.json({
-      message: 'Password reset link generated.',
-      token,
+      message: 'If that email exists, a reset link has been sent.',
     });
   }
 
@@ -94,13 +93,33 @@ export class AuthController {
   }
 
   async createToken(request: TyravelRequest) {
-    const body = await request.json<{ name?: string; abilities?: string[] }>();
-    const token = await Auth.createToken(body.name ?? 'api', body.abilities);
+    const body = await request.json<{
+      name?: string;
+      abilities?: string[];
+      expiresIn?: string;
+      ipWhitelist?: string[];
+    }>();
+    const token = await Auth.createToken(body.name ?? 'api', body.abilities, {
+      expiresIn: body.expiresIn,
+      ipWhitelist: body.ipWhitelist,
+    });
     return Response.json({
+      id: token.id,
       name: token.name,
+      tokenPrefix: token.tokenPrefix,
       plainTextToken: token.plainTextToken,
       abilities: token.abilities,
+      expiresAt: token.expiresAt?.toISOString() ?? null,
     });
+  }
+
+  async revokeToken(request: TyravelRequest) {
+    const tokenId = Number(request.param('id'));
+    const revoked = await Auth.revokeToken(tokenId);
+    if (!revoked) {
+      return Response.json({ message: 'Token not found.' }, { status: 404 });
+    }
+    return Response.json({ message: 'Token revoked.' });
   }
 
   oauthRedirect(request: TyravelRequest) {
@@ -108,7 +127,16 @@ export class AuthController {
     const oauth = this.app.make(OAuthManager);
     const state = oauth.createState();
     request.session?.put(`oauth.${provider}.state`, state);
-    const url = oauth.redirectUrl(provider, state);
+
+    const authorize: { codeChallenge?: string; codeChallengeMethod?: 'S256' } = {};
+    if (oauth.driverUsesPkce(provider)) {
+      const pkce = oauth.createPkcePair();
+      request.session?.put(`oauth.${provider}.pkce_verifier`, pkce.verifier);
+      authorize.codeChallenge = pkce.challenge;
+      authorize.codeChallengeMethod = pkce.method;
+    }
+
+    const url = oauth.redirectUrl(provider, state, authorize);
     return Response.redirect(url, 302);
   }
 
@@ -123,7 +151,8 @@ export class AuthController {
       return Response.json({ message: 'Invalid OAuth state.' }, { status: 422 });
     }
 
-    const profile = await oauth.handleCallback(provider, code, state);
+    const codeVerifier = request.session?.get<string>(`oauth.${provider}.pkce_verifier`);
+    const profile = await oauth.handleCallback(provider, code, { codeVerifier });
     const user = await oauth.findOrCreateUser(provider, profile);
     await Auth.login(user);
     return Response.redirect('/', 302);

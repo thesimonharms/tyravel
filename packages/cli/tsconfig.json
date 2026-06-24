@@ -6,7 +6,9 @@
     "rootDir": "src"
   },
   "references": [
+    { "path": "../crypto" },
     { "path": "../support" },
+    { "path": "../auth-oauth" },
     { "path": "../config" },
     { "path": "../core" },
     { "path": "../database" },

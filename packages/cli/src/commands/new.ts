@@ -153,6 +153,10 @@ export class NewCommand extends Command {
     console.log('  npm install');
     console.log('  npm test');
     console.log('  tyravel serve');
+    if (projectOptions.auth) {
+      console.log('');
+      console.log('  Auth dependency included — run tyravel auth:install to scaffold guards and routes.');
+    }
 
     // Run npm install with inline spinner (only in interactive mode)
     if (process.stdout.isTTY) {

@@ -19,7 +19,9 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@tyravel/crypto": "0.10.0",
     "@tyravel/support": "0.10.0",
+    "@tyravel/auth-oauth": "0.10.0",
     "@tyravel/config": "0.10.0",
     "@tyravel/core": "0.10.0",
     "@tyravel/database": "0.10.0",

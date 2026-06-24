@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "references": [
+    { "path": "../auth" },
+    { "path": "../crypto" },
+    { "path": "../config" },
+    { "path": "../container" },
+    { "path": "../core" },
+    { "path": "../database" },
+    { "path": "../http" }
+  ],
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts"]
+}

@@ -55,6 +55,9 @@ Useful but evolving — read release notes when upgrading minors:
 - Programmatic `.tyr.ts` views and `View.catalog()`
 - `tyravel shell` / REPL behavior
 - `ViewPropsMap` augmentation for typed view props
+- `@tyravel/crypto` algorithms, key formats, and envelope serialization
+- `@tyravel/auth-oauth` OAuth2 server grants, signed token layout, and repository APIs
+- Session encryption at rest and ML-DSA OAuth token signing integration flags
 
 Experimental features can graduate to stable once documented and covered by compatibility tests.
 

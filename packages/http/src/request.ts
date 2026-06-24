@@ -11,6 +11,8 @@ export class TyravelRequest {
 
   session?: SessionContract;
   user: unknown = null;
+  tokenAbilities?: string[];
+  tokenId?: number;
   remoteAddress?: string;
   private trustedProxies: string[] = [];
 

@@ -1,3 +1,4 @@
+import type { PayloadCipher } from '@tyravel/crypto';
 import type { DatabaseConnection } from '@tyravel/database';
 import { QueryBuilder } from '@tyravel/database';
 import type { SessionStore } from './session.js';
@@ -13,6 +14,7 @@ export class DatabaseSessionStore implements SessionStore {
   constructor(
     private readonly connection: DatabaseConnection,
     private readonly table = 'sessions',
+    private readonly cipher?: PayloadCipher,
   ) {}
 
   async read(id: string): Promise<Record<string, unknown>> {
@@ -25,7 +27,8 @@ export class DatabaseSessionStore implements SessionStore {
     }
 
     try {
-      return JSON.parse(row.payload) as Record<string, unknown>;
+      const decoded = this.cipher ? this.cipher.decrypt(row.payload) : row.payload;
+      return JSON.parse(decoded) as Record<string, unknown>;
     } catch {
       return {};
     }
@@ -37,7 +40,8 @@ export class DatabaseSessionStore implements SessionStore {
     lifetimeMinutes: number,
   ): Promise<void> {
     const now = Math.floor(Date.now() / 1000);
-    const payload = JSON.stringify(data);
+    const serialized = JSON.stringify(data);
+    const payload = this.cipher ? this.cipher.encrypt(serialized) : serialized;
     const existing = await new QueryBuilder<SessionsTableRow>(this.connection, this.table)
       .where('id', id)
       .first();
