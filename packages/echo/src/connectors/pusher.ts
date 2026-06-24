@@ -1,5 +1,9 @@
 import { createAuthTransport } from '../auth.js';
-import type { EchoAuthTransport, EchoConnector, EchoListener } from '../types.js';
+import {
+  bindConnectorPresenceEvents,
+  unbindConnectorPresenceEvents,
+} from '../presence-events.js';
+import type { EchoAuthTransport, EchoConnector, EchoListener, PresenceCallbacks } from '../types.js';
 
 export interface PusherChannelLike {
   bind(event: string, listener: EchoListener): void;
@@ -68,8 +72,9 @@ export class PusherConnector implements EchoConnector {
         }
 
         const channelName = (channel as { name?: string }).name ?? '';
+        const channelData = (channel as { channelData?: string }).channelData;
         this.auth
-          .authorize(socketId, channelName)
+          .authorize(socketId, channelName, channelData)
           .then((response) => callback(null, response.auth))
           .catch((error: unknown) => {
             callback(error instanceof Error ? error : new Error(String(error)), '');
@@ -98,11 +103,10 @@ export class PusherConnector implements EchoConnector {
       return;
     }
 
-    if (channelName.startsWith('presence-') && options?.channelData) {
-      await this.auth.authorize(client.connection.socket_id, channelName, options.channelData);
-    }
-
     const channel = client.subscribe(channelName);
+    if (channelName.startsWith('presence-') && options?.channelData) {
+      (channel as { channelData?: string }).channelData = options.channelData;
+    }
     this.channels.set(channelName, channel);
   }
 
@@ -129,6 +133,14 @@ export class PusherConnector implements EchoConnector {
       return;
     }
     channel.unbind(event, listener);
+  }
+
+  bindPresenceEvents(channelName: string, callbacks: PresenceCallbacks): void {
+    bindConnectorPresenceEvents(this, channelName, callbacks, 'pusher');
+  }
+
+  unbindPresenceEvents(channelName: string): void {
+    unbindConnectorPresenceEvents(this, channelName);
   }
 }
 

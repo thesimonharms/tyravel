@@ -247,7 +247,7 @@ Move from “render HTML strings in controllers” to a first-class SSR workflow
 
 - [x] **Streaming SSR middleware** — first-class chunked `Response` integration so `View.renderStream()` flushes early shell HTML without manual async iteration in every controller
 - [x] **SSR test helpers** — assert rendered HTML *and* hydration manifest contents in `@tyravel/testing` (`assertIsland`, `assertHydrationManifest`)
-- [ ] **`tyravel make:island`** — scaffold a paired server partial + client mount function with registry wiring
+- [x] **`tyravel make:island`** — scaffold a paired server partial + client mount function with registry wiring
 
 #### P2 — If scope allows
 
@@ -269,7 +269,7 @@ Browser-side channel subscriptions that mirror the server broadcasting API. Serv
 
 #### P1 — Strong want
 
-- [ ] **Presence events** — `.here()`, `.joining()`, `.leaving()`, `.error()` callbacks on presence channels
+- [x] **Presence events** — `.here()`, `.joining()`, `.leaving()`, `.error()` callbacks on presence channels
 - [x] **Scaffold integration** — `tyravel new` / layout stub emits an `@echo` or `@vite` companion script that bootstraps Echo from `config/broadcasting.ts` values safe for the client (key, host, driver)
 - [x] **Echo + views** — `@echo` directive or layout stack helper to load the Echo client bundle only on pages that need real-time updates
 

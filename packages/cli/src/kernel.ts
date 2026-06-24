@@ -19,6 +19,7 @@ import { MakeMigrationCommand } from './commands/make-migration.js';
 import { MakeModelCommand } from './commands/make-model.js';
 import { MakeProviderCommand } from './commands/make-provider.js';
 import { MakeComponentCommand } from './commands/make-component.js';
+import { MakeIslandCommand } from './commands/make-island.js';
 import { MakeViewCommand } from './commands/make-view.js';
 import { ViewCacheCommand, ViewClearCommand } from './commands/view-cache.js';
 import { ViewLintCommand } from './commands/view-lint.js';
@@ -51,6 +52,7 @@ export function createKernel(): ConsoleKernel {
     new MakeProviderCommand(),
     new MakeViewCommand(),
     new MakeComponentCommand(),
+    new MakeIslandCommand(),
     new ViewCacheCommand(),
     new ViewClearCommand(),
     new ViewWatchCommand(),

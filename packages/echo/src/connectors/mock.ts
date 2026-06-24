@@ -1,4 +1,8 @@
-import type { EchoConnector, EchoListener } from '../types.js';
+import {
+  bindConnectorPresenceEvents,
+  unbindConnectorPresenceEvents,
+} from '../presence-events.js';
+import type { EchoConnector, EchoListener, PresenceCallbacks } from '../types.js';
 
 type Subscription = {
   listeners: Map<string, Set<EchoListener>>;
@@ -69,5 +73,13 @@ export class MockConnector implements EchoConnector {
     for (const listener of bucket) {
       listener(payload);
     }
+  }
+
+  bindPresenceEvents(channelName: string, callbacks: PresenceCallbacks): void {
+    bindConnectorPresenceEvents(this, channelName, callbacks, 'pusher');
+  }
+
+  unbindPresenceEvents(channelName: string): void {
+    unbindConnectorPresenceEvents(this, channelName);
   }
 }

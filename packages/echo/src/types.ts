@@ -17,6 +17,8 @@ export interface EchoConnector {
   unsubscribe(channelName: string): Promise<void>;
   listen(channelName: string, event: string, listener: EchoListener): void;
   stopListening(channelName: string, event: string, listener?: EchoListener): void;
+  bindPresenceEvents?(channelName: string, callbacks: PresenceCallbacks): void;
+  unbindPresenceEvents?(channelName: string): void;
 }
 
 export type EchoDriver = 'socketio' | 'pusher' | 'null';

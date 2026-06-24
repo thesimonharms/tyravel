@@ -128,3 +128,5 @@ return Response.ssrStream(View.renderStream('dashboard', context, handlers), {
 ```
 
 `View.renderStream()` yields HTML in document order: shell markup, then each stream section as it resolves.
+
+Scaffold a new island with `tyravel make:island counter`. That creates `resources/views/islands/counter.tyr`, `resources/client/islands/counter.ts`, and registers the client mount in your bundle entry.

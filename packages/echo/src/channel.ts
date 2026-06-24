@@ -10,7 +10,7 @@ export class EchoChannel {
 
   constructor(
     readonly name: string,
-    private readonly connector: EchoConnector,
+    protected readonly connector: EchoConnector,
     private readonly options: { channelData?: string } = {},
   ) {}
 
@@ -67,7 +67,7 @@ export class EchoChannel {
     this.subscribed = false;
   }
 
-  private async ensureSubscribed(): Promise<void> {
+  protected async ensureSubscribed(): Promise<void> {
     if (this.subscribed) {
       return;
     }

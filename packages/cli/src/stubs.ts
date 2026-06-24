@@ -66,6 +66,22 @@ export function viewsConfig(): string {
 `;
 }
 
+export function islandViewPartial(id: string): string {
+  return `<div class="island island-${id}">
+  <p>${id} island</p>
+</div>
+`;
+}
+
+export function islandClientMount(id: string): string {
+  return `import { registerIsland } from '@tyravel/ssr';
+
+registerIsland('${id}', ({ element, props }) => {
+  // TODO: mount interactive behavior on \`element\` using \`props\`
+});
+`;
+}
+
 export function componentView(name: string): string {
   return `@props([])
 

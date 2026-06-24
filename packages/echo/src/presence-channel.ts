@@ -12,24 +12,41 @@ export class PresenceChannel<TMember = unknown> extends EchoChannel {
     super(name, connector, { channelData });
   }
 
+  override async subscribe(): Promise<this> {
+    await super.subscribe();
+    this.syncPresenceBindings();
+    return this;
+  }
+
   here(callback: (members: TMember[]) => void): this {
     this.presenceCallbacks.here = callback;
+    void this.ensureSubscribed().then(() => this.syncPresenceBindings());
     return this;
   }
 
   joining(callback: (member: TMember) => void): this {
     this.presenceCallbacks.joining = callback;
+    void this.ensureSubscribed().then(() => this.syncPresenceBindings());
     return this;
   }
 
   leaving(callback: (member: TMember) => void): this {
     this.presenceCallbacks.leaving = callback;
+    void this.ensureSubscribed().then(() => this.syncPresenceBindings());
     return this;
   }
 
   error(callback: (error: unknown) => void): this {
     this.presenceCallbacks.error = callback;
+    void this.ensureSubscribed().then(() => this.syncPresenceBindings());
     return this;
+  }
+
+  private syncPresenceBindings(): void {
+    this.connector.bindPresenceEvents?.(
+      this.name,
+      this.presenceCallbacks as import('./types.js').PresenceCallbacks,
+    );
   }
 
   override listen(event: string, listener: EchoListener): this {

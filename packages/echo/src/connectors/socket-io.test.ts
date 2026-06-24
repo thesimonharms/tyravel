@@ -54,4 +54,45 @@ describe('SocketIoConnector', () => {
 
     expect(payloads).toEqual([{ id: 7 }]);
   });
+
+  it('routes laravel-style channel tuples and presence callbacks', async () => {
+    const handlers = new Map<string, (...args: unknown[]) => void>();
+    const socket: SocketIoLike = {
+      id: 'socket-1',
+      on(event, handler) {
+        handlers.set(event, handler);
+      },
+      off(event) {
+        handlers.delete(event);
+      },
+      emit() {},
+      disconnect() {},
+    };
+
+    const connector = new SocketIoConnector({
+      io: () => socket,
+      authTransport: {
+        authorize: async () => ({ auth: 'signed-auth' }),
+      },
+    });
+    await connector.connect();
+    await connector.subscribe('presence-chat');
+
+    const hereMembers: unknown[] = [];
+    const joined: unknown[] = [];
+    connector.bindPresenceEvents('presence-chat', {
+      here: (members) => hereMembers.push(...members),
+      joining: (member) => joined.push(member),
+    });
+
+    handlers.get('presence:subscribed')?.('presence-chat', [
+      { user_info: { id: 1, name: 'Ada' } },
+    ]);
+    handlers.get('presence:joining')?.('presence-chat', {
+      user_info: { id: 2, name: 'Grace' },
+    });
+
+    expect(hereMembers).toEqual([{ id: 1, name: 'Ada' }]);
+    expect(joined).toEqual([{ id: 2, name: 'Grace' }]);
+  });
 });

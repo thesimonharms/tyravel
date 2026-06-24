@@ -76,6 +76,7 @@ tyravel make:factory <Model>             # Create database/factories/<model>-fac
 tyravel make:seeder <Name>               # Create database/seeders/<name>-seeder.ts
 tyravel make:migration <name>            # Create database/migrations/<timestamp>_<name>.ts
 tyravel make:view <name>                 # Create resources/views/<name>.tyr
+tyravel make:island <name>                # Scaffold island view + client mount
 tyravel make:job <Name>                  # Create src/jobs/<Name>.ts
 tyravel make:event <Name>                # Create src/events/<Name>.ts
 tyravel make:listener <Name>             # Create src/listeners/<Name>.ts

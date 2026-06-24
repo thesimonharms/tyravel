@@ -1,5 +1,9 @@
 import { createAuthTransport } from '../auth.js';
-import type { EchoAuthTransport, EchoConnector, EchoListener } from '../types.js';
+import {
+  bindConnectorPresenceEvents,
+  unbindConnectorPresenceEvents,
+} from '../presence-events.js';
+import type { EchoAuthTransport, EchoConnector, EchoListener, PresenceCallbacks } from '../types.js';
 
 export interface SocketIoLike {
   id?: string;
@@ -131,10 +135,21 @@ export class SocketIoConnector implements EchoConnector {
       throw new Error('Socket.io connection is not ready.');
     }
 
-    const socketHandler: EchoListener = (payload) => {
+    const socketHandler: EchoListener = (...args: unknown[]) => {
       if (!this.subscribed.has(channelName)) {
         return;
       }
+
+      let payload: unknown;
+      if (args.length >= 2 && typeof args[0] === 'string') {
+        if (args[0] !== channelName) {
+          return;
+        }
+        payload = args[1];
+      } else {
+        payload = args[0];
+      }
+
       listener(payload);
     };
 
@@ -169,6 +184,14 @@ export class SocketIoConnector implements EchoConnector {
     } else {
       this.bindings.set(event, remaining);
     }
+  }
+
+  bindPresenceEvents(channelName: string, callbacks: PresenceCallbacks): void {
+    bindConnectorPresenceEvents(this, channelName, callbacks, 'socketio');
+  }
+
+  unbindPresenceEvents(channelName: string): void {
+    unbindConnectorPresenceEvents(this, channelName);
   }
 }
 
