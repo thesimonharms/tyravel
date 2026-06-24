@@ -2,6 +2,17 @@
 
 All notable changes to Tyravel are documented in this file.
 
+## [0.11.0] - 2026-06-24
+
+### Added
+
+- **Auth security hardening** — Global CSRF middleware (HTTP 419), timing-safe password reset, `SESSION_SECURE` cookie support, token ability middleware, and `registerOAuthDriver()` for custom social providers.
+- **API token hardening** — `tyr_` token prefix, `token_prefix` / `last_used_ip` / `revoked_at` / `ip_whitelist` columns, `Auth.createToken()` options (`expiresIn`, `ipWhitelist`), `Auth.revokeToken()` / `revokeAllTokens()`, and `request.tokenId` on bearer auth.
+- **Social OAuth** — PKCE on all built-in providers; X, Facebook, LinkedIn, and Apple drivers; `tyravel make:social-driver`.
+- **OAuth2 authorization server** — `@tyravel/auth-oauth` with authorization code (+ PKCE), client credentials, and refresh token grants; `tyravel oauth:install`, `tyravel oauth:client:create`, and `auth:oauth` middleware.
+- **Post-quantum cryptography** — `@tyravel/crypto` with ML-KEM, ML-DSA, SLH-DSA, and hybrid X25519 + ML-KEM-768; native OpenSSL PQC when available, `@noble/post-quantum` fallback on Node 22.
+- **Crypto integrations** — Optional AES-256-GCM session encryption at rest and ML-DSA signed OAuth access tokens; `tyravel crypto:install` and `tyravel crypto:generate-keys`.
+
 ## [0.10.0] - 2026-06-24
 
 ### Added
@@ -11,12 +22,6 @@ All notable changes to Tyravel are documented in this file.
 - **Islands** — `@island` directive, `View.catalog()`, `registerProgrammaticIsland()`, and `tyravel make:island [--programmatic]`.
 - **Echo scaffold** — `@echo` views directive, `channels.ts` / `echo.ts` stubs, and `resolveEchoClientConfig`.
 - **Echo presence** — `.here()`, `.joining()`, `.leaving()`, and `.error()` callbacks on presence channels; `EchoChannelEventMap` typing; `echo.connected()` / `disconnected()` / `reconnecting()` lifecycle hooks.
-- **Auth security hardening** — Global CSRF middleware (HTTP 419), timing-safe password reset, `SESSION_SECURE` cookie support, token ability middleware, and `registerOAuthDriver()` for custom social providers.
-- **API token hardening** — `tyr_` token prefix, `token_prefix` / `last_used_ip` / `revoked_at` / `ip_whitelist` columns, `Auth.createToken()` options (`expiresIn`, `ipWhitelist`), `Auth.revokeToken()` / `revokeAllTokens()`, and `request.tokenId` on bearer auth.
-- **Social OAuth** — PKCE on all built-in providers; X, Facebook, LinkedIn, and Apple drivers; `tyravel make:social-driver`.
-- **OAuth2 authorization server** — `@tyravel/auth-oauth` with authorization code (+ PKCE), client credentials, and refresh token grants; `tyravel oauth:install`, `tyravel oauth:client:create`, and `auth:oauth` middleware.
-- **Post-quantum cryptography** — `@tyravel/crypto` with ML-KEM, ML-DSA, SLH-DSA, and hybrid X25519 + ML-KEM-768; native OpenSSL PQC when available, `@noble/post-quantum` fallback on Node 22.
-- **Crypto integrations** — Optional AES-256-GCM session encryption at rest and ML-DSA signed OAuth access tokens; `tyravel crypto:install` and `tyravel crypto:generate-keys`.
 
 ### Changed
 
@@ -127,5 +132,6 @@ First public release of the `@tyravel/*` monorepo.
 [0.7.0]: https://github.com/thesimonharms/tyravel/releases/tag/v0.7.0
 [0.8.0]: https://github.com/thesimonharms/tyravel/releases/tag/v0.8.0
 [0.9.0]: https://github.com/thesimonharms/tyravel/releases/tag/v0.9.0
+[0.11.0]: https://github.com/thesimonharms/tyravel/releases/tag/v0.11.0
 [0.10.0]: https://github.com/thesimonharms/tyravel/releases/tag/v0.10.0
 [0.9.1]: https://github.com/thesimonharms/tyravel/releases/tag/v0.9.1

@@ -24,7 +24,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/introduction', activeMatch: '/guide/' },
       {
-        text: 'v0.10.0',
+        text: 'v0.11.0',
         items: [
           { text: 'Changelog', link: 'https://github.com/thesimonharms/tyravel/blob/main/CHANGELOG.md' },
           { text: 'API stability', link: '/guide/api-stability' },

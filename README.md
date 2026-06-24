@@ -1,6 +1,6 @@
 # Tyravel
 
-**v0.10.0** — TypeScript-native web framework with Laravel-style ergonomics (service container, routing, middleware, queues, auth, post-quantum crypto, and an Artisan-like CLI) on standard Web APIs.
+**v0.11.0** — TypeScript-native web framework with Laravel-style ergonomics (service container, routing, middleware, queues, auth, post-quantum crypto, and an Artisan-like CLI) on standard Web APIs.
 
 Requires **Node.js ≥ 22**.
 
@@ -818,7 +818,7 @@ npm run build     # Build all packages
 npm run typecheck # Type-check via project references
 ```
 
-## Publishing (`@tyravel/*` v0.10.0)
+## Publishing (`@tyravel/*` v0.11.0)
 
 From the monorepo root after `npm run build`:
 
@@ -845,7 +845,7 @@ Build static output with `npm run docs:build`.
 
 See [ROADMAP.md](./ROADMAP.md) for release tiers.
 
-### Shipped highlights (v0.10.0)
+### Shipped highlights (v0.11.0)
 
 - [x] Service container, HTTP router, kernel, `Route` facade, CLI scaffolding
 - [x] Eloquent-style ORM, views, queue/events, cache, mail, notifications, broadcasting, storage
