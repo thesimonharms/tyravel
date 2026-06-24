@@ -1,3 +1,4 @@
+import { Response, type SsrStreamOptions } from '@tyravel/http';
 import type { TyravelRequest } from '@tyravel/http';
 import type {
   ComponentCatalogEntry,
@@ -47,6 +48,12 @@ export interface ViewFacade {
     context?: ViewPropsFor<TName>,
     handlers?: Record<string, (ctx: ViewContext) => Promise<string>>,
   ): AsyncGenerator<string>;
+  streamSsr<TName extends string>(
+    name: TName,
+    context?: ViewPropsFor<TName>,
+    handlers?: Record<string, (ctx: ViewContext) => Promise<string>>,
+    options?: SsrStreamOptions,
+  ): Response;
   exists(name: string): Promise<boolean>;
   catalog(): ComponentCatalogEntry[];
   escape(context: string, handler: EscapeHandler): ViewFacade;
@@ -70,6 +77,22 @@ export const View: ViewFacade = {
     context?: ViewPropsFor<TName>,
     handlers?: Record<string, (ctx: ViewContext) => Promise<string>>,
   ) => viewEngine().renderStream(name, (context ?? {}) as ViewPropsFor<TName>, handlers),
+  streamSsr: <TName extends string>(
+    name: TName,
+    context?: ViewPropsFor<TName>,
+    handlers?: Record<string, (ctx: ViewContext) => Promise<string>>,
+    options?: SsrStreamOptions,
+  ) => {
+    const engine = viewEngine();
+    return Response.ssrStream(
+      engine.renderStream(name, (context ?? {}) as ViewPropsFor<TName>, handlers ?? {}),
+      {
+        ...options,
+        hydrationManifest:
+          options?.hydrationManifest ?? (() => engine.getHydrationManifest()),
+      },
+    );
+  },
   exists: (name) => viewEngine().exists(name),
   catalog: () => viewEngine().getComponentCatalog(),
   escape: (context, handler) => {

@@ -1,0 +1,14 @@
+@layout('layouts.app')
+
+@section('title')
+  Streaming SSR
+@endsection
+
+@section('content')
+  <h1>Streaming {{ name }}</h1>
+  @stream('details')
+    <section class="details">
+      <p>Slow section rendered after the shell.</p>
+    </section>
+  @endstream
+@endsection

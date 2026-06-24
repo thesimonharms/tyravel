@@ -168,11 +168,29 @@ async function writeFetchResponse(
     outgoing.setHeader(key, value);
   });
 
-  if (response.body) {
-    const buffer = Buffer.from(await response.arrayBuffer());
-    outgoing.end(buffer);
+  if (!response.body) {
+    outgoing.end();
     return;
   }
 
-  outgoing.end();
+  const reader = response.body.getReader();
+
+  try {
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) {
+        break;
+      }
+
+      if (value.byteLength > 0) {
+        outgoing.write(Buffer.from(value));
+      }
+    }
+
+    outgoing.end();
+  } catch (error) {
+    outgoing.destroy(error instanceof Error ? error : new Error(String(error)));
+  } finally {
+    reader.releaseLock();
+  }
 }

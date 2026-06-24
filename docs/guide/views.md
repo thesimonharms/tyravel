@@ -106,12 +106,25 @@ For slow sections, stream the layout shell first and fill `@stream` regions asyn
 @endstream
 ```
 
+Return a chunked SSR response in one call — no manual async iteration in the controller:
+
 ```typescript
-for await (const chunk of View.renderStream('dashboard', context, {
-  sidebar: async () => '<aside>Fresh sidebar</aside>',
-})) {
-  // write chunk to the response
-}
+Route.get('/dashboard', () =>
+  View.streamSsr('dashboard', context, {
+    sidebar: async () => '<aside>Fresh sidebar</aside>',
+  }),
+);
+```
+
+`View.streamSsr()` pipes `View.renderStream()` through `Response.ssrStream()`, which wraps the HTML in a document shell and injects the hydration manifest after the view stream completes. The Node HTTP adapter flushes each chunk as it is produced.
+
+Lower-level control is still available when you need it:
+
+```typescript
+return Response.ssrStream(View.renderStream('dashboard', context, handlers), {
+  title: 'Dashboard',
+  hydrationManifest: () => View.getHydrationManifest(),
+});
 ```
 
 `View.renderStream()` yields HTML in document order: shell markup, then each stream section as it resolves.

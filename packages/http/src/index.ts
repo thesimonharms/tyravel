@@ -18,9 +18,12 @@ export { Response, ResponseFactory } from './response.js';
 export {
   buildSsrDocument,
   HYDRATION_SCRIPT_ID,
+  streamSsrDocument,
   type HydrationIslandPayload,
   type HydrationManifestPayload,
+  type HydrationManifestSource,
   type SsrDocumentOptions,
+  type SsrStreamOptions,
 } from './ssr.js';
 export {
   createRouter,

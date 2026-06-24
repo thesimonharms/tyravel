@@ -13,6 +13,18 @@ describe('hello-world reference app', () => {
     expect(html).toContain('Hello Tyravel');
   });
 
+  it('streams deferred view sections over chunked html', async () => {
+    const response = await t.http.get('http://localhost/stream');
+    await response.assertOk();
+    const html = await response.text();
+
+    expect(html).toContain('Streaming Tyravel');
+    expect(html).toContain('Slow section rendered after the shell.');
+    expect(html.indexOf('Streaming Tyravel')).toBeLessThan(
+      html.indexOf('Slow section rendered after the shell.'),
+    );
+  });
+
   it('renders SSR hydration markers for interactive islands', async () => {
     const response = await t.http.get('http://localhost/');
     await response.assertOk();

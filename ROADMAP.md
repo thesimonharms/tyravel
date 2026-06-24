@@ -245,7 +245,7 @@ Move from “render HTML strings in controllers” to a first-class SSR workflow
 
 #### P1 — Strong want
 
-- [ ] **Streaming SSR middleware** — first-class chunked `Response` integration so `View.renderStream()` flushes early shell HTML without manual async iteration in every controller
+- [x] **Streaming SSR middleware** — first-class chunked `Response` integration so `View.renderStream()` flushes early shell HTML without manual async iteration in every controller
 - [x] **SSR test helpers** — assert rendered HTML *and* hydration manifest contents in `@tyravel/testing` (`assertIsland`, `assertHydrationManifest`)
 - [ ] **`tyravel make:island`** — scaffold a paired server partial + client mount function with registry wiring
 

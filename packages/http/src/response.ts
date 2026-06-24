@@ -1,12 +1,14 @@
 import {
   buildSsrDocument,
+  streamSsrDocument,
   type HydrationManifestPayload,
   type SsrDocumentOptions,
+  type SsrStreamOptions,
 } from './ssr.js';
 
 const WebResponse = globalThis.Response;
 
-export type { HydrationManifestPayload, SsrDocumentOptions };
+export type { HydrationManifestPayload, SsrDocumentOptions, SsrStreamOptions };
 
 export class ResponseFactory {
   json(data: unknown, init: ResponseInit = {}): Response {
@@ -35,6 +37,18 @@ export class ResponseFactory {
 
   ssr(body: string, options: SsrDocumentOptions = {}, init: ResponseInit = {}): Response {
     return this.html(buildSsrDocument(body, options), init);
+  }
+
+  ssrStream(
+    source: AsyncIterable<string> | ReadableStream<string>,
+    options: SsrStreamOptions = {},
+    init: ResponseInit = {},
+  ): Response {
+    if (source instanceof ReadableStream) {
+      return this.streamHtml(source, init);
+    }
+
+    return this.streamHtml(streamSsrDocument(source, options), init);
   }
 
   streamHtml(

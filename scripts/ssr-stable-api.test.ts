@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { View } from '@tyravel/core';
-import { buildSsrDocument, Response } from '@tyravel/http';
+import { buildSsrDocument, Response, streamSsrDocument } from '@tyravel/http';
 import { hydrate, registerIsland, readManifestFromDocument } from '@tyravel/ssr';
 import { RenderedView } from '@tyravel/testing';
 
@@ -16,7 +16,8 @@ describe('SSR stable API surface', () => {
     for (const doc of [policy, guide]) {
       expect(doc).toMatch(/View\.renderStream\(\)/);
       expect(doc).toMatch(/@island/);
-      expect(doc).toMatch(/Response\.ssr\(\)|buildSsrDocument\(\)/);
+      expect(doc).toMatch(/Response\.ssr\(\)|Response\.ssrStream\(\)|buildSsrDocument\(\)|streamSsrDocument\(\)/);
+      expect(doc).toMatch(/View\.streamSsr\(\)/);
       expect(doc).toMatch(/registerIsland|@tyravel\/ssr/);
     }
 
@@ -30,7 +31,10 @@ describe('SSR stable API surface', () => {
     expect(typeof View.renderStream).toBe('function');
     expect(typeof View.getHydrationManifest).toBe('function');
     expect(typeof Response.ssr).toBe('function');
+    expect(typeof Response.ssrStream).toBe('function');
     expect(typeof buildSsrDocument).toBe('function');
+    expect(typeof streamSsrDocument).toBe('function');
+    expect(typeof View.streamSsr).toBe('function');
     expect(typeof registerIsland).toBe('function');
     expect(typeof hydrate).toBe('function');
     expect(typeof readManifestFromDocument).toBe('function');

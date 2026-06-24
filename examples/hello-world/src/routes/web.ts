@@ -15,6 +15,12 @@ export function registerWebRoutes(): void {
     });
   });
 
+  Route.get('/stream', () =>
+    View.streamSsr('streamed', {
+      name: 'Tyravel',
+    }),
+  );
+
   Route.prefix('api')
     .middleware('json')
     .group(() => {
