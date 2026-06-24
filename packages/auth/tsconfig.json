@@ -9,7 +9,8 @@
     { "path": "../crypto" },
     { "path": "../container" },
     { "path": "../database" },
-    { "path": "../http" }
+    { "path": "../http" },
+    { "path": "../redis" }
   ],
   "include": ["src"]
 }
