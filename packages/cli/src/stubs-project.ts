@@ -1,6 +1,6 @@
 import type { NewProjectOptions } from './new-project-options.js';
 
-const CORE_VERSION = '^0.13.0';
+const CORE_VERSION = '^0.14.0';
 
 export function projectPackageJson(name: string, options: NewProjectOptions): string {
   const dependencies: Record<string, string> = {

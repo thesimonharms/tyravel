@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/vector-qdrant",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,8 +15,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/database": "0.13.0",
-    "@tyravel/vector": "0.13.0"
+    "@tyravel/database": "0.14.0",
+    "@tyravel/vector": "0.14.0"
   },
   "files": [
     "dist"

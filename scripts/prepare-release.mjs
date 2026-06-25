@@ -121,10 +121,10 @@ for (const dir of pkgDirs) {
   for (const depType of ['dependencies', 'devDependencies', 'peerDependencies']) {
     if (!pkg[depType]) continue;
     for (const [name, version] of Object.entries(pkg[depType])) {
-      if (name.startsWith('@tyravel/') && version.startsWith('0.')) {
-        // Preserve ^ prefix for scaffolded app stubs
-        const prefix = version.startsWith('^') ? '^' : '';
-        pkg[depType][name] = `${prefix}${newVersion}`;
+      const match = String(version).match(/^(\^|~)?(\d+\.\d+\.\d+)/);
+      if (name.startsWith('@tyravel/') && match) {
+        // Preserve range prefix for scaffolded app stubs
+        pkg[depType][name] = `${match[1] ?? ''}${newVersion}`;
         changed = true;
       }
     }

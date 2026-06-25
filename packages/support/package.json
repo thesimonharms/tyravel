@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/support",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -31,6 +31,6 @@
     "node": ">=26"
   },
   "dependencies": {
-    "@tyravel/collection": "0.13.0"
+    "@tyravel/collection": "0.14.0"
   }
 }

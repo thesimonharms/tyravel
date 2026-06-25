@@ -53,7 +53,7 @@ export function buildCapabilityManifest(
 ): CapabilityManifest {
   return {
     name: overrides.name ?? 'tyravel',
-    version: overrides.version ?? '0.13.0',
+    version: overrides.version ?? '0.14.0',
     packages: overrides.packages ?? [...STABLE_PACKAGES],
     facades: overrides.facades ?? [...FACADES],
     commands: overrides.commands ?? [...CLI_COMMANDS],
