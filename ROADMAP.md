@@ -532,9 +532,9 @@ Final API pass on the three surfaces developers touch daily — models, routes, 
 
 #### P0 — Must ship
 
-- [ ] **Component props inference** — generated or hand-authored prop types flow into `@props` and `View.render<T>()`
-- [ ] **Stricter `view:lint` defaults** — unclosed directives and missing components fail CI in strict mode
-- [ ] **Production compile defaults** — `compiled: true` enforced in production boot with clear error when cache is cold
+- [x] **Component props inference** — generated or hand-authored prop types flow into `@props` and `View.render<T>()`
+- [x] **Stricter `view:lint` defaults** — unclosed directives and missing components fail CI in strict mode
+- [x] **Production compile defaults** — `compiled: true` enforced in production boot with clear error when cache is cold
 
 #### P1 — Strong want
 

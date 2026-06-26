@@ -13,6 +13,10 @@ export interface ViewConfig {
   env?: string;
   /** When true, warm disk cache is trusted without reading source templates. */
   trustCompiledCache?: boolean;
+  /** When true, production boot refuses to compile views at runtime if disk cache is cold. */
+  requireCompiledCache?: boolean;
+  /** Validate required @props values during render. */
+  validateProps?: boolean;
   /** Extension for programmatic TypeScript views (e.g. `.tyr.ts`). */
   programmaticExtension?: string;
 }

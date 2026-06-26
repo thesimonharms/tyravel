@@ -5,8 +5,10 @@ import { describe, expect, it } from 'vitest';
 import { compile } from './compiler.js';
 import { ViewCompileError } from './view-compile-error.js';
 import { InMemoryFragmentCache } from './fragment-cache.js';
+import { CompiledViewCacheMissError } from './view-cache-error.js';
 import { lintViewSource } from './view-lint.js';
 import { ViewEngine } from './view-engine.js';
+import { ViewPropsValidationError } from './component-props.js';
 
 function createFixture(): { basePath: string; engine: ViewEngine } {
   const basePath = join(tmpdir(), `tyravel-p6-${Date.now()}-${Math.random()}`);
@@ -220,5 +222,47 @@ describe('P6 view features', () => {
     expect(issues.some((issue) => issue.rule === 'unclosed-directive')).toBe(true);
     expect(issues.some((issue) => issue.rule === 'unknown-component')).toBe(true);
     expect(issues.some((issue) => issue.rule === 'unsafe-raw-echo')).toBe(true);
+    expect(issues.find((issue) => issue.rule === 'unsafe-raw-echo')?.severity).toBe(
+      'warning',
+    );
+  });
+
+  it('refuses to compile views at runtime when production cache is cold', async () => {
+    const { basePath } = createFixture();
+    const cacheDir = join(basePath, 'storage/framework/views');
+    mkdirSync(cacheDir, { recursive: true });
+
+    writeFileSync(join(basePath, 'resources/views/cold.tyr'), '<p>{{ message }}</p>');
+
+    const productionEngine = new ViewEngine(basePath, {
+      path: 'resources/views',
+      compiled: true,
+      compiledPath: 'storage/framework/views',
+      env: 'production',
+      requireCompiledCache: true,
+    });
+    productionEngine.setEnvironment('production');
+
+    await expect(productionEngine.render('cold', { message: 'Hello' })).rejects.toThrow(
+      CompiledViewCacheMissError,
+    );
+  });
+
+  it('validates required @props during render', async () => {
+    const { basePath, engine } = createFixture();
+
+    writeFileSync(
+      join(basePath, 'resources/views/props-required.tyr'),
+      `@props(['title'])
+<h1>{{ title }}</h1>
+`,
+    );
+
+    await expect(engine.render('props-required', {})).rejects.toThrow(
+      ViewPropsValidationError,
+    );
+
+    const html = await engine.render('props-required', { title: 'Hello' });
+    expect(html).toContain('<h1>Hello</h1>');
   });
 });

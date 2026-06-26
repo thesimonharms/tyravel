@@ -25,6 +25,7 @@ import { MakeSocialDriverCommand } from './commands/make-social-driver.js';
 import { MakeViewCommand } from './commands/make-view.js';
 import { ViewCacheCommand, ViewClearCommand } from './commands/view-cache.js';
 import { ViewLintCommand } from './commands/view-lint.js';
+import { ViewTypesCommand } from './commands/view-types.js';
 import { ViewWatchCommand } from './commands/view-watch.js';
 import { MigrateCommand } from './commands/migrate.js';
 import { AuthInstallCommand } from './commands/auth-install.js';
@@ -87,6 +88,7 @@ export function createKernel(): ConsoleKernel {
     new ViewClearCommand(),
     new ViewWatchCommand(),
     new ViewLintCommand(),
+    new ViewTypesCommand(),
     new MakeJobCommand(),
     new MakeEventCommand(),
     new MakeListenerCommand(),

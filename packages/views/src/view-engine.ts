@@ -9,6 +9,9 @@ import {
   writeCompiledCache,
 } from './compiled-cache.js';
 import { compile, type CompileOptions } from './compiler.js';
+import { validateViewProps } from './component-props.js';
+import { shouldRequireCompiledCache } from './compiled-cache-policy.js';
+import { CompiledViewCacheMissError } from './view-cache-error.js';
 import { ViewCompileError } from './view-compile-error.js';
 import { mergeEvaluationContext } from './evaluate.js';
 import {
@@ -388,6 +391,11 @@ export class ViewEngine {
     renderOptions: RenderOptions = {},
   ): Promise<string> {
     const template = await this.loadTemplate(resolved);
+
+    if (this.config.validateProps !== false && template.props) {
+      validateViewProps(template.props, renderContext, resolved);
+    }
+
     const helpers = new ViewHelpers(
       parentStacks,
       parentOnceRendered,
@@ -612,6 +620,10 @@ export class ViewEngine {
           });
           return diskEntry.template;
         }
+      }
+
+      if (shouldRequireCompiledCache(this.config, this.shouldTrustDiskCache())) {
+        throw new CompiledViewCacheMissError(name, this.compiledCacheDirectory);
       }
     }
 

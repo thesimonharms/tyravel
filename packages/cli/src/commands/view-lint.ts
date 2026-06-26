@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises';
-import { lintViewSource, type ViewLintIssue } from '@tyravel/views';
+import { lintHasErrors, lintViewSource, type ViewLintIssue } from '@tyravel/views';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { parseOptions, positionalArgs } from '../utils.js';
@@ -8,16 +8,17 @@ import { bootViewApplication } from '../view-bootstrap.js';
 export class ViewLintCommand extends Command {
   override readonly name = 'view:lint';
   override readonly description = 'Lint Tyr templates for common issues';
-  override readonly usage = 'tyravel view:lint';
+  override readonly usage = 'tyravel view:lint [--strict]';
 
   async handle(args: string[]): Promise<number> {
-    parseOptions(args);
+    const options = parseOptions(args);
     positionalArgs(args);
 
     const root = await requireProjectRoot();
     const { engine } = await bootViewApplication(root);
 
     const issues: Array<ViewLintIssue & { view: string }> = [];
+    const strict = options.strict === true;
 
     const viewNames = await engine.listViewNames();
 
@@ -29,6 +30,7 @@ export class ViewLintCommand extends Command {
         componentExists: (component) => engine.exists(component),
         escapeContexts: new Set(engine.getRegistry().getEscapeContexts().keys()),
         customDirectives: engine.getRegistry().getDirectiveNames(),
+        strict,
       });
 
       for (const issue of found) {
@@ -41,15 +43,34 @@ export class ViewLintCommand extends Command {
       return 0;
     }
 
-    for (const issue of issues) {
-      const location =
-        issue.column !== undefined
-          ? `${issue.view}:${issue.line}:${issue.column}`
-          : `${issue.view}:${issue.line}`;
-      console.error(`[${issue.rule}] ${location} ${issue.message}`);
+    const errors = issues.filter((issue) => issue.severity === 'error');
+    const warnings = issues.filter((issue) => issue.severity === 'warning');
+
+    for (const issue of errors) {
+      printIssue(issue);
     }
 
-    console.error(`Found ${issues.length} issue(s).`);
-    return 1;
+    for (const issue of warnings) {
+      printIssue(issue);
+    }
+
+    const summary = [
+      errors.length > 0 ? `${errors.length} error(s)` : null,
+      warnings.length > 0 ? `${warnings.length} warning(s)` : null,
+    ]
+      .filter(Boolean)
+      .join(', ');
+
+    console.error(`Found ${summary}.`);
+    return lintHasErrors(issues) ? 1 : 0;
   }
+}
+
+function printIssue(issue: ViewLintIssue & { view: string }): void {
+  const location =
+    issue.column !== undefined
+      ? `${issue.view}:${issue.line}:${issue.column}`
+      : `${issue.view}:${issue.line}`;
+  const label = issue.severity === 'error' ? 'error' : 'warning';
+  console.error(`[${label}] [${issue.rule}] ${location} ${issue.message}`);
 }

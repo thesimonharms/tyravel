@@ -18,11 +18,25 @@ export {
   type FragmentCacheStore,
 } from './fragment-cache.js';
 export {
+  lintHasErrors,
   lintViewSource,
+  resolveViewLintStrict,
   type ViewLintIssue,
   type ViewLintOptions,
   type ViewLintRule,
+  type ViewLintSeverity,
 } from './view-lint.js';
+export {
+  generateViewPropsDeclarationFile,
+  generateViewPropsMapInterface,
+  parsePropsSchema,
+  validateViewProps,
+  ViewPropsValidationError,
+  type ComponentPropDefinition,
+  type DefineViewProps,
+} from './component-props.js';
+export { CompiledViewCacheMissError } from './view-cache-error.js';
+export { shouldRequireCompiledCache } from './compiled-cache-policy.js';
 export { createViewWatcher, type ViewWatcher, type ViewWatcherOptions } from './view-watcher.js';
 export {
   BUILTIN_ESCAPE_CONTEXTS,

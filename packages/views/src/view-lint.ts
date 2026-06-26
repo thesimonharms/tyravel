@@ -10,11 +10,14 @@ export type ViewLintRule =
   | 'duplicate-island'
   | 'unsafe-raw-echo';
 
+export type ViewLintSeverity = 'error' | 'warning';
+
 export interface ViewLintIssue {
   rule: ViewLintRule;
   message: string;
   line: number;
   column?: number;
+  severity: ViewLintSeverity;
 }
 
 export interface ViewLintOptions {
@@ -22,6 +25,29 @@ export interface ViewLintOptions {
   componentExists?: (name: string) => boolean | Promise<boolean>;
   escapeContexts?: ReadonlySet<string>;
   customDirectives?: ReadonlySet<string>;
+  /** When true, every rule fails the lint run. Defaults to CI / TYRAVEL_VIEW_LINT_STRICT. */
+  strict?: boolean;
+}
+
+const STRICT_ONLY_RULES = new Set<ViewLintRule>([
+  'unclosed-directive',
+  'unknown-component',
+]);
+
+export function resolveViewLintStrict(options: ViewLintOptions = {}): boolean {
+  if (options.strict !== undefined) {
+    return options.strict;
+  }
+
+  return process.env.TYRAVEL_VIEW_LINT_STRICT === '1' || process.env.CI === 'true';
+}
+
+function issueSeverity(rule: ViewLintRule, strict: boolean): ViewLintSeverity {
+  if (strict || STRICT_ONLY_RULES.has(rule)) {
+    return 'error';
+  }
+
+  return 'warning';
 }
 
 interface DirectivePair {
@@ -67,19 +93,39 @@ export async function lintViewSource(
   source: string,
   options: ViewLintOptions = {},
 ): Promise<ViewLintIssue[]> {
+  const strict = resolveViewLintStrict(options);
   const escapeContexts = options.escapeContexts ?? new Set(Object.keys(BUILTIN_ESCAPE_CONTEXTS));
   const issues: ViewLintIssue[] = [];
-  issues.push(...lintUnclosedDirectives(source, options.viewPath));
-  issues.push(...(await lintUnknownComponents(source, options.componentExists)));
-  issues.push(...lintUnknownCustomDirectives(source, options.customDirectives));
-  issues.push(...lintDuplicateIslands(source));
-  issues.push(...lintUnknownEscapeContexts(source, escapeContexts));
-  issues.push(...lintUnsafeRawEchoes(source));
+  issues.push(...withSeverity(lintUnclosedDirectives(source, options.viewPath), strict));
+  issues.push(
+    ...withSeverity(await lintUnknownComponents(source, options.componentExists), strict),
+  );
+  issues.push(...withSeverity(lintUnknownCustomDirectives(source, options.customDirectives), strict));
+  issues.push(...withSeverity(lintDuplicateIslands(source), strict));
+  issues.push(...withSeverity(lintUnknownEscapeContexts(source, escapeContexts), strict));
+  issues.push(...withSeverity(lintUnsafeRawEchoes(source), strict));
   return issues;
 }
 
-function lintUnclosedDirectives(source: string, viewPath?: string): ViewLintIssue[] {
-  const issues: ViewLintIssue[] = [];
+export function lintHasErrors(issues: ViewLintIssue[]): boolean {
+  return issues.some((issue) => issue.severity === 'error');
+}
+
+function withSeverity(
+  issues: Array<Omit<ViewLintIssue, 'severity'>>,
+  strict: boolean,
+): ViewLintIssue[] {
+  return issues.map((issue) => ({
+    ...issue,
+    severity: issueSeverity(issue.rule, strict),
+  }));
+}
+
+function lintUnclosedDirectives(
+  source: string,
+  viewPath?: string,
+): Array<Omit<ViewLintIssue, 'severity'>> {
+  const issues: Array<Omit<ViewLintIssue, 'severity'>> = [];
   const stack: Array<{ label: string; index: number }> = [];
   let cursor = 0;
 
@@ -131,12 +177,12 @@ function lintUnclosedDirectives(source: string, viewPath?: string): ViewLintIssu
 async function lintUnknownComponents(
   source: string,
   componentExists?: (name: string) => boolean | Promise<boolean>,
-): Promise<ViewLintIssue[]> {
+): Promise<Array<Omit<ViewLintIssue, 'severity'>>> {
   if (!componentExists) {
     return [];
   }
 
-  const issues: ViewLintIssue[] = [];
+  const issues: Array<Omit<ViewLintIssue, 'severity'>> = [];
   let cursor = 0;
 
   while (cursor < source.length) {
@@ -167,12 +213,12 @@ async function lintUnknownComponents(
 function lintUnknownCustomDirectives(
   source: string,
   customDirectives?: ReadonlySet<string>,
-): ViewLintIssue[] {
+): Array<Omit<ViewLintIssue, 'severity'>> {
   if (!customDirectives) {
     return [];
   }
 
-  const issues: ViewLintIssue[] = [];
+  const issues: Array<Omit<ViewLintIssue, 'severity'>> = [];
   let cursor = 0;
 
   while (cursor < source.length) {
@@ -200,8 +246,8 @@ function lintUnknownCustomDirectives(
   return issues;
 }
 
-function lintDuplicateIslands(source: string): ViewLintIssue[] {
-  const issues: ViewLintIssue[] = [];
+function lintDuplicateIslands(source: string): Array<Omit<ViewLintIssue, 'severity'>> {
+  const issues: Array<Omit<ViewLintIssue, 'severity'>> = [];
   const seen = new Set<string>();
   let cursor = 0;
 
@@ -234,8 +280,8 @@ function lintDuplicateIslands(source: string): ViewLintIssue[] {
 function lintUnknownEscapeContexts(
   source: string,
   escapeContexts: ReadonlySet<string>,
-): ViewLintIssue[] {
-  const issues: ViewLintIssue[] = [];
+): Array<Omit<ViewLintIssue, 'severity'>> {
+  const issues: Array<Omit<ViewLintIssue, 'severity'>> = [];
   let cursor = 0;
 
   while (cursor < source.length) {
@@ -263,8 +309,8 @@ function lintUnknownEscapeContexts(
   return issues;
 }
 
-function lintUnsafeRawEchoes(source: string): ViewLintIssue[] {
-  const issues: ViewLintIssue[] = [];
+function lintUnsafeRawEchoes(source: string): Array<Omit<ViewLintIssue, 'severity'>> {
+  const issues: Array<Omit<ViewLintIssue, 'severity'>> = [];
   RAW_ECHO_RE.lastIndex = 0;
   let match: RegExpExecArray | null;
 
