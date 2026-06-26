@@ -108,6 +108,24 @@ export default {
 export function broadcastChannels(): string {
   return `import { Broadcast } from '@tyravel/core';
 
+/**
+ * Register channels with the same private-/presence- prefixes Echo sends.
+ *
+ * Client (Echo):  echo.channel('orders')
+ * Server:         Broadcast.channel('orders', ...)
+ *
+ * Client (Echo):  echo.private('orders.' + orderId)
+ * Server:         Broadcast.channel('private-orders.{orderId}', ...)
+ *
+ * Client (Echo):  echo.private('App.Models.User.' + userId)
+ * Server:         Broadcast.channel('private-App.Models.User.{id}', ...)
+ */
+Broadcast.channel('orders', () => true);
+
+Broadcast.channel('private-orders.{orderId}', (user, orderId) => {
+  return Boolean(user) && String(orderId).length > 0;
+});
+
 Broadcast.channel('private-App.Models.User.{id}', (user, id) => {
   if (!user || typeof user !== 'object' || !('id' in user)) {
     return false;

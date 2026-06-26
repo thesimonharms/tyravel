@@ -1,4 +1,8 @@
 import {
+  applyPartialReloadHeaders,
+  type PartialReloadOptions,
+} from './partial-reload.js';
+import {
   buildSsrDocument,
   streamSsrDocument,
   type HydrationManifestPayload,
@@ -9,7 +13,13 @@ import { encodeSseEvents, type SseEvent } from './sse.js';
 
 const WebResponse = globalThis.Response;
 
-export type { HydrationManifestPayload, SsrDocumentOptions, SsrStreamOptions, SseEvent };
+export type {
+  HydrationManifestPayload,
+  PartialReloadOptions,
+  SsrDocumentOptions,
+  SsrStreamOptions,
+  SseEvent,
+};
 
 export class ResponseFactory {
   json(data: unknown, init: ResponseInit = {}): Response {
@@ -29,6 +39,29 @@ export class ResponseFactory {
     if (!headers.has('content-type')) {
       headers.set('content-type', 'text/html; charset=utf-8');
     }
+
+    return new WebResponse(body, {
+      ...init,
+      headers,
+    });
+  }
+
+  partial(
+    body: string,
+    options: PartialReloadOptions = {},
+    init: ResponseInit = {},
+  ): Response {
+    const headers = new Headers(init.headers);
+    if (!headers.has('content-type')) {
+      headers.set(
+        'content-type',
+        options.turboStream
+          ? 'text/vnd.turbo-stream.html; charset=utf-8'
+          : 'text/html; charset=utf-8',
+      );
+    }
+
+    applyPartialReloadHeaders(headers, options);
 
     return new WebResponse(body, {
       ...init,

@@ -11,6 +11,7 @@ import {
 import { compile, type CompileOptions } from './compiler.js';
 import { validateViewProps } from './component-props.js';
 import { shouldRequireCompiledCache } from './compiled-cache-policy.js';
+import { findFragmentBody, ViewFragmentNotFoundError } from './fragment-ops.js';
 import { CompiledViewCacheMissError } from './view-cache-error.js';
 import { ViewCompileError } from './view-compile-error.js';
 import { mergeEvaluationContext } from './evaluate.js';
@@ -266,6 +267,34 @@ export class ViewEngine {
     }
 
     return name;
+  }
+
+  async renderFragment<TName extends string>(
+    name: TName,
+    fragmentName: string,
+    context: ViewPropsFor<TName> = {} as ViewPropsFor<TName>,
+  ): Promise<string> {
+    const resolved = await this.resolveName(name);
+    const composed = await this.registry.applyComposers(resolved, context as ViewContext);
+    const renderContext = this.buildEvaluationContext(
+      this.mergeFormContext(composed as ViewContext),
+    );
+    const template = await this.loadTemplate(resolved);
+
+    if (this.config.validateProps !== false && template.props) {
+      validateViewProps(template.props, renderContext, resolved);
+    }
+
+    const body = findFragmentBody(template.ops, fragmentName);
+    if (!body) {
+      throw new ViewFragmentNotFoundError(resolved, fragmentName);
+    }
+
+    const helpers = new ViewHelpers();
+    await renderOps(body, renderContext, helpers, this, {
+      viewPath: this.resolvePath(resolved),
+    });
+    return helpers.toString();
   }
 
   async render<TName extends string>(

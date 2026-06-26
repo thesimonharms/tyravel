@@ -45,6 +45,12 @@ describe('NewCommand', () => {
     expect(readFileSync(join(projectDir, '.env'), 'utf8')).toContain('QUEUE_CONNECTION=database');
 
     expect(existsSync(join(projectDir, 'src/routes/channels.ts'))).toBe(true);
+    expect(readFileSync(join(projectDir, 'src/routes/channels.ts'), 'utf8')).toContain(
+      'private-orders.{orderId}',
+    );
+    expect(readFileSync(join(projectDir, 'src/routes/channels.ts'), 'utf8')).toContain(
+      'echo.private',
+    );
     expect(existsSync(join(projectDir, 'resources/client/echo.ts'))).toBe(true);
     expect(readFileSync(join(projectDir, 'config/broadcasting.ts'), 'utf8')).toContain(
       "env('BROADCAST_CONNECTION', 'log')",

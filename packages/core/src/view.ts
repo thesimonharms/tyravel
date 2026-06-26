@@ -1,4 +1,4 @@
-import { Response, type SsrStreamOptions } from '@tyravel/http';
+import { Response, type PartialReloadOptions, type SsrStreamOptions } from '@tyravel/http';
 import type { TyravelRequest } from '@tyravel/http';
 import type {
   ComponentCatalogEntry,
@@ -40,11 +40,26 @@ function viewEngine(): ViewEngine {
   return activeApp.make<ViewEngine>('view');
 }
 
+export interface PartialViewOptions extends PartialReloadOptions {
+  /** Render only the named `@fragment` block from the view. */
+  fragment?: string;
+}
+
 export interface ViewFacade {
   render<TName extends string>(
     name: TName,
     context?: ViewPropsFor<TName>,
   ): Promise<string>;
+  renderFragment<TName extends string>(
+    name: TName,
+    fragmentName: string,
+    context?: ViewPropsFor<TName>,
+  ): Promise<string>;
+  partial<TName extends string>(
+    name: TName,
+    context?: ViewPropsFor<TName>,
+    options?: PartialViewOptions,
+  ): Promise<Response>;
   renderStream<TName extends string>(
     name: TName,
     context?: ViewPropsFor<TName>,
@@ -75,6 +90,26 @@ export interface ViewFacade {
 export const View: ViewFacade = {
   render: <TName extends string>(name: TName, context?: ViewPropsFor<TName>) =>
     viewEngine().render(name, (context ?? {}) as ViewPropsFor<TName>),
+  renderFragment: <TName extends string>(
+    name: TName,
+    fragmentName: string,
+    context?: ViewPropsFor<TName>,
+  ) => viewEngine().renderFragment(name, fragmentName, (context ?? {}) as ViewPropsFor<TName>),
+  partial: async <TName extends string>(
+    name: TName,
+    context?: ViewPropsFor<TName>,
+    options: PartialViewOptions = {},
+  ) => {
+    const { fragment, ...reloadOptions } = options;
+    const html = fragment
+      ? await viewEngine().renderFragment(
+          name,
+          fragment,
+          (context ?? {}) as ViewPropsFor<TName>,
+        )
+      : await viewEngine().render(name, (context ?? {}) as ViewPropsFor<TName>);
+    return Response.partial(html, reloadOptions);
+  },
   renderStream: <TName extends string>(
     name: TName,
     context?: ViewPropsFor<TName>,

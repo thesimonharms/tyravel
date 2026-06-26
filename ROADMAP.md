@@ -538,9 +538,9 @@ Final API pass on the three surfaces developers touch daily — models, routes, 
 
 #### P1 — Strong want
 
-- [ ] **View component docs export** — `tyravel view:catalog --json` for design-system tooling
-- [ ] **Partial reload helpers** — Turbo/HTMX-friendly fragment response helpers building on `@fragment`
-- [ ] **Broadcast channel scaffold** — `routes/channels.ts` uses `private-` prefix patterns matching Echo
+- [x] **View component docs export** — `tyravel view:catalog --json` for design-system tooling
+- [x] **Partial reload helpers** — Turbo/HTMX-friendly fragment response helpers building on `@fragment`
+- [x] **Broadcast channel scaffold** — `routes/channels.ts` uses `private-` prefix patterns matching Echo
 
 ### v0.16 closeout
 

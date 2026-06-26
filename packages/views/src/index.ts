@@ -52,6 +52,12 @@ export {
   type ComponentCatalogEntry,
 } from './component-catalog.js';
 export {
+  serializeViewCatalog,
+  type ComponentCatalogExportEntry,
+  type ViewCatalogExport,
+} from './catalog-export.js';
+export { findFragmentBody, ViewFragmentNotFoundError } from './fragment-ops.js';
+export {
   buildIslandCatalog,
   buildViewCatalog,
   type IslandCatalogEntry,

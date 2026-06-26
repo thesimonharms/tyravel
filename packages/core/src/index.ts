@@ -18,7 +18,7 @@ export { QueueServiceProvider } from './queue-service-provider.js';
 export { RedisServiceProvider } from './redis-service-provider.js';
 export { ViewServiceProvider } from './view-service-provider.js';
 export { View, getViewRequest, setViewApplication, setViewRequest } from './view.js';
-export type { ViewFacade } from './view.js';
+export type { PartialViewOptions, ViewFacade } from './view.js';
 export {
   createControllerHandler,
   isControllerAction,
