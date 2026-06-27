@@ -1,7 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { afterEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { compile } from './compiler.js';
 import { ViewCompileError } from './view-compile-error.js';
 import { InMemoryFragmentCache } from './fragment-cache.js';
@@ -25,23 +25,6 @@ function createFixture(): { basePath: string; engine: ViewEngine } {
 }
 
 describe('P6 view features', () => {
-  const originalCi = process.env.CI;
-  const originalStrict = process.env.TYRAVEL_VIEW_LINT_STRICT;
-
-  afterEach(() => {
-    if (originalCi === undefined) {
-      delete process.env.CI;
-    } else {
-      process.env.CI = originalCi;
-    }
-
-    if (originalStrict === undefined) {
-      delete process.env.TYRAVEL_VIEW_LINT_STRICT;
-    } else {
-      process.env.TYRAVEL_VIEW_LINT_STRICT = originalStrict;
-    }
-  });
-
   it('parses @pushOnce, @prepend, @inject, and @fragment directives', () => {
     const source = `@inject('stats', 'PostStats')
 @pushOnce('scripts', 'app')
@@ -224,9 +207,6 @@ describe('P6 view features', () => {
   });
 
   it('lints unclosed directives, unknown components, and raw echoes', async () => {
-    delete process.env.CI;
-    delete process.env.TYRAVEL_VIEW_LINT_STRICT;
-
     const issues = await lintViewSource(
       `@push('scripts')
 <script></script>
@@ -236,6 +216,7 @@ describe('P6 view features', () => {
       {
         viewPath: 'lint.tyr',
         componentExists: () => false,
+        strict: false,
       },
     );
 
