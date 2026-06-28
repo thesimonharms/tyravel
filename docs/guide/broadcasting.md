@@ -49,7 +49,7 @@ import { WebSocketBroadcastServiceProvider } from '@tyravel/broadcasting-websock
 
 ### 4. Channel authorization
 
-`routes/channels.ts` (scaffolded since v0.16):
+`routes/channels.ts` (scaffolded since v0.16; included in 1.x scaffolds):
 
 ```typescript
 import { Broadcast } from '@tyravel/core';

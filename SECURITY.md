@@ -7,10 +7,10 @@ Tyravel publishes security fixes for the **latest minor** on each supported majo
 | Version | Supported |
 |---------|-----------|
 | `1.x` (latest minor) | Yes — security patches |
-| `0.16.x` | Yes — until **1.0.0** ships; then upgrade to `1.x` |
-| `0.15.x` and older | No — upgrade to `0.16.x` or `1.x` |
+| `0.16.x` | No — upgrade to `1.x` |
+| `0.15.x` and older | No — upgrade to `1.x` |
 
-See [STABILITY.md](STABILITY.md) for the long-term support (LTS) window once **1.0.0** is released.
+See [STABILITY.md](STABILITY.md) for the long-term support (LTS) window on the `1.x` line.
 
 ## Reporting a vulnerability
 

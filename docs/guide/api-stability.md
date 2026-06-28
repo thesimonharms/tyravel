@@ -6,15 +6,15 @@ The canonical policy lives in [STABILITY.md](https://github.com/thesimonharms/ty
 
 ## Version numbers
 
-All first-party packages share one version (for example `0.16.0`) and ship together on each release.
+All first-party packages share one version (for example `1.0.1`) and ship together on each release.
 
 | Release | What to expect |
 |---------|----------------|
-| **Patch** (`0.6.1` → `0.6.2`) | Bug fixes; stable APIs stay compatible. |
-| **Minor** (`0.6.x` → `0.7.0`) | New features; experimental APIs may change; stable APIs only break after deprecation. |
-| **Major** (`1.0.0`+) | Strict [semver](https://semver.org/): breaking stable changes only in major versions. |
+| **Patch** (`1.0.0` → `1.0.1`) | Bug fixes; stable APIs stay compatible. |
+| **Minor** (`1.0.x` → `1.1.0`) | New features; experimental APIs may change; stable APIs only break after deprecation. |
+| **Major** (`1.x` → `2.0.0`) | Strict [semver](https://semver.org/): breaking stable changes only in major versions. |
 
-Tyravel is **pre-1.0**. We still treat patch releases as safe upgrades for documented stable APIs.
+**1.0.0** marked the first semver-strict era. Patch and minor releases preserve documented stable APIs unless a symbol is explicitly deprecated.
 
 ## Public API
 

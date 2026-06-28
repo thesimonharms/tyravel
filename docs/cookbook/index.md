@@ -1,6 +1,6 @@
 # Cookbook
 
-Short, goal-oriented recipes for common Tyravel tasks. Each recipe assumes **0.16.x** and links to guide chapters for depth.
+Short, goal-oriented recipes for common Tyravel tasks. Each recipe assumes **1.0.x** and links to guide chapters for depth.
 
 ## Recipes
 

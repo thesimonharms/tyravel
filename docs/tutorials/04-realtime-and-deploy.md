@@ -13,7 +13,7 @@ Quick checklist:
 1. Scaffold with Redis: `tyravel new my-app --redis`
 2. Set `BROADCAST_CONNECTION=websocket` in `.env`
 3. Register `WebSocketBroadcastServiceProvider` in `src/main.ts`
-4. Define channels in `routes/channels.ts` (private channel prefixes ship in **v0.16** scaffolds)
+4. Define channels in `routes/channels.ts` (private channel prefixes ship in current scaffolds since **v0.16**)
 
 `examples/hello-world` does not include broadcasting yet — use a `--redis` scaffold or the [realtime Echo recipe](/cookbook/realtime-echo) for a minimal client.
 
@@ -56,4 +56,4 @@ Run `tyravel queue:work` in a separate process when using the database queue.
 
 - [Realtime UI with Echo](/cookbook/realtime-echo) — recipe for channel auth + client bootstrap
 - [CLI reference](/reference/generated/cli) — full command list
-- [Upgrading to 1.0](/guide/upgrading-to-1.0) — pre-1.0 migration checklist
+- [Upgrading to 1.0](/guide/upgrading-to-1.0) — migration checklist for apps on 0.x

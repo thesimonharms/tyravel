@@ -4,7 +4,7 @@ Tyravel publishes the `@tyravel/*` packages as a versioned monorepo. This docume
 
 ## Versioning
 
-All first-party packages share a single version (for example `0.16.0`) and are released together.
+All first-party packages share a single version (for example `1.0.1`) and are released together.
 
 | Segment | Meaning |
 |---------|---------|
@@ -12,13 +12,16 @@ All first-party packages share a single version (for example `0.16.0`) and are r
 | **MINOR** | New features, deprecations, and experimental API changes. |
 | **PATCH** | Bug fixes and non-breaking corrections to stable APIs. |
 
-### Pre-1.0 (`0.y.z`)
+### Post-1.0 (`1.y.z`)
 
-Tyravel is pre-1.0. We still follow the table above in spirit:
+**1.0.0** (June 2026) began the semver-strict era: stable APIs only break in major releases. Patch and minor releases preserve stable behavior unless a symbol is deprecated.
 
-- **Patch releases** (`0.6.1` → `0.6.2`) do not intentionally remove or break stable APIs.
-- **Minor releases** (`0.6.x` → `0.7.0`) may introduce breaking changes to **experimental** APIs and may deprecate stable APIs. Breaking changes to **stable** APIs require a deprecation window (see below) except when explicitly called out in release notes for urgent fixes.
-- **1.0.0** will mark the first semver-strict era: stable APIs only break in major releases.
+### Pre-1.0 (`0.y.z`) — historical
+
+Before **1.0.0**, Tyravel followed the table above in spirit:
+
+- **Patch releases** (`0.6.1` → `0.6.2`) did not intentionally remove or break stable APIs.
+- **Minor releases** (`0.6.x` → `0.7.0`) could introduce breaking changes to **experimental** APIs and deprecate stable APIs. Breaking changes to **stable** APIs required a deprecation window (see below) except when explicitly called out in release notes for urgent fixes.
 
 ## What counts as public API
 

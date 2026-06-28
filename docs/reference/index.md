@@ -1,6 +1,6 @@
 # Reference
 
-Machine-readable API surface for Tyravel **0.16.x**. Use this section when you need package names, CLI commands, facade entry points, or exported symbols — not narrative guides.
+Machine-readable API surface for Tyravel **1.0.x**. Use this section when you need package names, CLI commands, facade entry points, or exported symbols — not narrative guides.
 
 ## What's here
 

@@ -1,6 +1,6 @@
 # Tutorials
 
-A zero-to-deploy learning path for Tyravel **0.16.x**. Each tutorial builds on the last and links to deeper guide chapters.
+A zero-to-deploy learning path for Tyravel **1.0.x**. Each tutorial builds on the last and links to deeper guide chapters.
 
 ## Track overview
 

@@ -5,7 +5,7 @@
 <h1 align="center">Tyravel</h1>
 
 <p align="center">
-  <strong>v0.16.0</strong> — TypeScript-native web framework with Laravel-style ergonomics (service container, routing, middleware, queues, auth, post-quantum crypto, and an Artisan-like CLI) on standard Web APIs.
+  <strong>v1.0.1</strong> — TypeScript-native web framework with Laravel-style ergonomics (service container, routing, middleware, queues, auth, post-quantum crypto, and an Artisan-like CLI) on standard Web APIs.
 </p>
 
 <p align="center">
@@ -875,7 +875,7 @@ Published to [tyravel.dev](https://tyravel.dev) via GitHub Pages (`.github/workf
 
 See [ROADMAP.md](./ROADMAP.md) for release tiers.
 
-### Shipped highlights (through v0.16.0)
+### Shipped highlights (through v1.0.1)
 
 - [x] Service container, HTTP router, kernel, `Route` facade, CLI scaffolding
 - [x] Eloquent-style ORM, views, queue/events, cache, mail, notifications, broadcasting, storage
@@ -885,7 +885,8 @@ See [ROADMAP.md](./ROADMAP.md) for release tiers.
 - [x] Native WebSocket broadcasting (`@tyravel/broadcasting-websocket`) and Echo client with zero peer deps
 - [x] AI-native stack (v0.14): vector search, RAG, GraphQL, MCP server
 - [x] Infrastructure depth (v0.15): taggable cache, notification channels, testing fakes
-- [x] Core surface polish (v0.16): route model binding, signed URLs, typed view props, `view:catalog`, prunable models — pre-1.0 sync API sweep complete
+- [x] Core surface polish (v0.16): route model binding, signed URLs, typed view props, `view:catalog`, prunable models — sync API sweep complete ahead of 1.0
+- [x] Documentation site & semver strict (v1.0): hosted docs at [tyravel.dev](https://tyravel.dev), facade reference, deploy walkthroughs, cookbook complete
 - [x] Optional drivers only when you need them — five third-party production deps across the whole monorepo
 
 ## License

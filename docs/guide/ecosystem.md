@@ -25,7 +25,7 @@ Drivers should expose:
 
 ## Versioning with Tyravel
 
-- Target the **latest `0.16.x`** or **`1.x`** minor when depending on `@tyravel/*`
+- Target the **latest `1.x`** minor when depending on `@tyravel/*`
 - Pin the same version for all `@tyravel/*` deps in your package (e.g. `^1.2.0` everywhere)
 - Use **peerDependencies** for `@tyravel/core` (and other facades you call) so apps supply one copy
 - Follow [STABILITY.md](https://github.com/thesimonharms/tyravel/blob/main/STABILITY.md) — depend only on **stable** exports from package entry points

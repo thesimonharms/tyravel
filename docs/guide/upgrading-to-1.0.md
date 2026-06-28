@@ -105,6 +105,6 @@ These remain **experimental** and may still change in minors before or shortly a
 - [ ] Queue config uses `database` or `redis`, not `sync`
 - [ ] Broadcasting uses the WebSocket driver (0.13+)
 - [ ] Production views use compiled cache (`view:cache` / `config/views.ts` `compiled: true`)
-- [ ] Tests pass on **0.16.x**
+- [ ] Tests pass on **1.0.x** (or latest **0.16.x** if you are mid-migration)
 
-When **1.0.0** ships, stable APIs will only break in major releases per [STABILITY.md](https://github.com/thesimonharms/tyravel/blob/main/STABILITY.md).
+**1.0.0** shipped in June 2026. Stable APIs only break in major releases per [STABILITY.md](https://github.com/thesimonharms/tyravel/blob/main/STABILITY.md).
