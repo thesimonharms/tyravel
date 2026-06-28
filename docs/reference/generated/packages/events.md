@@ -15,7 +15,7 @@ npm install @tyravel/events
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.2` |
+| Version | `1.0.3` |
 | Source | [`packages/events`](https://github.com/thesimonharms/tyravel/tree/main/packages/events) |
 | Category | Platform services |
 | Node.js | `>=26` |

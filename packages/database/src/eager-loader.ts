@@ -14,24 +14,26 @@ export class EagerLoader {
 
     const instance = new (ModelClass as new () => Model)();
 
-    for (const relationName of relations) {
-      const relationMethod = (instance as unknown as Record<string, unknown>)[relationName];
-      if (typeof relationMethod !== 'function') {
-        throw new Error(
-          `Relation [${relationName}] not defined on model [${ModelClass.name}].`,
-        );
-      }
+    await Promise.all(
+      relations.map(async (relationName) => {
+        const relationMethod = (instance as unknown as Record<string, unknown>)[relationName];
+        if (typeof relationMethod !== 'function') {
+          throw new Error(
+            `Relation [${relationName}] not defined on model [${ModelClass.name}].`,
+          );
+        }
 
-      const relation = relationMethod.call(instance) as Relation;
-      relation.initRelation(parents, relationName);
+        const relation = relationMethod.call(instance) as Relation;
+        relation.initRelation(parents, relationName);
 
-      const keys = relation.eagerLoadKeys(parents);
-      if (keys.length === 0) {
-        continue;
-      }
+        const keys = relation.eagerLoadKeys(parents);
+        if (keys.length === 0) {
+          return;
+        }
 
-      const results = await relation.eagerLoad(keys, parents);
-      relation.matchEager(parents, results, relationName);
-    }
+        const results = await relation.eagerLoad(keys, parents);
+        relation.matchEager(parents, results, relationName);
+      }),
+    );
   }
 }

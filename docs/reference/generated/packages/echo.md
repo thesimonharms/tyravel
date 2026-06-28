@@ -15,7 +15,7 @@ npm install @tyravel/echo
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.2` |
+| Version | `1.0.3` |
 | Source | [`packages/echo`](https://github.com/thesimonharms/tyravel/tree/main/packages/echo) |
 | Category | Views & client |
 | Node.js | `>=26` |

@@ -61,6 +61,7 @@ interface ComposerEntry {
 export class ViewRegistry {
   private readonly composers: ComposerEntry[] = [];
   private readonly directives = new Map<string, CustomDirectiveHandler>();
+  private directiveNamesCache: ReadonlySet<string> | null = null;
   private readonly components = new Map<string, ViewComponentBinding>();
   private shared: ViewContext = {};
   private bindings: ViewExpressionBindings = {};
@@ -79,6 +80,7 @@ export class ViewRegistry {
 
   directive(name: string, handler: CustomDirectiveHandler): this {
     this.directives.set(name, handler);
+    this.directiveNamesCache = null;
     this.compileVersion += 1;
     return this;
   }
@@ -214,7 +216,10 @@ export class ViewRegistry {
   }
 
   getDirectiveNames(): ReadonlySet<string> {
-    return new Set(this.directives.keys());
+    if (!this.directiveNamesCache) {
+      this.directiveNamesCache = new Set(this.directives.keys());
+    }
+    return this.directiveNamesCache;
   }
 
   getCompileVersion(): number {
@@ -222,6 +227,12 @@ export class ViewRegistry {
   }
 
   async applyComposers(viewName: string, context: ViewContext): Promise<ViewContext> {
+    if (this.composers.length === 0) {
+      return Object.keys(this.shared).length === 0
+        ? context
+        : { ...this.shared, ...context };
+    }
+
     let merged = { ...this.shared, ...context };
 
     for (const { pattern, handler } of this.composers) {

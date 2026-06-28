@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/vector-pg",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,8 +15,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/database": "1.0.2",
-    "@tyravel/vector": "1.0.2"
+    "@tyravel/database": "1.0.3",
+    "@tyravel/vector": "1.0.3"
   },
   "files": [
     "dist"

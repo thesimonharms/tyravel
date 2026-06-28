@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/cache-upstash",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,7 +15,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/cache": "1.0.2"
+    "@tyravel/cache": "1.0.3"
   },
   "files": [
     "dist"

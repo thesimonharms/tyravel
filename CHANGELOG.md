@@ -6,6 +6,32 @@ All notable changes to Tyravel are documented in this file.
 ## [1.0.2] - 2026-06-28
 
 See [v1.0.2 release notes](https://github.com/thesimonharms/tyravel/releases/tag/v1.0.2).
+## [1.0.3] - 2026-06-28
+
+See [v1.0.3 release notes](https://github.com/thesimonharms/tyravel/releases/tag/v1.0.3).
+
+Performance patch from the Tier 19 audit. See [ROADMAP.md](./ROADMAP.md#v103--performance-patch-unreleased) for the full patch queue.
+
+### Patch roadmap
+
+- [x] Router prefix trie for large dynamic route tables
+- [x] Compile-time `@if` / env conditional folding
+- [x] Column-scoped cast maps at `Model.select()` time
+- [x] Competitive benchmarks (Express, Fastify, Hono)
+
+### Added
+
+- **Router prefix trie** — segment-indexed dynamic route dispatch for apps with 100+ routes
+- **Compile-time conditional folding** — static `@if`, `@unless`, `@empty`, `@production`, `@local`, and `@env` branches fold into `text` ops when truthiness is known at compile time
+- **Column-scoped cast maps** — `Model.select()` precomputes cast subsets so `getModels()` skips unused cast keys on pruned queries
+- **Competitive benchmarks** — Express, Fastify, and Hono JSON `/bench` baselines alongside Tyravel in `npm run benchmark`
+
+### Performance
+
+- HTTP JSON fast path, request pooling, zero-middleware pipeline short-circuit
+- ORM in-place casts, query-owned row hydration, SQLite ready-handle cache
+- View `pathEcho` ops, sync `@if` evaluation, compile-time literal echo folding
+
 ## [1.3.0] - Unreleased
 
 ### Documentation
@@ -358,3 +384,4 @@ First public release of the `@tyravel/*` monorepo.
 [1.0.0]: https://github.com/thesimonharms/tyravel/releases/tag/v1.0.0
 [1.0.1]: https://github.com/thesimonharms/tyravel/releases/tag/v1.0.1
 [1.0.2]: https://github.com/thesimonharms/tyravel/releases/tag/v1.0.2
+[1.0.3]: https://github.com/thesimonharms/tyravel/releases/tag/v1.0.3

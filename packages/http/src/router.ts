@@ -24,13 +24,20 @@ import {
 import { applyRouteGroupOptions, flattenMiddlewareInputs } from './route-group-options.js';
 import { throttleMiddlewareAlias } from './throttle.js';
 import {
+  collectMiddlewareLabels,
   filterFastPathMiddleware,
-  qualifiesForJsonFastPath,
+  qualifiesForJsonFastPathLabels,
 } from './json-fast-path.js';
 import {
   MiddlewareRegistry,
   type MiddlewareInput,
 } from './middleware-registry.js';
+import {
+  parseRouteSegments,
+  RoutePrefixTrie,
+  type TrieRouteMatch,
+} from './route-prefix-trie.js';
+import { createRoutePipelineRunner, type RoutePipelineRunner } from './route-pipeline.js';
 import type {
   HttpMethod,
   Middleware,
@@ -38,6 +45,8 @@ import type {
   RouteHandler,
   RouteParams,
 } from './types.js';
+
+const EMPTY_ROUTE_PARAMS = Object.freeze({}) as RouteParams;
 
 export class RouteNotFoundException extends Error {
   constructor(method: string, path: string) {
@@ -48,8 +57,19 @@ export class RouteNotFoundException extends Error {
 
 interface CompiledRoute {
   definition: RouteDefinition;
-  regex: RegExp;
+  regex: RegExp | null;
   paramNames: string[];
+  staticPath?: string;
+  pipelineMiddleware: Middleware[];
+  pipelineRunner: RoutePipelineRunner;
+}
+
+interface CompiledRouteTable {
+  staticByMethod: Map<HttpMethod, Map<string, CompiledRoute>>;
+  dynamicByMethod: Map<HttpMethod, CompiledRoute[]>;
+  dynamicTrieByMethod: Map<HttpMethod, RoutePrefixTrie<CompiledRoute>>;
+  allStatic: CompiledRoute[];
+  allDynamic: CompiledRoute[];
 }
 
 export interface RouteCacheManifest {
@@ -109,7 +129,7 @@ export class Router implements Routable {
   private urlDefaults: RouteParams = {};
   private readonly bindings = new Map<string, RouteBinding>();
   private readonly implicitBindings = new Map<string, RouteBinding>();
-  private compiledCache: CompiledRoute[] | null = null;
+  private compiledCache: CompiledRouteTable | null = null;
   private readonly middlewareRegistry: MiddlewareRegistry;
   private handlerNormalizer: (handler: RouteHandler) => RouteHandler = (handler) => handler;
   private jsonFastPathEnabled = true;
@@ -132,6 +152,7 @@ export class Router implements Routable {
 
   setJsonFastPath(enabled: boolean): this {
     this.jsonFastPathEnabled = enabled;
+    this.invalidateCompiledCache();
     return this;
   }
 
@@ -275,11 +296,12 @@ export class Router implements Routable {
       handler: this.handlerNormalizer(handler),
       handlerLabel: resolveHandlerLabel(handler),
       middleware: this.resolveMiddleware(middlewareInputs),
-      middlewareLabels: middlewareInputs.map((input) => String(input)),
+      middlewareLabels: collectMiddlewareLabels(middlewareInputs),
       name: undefined,
       namePrefix: activeScope.namePrefix,
     });
 
+    this.invalidateCompiledCache();
     return this;
   }
 
@@ -308,6 +330,7 @@ export class Router implements Routable {
       ...route.middleware,
       this.middlewareRegistry.resolve(label),
     ];
+    this.invalidateCompiledCache();
     return this;
   }
 
@@ -339,7 +362,8 @@ export class Router implements Routable {
   }
 
   exportRouteCache(): RouteCacheManifest {
-    const compiled = this.compile();
+    const table = this.compile();
+    const compiled = [...table.allStatic, ...table.allDynamic];
     return {
       version: 1,
       routes: compiled.map((route) => ({
@@ -359,14 +383,14 @@ export class Router implements Routable {
   }
 
   clearRouteCache(): this {
-    this.compiledCache = null;
+    this.invalidateCompiledCache();
     return this;
   }
 
   resetRoutes(): this {
     this.routes = [];
     this.namedRoutes.clear();
-    this.compiledCache = null;
+    this.invalidateCompiledCache();
     this.scopeStack = [];
     return this;
   }
@@ -405,55 +429,78 @@ export class Router implements Routable {
     });
   }
 
-  async dispatch(request: Request): Promise<Response> {
-    const compiled = this.compile();
-    const url = new URL(request.url);
+  async dispatch(request: Request, pathname?: string): Promise<Response> {
+    const table = this.compile();
+    const normalizedPath = normalizePathname(pathname ?? new URL(request.url).pathname);
     const method = request.method.toUpperCase() as HttpMethod;
 
-    let pathMatched = false;
-    const allowedMethods: string[] = [];
-
-    for (const route of compiled) {
-      const match = route.regex.exec(url.pathname);
-      if (!match) {
-        continue;
-      }
-
-      if (route.definition.method !== method) {
-        pathMatched = true;
-        if (!allowedMethods.includes(route.definition.method)) {
-          allowedMethods.push(route.definition.method);
-        }
-        continue;
-      }
-
-      const params = this.extractParams(route.paramNames, match);
-      const resolved = await this.resolveBindings(params);
-      const tyravelRequest = this.requestPoolingEnabled
-        ? this.requestPool.acquire(request, resolved, route.definition.name)
-        : new TyravelRequest(request, resolved, route.definition.name);
-
-      try {
-        return await this.runPipeline(tyravelRequest, route.definition);
-      } finally {
-        if (this.requestPoolingEnabled) {
-          this.requestPool.release(tyravelRequest);
-        }
-      }
+    const staticHit = table.staticByMethod.get(method)?.get(normalizedPath);
+    if (staticHit) {
+      return this.dispatchRoute(request, staticHit, EMPTY_ROUTE_PARAMS);
     }
 
-    if (pathMatched) {
+    const trieMatch = this.matchDynamicRoute(table, method, normalizedPath);
+    if (trieMatch) {
+      return this.dispatchRoute(request, trieMatch.route, trieMatch.params);
+    }
+
+    const allowedMethods = this.collectAllowedMethods(table, normalizedPath, method);
+    if (allowedMethods.length > 0) {
       if (this.early404Enabled) {
-        return this.shortCircuitNotAllowed(method, url.pathname, allowedMethods);
+        return this.shortCircuitNotAllowed(method, normalizedPath, allowedMethods);
       }
-      throw new MethodNotAllowedException(method, url.pathname, allowedMethods);
+      throw new MethodNotAllowedException(method, normalizedPath, allowedMethods);
     }
 
     if (this.early404Enabled) {
-      return this.shortCircuitNotFound(method, url.pathname);
+      return this.shortCircuitNotFound(method, normalizedPath);
     }
 
-    throw new RouteNotFoundException(method, url.pathname);
+    throw new RouteNotFoundException(method, normalizedPath);
+  }
+
+  private async dispatchRoute(
+    request: Request,
+    route: CompiledRoute,
+    params: RouteParams,
+  ): Promise<Response> {
+    const resolved = await this.resolveBindings(params);
+    const tyravelRequest = this.requestPoolingEnabled
+      ? this.requestPool.acquire(request, resolved, route.definition.name)
+      : new TyravelRequest(request, resolved, route.definition.name);
+
+    try {
+      return await route.pipelineRunner.run(tyravelRequest);
+    } finally {
+      if (this.requestPoolingEnabled) {
+        this.requestPool.release(tyravelRequest);
+      }
+    }
+  }
+
+  private collectAllowedMethods(
+    table: CompiledRouteTable,
+    normalizedPath: string,
+    method: HttpMethod,
+  ): string[] {
+    const allowed = new Set<string>();
+
+    for (const [otherMethod, routes] of table.staticByMethod) {
+      if (otherMethod !== method && routes.has(normalizedPath)) {
+        allowed.add(otherMethod);
+      }
+    }
+
+    for (const route of table.allDynamic) {
+      if (route.definition.method === method) {
+        continue;
+      }
+      if (route.regex!.test(normalizedPath)) {
+        allowed.add(route.definition.method);
+      }
+    }
+
+    return [...allowed];
   }
 
   private shortCircuitNotFound(method: string, path: string): Response {
@@ -477,46 +524,17 @@ export class Router implements Routable {
     );
   }
 
-  private async runPipeline(
-    request: TyravelRequest,
-    route: RouteDefinition,
-  ): Promise<Response> {
-    const middleware = this.resolvePipelineMiddleware(route);
-    let index = -1;
-
-    const next = async (): Promise<Response> => {
-      index += 1;
-
-      if (index < middleware.length) {
-        const current = middleware[index];
-        if (!current) {
-          return next();
-        }
-        return current(request, next);
-      }
-
-      const result = await route.handler(request);
-      return this.normalizeResponse(result);
-    };
-
-    return next();
-  }
-
-  private normalizeResponse(result: Response): Response {
-    return result;
-  }
-
   private resolveMiddleware(inputs: MiddlewareInput[]): Middleware[] {
     return this.middlewareRegistry.resolveMany(inputs);
   }
 
-  private resolvePipelineMiddleware(route: RouteDefinition): Middleware[] {
+  private buildPipelineMiddleware(route: RouteDefinition): Middleware[] {
     if (!this.jsonFastPathEnabled) {
       return route.middleware;
     }
 
     const labels = route.middlewareLabels ?? [];
-    if (!qualifiesForJsonFastPath(route.method, labels)) {
+    if (!qualifiesForJsonFastPathLabels(route.method, labels)) {
       return route.middleware;
     }
 
@@ -535,6 +553,14 @@ export class Router implements Routable {
   }
 
   private async resolveBindings(params: RouteParams): Promise<RouteParams> {
+    if (params === EMPTY_ROUTE_PARAMS) {
+      return params;
+    }
+
+    if (this.bindings.size === 0 && this.implicitBindings.size === 0) {
+      return params;
+    }
+
     const resolved: RouteParams = { ...params };
 
     for (const [name, value] of Object.entries(params)) {
@@ -561,16 +587,56 @@ export class Router implements Routable {
     return resolved;
   }
 
-  private compile(): CompiledRoute[] {
+  private invalidateCompiledCache(): void {
+    this.compiledCache = null;
+  }
+
+  private compile(): CompiledRouteTable {
     if (this.compiledCache) {
       return this.compiledCache;
     }
 
-    return this.buildCompiledRoutes();
+    this.compiledCache = this.buildCompiledRoutes();
+    return this.compiledCache;
   }
 
-  private buildCompiledRoutes(): CompiledRoute[] {
-    return this.routes.map((definition) => {
+  private matchDynamicRoute(
+    table: CompiledRouteTable,
+    method: HttpMethod,
+    normalizedPath: string,
+  ): TrieRouteMatch<CompiledRoute> | null {
+    const trie = table.dynamicTrieByMethod.get(method);
+    if (trie) {
+      const matches = trie.match(normalizedPath);
+      if (matches.length > 0) {
+        return matches[0]!;
+      }
+    }
+
+    const dynamicRoutes = table.dynamicByMethod.get(method) ?? [];
+    for (const route of dynamicRoutes) {
+      const match = route.regex!.exec(normalizedPath);
+      if (!match) {
+        continue;
+      }
+
+      return {
+        route,
+        params: this.extractParams(route.paramNames, match),
+      };
+    }
+
+    return null;
+  }
+
+  private buildCompiledRoutes(): CompiledRouteTable {
+    const staticByMethod = new Map<HttpMethod, Map<string, CompiledRoute>>();
+    const dynamicByMethod = new Map<HttpMethod, CompiledRoute[]>();
+    const dynamicTrieByMethod = new Map<HttpMethod, RoutePrefixTrie<CompiledRoute>>();
+    const allStatic: CompiledRoute[] = [];
+    const allDynamic: CompiledRoute[] = [];
+
+    for (const definition of this.routes) {
       const paramNames: string[] = [];
       const pattern = definition.pattern
         .replace(/\/+$/, '')
@@ -580,14 +646,37 @@ export class Router implements Routable {
         });
 
       const normalizedPattern = pattern === '' ? '/' : pattern;
-      const regex = new RegExp(`^${normalizedPattern}/?$`);
-
-      return {
+      const pipelineMiddleware = this.buildPipelineMiddleware(definition);
+      const compiled: CompiledRoute = {
         definition,
-        regex,
+        regex: null,
         paramNames,
+        pipelineMiddleware,
+        pipelineRunner: createRoutePipelineRunner(definition.handler, pipelineMiddleware),
       };
-    });
+
+      if (paramNames.length === 0) {
+        compiled.staticPath = normalizedPattern;
+        const methodRoutes = staticByMethod.get(definition.method) ?? new Map<string, CompiledRoute>();
+        methodRoutes.set(normalizedPattern, compiled);
+        staticByMethod.set(definition.method, methodRoutes);
+        allStatic.push(compiled);
+        continue;
+      }
+
+      compiled.regex = new RegExp(`^${normalizedPattern}/?$`);
+      const methodRoutes = dynamicByMethod.get(definition.method) ?? [];
+      methodRoutes.push(compiled);
+      dynamicByMethod.set(definition.method, methodRoutes);
+
+      const trie = dynamicTrieByMethod.get(definition.method) ?? new RoutePrefixTrie<CompiledRoute>();
+      trie.add(compiled, parseRouteSegments(normalizedPattern));
+      dynamicTrieByMethod.set(definition.method, trie);
+
+      allDynamic.push(compiled);
+    }
+
+    return { staticByMethod, dynamicByMethod, dynamicTrieByMethod, allStatic, allDynamic };
   }
 
   private extractParams(names: string[], match: RegExpExecArray): RouteParams {
@@ -606,6 +695,15 @@ export class Router implements Routable {
 
 function normalizeRoutePattern(pattern: string): string {
   return pattern.replace(/\{([A-Za-z0-9_]+)\}/g, ':$1');
+}
+
+function normalizePathname(pathname: string): string {
+  if (pathname.length <= 1) {
+    return pathname || '/';
+  }
+
+  const trimmed = pathname.replace(/\/+$/, '');
+  return trimmed === '' ? '/' : trimmed;
 }
 
 function resolveHandlerLabel(handler: RouteHandler): string {

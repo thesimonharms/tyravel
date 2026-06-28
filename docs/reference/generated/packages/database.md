@@ -15,7 +15,7 @@ npm install @tyravel/database
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.2` |
+| Version | `1.0.3` |
 | Source | [`packages/database`](https://github.com/thesimonharms/tyravel/tree/main/packages/database) |
 | Category | Database |
 | Node.js | `>=26` |
@@ -84,11 +84,13 @@ From the package entry point (`dist/index.d.ts`). Deep imports are not supported
 - `isCustomCast`
 - `isPrunableModel`
 - `migrationsTableSql`
+- `normalizeSelectColumn`
 - `pruneModel`
 - `pruneModels`
 - `registerMorphMap`
 - `rememberModelAttribute`
 - `resetFactoryHelpers`
+- `resolveCastsForColumns`
 - `resolveMorphAlias`
 - `resolveMorphModel`
 - `resolvePoolWarmupEnabled`

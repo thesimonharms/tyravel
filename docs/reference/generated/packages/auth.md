@@ -15,7 +15,7 @@ npm install @tyravel/auth
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.2` |
+| Version | `1.0.3` |
 | Source | [`packages/auth`](https://github.com/thesimonharms/tyravel/tree/main/packages/auth) |
 | Category | Platform services |
 | Node.js | `>=26` |

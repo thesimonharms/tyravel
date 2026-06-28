@@ -15,7 +15,7 @@ npm install @tyravel/vector-qdrant
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.2` |
+| Version | `1.0.3` |
 | Source | [`packages/vector-qdrant`](https://github.com/thesimonharms/tyravel/tree/main/packages/vector-qdrant) |
 | Category | AI & agents |
 | Node.js | `>=26` |

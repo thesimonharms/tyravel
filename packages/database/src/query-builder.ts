@@ -305,11 +305,14 @@ export class QueryBuilder<T extends Row = Row> {
 
       if (clause.type === 'in') {
         const values = clause.value as RowValue[];
-        const placeholders = values.map((_, valueIndex) =>
-          this.grammar.parameter(bindingOffset + bindings.length + valueIndex + 1),
+        const placeholders = inPlaceholderList(
+          this.grammar.driver,
+          values.length,
+          bindingOffset + bindings.length + 1,
+          (index) => this.grammar.parameter(index),
         );
         parts.push(
-          `${prefix}${this.grammar.wrapIdentifier(clause.column)} IN (${placeholders.join(', ')})`,
+          `${prefix}${this.grammar.wrapIdentifier(clause.column)} IN (${placeholders})`,
         );
         bindings.push(...values);
         continue;
@@ -336,4 +339,25 @@ export class QueryBuilder<T extends Row = Row> {
       this.grammar.parameter(index + 1),
     );
   }
+}
+
+const inPlaceholderCache = new Map<string, string>();
+
+function inPlaceholderList(
+  driver: string,
+  count: number,
+  startIndex: number,
+  parameter: (index: number) => string,
+): string {
+  const cacheKey = `${driver}:${count}:${startIndex}`;
+  const cached = inPlaceholderCache.get(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
+  const placeholders = Array.from({ length: count }, (_, index) =>
+    parameter(startIndex + index),
+  ).join(', ');
+  inPlaceholderCache.set(cacheKey, placeholders);
+  return placeholders;
 }

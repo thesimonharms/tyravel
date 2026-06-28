@@ -100,14 +100,58 @@ export function applyCastsToAttributes(
   casts: ModelCastMap,
 ): Record<string, unknown> {
   const result = { ...attributes };
+  applyCastsInPlace(result, casts);
+  return result;
+}
 
-  for (const [key, type] of Object.entries(casts)) {
-    if (key in result) {
-      result[key] = castAttribute(result[key], type);
+/** Normalize `select()` column names to attribute keys for cast lookup. */
+export function normalizeSelectColumn(column: string): string {
+  const trimmed = column.trim();
+  const asMatch = trimmed.match(/\s+as\s+([A-Za-z_][\w]*)$/i);
+  if (asMatch) {
+    return asMatch[1]!;
+  }
+
+  const parts = trimmed.split('.');
+  return parts[parts.length - 1]!;
+}
+
+/**
+ * Returns only cast entries for columns present in a pruned `select()` list.
+ * When `columns` is empty or includes `*`, the full cast map is returned.
+ */
+export function resolveCastsForColumns(
+  casts: ModelCastMap,
+  columns: readonly string[],
+): ModelCastMap {
+  if (columns.length === 0 || columns.includes('*')) {
+    return casts;
+  }
+
+  const resolved: ModelCastMap = {};
+  for (const column of columns) {
+    const key = normalizeSelectColumn(column);
+    const cast = casts[key];
+    if (cast !== undefined) {
+      resolved[key] = cast;
     }
   }
 
-  return result;
+  return resolved;
+}
+
+/** Mutates `attributes` when casts apply; safe when the row object is query-owned. */
+export function applyCastsInPlace(
+  attributes: Record<string, unknown>,
+  casts: ModelCastMap,
+): Record<string, unknown> {
+  for (const [key, type] of Object.entries(casts)) {
+    if (key in attributes) {
+      attributes[key] = castAttribute(attributes[key], type);
+    }
+  }
+
+  return attributes;
 }
 
 export function serializeAttributesForStorage(

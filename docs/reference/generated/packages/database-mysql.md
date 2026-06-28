@@ -15,7 +15,7 @@ npm install @tyravel/database-mysql
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.2` |
+| Version | `1.0.3` |
 | Source | [`packages/database-mysql`](https://github.com/thesimonharms/tyravel/tree/main/packages/database-mysql) |
 | Category | Database |
 | Node.js | `>=26` |

@@ -5,14 +5,38 @@ import type { HttpMethod, Middleware } from './types.js';
 const SAFE_METHODS = new Set<HttpMethod>(['GET', 'HEAD', 'OPTIONS', 'DELETE']);
 const SKIP_TAGS = new Set(['session', 'csrf', 'locale', 'view']);
 
+export function collectMiddlewareLabels(middlewareInputs: MiddlewareInput[]): string[] {
+  const labels: string[] = [];
+
+  for (const input of middlewareInputs) {
+    if (Array.isArray(input)) {
+      for (const nested of input) {
+        if (typeof nested === 'string') {
+          labels.push(nested);
+        }
+      }
+      continue;
+    }
+
+    if (typeof input === 'string') {
+      labels.push(input);
+    }
+  }
+
+  return labels;
+}
+
 export function qualifiesForJsonFastPath(
   method: HttpMethod,
   middlewareInputs: MiddlewareInput[],
 ): boolean {
-  const labels = middlewareInputs
-    .flatMap((input) => (Array.isArray(input) ? input : [input]))
-    .filter((input): input is string => typeof input === 'string');
+  return qualifiesForJsonFastPathLabels(method, collectMiddlewareLabels(middlewareInputs));
+}
 
+export function qualifiesForJsonFastPathLabels(
+  method: HttpMethod,
+  labels: string[],
+): boolean {
   if (labels.includes('csrf') || labels.includes('guest') || labels.includes('auth')) {
     return false;
   }

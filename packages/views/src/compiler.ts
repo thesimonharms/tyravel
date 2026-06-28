@@ -11,11 +11,55 @@ import type {
   SwitchCase,
   TemplateOp,
 } from './types.js';
+import { foldCompiledTemplate } from './conditional-folding.js';
+import { SIMPLE_PATH } from './evaluate.js';
 import { lineColumnAt, ViewCompileError } from './view-compile-error.js';
 
 export interface CompileOptions {
   customDirectives?: ReadonlySet<string>;
   viewPath?: string;
+  /** When set, `@production`, `@local`, and `@env` branches fold at compile time. */
+  environment?: string;
+}
+
+/** Fold static `{{ 'literal' }}` echoes into text ops at compile time. */
+function foldLiteralEcho(expression: string, raw: boolean): TemplateOp | null {
+  if (raw) {
+    return null;
+  }
+
+  const trimmed = expression.trim();
+  const quoted = trimmed.match(/^(['"])(.*)\1$/s);
+  if (quoted) {
+    const value = quoted[2]!
+      .replace(/\\n/g, '\n')
+      .replace(/\\r/g, '\r')
+      .replace(/\\t/g, '\t')
+      .replace(/\\(['"\\])/g, '$1');
+    return { type: 'text', value };
+  }
+
+  if (/^-?\d+(?:\.\d+)?$/.test(trimmed)) {
+    return { type: 'text', value: trimmed };
+  }
+
+  return null;
+}
+
+function pushEchoOp(ops: TemplateOp[], expression: string, raw: boolean): void {
+  const folded = foldLiteralEcho(expression, raw);
+  if (folded) {
+    ops.push(folded);
+    return;
+  }
+
+  const trimmed = expression.trim();
+  if (!raw && SIMPLE_PATH.test(trimmed)) {
+    ops.push({ type: 'pathEcho', path: trimmed, raw: false });
+    return;
+  }
+
+  ops.push({ type: 'echo', expression, raw });
 }
 
 export const BUILTIN_VIEW_DIRECTIVES = new Set([
@@ -213,23 +257,29 @@ export function compile(source: string, options: CompileOptions = {}): CompiledT
 
   if (useSlotAwareCompile) {
     const { defaultSlot, namedSlots } = parseSlotAwareBody(body, options);
-    return {
+    return foldCompiledTemplate(
+      {
+        layout,
+        ops: defaultSlot,
+        props: props.value,
+        aware: aware.value,
+        memo: memo.value,
+        defaultSlots: Object.keys(namedSlots).length > 0 ? namedSlots : undefined,
+      },
+      options,
+    );
+  }
+
+  return foldCompiledTemplate(
+    {
       layout,
-      ops: defaultSlot,
+      ops: parseOps(body, options),
       props: props.value,
       aware: aware.value,
       memo: memo.value,
-      defaultSlots: Object.keys(namedSlots).length > 0 ? namedSlots : undefined,
-    };
-  }
-
-  return {
-    layout,
-    ops: parseOps(body, options),
-    props: props.value,
-    aware: aware.value,
-    memo: memo.value,
-  };
+    },
+    options,
+  );
 }
 
 function extractMemoDirective(source: string): { value?: boolean | number; remaining: string } {
@@ -308,7 +358,7 @@ function parseOps(source: string, options: CompileOptions = {}): TemplateOp[] {
     if (remaining.startsWith('{{')) {
       const match = remaining.match(/^\{\{\s*(.+?)\s*\}\}/);
       if (match) {
-        ops.push({ type: 'echo', expression: match[1]!, raw: false });
+        pushEchoOp(ops, match[1]!, false);
         cursor += match[0].length;
         continue;
       }
@@ -317,7 +367,7 @@ function parseOps(source: string, options: CompileOptions = {}): TemplateOp[] {
     if (remaining.startsWith('{!!')) {
       const match = remaining.match(/^\{!!\s*(.+?)\s*!!\}/);
       if (match) {
-        ops.push({ type: 'echo', expression: match[1]!, raw: true });
+        pushEchoOp(ops, match[1]!, true);
         cursor += match[0].length;
         continue;
       }
@@ -1840,7 +1890,7 @@ export function compileInlineEchoes(source: string): TemplateOp[] {
 
     const raw = match[0].startsWith('{!!');
     const expression = match[1] ?? '';
-    ops.push({ type: 'echo', expression, raw });
+    pushEchoOp(ops, expression, raw);
     lastIndex = match.index + match[0].length;
   }
 

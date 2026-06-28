@@ -2,6 +2,7 @@ import { resolveMorphModel } from '../morph-map.js';
 import type { Model } from '../model.js';
 import type { ModelStatic } from '../model-types.js';
 import type { RowValue } from '../types.js';
+import { dedupeEagerKeys } from './eager-keys.js';
 import { Relation } from './relation.js';
 
 export class MorphToRelation<Related extends Model = Model> extends Relation<Related> {
@@ -31,22 +32,14 @@ export class MorphToRelation<Related extends Model = Model> extends Relation<Rel
 
       const relatedModel = resolveMorphModel(type);
       const key = this.ownerKey ?? relatedModel.primaryKey;
-      const row = await relatedModel.query().where(key, id).first();
-      if (!row) {
-        return null;
-      }
-
-      const ModelClass = relatedModel as new (
-        attributes?: Record<string, unknown>,
-      ) => Related;
-      return new ModelClass(row);
+      return relatedModel.query().where(key, id).firstModel<Related>();
     });
   }
 
   override eagerLoadKeys(parents: Model[]): RowValue[] {
-    return parents
-      .map((parent) => parent.getAttribute(this.morphId as never) as RowValue)
-      .filter((key) => key !== undefined && key !== null);
+    return dedupeEagerKeys(
+      parents.map((parent) => parent.getAttribute(this.morphId as never) as RowValue),
+    );
   }
 
   override defaultEagerValue(): Related | null {
@@ -57,11 +50,12 @@ export class MorphToRelation<Related extends Model = Model> extends Relation<Rel
     keys: RowValue[],
     parents: Model[] = [],
   ): Promise<Array<{ type: string; key: RowValue; model: Related }>> {
+    const keySet = new Set(keys);
     const grouped = new Map<string, RowValue[]>();
 
     for (const parent of parents) {
       const id = parent.getAttribute(this.morphId as never) as RowValue;
-      if (!keys.includes(id)) {
+      if (!keySet.has(id)) {
         continue;
       }
 
@@ -75,23 +69,25 @@ export class MorphToRelation<Related extends Model = Model> extends Relation<Rel
       grouped.set(type, bucket);
     }
 
-    const results: Array<{ type: string; key: RowValue; model: Related }> = [];
+    const batches = await Promise.all(
+      [...grouped.entries()].map(async ([type, ids]) => {
+        const relatedModel = resolveMorphModel(type);
+        const ownerKey = this.ownerKey ?? relatedModel.primaryKey;
+        const uniqueIds = dedupeEagerKeys(ids);
+        const models = await relatedModel
+          .query()
+          .whereIn(ownerKey, uniqueIds)
+          .getModels<Related>();
 
-    for (const [type, ids] of grouped.entries()) {
-      const relatedModel = resolveMorphModel(type);
-      const ownerKey = this.ownerKey ?? relatedModel.primaryKey;
-      const rows = await relatedModel.query().whereIn(ownerKey, ids).get();
-      const ModelClass = relatedModel as new (
-        attributes?: Record<string, unknown>,
-      ) => Related;
+        return models.map((model) => ({
+          type,
+          key: model.getAttribute(ownerKey as never) as RowValue,
+          model,
+        }));
+      }),
+    );
 
-      for (const row of rows) {
-        const key = row[ownerKey] as RowValue;
-        results.push({ type, key, model: new ModelClass(row) });
-      }
-    }
-
-    return results;
+    return batches.flat();
   }
 
   override matchEager(

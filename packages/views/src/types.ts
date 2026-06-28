@@ -62,6 +62,7 @@ export type FormAttribute = 'checked' | 'selected' | 'disabled' | 'readonly';
 
 export type TemplateOp =
   | { type: 'text'; value: string }
+  | { type: 'pathEcho'; path: string; raw: boolean }
   | { type: 'echo'; expression: string; raw: boolean }
   | {
       type: 'if';

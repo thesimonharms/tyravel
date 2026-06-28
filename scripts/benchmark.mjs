@@ -26,9 +26,27 @@ import {
 import { Model, SqliteConnection } from '@tyravel/database';
 import { Response } from '@tyravel/http';
 import { compile, ViewEngine } from '@tyravel/views';
+import { runCompetitiveBenchmarks } from './competitive-benchmarks.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const QUICK = process.env.BENCHMARK_QUICK === '1';
+
+function prepareBenchmarkRouter(router, options = {}) {
+  const {
+    jsonFastPath = true,
+    requestPooling = false,
+    early404 = false,
+  } = options;
+
+  router.warmRouteCache();
+  router.setJsonFastPath(jsonFastPath);
+  if (requestPooling) {
+    router.setRequestPooling(true);
+  }
+  if (early404) {
+    router.setEarly404(true);
+  }
+}
 
 const DEFAULTS = {
   http: { warmup: QUICK ? 10 : 200, requests: QUICK ? 50 : 2_000, concurrency: QUICK ? 5 : 50 },
@@ -52,7 +70,7 @@ export async function measureHttpJsonFast({
     withMiddlewareMeta(async (_request, next) => next(), { tag: 'session' }),
   );
   Route.get('/api/v1/health', () => Response.json({ status: 'ok' }));
-  app.router().setRequestPooling(true);
+  prepareBenchmarkRouter(app.router(), { requestPooling: true });
 
   const kernel = new HttpKernel(app);
   const server = await serve(kernel, { port: 0, hostname: '127.0.0.1', quiet: true });
@@ -96,6 +114,7 @@ export async function measureHttp({
   const app = new Application();
   setRouteApplication(app);
   Route.get('/bench', () => Response.json({ ok: true }));
+  prepareBenchmarkRouter(app.router());
   const kernel = new HttpKernel(app);
   const server = await serve(kernel, { port: 0, hostname: '127.0.0.1', quiet: true });
   const url = `http://${server.hostname}:${server.port}/bench`;
@@ -147,6 +166,7 @@ export async function measureMiddlewareStack({
   app.middleware('mw-c', async (_request, next) => next());
 
   Route.middleware(['mw-a', 'mw-b', 'mw-c']).get('/mw', () => Response.json({ ok: true }));
+  prepareBenchmarkRouter(app.router());
 
   const kernel = new HttpKernel(app);
   const server = await serve(kernel, { port: 0, hostname: '127.0.0.1', quiet: true });
@@ -192,6 +212,7 @@ export async function measureBootCold({
     const app = new Application();
     setRouteApplication(app);
     Route.get('/boot', () => Response.json({ ok: true }));
+    prepareBenchmarkRouter(app.router());
     const kernel = new HttpKernel(app);
     const server = await serve(kernel, { port: 0, hostname: '127.0.0.1', quiet: true });
     samples.push(performance.now() - start);
@@ -388,6 +409,7 @@ export async function measureHttpSsr({
   app.instance('view', engine);
 
   Route.get('/', async () => Response.html(await View.render('welcome', WELCOME_CONTEXT)));
+  prepareBenchmarkRouter(app.router());
 
   const kernel = new HttpKernel(app);
   const server = await serve(kernel, { port: 0, hostname: '127.0.0.1', quiet: true });
@@ -501,7 +523,7 @@ export async function measureSessionAuth({
 
   const app = new Application();
   setRouteApplication(app);
-  app.router().setJsonFastPath(false);
+  prepareBenchmarkRouter(app.router(), { jsonFastPath: false });
   app.use(createStartSessionMiddleware(auth));
   app.middleware('auth', createAuthMiddleware(auth));
   Route.post('/login', async (request) => {
@@ -596,9 +618,12 @@ export function measureViewCompile({
 }
 
 export async function runBenchmarks(options = {}) {
+  const httpOptions = { ...DEFAULTS.http, ...options.http };
+  const competitive = await runCompetitiveBenchmarks(httpOptions, measureHttp);
   const results = [
     await measureBootCold(options.boot),
-    await measureHttp(options.http),
+    await measureHttp(httpOptions),
+    ...competitive,
     await measureHttpJsonFast(options.http),
     await measureMiddlewareStack(options.middleware),
     await measureSessionAuth(options.middleware),
@@ -616,7 +641,13 @@ export async function runBenchmarks(options = {}) {
     timestamp: new Date().toISOString(),
     quick: QUICK,
     results,
+    competitive,
   };
+}
+
+function formatResultLine(result) {
+  return `${result.label}: ${result.value.toLocaleString()} ${result.unit}`
+    + ` (${result.samples.toLocaleString()} samples in ${result.elapsedMs.toFixed(1)} ms)`;
 }
 
 function printHuman(report) {
@@ -625,11 +656,24 @@ function printHuman(report) {
     console.log('Quick mode — set BENCHMARK_QUICK=0 for full samples.');
   }
   console.log('');
-  for (const result of report.results) {
-    console.log(
-      `${result.label}: ${result.value.toLocaleString()} ${result.unit}`
-      + ` (${result.samples.toLocaleString()} samples in ${result.elapsedMs.toFixed(1)} ms)`,
-    );
+
+  const compareNames = new Set((report.competitive ?? []).map((entry) => entry.name));
+  const coreResults = report.results.filter((result) => !compareNames.has(result.name));
+  const compareResults = report.competitive ?? report.results.filter((result) => result.category === 'compare');
+
+  for (const result of coreResults) {
+    console.log(formatResultLine(result));
+  }
+
+  if (compareResults.length > 0) {
+    console.log('');
+    console.log('Competitive JSON (/bench, same payload, fetch client):');
+    const sorted = [...compareResults]
+      .filter((result) => result && Number.isFinite(result.value))
+      .sort((left, right) => right.value - left.value);
+    for (const result of sorted) {
+      console.log(formatResultLine(result));
+    }
   }
 }
 

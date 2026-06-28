@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/ssr",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Client-side hydration runtime for Tyravel SSR islands",
   "license": "MIT",
   "type": "module",

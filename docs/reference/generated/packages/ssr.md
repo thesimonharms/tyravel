@@ -15,7 +15,7 @@ npm install @tyravel/ssr
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.2` |
+| Version | `1.0.3` |
 | Source | [`packages/ssr`](https://github.com/thesimonharms/tyravel/tree/main/packages/ssr) |
 | Category | Views & client |
 | Node.js | `>=26` |

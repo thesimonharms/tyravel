@@ -15,7 +15,7 @@ npm install @tyravel/vector-pg
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.2` |
+| Version | `1.0.3` |
 | Source | [`packages/vector-pg`](https://github.com/thesimonharms/tyravel/tree/main/packages/vector-pg) |
 | Category | AI & agents |
 | Node.js | `>=26` |

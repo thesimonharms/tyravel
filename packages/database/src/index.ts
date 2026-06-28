@@ -5,6 +5,8 @@ export { resolvePoolWarmupEnabled } from './pool-warmup.js';
 export {
   applyCastsToAttributes,
   castAttribute,
+  normalizeSelectColumn,
+  resolveCastsForColumns,
   serializeAttributesForStorage,
   serializeCast,
 } from './model-casts.js';

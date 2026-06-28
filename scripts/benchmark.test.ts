@@ -83,8 +83,15 @@ describe('benchmarks', () => {
       views: { warmup: 2, iterations: 5 },
     });
 
-    expect(report.results).toHaveLength(10);
+    expect(report.results).toHaveLength(14);
+    expect(report.competitive).toHaveLength(4);
+
     for (const result of report.results) {
+      expect(result.value).toBeGreaterThan(0);
+    }
+
+    for (const result of report.competitive) {
+      expect(result.name).toMatch(/^compare\./);
       expect(result.value).toBeGreaterThan(0);
     }
   });

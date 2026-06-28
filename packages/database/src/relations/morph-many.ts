@@ -3,6 +3,7 @@ import type { Model } from '../model.js';
 import type { ModelStatic } from '../model-types.js';
 import type { ModelQueryBuilder } from '../model-query-builder.js';
 import type { RowValue } from '../types.js';
+import { dedupeEagerKeys } from './eager-keys.js';
 import { Relation } from './relation.js';
 
 export class MorphManyRelation<Related extends Model = Model> extends Relation<Related> {
@@ -41,9 +42,9 @@ export class MorphManyRelation<Related extends Model = Model> extends Relation<R
   override eagerLoadKeys(parents: Model[]): RowValue[] {
     const parentModel = this.parent.constructor as ModelStatic;
     const parentKey = this.localKey ?? parentModel.primaryKey;
-    return parents
-      .map((parent) => parent.getAttribute(parentKey as never) as RowValue)
-      .filter((key) => key !== undefined && key !== null);
+    return dedupeEagerKeys(
+      parents.map((parent) => parent.getAttribute(parentKey as never) as RowValue),
+    );
   }
 
   override defaultEagerValue(): Related[] {

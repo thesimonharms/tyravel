@@ -15,7 +15,7 @@ npm install @tyravel/vector-pinecone
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.2` |
+| Version | `1.0.3` |
 | Source | [`packages/vector-pinecone`](https://github.com/thesimonharms/tyravel/tree/main/packages/vector-pinecone) |
 | Category | AI & agents |
 | Node.js | `>=26` |

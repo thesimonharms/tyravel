@@ -2,6 +2,8 @@ export class ViewHelpers {
   private readonly sections = new Map<string, string>();
   private readonly componentPropsStack: Record<string, unknown>[] = [];
   private output = '';
+  private chunks: string[] | null = null;
+  private static readonly CHUNK_THRESHOLD = 8_192;
 
   constructor(
     private readonly stacks: Map<string, string[]> = new Map(),
@@ -15,7 +17,20 @@ export class ViewHelpers {
   }
 
   append(value: string): void {
+    if (!value) {
+      return;
+    }
+
+    if (this.chunks) {
+      this.chunks.push(value);
+      return;
+    }
+
     this.output += value;
+    if (this.output.length >= ViewHelpers.CHUNK_THRESHOLD) {
+      this.chunks = [this.output];
+      this.output = '';
+    }
   }
 
   setSection(name: string, content: string): void {
@@ -113,6 +128,14 @@ export class ViewHelpers {
   }
 
   toString(): string {
-    return this.output;
+    if (!this.chunks) {
+      return this.output;
+    }
+
+    if (this.output) {
+      this.chunks.push(this.output);
+    }
+
+    return this.chunks.length === 1 ? this.chunks[0]! : this.chunks.join('');
   }
 }

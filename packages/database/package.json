@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/database",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,7 +21,7 @@
     "node": ">=26"
   },
   "dependencies": {
-    "@tyravel/support": "1.0.2"
+    "@tyravel/support": "1.0.3"
   },
   "description": "Database ORM, query builder, and migrations for Tyravel",
   "license": "MIT",

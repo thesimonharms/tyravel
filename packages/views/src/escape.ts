@@ -8,12 +8,19 @@ const ESCAPE_MAP: Record<string, string> = {
 
 export type EscapeHandler = (value: unknown) => string;
 
+const HTML_ESCAPE_PATTERN = /[&<>"']/;
+
 export function escapeHtml(value: unknown): string {
   if (value === null || value === undefined) {
     return '';
   }
 
-  return String(value).replace(/[&<>"']/g, (char) => ESCAPE_MAP[char] ?? char);
+  const str = String(value);
+  if (!HTML_ESCAPE_PATTERN.test(str)) {
+    return str;
+  }
+
+  return str.replace(/[&<>"']/g, (char) => ESCAPE_MAP[char] ?? char);
 }
 
 export function escapeUrl(value: unknown): string {

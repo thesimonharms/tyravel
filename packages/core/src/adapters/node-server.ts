@@ -170,7 +170,8 @@ async function toFetchRequest(incoming: IncomingMessage, scheme: string): Promis
   const method = incoming.method ?? 'GET';
   const headers = new Headers();
 
-  for (const [key, value] of Object.entries(incoming.headers)) {
+  for (const key in incoming.headers) {
+    const value = incoming.headers[key];
     if (value === undefined) {
       continue;
     }
@@ -183,13 +184,14 @@ async function toFetchRequest(incoming: IncomingMessage, scheme: string): Promis
     headers.set(key, value);
   }
 
-  const init: RequestInit = { method, headers };
+  if (method === 'GET' || method === 'HEAD') {
+    return new Request(url, { method, headers });
+  }
 
-  if (method !== 'GET' && method !== 'HEAD') {
-    const body = await readIncomingBody(incoming);
-    if (body.length > 0) {
-      init.body = Buffer.from(body);
-    }
+  const init: RequestInit = { method, headers };
+  const body = await readIncomingBody(incoming);
+  if (body.length > 0) {
+    init.body = Buffer.from(body);
   }
 
   return new Request(url, init);
@@ -217,6 +219,13 @@ async function writeFetchResponse(
 
   if (!response.body) {
     outgoing.end();
+    return;
+  }
+
+  const contentType = response.headers.get('content-type') ?? '';
+  if (contentType.includes('application/json')) {
+    const body = await response.text();
+    outgoing.end(body.length > 0 ? body : undefined);
     return;
   }
 

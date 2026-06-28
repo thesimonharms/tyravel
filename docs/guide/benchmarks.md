@@ -36,7 +36,20 @@ BENCHMARK_QUICK=1 npm run benchmark
 | View compile | `view.compile` | Compiling `welcome.tyr` |
 | View render | `view.render` | Rendering `welcome.tyr` with context |
 
-Results are **informational baselines**, not competitive claims. Throughput varies with CPU, Node version, and concurrent load.
+### Competitive JSON baselines
+
+Same machine, same Node version, same `GET /bench` → `{ "ok": true }` payload, same `fetch` client and sample sizes:
+
+| Benchmark | Key | Framework |
+|-----------|-----|-----------|
+| Compare Tyravel | `compare.tyravel` | Tyravel `HttpKernel` |
+| Compare Express | `compare.express` | Express 5 |
+| Compare Fastify | `compare.fastify` | Fastify 5 |
+| Compare Hono | `compare.hono` | Hono + `@hono/node-server` |
+
+These are **informational baselines** on a minimal JSON route — not a full framework shootout. Tyravel’s value is the integrated stack (ORM, views, auth, queues). Use competitive rows to sanity-check HTTP overhead, not to pick a winner in isolation.
+
+Throughput varies with CPU, Node version, and concurrent load.
 
 ## Latest CI numbers
 

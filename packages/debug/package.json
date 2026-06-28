@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/debug",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,11 +15,11 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/config": "1.0.2",
-    "@tyravel/database": "1.0.2",
-    "@tyravel/http": "1.0.2",
-    "@tyravel/log": "1.0.2",
-    "@tyravel/queue": "1.0.2"
+    "@tyravel/config": "1.0.3",
+    "@tyravel/database": "1.0.3",
+    "@tyravel/http": "1.0.3",
+    "@tyravel/log": "1.0.3",
+    "@tyravel/queue": "1.0.3"
   },
   "files": [
     "dist"

@@ -78,6 +78,7 @@ export class ViewEngine {
   private readonly manifestPath: string;
   private readonly viteBase: string;
   private localeCode: string;
+  private readonly resolvedNameCache = new Map<string, string>();
   private translations: Record<string, string> = {};
   private viteManifest?: ViteManifest;
   private echoClientConfig: EchoClientConfig | null = null;
@@ -272,21 +273,30 @@ export class ViewEngine {
   }
 
   async resolveName(name: string): Promise<string> {
+    const cached = this.resolvedNameCache.get(name);
+    if (cached) {
+      return cached;
+    }
+
     const parsed = parseViewName(name);
 
     if (parsed.namespace) {
+      this.resolvedNameCache.set(name, name);
       return name;
     }
 
     if (await this.existsAt(name)) {
+      this.resolvedNameCache.set(name, name);
       return name;
     }
 
     const anonymous = `components.${name}`;
     if (await this.existsAt(anonymous)) {
+      this.resolvedNameCache.set(name, anonymous);
       return anonymous;
     }
 
+    this.resolvedNameCache.set(name, name);
     return name;
   }
 
@@ -597,10 +607,7 @@ export class ViewEngine {
         return {
           name,
           sourcePath,
-          compileOptions: {
-            customDirectives: this.registry.getDirectiveNames(),
-            viewPath: sourcePath,
-          } satisfies CompileOptions,
+          compileOptions: this.buildCompileOptions(sourcePath),
         };
       });
 
@@ -662,6 +669,7 @@ export class ViewEngine {
   invalidateTemplate(name: string): void {
     const path = this.resolvePath(name);
     this.cache.delete(path);
+    this.resolvedNameCache.delete(name);
   }
 
   async recompileTemplate(name: string): Promise<CompiledTemplate> {
@@ -679,10 +687,14 @@ export class ViewEngine {
 
     const path = this.resolvePath(name);
     const registryVersion = this.registry.getCompileVersion();
-    const compileOptions: CompileOptions = {
-      customDirectives: this.registry.getDirectiveNames(),
-      viewPath: path,
-    };
+    const compileOptions = this.buildCompileOptions(path);
+
+    const memoryCached = this.getCachedTemplate(path);
+    if (memoryCached && memoryCached.registryVersion === registryVersion) {
+      if (this.shouldTrustDiskCache()) {
+        return memoryCached.template;
+      }
+    }
 
     if (this.compiledCacheDirectory) {
       const cacheFile = cacheFileForView(this.compiledCacheDirectory, this.viewsRoot, path);
@@ -714,16 +726,14 @@ export class ViewEngine {
       }
     }
 
-    const cached = this.getCachedTemplate(path);
-    const stats = await stat(path);
-
-    if (
-      cached &&
-      cached.mtimeMs === stats.mtimeMs &&
-      cached.registryVersion === registryVersion
-    ) {
-      return cached.template;
+    if (memoryCached && memoryCached.registryVersion === registryVersion) {
+      const stats = await stat(path);
+      if (memoryCached.mtimeMs === stats.mtimeMs) {
+        return memoryCached.template;
+      }
     }
+
+    const stats = await stat(path);
 
     const source = await readFile(path, 'utf8');
     const template = this.compileSource(source, compileOptions);
@@ -736,6 +746,14 @@ export class ViewEngine {
     }
 
     return template;
+  }
+
+  private buildCompileOptions(viewPath: string): CompileOptions {
+    return {
+      customDirectives: this.registry.getDirectiveNames(),
+      viewPath,
+      environment: this.config.env ?? this.registry.getEnvironment(),
+    };
   }
 
   private compileSource(source: string, options: CompileOptions): CompiledTemplate {

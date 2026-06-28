@@ -839,6 +839,24 @@ First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client 
 - [x] **Performance guide** — `docs/guide/performance.md`: boot checklist, cache warm-up, pool sizing, when to use Redis, anti-patterns (N+1, uncached views)
 - [x] **Snappy defaults changelog** — each speed tier item notes the measurable before/after in release notes
 
+## v1.0.3 — Performance patch (unreleased)
+
+Incremental hot-path optimizations from the Tier 19 audit. Land as patch releases ahead of v1.3.0 so production apps pick up throughput wins without waiting for the full speed tier.
+
+### Patch roadmap
+
+- [x] **Router prefix trie** — segment trie for dynamic route lookup when route tables grow (100+ routes); O(path segments) candidate selection instead of O(routes) regex scan
+- [x] **Compile-time `@if` folding** — fold static conditionals and known env branches (`@production`, literal `@if (true)`) into `text` ops at compile time
+- [x] **Column-scoped cast maps** — precompute cast subsets when `Model.select()` prunes columns; skip iterating unused cast keys in `getModels()`
+- [x] **Competitive benchmarks** — add Express, Fastify, and Hono baselines to `scripts/benchmark.mjs` for apples-to-apples JSON throughput comparison
+
+### Already landed (local, pending release)
+
+- Auto-memoized route compilation with static O(1) lookup and method-indexed dynamic tables
+- JSON fast path, request pooling, route pipeline runner, `EMPTY_ROUTE_PARAMS` short-circuit
+- Parallel ORM eager loading, `dedupeEagerKeys`, in-place casts, SQLite query classification cache
+- View expression LRU, `pathEcho` compile-time folding, sync conditional rendering, literal echo folding
+
 ## Tier X — Ongoing
 
 Items not tied to a version number. Land when useful; do not block releases.

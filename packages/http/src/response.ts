@@ -13,6 +13,10 @@ import { encodeSseEvents, type SseEvent } from './sse.js';
 
 const WebResponse = globalThis.Response;
 
+const JSON_RESPONSE_HEADERS = new Headers({
+  'content-type': 'application/json; charset=utf-8',
+});
+
 export type {
   HydrationManifestPayload,
   PartialReloadOptions,
@@ -23,13 +27,20 @@ export type {
 
 export class ResponseFactory {
   json(data: unknown, init: ResponseInit = {}): Response {
+    const body = JSON.stringify(data);
+
+    if (init.status === undefined && init.statusText === undefined && init.headers === undefined) {
+      return new WebResponse(body, { headers: JSON_RESPONSE_HEADERS });
+    }
+
     const headers = new Headers(init.headers);
     if (!headers.has('content-type')) {
       headers.set('content-type', 'application/json; charset=utf-8');
     }
 
-    return new WebResponse(JSON.stringify(data), {
-      ...init,
+    return new WebResponse(body, {
+      status: init.status,
+      statusText: init.statusText,
       headers,
     });
   }

@@ -37,6 +37,8 @@ import { singularSnakeCase } from './utils.js';
 
 type ModelAttributes = Record<string, unknown>;
 
+const softDeleteScopeEnsured = new WeakMap<typeof Model, boolean>();
+
 export class Model<T extends ModelAttributes = ModelAttributes> {
   static table = '';
   static primaryKey = 'id';
@@ -56,8 +58,8 @@ export class Model<T extends ModelAttributes = ModelAttributes> {
   private relations: Record<string, unknown> = {};
   private runtimeAppends: string[] = [];
 
-  constructor(attributes: Partial<T> = {}) {
-    this.attributes = { ...attributes };
+  constructor(attributes: Partial<T> = {}, takeOwnership = false) {
+    this.attributes = takeOwnership ? attributes : { ...attributes };
   }
 
   static setConnectionResolver(resolver: () => DatabaseConnection): void {
@@ -111,8 +113,11 @@ export class Model<T extends ModelAttributes = ModelAttributes> {
 
   static query(): ModelQueryBuilder {
     const model = this as unknown as ModelStatic;
-    if (model.softDeletes && !this.globalScopes.some((scope) => scope.name === SoftDeletingScope.name)) {
-      this.addGlobalScope(SoftDeletingScope);
+    if (model.softDeletes && !softDeleteScopeEnsured.get(this)) {
+      if (!this.globalScopes.some((scope) => scope.name === SoftDeletingScope.name)) {
+        this.addGlobalScope(SoftDeletingScope);
+      }
+      softDeleteScopeEnsured.set(this, true);
     }
 
     const builder = new ModelQueryBuilder(
@@ -205,13 +210,6 @@ export class Model<T extends ModelAttributes = ModelAttributes> {
     }
 
     await fireModelEvent(instance, 'created');
-
-    if (id !== undefined) {
-      const created = await (this as unknown as ModelStatic).find(id);
-      if (created) {
-        return created as TModel;
-      }
-    }
 
     return instance;
   }

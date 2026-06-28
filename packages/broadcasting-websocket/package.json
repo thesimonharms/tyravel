@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/broadcasting-websocket",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,8 +15,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/broadcasting": "1.0.2",
-    "@tyravel/redis": "1.0.2"
+    "@tyravel/broadcasting": "1.0.3",
+    "@tyravel/redis": "1.0.3"
   },
   "files": [
     "dist"

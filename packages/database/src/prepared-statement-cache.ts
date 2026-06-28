@@ -9,6 +9,8 @@ export class PreparedStatementCache<TStatement> {
   get(sql: string, factory: () => TStatement): TStatement {
     const existing = this.cache.get(sql);
     if (existing) {
+      this.cache.delete(sql);
+      this.cache.set(sql, existing);
       return existing;
     }
 

@@ -15,7 +15,7 @@ npm install @tyravel/notifications
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.2` |
+| Version | `1.0.3` |
 | Source | [`packages/notifications`](https://github.com/thesimonharms/tyravel/tree/main/packages/notifications) |
 | Category | Platform services |
 | Node.js | `>=26` |

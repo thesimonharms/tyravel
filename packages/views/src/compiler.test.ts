@@ -2,6 +2,18 @@ import { describe, expect, it } from 'vitest';
 import { compile } from './compiler.js';
 
 describe('compile', () => {
+  it('folds simple path echoes into pathEcho ops at compile time', () => {
+    const template = compile('Hello {{ name }}, from {{ user.city }}!');
+
+    expect(template.ops).toEqual([
+      { type: 'text', value: 'Hello ' },
+      { type: 'pathEcho', path: 'name', raw: false },
+      { type: 'text', value: ', from ' },
+      { type: 'pathEcho', path: 'user.city', raw: false },
+      { type: 'text', value: '!' },
+    ]);
+  });
+
   it('parses layout, sections, echoes, and control flow', () => {
     const source = `@layout('layouts.app')
 
@@ -67,7 +79,9 @@ describe('compile', () => {
       throw new Error('Expected component op');
     }
 
-    expect(component.defaultSlot?.some((op) => op.type === 'echo')).toBe(true);
+    expect(
+      component.defaultSlot?.some((op) => op.type === 'pathEcho' || op.type === 'echo'),
+    ).toBe(true);
     expect(component.namedSlots?.footer?.some((op) => op.type === 'text')).toBe(true);
   });
 
@@ -111,7 +125,9 @@ describe('compile', () => {
       expression: 'items as item',
     });
     if (forelse?.type === 'forelse') {
-      expect(forelse.body.some((op) => op.type === 'echo')).toBe(true);
+      expect(forelse.body.some((op) => op.type === 'pathEcho' || op.type === 'echo')).toBe(
+        true,
+      );
       expect(forelse.emptyBody.some((op) => op.type === 'text')).toBe(true);
     }
 
@@ -269,7 +285,9 @@ describe('compile', () => {
 
     expect(template.props).toEqual({ title: undefined, count: 0 });
     expect(template.aware).toEqual(['color']);
-    expect(template.ops.some((op) => op.type === 'echo')).toBe(true);
+    expect(template.ops.some((op) => op.type === 'pathEcho' || op.type === 'echo')).toBe(
+      true,
+    );
     expect(template.defaultSlots?.footer?.some((op) => op.type === 'text')).toBe(true);
   });
 

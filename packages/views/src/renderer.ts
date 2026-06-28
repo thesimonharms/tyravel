@@ -5,11 +5,15 @@ import {
   renderStyleDirective,
 } from './component-helpers.js';
 import { parseQuotedStrings } from './directive-parsers.js';
-import { isIterableEmpty, isViewEmpty, isViewSet } from './conditions.js';
+import { isIterableEmpty, isIterableValueEmpty, isViewEmpty, isViewSet } from './conditions.js';
 import { escapeHtml } from './escape.js';
 import { renderIslandWrapper } from './hydration.js';
 import { streamPlaceholder } from './streaming.js';
-import { evaluateExpression, parseForeachExpression } from './evaluate.js';
+import {
+  evaluateExpression,
+  parseForeachExpression,
+  readContextPath,
+} from './evaluate.js';
 import {
   encodeJsonForHtml,
   renderCsrfField,
@@ -31,11 +35,23 @@ export async function renderOps(
   engine: ViewEngine,
   renderOptions: RenderOptions = {},
 ): Promise<void> {
+  const registry = engine.getRegistry();
+
   for (const op of ops) {
     switch (op.type) {
       case 'text':
         helpers.append(op.value);
         break;
+
+      case 'pathEcho': {
+        const value = readContextPath(context, op.path);
+        if (value instanceof ViewAttributeBag) {
+          helpers.append(value.toHtml());
+          break;
+        }
+        helpers.append(op.raw ? String(value ?? '') : escapeHtml(value));
+        break;
+      }
 
       case 'echo': {
         const value = evaluateExpression(op.expression, context);
@@ -48,8 +64,9 @@ export async function renderOps(
       }
 
       case 'if': {
-        const result = await evaluateConditional(op, context, engine);
-        if (result) {
+        const result = evaluateConditional(op, context, engine);
+        const matched = result instanceof Promise ? await result : result;
+        if (matched) {
           await renderOps(op.body, context, helpers, engine, renderOptions);
         } else if (op.elseBody) {
           await renderOps(op.elseBody, context, helpers, engine, renderOptions);
@@ -81,7 +98,7 @@ export async function renderOps(
       }
 
       case 'csrf': {
-        const token = engine.getRegistry().getForm()?.csrfToken() ?? '';
+        const token = registry.getForm()?.csrfToken() ?? '';
         if (token) {
           helpers.append(renderCsrfField(token));
         }
@@ -117,7 +134,13 @@ export async function renderOps(
       }
 
       case 'forelse': {
-        if (isIterableEmpty(op.expression, context)) {
+        const parsed = parseForeachExpression(op.expression);
+        const items = evaluateExpression(
+          parsed?.itemsExpression ?? op.expression,
+          context,
+        );
+
+        if (isIterableValueEmpty(items)) {
           await renderOps(op.emptyBody, context, helpers, engine, renderOptions);
         } else {
           await renderForeachBody(
@@ -127,6 +150,8 @@ export async function renderOps(
             helpers,
             engine,
             renderOptions,
+            parsed,
+            items,
           );
         }
         break;
@@ -201,9 +226,9 @@ export async function renderOps(
       }
 
       case 'inject': {
-        const injector = engine.getRegistry().getInjector();
+        const injector = registry.getInjector();
         if (!injector) {
-          const environment = engine.getRegistry().getEnvironment();
+          const environment = registry.getEnvironment();
           if (environment === 'local' || environment === 'development') {
             throw new Error(
               `@inject('${op.varName}', '${op.binding}') requires a view injector. ` +
@@ -219,7 +244,7 @@ export async function renderOps(
       }
 
       case 'fragment': {
-        const cache = engine.getRegistry().getFragmentCache();
+        const cache = registry.getFragmentCache();
         const cacheKey = renderOptions.viewPath
           ? `${renderOptions.viewPath}::${op.name}`
           : op.name;
@@ -244,7 +269,7 @@ export async function renderOps(
 
       case 'escape': {
         const handler =
-          engine.getRegistry().getEscapeHandler(op.context) ?? escapeHtml;
+          registry.getEscapeHandler(op.context) ?? escapeHtml;
         const value = evaluateExpression(op.expression, context);
         helpers.append(handler(value));
         break;
@@ -289,7 +314,7 @@ export async function renderOps(
           inner = islandHelpers.toString();
         }
 
-        engine.getRegistry().getHydrationManifest().register(op.id, inner, props);
+        registry.getHydrationManifest().register(op.id, inner, props);
         helpers.append(renderIslandWrapper(op.id, inner, props));
         break;
       }
@@ -359,7 +384,7 @@ export async function renderOps(
         break;
 
       case 'custom': {
-        const handler = engine.getRegistry().getDirective(op.name);
+        const handler = registry.getDirective(op.name);
         if (!handler) {
           break;
         }
@@ -378,11 +403,11 @@ export async function renderOps(
           typeof passed === 'object' && passed !== null ? passed : {};
 
         const provider =
-          engine.getRegistry().getComponent(resolvedName) ??
-          engine.getRegistry().getComponent(op.name);
+          registry.getComponent(resolvedName) ??
+          registry.getComponent(op.name);
         const hasDynamicSlots = Boolean(op.defaultSlot || op.namedSlots);
         const memoEnabled = template.memo !== undefined && !hasDynamicSlots;
-        const memoCache = engine.getRegistry().getComponentMemoCache();
+        const memoCache = registry.getComponentMemoCache();
 
         if (memoEnabled && !provider && !hasDynamicSlots) {
           const earlyKey = buildComponentMemoKey(
@@ -496,11 +521,11 @@ export async function renderOps(
   }
 }
 
-async function evaluateConditional(
+function evaluateConditional(
   op: Extract<TemplateOp, { type: 'if' }>,
   context: ViewContext,
   engine: ViewEngine,
-): Promise<boolean> {
+): boolean | Promise<boolean> {
   const auth = engine.getRegistry().getAuth();
 
   switch (op.mode) {
@@ -522,8 +547,10 @@ async function evaluateConditional(
         return true;
       }
       const result = auth.check();
-      const checked = result instanceof Promise ? await result : result;
-      return !checked;
+      if (result instanceof Promise) {
+        return result.then((checked) => !checked);
+      }
+      return !result;
     }
     case 'can': {
       if (!auth) {
@@ -620,13 +647,15 @@ async function renderForeachBody(
   helpers: ViewHelpers,
   engine: ViewEngine,
   renderOptions: RenderOptions = {},
+  parsedInput?: ReturnType<typeof parseForeachExpression>,
+  itemsInput?: unknown,
 ): Promise<void> {
-  const parsed = parseForeachExpression(expression);
+  const parsed = parsedInput ?? parseForeachExpression(expression);
   if (!parsed) {
     return;
   }
 
-  const items = evaluateExpression(parsed.itemsExpression, context);
+  const items = itemsInput ?? evaluateExpression(parsed.itemsExpression, context);
   if (!items || typeof items !== 'object') {
     return;
   }
@@ -635,12 +664,10 @@ async function renderForeachBody(
     ? items.entries()
     : Object.entries(items as Record<string, unknown>);
 
-  for (const [key, value] of iterable) {
-    const loopContext: ViewContext = {
-      ...context,
-      [parsed.valueName]: value,
-    };
+  const loopContext: ViewContext = { ...context };
 
+  for (const [key, value] of iterable) {
+    loopContext[parsed.valueName] = value;
     if (parsed.keyName) {
       loopContext[parsed.keyName] = key;
     }

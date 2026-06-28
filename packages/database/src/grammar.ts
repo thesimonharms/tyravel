@@ -10,9 +10,17 @@ export interface SqlGrammar {
 export class SqliteGrammar implements SqlGrammar {
   readonly driver = 'sqlite' as const;
   readonly supportsReturning = false;
+  private readonly identifierCache = new Map<string, string>();
 
   wrapIdentifier(identifier: string): string {
-    return `"${identifier.replaceAll('"', '""')}"`;
+    const cached = this.identifierCache.get(identifier);
+    if (cached) {
+      return cached;
+    }
+
+    const wrapped = `"${identifier.replaceAll('"', '""')}"`;
+    this.identifierCache.set(identifier, wrapped);
+    return wrapped;
   }
 
   parameter(): string {
@@ -23,9 +31,17 @@ export class SqliteGrammar implements SqlGrammar {
 export class PostgresGrammar implements SqlGrammar {
   readonly driver = 'postgres' as const;
   readonly supportsReturning = true;
+  private readonly identifierCache = new Map<string, string>();
 
   wrapIdentifier(identifier: string): string {
-    return `"${identifier.replaceAll('"', '""')}"`;
+    const cached = this.identifierCache.get(identifier);
+    if (cached) {
+      return cached;
+    }
+
+    const wrapped = `"${identifier.replaceAll('"', '""')}"`;
+    this.identifierCache.set(identifier, wrapped);
+    return wrapped;
   }
 
   parameter(index: number): string {
@@ -36,9 +52,17 @@ export class PostgresGrammar implements SqlGrammar {
 export class MysqlGrammar implements SqlGrammar {
   readonly driver = 'mysql' as const;
   readonly supportsReturning = false;
+  private readonly identifierCache = new Map<string, string>();
 
   wrapIdentifier(identifier: string): string {
-    return `\`${identifier.replaceAll('`', '``')}\``;
+    const cached = this.identifierCache.get(identifier);
+    if (cached) {
+      return cached;
+    }
+
+    const wrapped = `\`${identifier.replaceAll('`', '``')}\``;
+    this.identifierCache.set(identifier, wrapped);
+    return wrapped;
   }
 
   parameter(): string {

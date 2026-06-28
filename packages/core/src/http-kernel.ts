@@ -12,7 +12,7 @@ export class HttpKernel {
     try {
       const pathname = new URL(request.url).pathname;
       await this.app.bootLazyProvidersForRequest(pathname);
-      return await this.app.router().dispatch(request);
+      return await this.app.router().dispatch(request, pathname);
     } catch (error) {
       return this.handler.render(error, request);
     }

@@ -15,7 +15,7 @@ npm install @tyravel/config
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.2` |
+| Version | `1.0.3` |
 | Source | [`packages/config`](https://github.com/thesimonharms/tyravel/tree/main/packages/config) |
 | Category | Kernel & HTTP |
 | Node.js | `>=26` |

@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "The Tyravel command-line interface",
   "type": "module",
   "bin": {
@@ -19,20 +19,20 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/crypto": "1.0.2",
-    "@tyravel/support": "1.0.2",
-    "@tyravel/auth-oauth": "1.0.2",
-    "@tyravel/config": "1.0.2",
-    "@tyravel/locale": "1.0.2",
-    "@tyravel/core": "1.0.2",
-    "@tyravel/database": "1.0.2",
-    "@tyravel/mcp": "1.0.2",
-    "@tyravel/notifications": "1.0.2",
-    "@tyravel/vector": "1.0.2",
-    "@tyravel/debug": "1.0.2",
-    "@tyravel/queue": "1.0.2",
-    "@tyravel/views": "1.0.2",
-    "@tyravel/repl": "1.0.2"
+    "@tyravel/crypto": "1.0.3",
+    "@tyravel/support": "1.0.3",
+    "@tyravel/auth-oauth": "1.0.3",
+    "@tyravel/config": "1.0.3",
+    "@tyravel/locale": "1.0.3",
+    "@tyravel/core": "1.0.3",
+    "@tyravel/database": "1.0.3",
+    "@tyravel/mcp": "1.0.3",
+    "@tyravel/notifications": "1.0.3",
+    "@tyravel/vector": "1.0.3",
+    "@tyravel/debug": "1.0.3",
+    "@tyravel/queue": "1.0.3",
+    "@tyravel/views": "1.0.3",
+    "@tyravel/repl": "1.0.3"
   },
   "files": [
     "dist"

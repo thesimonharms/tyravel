@@ -29,7 +29,11 @@
     "release:prepare": "node scripts/prepare-release.mjs"
   },
   "devDependencies": {
+    "@hono/node-server": "^2.0.6",
     "@types/node": "^26.0.1",
+    "express": "^5.2.1",
+    "fastify": "^5.9.0",
+    "hono": "^4.12.27",
     "typescript": "^5.8.3",
     "vitepress": "^1.6.3",
     "vitest": "^3.2.4"

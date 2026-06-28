@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/cache-dynamodb",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.840.0",
-    "@tyravel/cache": "1.0.2"
+    "@tyravel/cache": "1.0.3"
   },
   "files": [
     "dist"

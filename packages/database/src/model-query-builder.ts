@@ -1,6 +1,6 @@
 import type { DatabaseConnection } from './connection.js';
 import { EagerLoader } from './eager-loader.js';
-import { applyCastsToAttributes } from './model-casts.js';
+import { applyCastsInPlace, resolveCastsForColumns, type ModelCastMap } from './model-casts.js';
 import { LengthAwarePaginator } from './paginator.js';
 import { QueryBuilder } from './query-builder.js';
 import type { Model } from './model.js';
@@ -9,6 +9,7 @@ import { scopeMethodName, type GlobalScope, type LocalScope } from './scopes.js'
 
 export class ModelQueryBuilder extends QueryBuilder {
   protected eagerLoad: string[] = [];
+  private activeCasts: ModelCastMap;
   private withTrashed = false;
   private onlyTrashed = false;
   private ignoredGlobalScopes = new Set<string>();
@@ -21,6 +22,19 @@ export class ModelQueryBuilder extends QueryBuilder {
     private readonly model: ModelStatic,
   ) {
     super(connection, tableName);
+    this.activeCasts = resolveCastsForColumns(
+      (model as typeof Model).casts,
+      this.columns,
+    );
+  }
+
+  override select(...columns: string[]): this {
+    super.select(...columns);
+    this.activeCasts = resolveCastsForColumns(
+      (this.model as typeof Model).casts,
+      this.columns,
+    );
+    return this;
   }
 
   getModel(): ModelStatic {
@@ -98,6 +112,7 @@ export class ModelQueryBuilder extends QueryBuilder {
       builder.ignoredGlobalScopes = new Set(this.ignoredGlobalScopes);
       builder.pendingGlobalScopes = [...this.pendingGlobalScopes];
       builder.globalScopesApplied = this.globalScopesApplied;
+      builder.activeCasts = this.activeCasts;
     }
   }
 
@@ -143,13 +158,14 @@ export class ModelQueryBuilder extends QueryBuilder {
     const rows = await this.get();
     const ModelClass = this.model as new (
       attributes?: Partial<ModelAttributes>,
+      takeOwnership?: boolean,
     ) => TModel;
-    const casts = (this.model as typeof Model).casts;
+    const hasCasts = Object.keys(this.activeCasts).length > 0;
     const models = rows.map((row) => {
-      const attributes = Object.keys(casts).length > 0
-        ? applyCastsToAttributes(row, casts)
-        : row;
-      return new ModelClass(attributes);
+      if (hasCasts) {
+        applyCastsInPlace(row, this.activeCasts);
+      }
+      return new ModelClass(row, true);
     });
 
     if (this.eagerLoad.length > 0) {
@@ -170,11 +186,13 @@ export class ModelQueryBuilder extends QueryBuilder {
   ): Promise<LengthAwarePaginator<TModel>> {
     const resolvedPage = LengthAwarePaginator.resolvePage(page);
     const resolvedPerPage = LengthAwarePaginator.resolvePerPage(perPage);
-    const total = await this.clone().count();
-    const items = await this.clone()
-      .offset((resolvedPage - 1) * resolvedPerPage)
-      .limit(resolvedPerPage)
-      .getModels<TModel>();
+    const [total, items] = await Promise.all([
+      this.clone().count(),
+      this.clone()
+        .offset((resolvedPage - 1) * resolvedPerPage)
+        .limit(resolvedPerPage)
+        .getModels<TModel>(),
+    ]);
 
     return new LengthAwarePaginator(items, total, resolvedPerPage, resolvedPage);
   }

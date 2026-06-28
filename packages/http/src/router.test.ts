@@ -235,6 +235,73 @@ describe('Router', () => {
     expect((seen[1] as { user: unknown }).user).toBeNull();
   });
 
+  it('accepts a pre-parsed pathname to avoid duplicate URL parsing', async () => {
+    const router = new Router();
+    router.get('/api/health', () => Response.json({ ok: true }));
+
+    const response = await router.dispatch(
+      new Request('http://localhost/other'),
+      '/api/health',
+    );
+
+    expect(await response.json()).toEqual({ ok: true });
+  });
+
+  it('matches static routes via the static lookup table', async () => {
+    const router = new Router();
+    router.get('/api/v1/health', () => Response.text('ok'));
+    router.get('/users/:id', (request) => Response.json({ id: request.param('id') }));
+
+    const health = await router.dispatch(new Request('http://localhost/api/v1/health'));
+    const user = await router.dispatch(new Request('http://localhost/users/7'));
+
+    expect(await health.text()).toBe('ok');
+    expect(await user.json()).toEqual({ id: '7' });
+  });
+
+  it('memoizes compiled routes after the first dispatch', async () => {
+    const router = new Router();
+    router.get('/memo', () => Response.text('hit'));
+
+    await router.dispatch(new Request('http://localhost/memo'));
+    router.warmRouteCache();
+    const before = router.exportRouteCache().routes.length;
+
+    await router.dispatch(new Request('http://localhost/memo'));
+
+    expect(before).toBe(1);
+  });
+
+  it('matches dynamic routes via the prefix trie for large route tables', async () => {
+    const router = new Router();
+
+    for (let i = 0; i < 120; i++) {
+      router.get(`/api/v1/resources/${i}/:id`, () => Response.text(`resource-${i}`));
+    }
+
+    router.get('/api/v1/users/:id', (request) =>
+      Response.json({ id: request.param('id') }),
+    );
+    router.get('/api/v1/users/:userId/posts/:postId', (request) =>
+      Response.json({
+        userId: request.param('userId'),
+        postId: request.param('postId'),
+      }),
+    );
+
+    const user = await router.dispatch(new Request('http://localhost/api/v1/users/42'));
+    const nested = await router.dispatch(
+      new Request('http://localhost/api/v1/users/42/posts/7'),
+    );
+    const resource = await router.dispatch(
+      new Request('http://localhost/api/v1/resources/15/99'),
+    );
+
+    expect(await user.json()).toEqual({ id: '42' });
+    expect(await nested.json()).toEqual({ userId: '42', postId: '7' });
+    expect(await resource.text()).toBe('resource-15');
+  });
+
   it('keeps session middleware on routes that require it', async () => {
     const registry = new MiddlewareRegistry();
     const router = new Router(registry);

@@ -11,7 +11,7 @@
     "README.md"
   ],
   "dependencies": {
-    "@tyravel/cli": "1.0.2"
+    "@tyravel/cli": "1.0.3"
   },
   "engines": {
     "node": ">=26"
