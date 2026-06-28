@@ -720,15 +720,15 @@ First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client 
 
 #### P0 — Must ship
 
-- [ ] **`tyravel new --headless`** — slim `package.json`, `src/routes/api.ts`, `config/app.ts` with `headless: true`, `tyravel.json` `mode: "headless"`
-- [ ] **Headless-aware CLI** — `doctor` skips view-cache checks; `deploy:check` skips view compilation; `tyravel dev` omits view watch
-- [ ] **Headless guide** — `docs/guide/headless.md` with quick start, auth, deploy, and conversion notes
+- [x] **`tyravel new --headless`** — slim `package.json`, `src/routes/api.ts`, `config/app.ts` with `headless: true`, `tyravel.json` `mode: "headless"`
+- [x] **Headless-aware CLI** — `doctor` skips view-cache checks; `deploy:check` skips view compilation; `tyravel dev` omits view watch; `auth:install` uses API routes
+- [x] **Headless guide** — `docs/guide/headless.md` with quick start, auth, deploy, and conversion notes
 
 #### P1 — Strong want
 
-- [ ] **Headless example app** — `examples/headless-api` with auth tokens, queue worker, and deploy manifests
-- [ ] **`npm create tyravel@latest -- --headless`** — document in getting-started and create-tyravel README
-- [ ] **Headless boot profile** — skip `ViewServiceProvider` and view middleware when `config.app.headless` or `tyravel.json` mode is headless (runtime, not scaffold-only)
+- [x] **Headless example app** — `examples/headless-api` with auth tokens, queue worker, and deploy manifests
+- [x] **`npm create tyravel@latest -- --headless`** — document in getting-started and create-tyravel README
+- [x] **Headless boot profile** — `applyBootProfile()` + JSON errors by default; `registerViewStack()` helper when not headless
 
 #### P2 — If scope allows
 

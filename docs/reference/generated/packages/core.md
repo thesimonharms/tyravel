@@ -72,6 +72,7 @@ From the package entry point (`dist/index.d.ts`). Deep imports are not supported
 - `ExceptionHandler`
 - `FormRequest`
 - `Gate`
+- `HEADLESS_BINDING`
 - `HealthChecker`
 - `HealthServiceProvider`
 - `Http`
@@ -112,6 +113,7 @@ From the package entry point (`dist/index.d.ts`). Deep imports are not supported
 - `URL`
 - `View`
 - `ViewServiceProvider`
+- `applyBootProfile`
 - `createControllerHandler`
 - `createTokenAbilityMiddleware`
 - `cronMatches`
@@ -123,8 +125,12 @@ From the package entry point (`dist/index.d.ts`). Deep imports are not supported
 - `getViewRequest`
 - `isControllerAction`
 - `isFormRequestConstructor`
+- `isHeadlessApplication`
+- `isHeadlessMode`
 - `loadEnv`
 - `registerHttpMiddleware`
+- `registerViewStack`
+- `resolveHeadlessMode`
 - `route`
 - `serve`
 - `setAuthApplication`
@@ -144,6 +150,7 @@ From the package entry point (`dist/index.d.ts`). Deep imports are not supported
 - `setUrlApplication`
 - `setViewApplication`
 - `setViewRequest`
+- `shouldRegisterViewStack`
 - `startDevHotReload`
 
 ### Types

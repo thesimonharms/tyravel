@@ -1,5 +1,13 @@
+import { loadConfig } from '@tyravel/config';
 import { Command } from '../command.js';
+import { isHeadlessProject } from '../headless-project.js';
+import type { NewProjectOptions } from '../new-project-options.js';
 import { requireProjectRoot } from '../project.js';
+import {
+  headlessAuthConfig,
+  headlessAuthRoutes,
+  headlessMainEntryWithAuth,
+} from '../stubs-headless.js';
 import {
   appServiceProviderWithAuth,
   authConfig,
@@ -24,6 +32,7 @@ export class AuthInstallCommand extends Command {
 
   async handle(): Promise<number> {
     const root = await requireProjectRoot();
+    const headless = await isHeadlessProject(root);
 
     const configPath = projectPath(root, 'config/auth.ts');
     if (await pathExists(configPath)) {
@@ -31,10 +40,13 @@ export class AuthInstallCommand extends Command {
       return 1;
     }
 
-    await writeFile(configPath, authConfig());
+    await writeFile(configPath, headless ? headlessAuthConfig() : authConfig());
     await writeFile(projectPath(root, 'src/models/User.ts'), userModel());
     await writeFile(projectPath(root, 'src/controllers/AuthController.ts'), authController());
-    await writeFile(projectPath(root, 'src/routes/auth.ts'), authRoutes());
+    await writeFile(
+      projectPath(root, 'src/routes/auth.ts'),
+      headless ? headlessAuthRoutes() : authRoutes(),
+    );
     await writeFile(projectPath(root, 'src/policies/PostPolicy.ts'), postPolicyStub());
     await writeFile(projectPath(root, 'src/providers/app-service-provider.ts'), appServiceProviderWithAuth());
     await writeFile(
@@ -57,13 +69,22 @@ export class AuthInstallCommand extends Command {
       projectPath(root, 'database/migrations/20260101000004_create_oauth_accounts_table.ts'),
       oauthAccountsMigration(),
     );
-    await writeFile(projectPath(root, 'src/main.ts'), mainEntryWithAuth());
+    if (headless) {
+      const projectOptions = await resolveHeadlessAuthOptions(root);
+      await writeFile(projectPath(root, 'src/main.ts'), headlessMainEntryWithAuth(projectOptions));
+    } else {
+      await writeFile(projectPath(root, 'src/main.ts'), mainEntryWithAuth());
+    }
 
     console.log('Auth scaffolding installed.');
     console.log('');
     console.log('Next steps:');
     console.log('  tyravel migrate');
-    console.log('  POST /login  |  POST /tokens (session)  |  Authorization: Bearer <token> (api guard)');
+    if (headless) {
+      console.log('  POST /api/v1/login  |  POST /api/v1/tokens (session)  |  Authorization: Bearer <token> (api guard)');
+    } else {
+      console.log('  POST /login  |  POST /tokens (session)  |  Authorization: Bearer <token> (api guard)');
+    }
     console.log('  POST /forgot-password  |  POST /reset-password');
     console.log('  GET /auth/github/redirect  |  GET /auth/github/callback');
     console.log('');
@@ -71,4 +92,26 @@ export class AuthInstallCommand extends Command {
 
     return 0;
   }
+}
+
+async function resolveHeadlessAuthOptions(root: string): Promise<NewProjectOptions> {
+  const config = (await loadConfig(root, { validate: false })) as {
+    database?: { default?: string };
+    redis?: { default?: string };
+  };
+
+  const defaultDb = config.database?.default ?? 'sqlite';
+  const database =
+    defaultDb === 'mysql' || defaultDb === 'postgres' ? defaultDb : 'sqlite';
+
+  return {
+    database,
+    redis: Boolean(config.redis?.default),
+    auth: true,
+    queue: 'database',
+    mail: 'log',
+    ai: false,
+    template: 'headless',
+    headless: true,
+  };
 }

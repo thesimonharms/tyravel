@@ -156,6 +156,7 @@ export function headlessMainEntry(options: NewProjectOptions): string {
 
   const coreImports = [
     'Application',
+    'applyBootProfile',
     'CacheServiceProvider',
     'ConfigRepository',
     'ConfigServiceProvider',
@@ -216,7 +217,193 @@ ${providerRegistrations.join('\n')}
 
 await app.boot();
 
-registerHttpMiddleware(app, app.make(ConfigRepository));
+const config = app.make(ConfigRepository);
+await applyBootProfile(app, config);
+registerHttpMiddleware(app, config);
+startDevHotReload(app);
+
+const kernel = new HttpKernel(app);
+await serve(kernel);
+`;
+}
+
+export function headlessAuthConfig(): string {
+  return `import type { AuthConfig } from '@tyravel/auth';
+import { env } from '@tyravel/config';
+import { User } from '../src/models/User.js';
+
+export default {
+  defaults: {
+    guard: 'api',
+  },
+  guards: {
+    web: {
+      driver: 'session',
+      provider: 'users',
+    },
+    api: {
+      driver: 'token',
+      provider: 'users',
+    },
+  },
+  providers: {
+    users: {
+      driver: 'eloquent',
+      model: User,
+    },
+  },
+  session: {
+    driver: 'database',
+    cookie: 'tyravel_session',
+    lifetimeMinutes: 120,
+    secure: env('SESSION_SECURE', 'false') === 'true',
+    table: 'sessions',
+    connection: 'sqlite',
+  },
+  passwords: {
+    users: {
+      provider: 'users',
+      table: 'password_reset_tokens',
+      expireMinutes: 60,
+      connection: 'sqlite',
+    },
+  },
+  tokens: {
+    table: 'personal_access_tokens',
+    connection: 'sqlite',
+    prefix: 'tyr_',
+    prefixLength: 8,
+  },
+  oauth: {
+    accountsTable: 'oauth_accounts',
+    connection: 'sqlite',
+    providers: {
+      github: {
+        clientId: env('GITHUB_CLIENT_ID', ''),
+        clientSecret: env('GITHUB_CLIENT_SECRET', ''),
+        redirectUri: env('GITHUB_REDIRECT_URI', 'http://127.0.0.1:3000/api/v1/auth/github/callback'),
+        scopes: ['user:email'],
+      },
+    },
+  },
+} satisfies AuthConfig;
+`;
+}
+
+export function headlessAuthRoutes(): string {
+  return `import { Route } from '@tyravel/core';
+import { AuthController } from '../controllers/AuthController.js';
+
+Route.prefix('api/v1').middleware('throttle:api').group((routes) => {
+  routes.middleware('guest').post('/login', [AuthController, 'login']);
+  routes.middleware('guest').post('/forgot-password', [AuthController, 'forgotPassword']);
+  routes.middleware('guest').post('/reset-password', [AuthController, 'resetPassword']);
+  routes.middleware('auth:api').get('/me', [AuthController, 'me']);
+  routes.middleware('auth:api').post('/logout', [AuthController, 'logout']);
+  routes.middleware('auth:api').post('/tokens', [AuthController, 'createToken']);
+  routes.middleware('auth:api').delete('/tokens/:id', [AuthController, 'revokeToken']);
+  routes.middleware('guest').get('/auth/:provider/redirect', [AuthController, 'oauthRedirect']);
+  routes.middleware('guest').get('/auth/:provider/callback', [AuthController, 'oauthCallback']);
+});
+`;
+}
+
+export function headlessMainEntryWithAuth(options: NewProjectOptions): string {
+  const driverImports: string[] = [];
+  const driverProviders: string[] = [];
+
+  if (options.database === 'mysql') {
+    driverImports.push(
+      "import { MysqlDatabaseServiceProvider } from '@tyravel/database-mysql';",
+    );
+    driverProviders.push('app.register(MysqlDatabaseServiceProvider);');
+  } else if (options.database === 'postgres') {
+    driverImports.push(
+      "import { PgDatabaseServiceProvider } from '@tyravel/database-pg';",
+    );
+    driverProviders.push('app.register(PgDatabaseServiceProvider);');
+  }
+
+  if (options.redis) {
+    driverImports.push("import { NodeRedisServiceProvider } from '@tyravel/redis-node';");
+    driverProviders.push('app.register(NodeRedisServiceProvider);');
+  }
+
+  const coreImports = [
+    'Application',
+    'applyBootProfile',
+    'AuthServiceProvider',
+    'CacheServiceProvider',
+    'ConfigRepository',
+    'ConfigServiceProvider',
+    'DatabaseServiceProvider',
+    ...(options.redis ? ['RedisServiceProvider'] : []),
+    'EventServiceProvider',
+    'HttpKernel',
+    'LogServiceProvider',
+    'MailServiceProvider',
+    'NotificationServiceProvider',
+    'QueueServiceProvider',
+    'StorageServiceProvider',
+    'registerHttpMiddleware',
+    'setAuthApplication',
+    'setCacheApplication',
+    'setEventApplication',
+    'setGateApplication',
+    'setLogApplication',
+    'setMailApplication',
+    'setNotificationApplication',
+    'setPasswordApplication',
+    'setQueueApplication',
+    'setRouteApplication',
+    'setStorageApplication',
+    'serve',
+    'startDevHotReload',
+  ];
+
+  const providerRegistrations = [
+    'app.register(ConfigServiceProvider);',
+    ...driverProviders,
+    ...(options.redis ? ['app.register(RedisServiceProvider);'] : []),
+    'app.register(DatabaseServiceProvider);',
+    'app.register(CacheServiceProvider);',
+    'app.register(StorageServiceProvider);',
+    'app.register(LogServiceProvider);',
+    'app.register(MailServiceProvider);',
+    'app.register(NotificationServiceProvider);',
+    'app.register(QueueServiceProvider);',
+    'app.register(EventServiceProvider);',
+    'app.register(AuthServiceProvider);',
+    'app.register(AppServiceProvider);',
+  ];
+
+  return `${driverImports.length > 0 ? `${driverImports.join('\n')}\n` : ''}import {
+  ${coreImports.join(',\n  ')},
+} from '@tyravel/core';
+import { AppServiceProvider } from './providers/app-service-provider.js';
+import './routes/api.js';
+import './routes/auth.js';
+
+const app = new Application(import.meta.dir);
+setRouteApplication(app);
+setQueueApplication(app);
+setEventApplication(app);
+setCacheApplication(app);
+setStorageApplication(app);
+setLogApplication(app);
+setMailApplication(app);
+setNotificationApplication(app);
+setAuthApplication(app);
+setGateApplication(app);
+setPasswordApplication(app);
+
+${providerRegistrations.join('\n')}
+
+await app.boot();
+
+const config = app.make(ConfigRepository);
+await applyBootProfile(app, config);
+registerHttpMiddleware(app, config);
 startDevHotReload(app);
 
 const kernel = new HttpKernel(app);

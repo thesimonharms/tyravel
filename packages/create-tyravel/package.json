@@ -7,7 +7,8 @@
     "create-tyravel": "./index.js"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "README.md"
   ],
   "dependencies": {
     "@tyravel/cli": "1.0.1"

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Application } from './application.js';
+import { HEADLESS_BINDING } from './boot-profile.js';
 import { ConfigRepository } from '@tyravel/config';
 import { ExceptionHandler } from './exception-handler.js';
 import {
@@ -135,6 +136,19 @@ describe('ExceptionHandler', () => {
       const body = await res.text();
       expect(body).toContain('404');
       expect(body).toContain('<!DOCTYPE html>');
+    });
+
+    it('returns JSON for headless apps even when Accept is HTML', async () => {
+      const app = makeApp(false);
+      app.instance(HEADLESS_BINDING, true);
+      const handler = new ExceptionHandler(app);
+      const res = await handler.render(
+        new HttpException('Not found', 404),
+        htmlRequest(),
+      );
+      expect(res.headers.get('content-type')).toContain('application/json');
+      const body = await res.json();
+      expect(body.message).toBe('Not found');
     });
 
     it('includes stack trace in HTML debug page', async () => {

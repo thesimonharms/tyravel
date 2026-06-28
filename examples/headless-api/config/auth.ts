@@ -1,0 +1,127 @@
+import type { AuthConfig } from '@tyravel/auth';
+import { env } from '@tyravel/config';
+import { User } from '../src/models/User.js';
+
+export default {
+  defaults: {
+    guard: 'api',
+  },
+  guards: {
+    web: {
+      driver: 'session',
+      provider: 'users',
+    },
+    api: {
+      driver: 'token',
+      provider: 'users',
+    },
+  },
+  providers: {
+    users: {
+      driver: 'eloquent',
+      model: User,
+    },
+  },
+  session: {
+    driver: 'database',
+    cookie: 'tyravel_session',
+    lifetimeMinutes: 120,
+    secure: env('SESSION_SECURE', 'false') === 'true',
+    table: 'sessions',
+    connection: 'sqlite',
+  },
+  passwords: {
+    users: {
+      provider: 'users',
+      table: 'password_reset_tokens',
+      expireMinutes: 60,
+      connection: 'sqlite',
+    },
+  },
+  tokens: {
+    table: 'personal_access_tokens',
+    connection: 'sqlite',
+    prefix: 'tyr_',
+    prefixLength: 8,
+  },
+  oauth: {
+    accountsTable: 'oauth_accounts',
+    connection: 'sqlite',
+    providers: {
+      github: {
+        clientId: env('GITHUB_CLIENT_ID', ''),
+        clientSecret: env('GITHUB_CLIENT_SECRET', ''),
+        redirectUri: env('GITHUB_REDIRECT_URI', 'http://127.0.0.1:3000/api/v1/auth/github/callback'),
+        scopes: ['user:email'],
+      },
+      google: {
+        clientId: env('GOOGLE_CLIENT_ID', ''),
+        clientSecret: env('GOOGLE_CLIENT_SECRET', ''),
+        redirectUri: env('GOOGLE_REDIRECT_URI', 'http://127.0.0.1:3000/auth/google/callback'),
+      },
+      discord: {
+        clientId: env('DISCORD_CLIENT_ID', ''),
+        clientSecret: env('DISCORD_CLIENT_SECRET', ''),
+        redirectUri: env('DISCORD_REDIRECT_URI', 'http://127.0.0.1:3000/auth/discord/callback'),
+        scopes: ['identify', 'email'],
+      },
+      microsoft: {
+        clientId: env('MICROSOFT_CLIENT_ID', ''),
+        clientSecret: env('MICROSOFT_CLIENT_SECRET', ''),
+        redirectUri: env('MICROSOFT_REDIRECT_URI', 'http://127.0.0.1:3000/auth/microsoft/callback'),
+      },
+      x: {
+        clientId: env('X_CLIENT_ID', ''),
+        clientSecret: env('X_CLIENT_SECRET', ''),
+        redirectUri: env('X_REDIRECT_URI', 'http://127.0.0.1:3000/auth/x/callback'),
+      },
+      facebook: {
+        clientId: env('FACEBOOK_CLIENT_ID', ''),
+        clientSecret: env('FACEBOOK_CLIENT_SECRET', ''),
+        redirectUri: env('FACEBOOK_REDIRECT_URI', 'http://127.0.0.1:3000/auth/facebook/callback'),
+      },
+      linkedin: {
+        clientId: env('LINKEDIN_CLIENT_ID', ''),
+        clientSecret: env('LINKEDIN_CLIENT_SECRET', ''),
+        redirectUri: env('LINKEDIN_REDIRECT_URI', 'http://127.0.0.1:3000/auth/linkedin/callback'),
+      },
+      apple: {
+        clientId: env('APPLE_CLIENT_ID', ''),
+        clientSecret: env('APPLE_CLIENT_SECRET', ''),
+        redirectUri: env('APPLE_REDIRECT_URI', 'http://127.0.0.1:3000/auth/apple/callback'),
+        teamId: env('APPLE_TEAM_ID', ''),
+        keyId: env('APPLE_KEY_ID', ''),
+        privateKey: env('APPLE_PRIVATE_KEY', ''),
+      },
+      gitlab: {
+        clientId: env('GITLAB_CLIENT_ID', ''),
+        clientSecret: env('GITLAB_CLIENT_SECRET', ''),
+        redirectUri: env('GITLAB_REDIRECT_URI', 'http://127.0.0.1:3000/auth/gitlab/callback'),
+        baseUrl: env('GITLAB_BASE_URL', 'https://gitlab.com'),
+        scopes: ['read_user'],
+      },
+      slack: {
+        clientId: env('SLACK_CLIENT_ID', ''),
+        clientSecret: env('SLACK_CLIENT_SECRET', ''),
+        redirectUri: env('SLACK_REDIRECT_URI', 'http://127.0.0.1:3000/auth/slack/callback'),
+        scopes: ['openid', 'profile', 'email'],
+      },
+      spotify: {
+        clientId: env('SPOTIFY_CLIENT_ID', ''),
+        clientSecret: env('SPOTIFY_CLIENT_SECRET', ''),
+        redirectUri: env('SPOTIFY_REDIRECT_URI', 'http://127.0.0.1:3000/auth/spotify/callback'),
+      },
+      twitch: {
+        clientId: env('TWITCH_CLIENT_ID', ''),
+        clientSecret: env('TWITCH_CLIENT_SECRET', ''),
+        redirectUri: env('TWITCH_REDIRECT_URI', 'http://127.0.0.1:3000/auth/twitch/callback'),
+      },
+      bitbucket: {
+        clientId: env('BITBUCKET_CLIENT_ID', ''),
+        clientSecret: env('BITBUCKET_CLIENT_SECRET', ''),
+        redirectUri: env('BITBUCKET_REDIRECT_URI', 'http://127.0.0.1:3000/auth/bitbucket/callback'),
+      },
+    },
+  },
+  policies: {},
+} satisfies AuthConfig;

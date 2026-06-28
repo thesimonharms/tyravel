@@ -50,7 +50,26 @@ The root path `/` returns a small JSON index with links to this guide.
 
 ## Authentication
 
-Run `tyravel auth:install` for guards and migrations. Headless apps default to JSON error responses — no Blade-style login views. Use API tokens or session guards depending on your client.
+Run `tyravel auth:install` for guards and migrations. On headless projects it scaffolds:
+
+- `config/auth.ts` with default guard `api`
+- Routes under `/api/v1/*` (login, tokens, me) without CSRF middleware
+- `src/main.ts` without `ViewServiceProvider`
+
+Headless apps return JSON errors by default — no HTML error pages. Use Bearer tokens (`auth:api`) or session login at `POST /api/v1/login`.
+
+## Boot profile
+
+After `await app.boot()`, call `applyBootProfile()` so runtime tooling knows the app is headless:
+
+```typescript
+import { applyBootProfile, ConfigRepository } from '@tyravel/core';
+
+const config = app.make(ConfigRepository);
+await applyBootProfile(app, config);
+```
+
+This enables JSON exception responses even when clients send `Accept: text/html`. Full-stack apps can use `registerViewStack(app)` when not headless.
 
 ## Development
 

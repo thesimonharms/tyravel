@@ -56,6 +56,14 @@ export { HealthServiceProvider } from './health-service-provider.js';
 export type { HealthConfig } from './health-service-provider.js';
 export { Storage, setStorageApplication } from './storage.js';
 export type { StorageFacade } from './storage.js';
+export {
+  applyBootProfile,
+  HEADLESS_BINDING,
+  isHeadlessApplication,
+  registerViewStack,
+  shouldRegisterViewStack,
+} from './boot-profile.js';
+export { isHeadlessMode, resolveHeadlessMode } from './headless-mode.js';
 export { registerHttpMiddleware } from './http-middleware.js';
 export type { CorsConfig, HttpConfig } from './http-middleware.js';
 export { Log, setLogApplication } from './log.js';

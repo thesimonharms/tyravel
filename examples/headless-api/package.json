@@ -1,0 +1,32 @@
+{
+  "name": "headless-api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tyravel dev",
+    "start": "tyravel start",
+    "dev:worker": "tyravel queue:work",
+    "test": "tyravel test"
+  },
+  "dependencies": {
+    "@tyravel/auth": "1.0.1",
+    "@tyravel/cache": "1.0.1",
+    "@tyravel/cli": "1.0.1",
+    "@tyravel/collection": "1.0.1",
+    "@tyravel/config": "1.0.1",
+    "@tyravel/core": "1.0.1",
+    "@tyravel/database": "1.0.1",
+    "@tyravel/events": "1.0.1",
+    "@tyravel/http": "1.0.1",
+    "@tyravel/log": "1.0.1",
+    "@tyravel/mail": "1.0.1",
+    "@tyravel/notifications": "1.0.1",
+    "@tyravel/queue": "1.0.1",
+    "@tyravel/support": "1.0.1",
+    "@tyravel/validation": "1.0.1"
+  },
+  "devDependencies": {
+    "@tyravel/testing": "1.0.1",
+    "vitest": "^3.2.4"
+  }
+}

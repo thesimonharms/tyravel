@@ -1,0 +1,45 @@
+app = "headless-api"
+primary_region = "iad"
+
+[build]
+
+[env]
+  NODE_ENV = "production"
+  APP_DEBUG = "false"
+  TYRAVEL_HOST = "0.0.0.0"
+  TYRAVEL_PORT = "8080"
+  DB_CONNECTION = "postgres"
+  QUEUE_CONNECTION = "database"
+  BROADCAST_CONNECTION = "log"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+  [http_service.concurrency]
+    type = "requests"
+    hard_limit = 250
+    soft_limit = 200
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    path = "/health/ready"
+    timeout = "5s"
+
+[deploy]
+  release_command = "npx tyravel migrate"
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1
+
+[processes]
+  app = "./deploy/docker-entrypoint.sh"
+  worker = "npx tyravel queue:work"

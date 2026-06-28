@@ -15,6 +15,7 @@ import type {
 } from '@tyravel/auth';
 import type { ValidationException } from '@tyravel/validation';
 import type { Application } from './application.js';
+import { isHeadlessApplication } from './boot-profile.js';
 
 /**
  * Maps thrown errors to HTTP responses.
@@ -282,6 +283,10 @@ export class ExceptionHandler {
   }
 
   private wantsJson(request: Request): boolean {
+    if (isHeadlessApplication(this.app)) {
+      return true;
+    }
+
     const accept = request.headers.get('accept') ?? '';
     const contentType = request.headers.get('content-type') ?? '';
     // Prefer Accept header, fall back to content-type

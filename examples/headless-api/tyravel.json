@@ -1,0 +1,9 @@
+{
+  "name": "headless-api",
+  "mode": "headless",
+  "entry": "src/main.ts",
+  "serve": {
+    "port": 3000,
+    "hostname": "127.0.0.1"
+  }
+}

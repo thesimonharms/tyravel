@@ -11,6 +11,21 @@ tyravel serve
 
 Visit `http://127.0.0.1:3000`.
 
+### Backend-only (headless API)
+
+For JSON APIs without views, SSR, or client assets:
+
+```bash
+npm create tyravel@latest my-api -- --headless
+cd my-api
+npm install
+tyravel migrate
+tyravel dev
+curl http://127.0.0.1:3000/api/v1/health
+```
+
+See the [Headless API guide](./headless) and `examples/headless-api` in the repo.
+
 ## Run from the monorepo
 
 If you are developing Tyravel itself, build the workspace first:
@@ -20,12 +35,19 @@ npm install
 npm run build
 ```
 
-Then try the reference app:
+Then try the reference apps:
 
 ```bash
 cd examples/hello-world
 npm install
 tyravel serve
+```
+
+```bash
+cd examples/headless-api
+npm install
+tyravel migrate
+tyravel dev
 ```
 
 ## Application entry point
