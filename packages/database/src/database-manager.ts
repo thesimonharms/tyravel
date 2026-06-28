@@ -23,6 +23,10 @@ export class DatabaseManager {
     DatabaseManager.drivers.set(name, factory);
   }
 
+  listConnectionNames(): string[] {
+    return Object.keys(this.config.connections);
+  }
+
   connection(name?: string): DatabaseConnection {
     const connectionName = name ?? this.config.default;
     const existing = this.connections.get(connectionName);
@@ -49,6 +53,15 @@ export class DatabaseManager {
     const connection = this.connection(name);
     return connection.transaction(async (transactional) =>
       runWithConnection(transactional, callback),
+    );
+  }
+
+  async warmPools(connectionNames?: string[]): Promise<void> {
+    const names = connectionNames ?? this.listConnectionNames();
+    await Promise.all(
+      names.map(async (name) => {
+        await this.connection(name).query('SELECT 1');
+      }),
     );
   }
 

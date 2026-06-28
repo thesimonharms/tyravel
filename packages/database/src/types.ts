@@ -22,6 +22,8 @@ export type ConnectionConfig =
 export interface DatabaseConfig {
   default: string;
   connections: Record<string, ConnectionConfig>;
+  /** Fire-and-forget SELECT 1 on boot (overridden by DB_POOL_WARMUP env). */
+  poolWarmup?: boolean;
 }
 
 export type DatabaseDriverFactory = (

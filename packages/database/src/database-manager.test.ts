@@ -47,6 +47,18 @@ describe('DatabaseManager', () => {
     expect(connection.query).toBeTypeOf('function');
   });
 
+  it('lists configured connection names', () => {
+    const manager = new DatabaseManager({
+      default: 'sqlite',
+      connections: {
+        sqlite: { driver: 'sqlite', database: ':memory:' },
+        analytics: { driver: 'sqlite', database: ':memory:' },
+      },
+    });
+
+    expect(manager.listConnectionNames()).toEqual(['sqlite', 'analytics']);
+  });
+
   it('throws for unknown drivers with a helpful message', () => {
     const manager = new DatabaseManager({
       default: 'missing',

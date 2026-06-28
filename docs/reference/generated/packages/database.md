@@ -90,6 +90,7 @@ From the package entry point (`dist/index.d.ts`). Deep imports are not supported
 - `resetFactoryHelpers`
 - `resolveMorphAlias`
 - `resolveMorphModel`
+- `resolvePoolWarmupEnabled`
 - `runWithConnection`
 - `scopeMethodName`
 - `serializeAttributesForStorage`

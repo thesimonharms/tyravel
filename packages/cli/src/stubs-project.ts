@@ -183,7 +183,7 @@ await serve(kernel);
 export function databaseConfig(options: NewProjectOptions): string {
   if (options.database === 'mysql') {
     return `import type { MysqlConnectionConfig } from '@tyravel/database-mysql';
-import { env, envInt, s } from '@tyravel/config';
+import { env, envBool, envInt, s } from '@tyravel/config';
 
 export const schema = s.object({
   default: s.string({ required: true, minLength: 1 }),
@@ -198,6 +198,7 @@ export const schema = s.object({
 
 export default {
   default: env('DB_CONNECTION', 'mysql'),
+  poolWarmup: envBool('DB_POOL_WARMUP', env('NODE_ENV', 'development') === 'production'),
   connections: {
     mysql: {
       driver: 'mysql',
@@ -214,7 +215,7 @@ export default {
 
   if (options.database === 'postgres') {
     return `import type { PgConnectionConfig } from '@tyravel/database-pg';
-import { env, envInt, s } from '@tyravel/config';
+import { env, envBool, envInt, s } from '@tyravel/config';
 
 export const schema = s.object({
   default: s.string({ required: true, minLength: 1 }),
@@ -229,6 +230,7 @@ export const schema = s.object({
 
 export default {
   default: env('DB_CONNECTION', 'postgres'),
+  poolWarmup: envBool('DB_POOL_WARMUP', env('NODE_ENV', 'development') === 'production'),
   connections: {
     postgres: {
       driver: 'postgres',
@@ -243,7 +245,7 @@ export default {
 `;
   }
 
-  return `import { env, s } from '@tyravel/config';
+  return `import { env, envBool, s } from '@tyravel/config';
 
 export const schema = s.object({
   default: s.string({ required: true, minLength: 1 }),
@@ -257,6 +259,7 @@ export const schema = s.object({
 
 export default {
   default: env('DB_CONNECTION', 'sqlite'),
+  poolWarmup: envBool('DB_POOL_WARMUP', env('NODE_ENV', 'development') === 'production'),
   connections: {
     sqlite: {
       driver: 'sqlite',

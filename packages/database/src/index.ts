@@ -1,6 +1,7 @@
 export type { DatabaseConnection, QueryResult } from './connection.js';
 export { getContextConnection, runWithConnection } from './connection-context.js';
 export { DatabaseManager } from './database-manager.js';
+export { resolvePoolWarmupEnabled } from './pool-warmup.js';
 export {
   applyCastsToAttributes,
   castAttribute,
