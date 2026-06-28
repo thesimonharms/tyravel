@@ -5,7 +5,7 @@
 
 Facades provide a static entry point to services resolved from the application container.
 
-Documented for Tyravel **1.0.1**. See [API stability](/guide/api-stability) for stability tiers.
+Documented for Tyravel **1.0.2**. See [API stability](/guide/api-stability) for stability tiers.
 
 | Facade | Package | Guide |
 |--------|---------|-------|

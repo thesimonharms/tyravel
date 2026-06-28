@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/rag",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,9 +15,9 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/database": "1.0.1",
-    "@tyravel/http": "1.0.1",
-    "@tyravel/vector": "1.0.1"
+    "@tyravel/database": "1.0.2",
+    "@tyravel/http": "1.0.2",
+    "@tyravel/vector": "1.0.2"
   },
   "files": [
     "dist"

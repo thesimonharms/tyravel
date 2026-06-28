@@ -15,7 +15,7 @@ npm install @tyravel/validation
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.1` |
+| Version | `1.0.2` |
 | Source | [`packages/validation`](https://github.com/thesimonharms/tyravel/tree/main/packages/validation) |
 | Category | Kernel & HTTP |
 | Node.js | `>=26` |

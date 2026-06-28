@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/vector",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,9 +15,9 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/cache": "1.0.1",
-    "@tyravel/database": "1.0.1",
-    "@tyravel/queue": "1.0.1"
+    "@tyravel/cache": "1.0.2",
+    "@tyravel/database": "1.0.2",
+    "@tyravel/queue": "1.0.2"
   },
   "files": [
     "dist"

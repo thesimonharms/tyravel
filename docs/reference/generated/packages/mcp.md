@@ -15,7 +15,7 @@ npm install @tyravel/mcp
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.1` |
+| Version | `1.0.2` |
 | Source | [`packages/mcp`](https://github.com/thesimonharms/tyravel/tree/main/packages/mcp) |
 | Category | AI & agents |
 | Node.js | `>=26` |

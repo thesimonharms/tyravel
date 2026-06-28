@@ -15,7 +15,7 @@ npm install @tyravel/crypto
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.1` |
+| Version | `1.0.2` |
 | Source | [`packages/crypto`](https://github.com/thesimonharms/tyravel/tree/main/packages/crypto) |
 | Category | Platform services |
 | Node.js | `>=26` |

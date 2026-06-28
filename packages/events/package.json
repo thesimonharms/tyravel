@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/events",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,8 +15,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/container": "1.0.1",
-    "@tyravel/queue": "1.0.1"
+    "@tyravel/container": "1.0.2",
+    "@tyravel/queue": "1.0.2"
   },
   "files": [
     "dist"

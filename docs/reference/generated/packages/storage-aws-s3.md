@@ -15,7 +15,7 @@ npm install @tyravel/storage-aws-s3
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.1` |
+| Version | `1.0.2` |
 | Source | [`packages/storage-aws-s3`](https://github.com/thesimonharms/tyravel/tree/main/packages/storage-aws-s3) |
 | Category | Storage drivers |
 | Node.js | `>=26` |

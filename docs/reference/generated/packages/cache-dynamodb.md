@@ -15,7 +15,7 @@ npm install @tyravel/cache-dynamodb
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.1` |
+| Version | `1.0.2` |
 | Source | [`packages/cache-dynamodb`](https://github.com/thesimonharms/tyravel/tree/main/packages/cache-dynamodb) |
 | Category | Cache drivers |
 | Node.js | `>=26` |

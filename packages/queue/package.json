@@ -1,6 +1,6 @@
 {
   "name": "@tyravel/queue",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,10 +15,10 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/cache": "1.0.1",
-    "@tyravel/container": "1.0.1",
-    "@tyravel/database": "1.0.1",
-    "@tyravel/redis": "1.0.1"
+    "@tyravel/cache": "1.0.2",
+    "@tyravel/container": "1.0.2",
+    "@tyravel/database": "1.0.2",
+    "@tyravel/redis": "1.0.2"
   },
   "files": [
     "dist"

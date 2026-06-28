@@ -15,7 +15,7 @@ npm install @tyravel/queue
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.1` |
+| Version | `1.0.2` |
 | Source | [`packages/queue`](https://github.com/thesimonharms/tyravel/tree/main/packages/queue) |
 | Category | Platform services |
 | Node.js | `>=26` |
