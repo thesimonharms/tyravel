@@ -1,0 +1,15 @@
+/* New logo tile already includes its own background — drop the default hero halo. */
+.VPHomeHero .image-bg {
+  display: none;
+}
+
+.VPHomeHero .image-container {
+  background: transparent;
+}
+
+.VPNavBarTitle .logo,
+.VPNavBarTitle.has-sidebar .logo {
+  height: 28px;
+  width: 28px;
+  border-radius: 6px;
+}

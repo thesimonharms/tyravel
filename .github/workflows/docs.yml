@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'docs/**'
+      - 'logo.svg'
       - 'packages/**'
       - 'scripts/generate-docs.mjs'
       - 'package.json'

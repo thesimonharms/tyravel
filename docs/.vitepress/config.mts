@@ -14,8 +14,10 @@ export default defineConfig({
   cleanUrls: true,
 
   head: [
-    ['meta', { name: 'theme-color', content: '#4f46e5' }],
-    ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
+    ['meta', { name: 'theme-color', content: '#0f0f1a' }],
+    ['meta', { property: 'og:image', content: 'https://tyravel.dev/logo.svg' }],
+    ['meta', { name: 'twitter:image', content: 'https://tyravel.dev/logo.svg' }],
+    ['link', { rel: 'icon', href: '/favicon.svg?v=1.0.1', type: 'image/svg+xml' }],
     ['link', { rel: 'apple-touch-icon', href: '/logo.svg' }],
   ],
 
@@ -28,7 +30,7 @@ export default defineConfig({
   },
 
   themeConfig: {
-    logo: '/logo.svg',
+    logo: { src: '/logo.svg', alt: 'Tyravel' },
 
     nav: [
       { text: 'Guide', link: '/guide/introduction', activeMatch: '/guide/' },
@@ -36,7 +38,7 @@ export default defineConfig({
       { text: 'Tutorials', link: '/tutorials/', activeMatch: '/tutorials/' },
       { text: 'Cookbook', link: '/cookbook/', activeMatch: '/cookbook/' },
       {
-        text: 'v0.16.0',
+        text: 'v1.0.1',
         items: [
           { text: 'Changelog', link: 'https://github.com/thesimonharms/tyravel/blob/main/CHANGELOG.md' },
           { text: 'API stability', link: '/guide/api-stability' },
