@@ -28,3 +28,7 @@ docker compose -f deploy/docker-compose.yml up --build
 | `/health` | Alias for readiness |
 
 See the [deployment guide](https://tyravel.dev/guide/deployment) for platform walkthroughs.
+
+## Cloudflare (optional)
+
+Mix-and-match Cloudflare modules (proxy, CDN, R2, Pages, tunnel): [deploy/cloudflare.md](./cloudflare.md).

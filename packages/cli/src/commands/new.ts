@@ -36,6 +36,7 @@ import {
 } from '../stubs.js';
 import { webRoutesForTemplate } from '../stubs-templates.js';
 import {
+  deployCloudflareMd,
   deployReadme,
   dockerCompose,
   dockerEntrypoint,
@@ -257,6 +258,7 @@ export class NewCommand extends Command {
     await writeFile(projectPath(targetDir, 'deploy/fly.toml'), flyToml(name));
     await writeFile(projectPath(targetDir, 'deploy/railway.toml'), railwayToml());
     await writeFile(projectPath(targetDir, 'deploy/README.md'), deployReadme());
+    await writeFile(projectPath(targetDir, 'deploy/cloudflare.md'), deployCloudflareMd());
     await writeFile(projectPath(targetDir, '.dockerignore'), dockerignore());
     if (!headless) {
       await writeFile(

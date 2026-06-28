@@ -66,6 +66,7 @@ describe('NewCommand', () => {
     expect(readFileSync(join(projectDir, 'package.json'), 'utf8')).toContain('"start": "tyravel start"');
     expect(readFileSync(join(projectDir, 'package.json'), 'utf8')).toContain('"@tyravel/cli"');
 
+    expect(existsSync(join(projectDir, 'deploy/cloudflare.md'))).toBe(true);
     expect(existsSync(join(projectDir, 'deploy/Dockerfile'))).toBe(true);
     expect(existsSync(join(projectDir, 'deploy/docker-entrypoint.sh'))).toBe(true);
     expect(readFileSync(join(projectDir, 'deploy/docker-entrypoint.sh'), 'utf8')).toContain('tyravel start');

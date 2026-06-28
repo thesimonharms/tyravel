@@ -88,14 +88,14 @@ Static SPA on Cloudflare Pages; Tyravel headless API on Fly/Railway. Common for 
 
 ## Cloudflare summary
 
+Cloudflare is **modular** — enable only the pieces you need (proxy, CDN, R2, Pages, tunnel, WAF). Tyravel still runs on Node; pick modules in [Cloudflare deployment](/guide/deployment/cloudflare) or `deploy/cloudflare.md` in your project.
+
 | Works today | Not yet |
 |-------------|---------|
-| DNS proxy, WAF, TLS | Full app on Workers |
-| CDN + cache rules + ETag | `tyravel queue:work` on edge |
-| R2 storage (`@tyravel/storage-r2`) | D1 as Tyravel database |
-| Tunnel for previews | SSR view compile on Workers |
-
-**Recommended:** Node origin (Fly/Railway/Docker) + Cloudflare proxy + optional R2. Details in [Cloudflare deployment](/guide/deployment/cloudflare).
+| DNS proxy, WAF, TLS (Module 1) | Full app on Workers |
+| CDN + ETag cache (Module 2) | `tyravel queue:work` on edge |
+| R2 storage (Module 3) | D1 as Tyravel database |
+| Pages static, Tunnel previews | SSR compile on Workers |
 
 ## Tyravel Cloud (planned)
 

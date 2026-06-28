@@ -21,3 +21,7 @@ docker compose -f deploy/docker-compose.yml up --build
 | Warm caches | `npx tyravel config:cache && npx tyravel route:cache && npx tyravel view:cache` |
 
 Ensure `@tyravel/cli` and your database driver (e.g. `@tyravel/database-pg`) are in `dependencies`, not only `devDependencies`.
+
+## Cloudflare (optional)
+
+Mix-and-match Cloudflare modules (proxy, CDN, R2, Pages, tunnel): [deploy/cloudflare.md](./cloudflare.md).
