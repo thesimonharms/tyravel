@@ -1,4 +1,5 @@
 import { TyravelRequest } from './request.js';
+import { TyravelRequestPool } from './request-pool.js';
 import { Response } from './response.js';
 import {
   MethodNotAllowedException,
@@ -113,6 +114,8 @@ export class Router implements Routable {
   private handlerNormalizer: (handler: RouteHandler) => RouteHandler = (handler) => handler;
   private jsonFastPathEnabled = true;
   private early404Enabled = false;
+  private requestPoolingEnabled = false;
+  private readonly requestPool = new TyravelRequestPool();
 
   constructor(middlewareRegistry = new MiddlewareRegistry()) {
     this.middlewareRegistry = middlewareRegistry;
@@ -143,6 +146,15 @@ export class Router implements Routable {
 
   isEarly404Enabled(): boolean {
     return this.early404Enabled;
+  }
+
+  setRequestPooling(enabled: boolean): this {
+    this.requestPoolingEnabled = enabled;
+    return this;
+  }
+
+  isRequestPoolingEnabled(): boolean {
+    return this.requestPoolingEnabled;
   }
 
   bind(parameter: string, binding: RouteBinding | RouteBindingResolver): this {
@@ -417,13 +429,17 @@ export class Router implements Routable {
 
       const params = this.extractParams(route.paramNames, match);
       const resolved = await this.resolveBindings(params);
-      const tyravelRequest = new TyravelRequest(
-        request,
-        resolved,
-        route.definition.name,
-      );
+      const tyravelRequest = this.requestPoolingEnabled
+        ? this.requestPool.acquire(request, resolved, route.definition.name)
+        : new TyravelRequest(request, resolved, route.definition.name);
 
-      return this.runPipeline(tyravelRequest, route.definition);
+      try {
+        return await this.runPipeline(tyravelRequest, route.definition);
+      } finally {
+        if (this.requestPoolingEnabled) {
+          this.requestPool.release(tyravelRequest);
+        }
+      }
     }
 
     if (pathMatched) {

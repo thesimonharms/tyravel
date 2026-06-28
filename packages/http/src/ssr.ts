@@ -10,7 +10,7 @@ export interface HydrationManifestPayload {
 
 export type HydrationManifestSource =
   | HydrationManifestPayload
-  | (() => HydrationManifestPayload);
+  | (() => HydrationManifestPayload | undefined);
 
 export interface SsrDocumentOptions {
   /** Document title when wrapping a fragment (ignored when body is a full HTML document). */
@@ -43,6 +43,16 @@ export function buildSsrDocument(body: string, options: SsrDocumentOptions = {})
   return wrapFragment(body, options, injections);
 }
 
+export function coalesceHydrationManifest(
+  manifest?: HydrationManifestPayload | null,
+): HydrationManifestPayload | undefined {
+  if (!manifest || manifest.islands.length === 0) {
+    return undefined;
+  }
+
+  return manifest;
+}
+
 function resolveHydrationManifest(
   source?: HydrationManifestSource,
 ): HydrationManifestPayload | undefined {
@@ -50,7 +60,8 @@ function resolveHydrationManifest(
     return undefined;
   }
 
-  return typeof source === 'function' ? source() : source;
+  const manifest = typeof source === 'function' ? source() : source;
+  return coalesceHydrationManifest(manifest);
 }
 
 function buildInjections(options: {

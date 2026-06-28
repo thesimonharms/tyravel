@@ -22,6 +22,20 @@ describe('TyravelRequest', () => {
     expect(request.perPage()).toBe(15);
   });
 
+  it('reinitializes and clears mutable request state', () => {
+    const request = new TyravelRequest(new Request('http://localhost/a'), { id: '1' }, 'a.show');
+    request.user = { id: 42 };
+    request.locale = 'en';
+
+    request.reinitialize(new Request('http://localhost/b'), { id: '2' }, 'b.show');
+
+    expect(request.path).toBe('/b');
+    expect(request.param('id')).toBe('2');
+    expect(request.routeName).toBe('b.show');
+    expect(request.user).toBeNull();
+    expect(request.locale).toBeUndefined();
+  });
+
   it('resolves ip and secure state from trusted proxy headers', () => {
     const request = new TyravelRequest(
       new Request('http://localhost/users', {

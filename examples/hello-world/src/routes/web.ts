@@ -1,5 +1,5 @@
 import { Route, View } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+import { coalesceHydrationManifest, Response } from '@tyravel/http';
 import { UserController } from '../controllers/user-controller.js';
 
 export function registerWebRoutes(): void {
@@ -11,7 +11,7 @@ export function registerWebRoutes(): void {
     });
 
     return Response.ssr(html, {
-      hydrationManifest: View.getHydrationManifest(),
+      hydrationManifest: coalesceHydrationManifest(View.getHydrationManifest()),
     });
   });
 

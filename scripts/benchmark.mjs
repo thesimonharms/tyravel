@@ -52,6 +52,7 @@ export async function measureHttpJsonFast({
     withMiddlewareMeta(async (_request, next) => next(), { tag: 'session' }),
   );
   Route.get('/api/v1/health', () => Response.json({ status: 'ok' }));
+  app.router().setRequestPooling(true);
 
   const kernel = new HttpKernel(app);
   const server = await serve(kernel, { port: 0, hostname: '127.0.0.1', quiet: true });
@@ -79,7 +80,7 @@ export async function measureHttpJsonFast({
 
   return {
     name: 'http.json.fast',
-    label: 'HTTP JSON fast path (session skipped)',
+    label: 'HTTP JSON fast path (session skipped, request pool)',
     unit: 'req/s',
     samples: requests,
     elapsedMs,

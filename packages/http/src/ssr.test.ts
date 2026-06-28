@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildSsrDocument, streamSsrDocument } from './ssr.js';
+import { buildSsrDocument, coalesceHydrationManifest, streamSsrDocument } from './ssr.js';
 import { Response } from './response.js';
 
 describe('buildSsrDocument', () => {
@@ -27,6 +27,15 @@ describe('buildSsrDocument', () => {
     expect(html).toContain('id="tyr-hydration"');
     expect(html).toContain('"counter"');
     expect(html.indexOf('tyr-hydration')).toBeLessThan(html.indexOf('</body>'));
+  });
+
+  it('omits hydration script when manifest has no islands', () => {
+    const html = buildSsrDocument('<main>Hi</main>', {
+      hydrationManifest: { islands: [] },
+    });
+
+    expect(html).not.toContain('id="tyr-hydration"');
+    expect(coalesceHydrationManifest({ islands: [] })).toBeUndefined();
   });
 
   it('injects head snippets before </head>', () => {

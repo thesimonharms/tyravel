@@ -27,6 +27,7 @@ export {
 export { formatSseEvent, encodeSseEvents, type SseEvent } from './sse.js';
 export {
   buildSsrDocument,
+  coalesceHydrationManifest,
   HYDRATION_SCRIPT_ID,
   streamSsrDocument,
   type HydrationIslandPayload,

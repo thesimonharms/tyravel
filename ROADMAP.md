@@ -745,7 +745,7 @@ First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client 
 #### P1 — Strong want
 
 - [x] **Keep-alive tuning** — Node adapter defaults `keepAliveTimeout` / `headersTimeout` for reverse-proxy deployments
-- [ ] **Request object pooling** — reuse or slim `TyravelRequest` construction for high-throughput JSON endpoints (behind benchmark proof)
+- [x] **Request object pooling** — reuse or slim `TyravelRequest` construction for high-throughput JSON endpoints (behind benchmark proof)
 - [x] **Early 404 short-circuit** — unmatched routes exit before session/database providers when `APP_DEBUG=false`
 
 #### P2 — If scope allows
@@ -781,7 +781,7 @@ First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client 
 
 #### P1 — Strong want
 
-- [ ] **Skip empty hydration manifest** — omit hydration `<script>` payload when the rendered tree has no `@island` markers
+- [x] **Skip empty hydration manifest** — omit hydration `<script>` payload when the rendered tree has no `@island` markers
 - [ ] **Streaming shell flush** — guarantee first HTML chunk (layout `<head>` + CSS links) within N ms of handler start for `Response.ssrStream()`
 - [ ] **Component render memoization** — opt-in `@@memo` or cache keyed by props hash for expensive pure components
 

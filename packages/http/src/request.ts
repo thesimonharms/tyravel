@@ -3,11 +3,44 @@ import type { RouteParamValue, RouteParams } from './types.js';
 import type { SessionContract } from './session-contract.js';
 
 export class TyravelRequest {
-  constructor(
-    public readonly raw: Request,
-    public readonly params: RouteParams = {},
-    public readonly routeName?: string,
-  ) {}
+  private _raw: Request;
+  private _params: RouteParams;
+  private _routeName?: string;
+
+  constructor(raw: Request, params: RouteParams = {}, routeName?: string) {
+    this._raw = raw;
+    this._params = params;
+    this._routeName = routeName;
+  }
+
+  get raw(): Request {
+    return this._raw;
+  }
+
+  get params(): RouteParams {
+    return this._params;
+  }
+
+  get routeName(): string | undefined {
+    return this._routeName;
+  }
+
+  reinitialize(raw: Request, params: RouteParams, routeName?: string): void {
+    this._raw = raw;
+    this._params = params;
+    this._routeName = routeName;
+    this.resetMutableState();
+  }
+
+  resetMutableState(): void {
+    this.session = undefined;
+    this.locale = undefined;
+    this.user = null;
+    this.tokenAbilities = undefined;
+    this.tokenId = undefined;
+    this.remoteAddress = undefined;
+    this.trustedProxies = [];
+  }
 
   session?: SessionContract;
   locale?: string;

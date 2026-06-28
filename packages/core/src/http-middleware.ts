@@ -19,6 +19,8 @@ export interface HttpConfig {
   jsonFastPath?: boolean;
   /** Return minimal 404/405 JSON without exception handler (default: !app.debug). */
   early404?: boolean;
+  /** Reuse TyravelRequest instances for matched routes (default: !app.debug). */
+  requestPooling?: boolean;
   throttle?: {
     enabled?: boolean;
     limit: number;
@@ -49,6 +51,11 @@ export function registerHttpMiddleware(
   const early404 = httpConfig?.early404 ?? !appDebug;
   if (early404) {
     app.router().setEarly404(true);
+  }
+
+  const requestPooling = httpConfig?.requestPooling ?? !appDebug;
+  if (requestPooling) {
+    app.router().setRequestPooling(true);
   }
 
   if (httpConfig?.throttle && httpConfig.throttle.enabled !== false) {

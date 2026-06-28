@@ -1,4 +1,9 @@
-import { Response, type PartialReloadOptions, type SsrStreamOptions } from '@tyravel/http';
+import {
+  coalesceHydrationManifest,
+  Response,
+  type PartialReloadOptions,
+  type SsrStreamOptions,
+} from '@tyravel/http';
 import type { TyravelRequest } from '@tyravel/http';
 import type {
   ComponentCatalogEntry,
@@ -127,7 +132,8 @@ export const View: ViewFacade = {
       {
         ...options,
         hydrationManifest:
-          options?.hydrationManifest ?? (() => engine.getHydrationManifest()),
+          options?.hydrationManifest
+          ?? (() => coalesceHydrationManifest(engine.getHydrationManifest())),
       },
     );
   },

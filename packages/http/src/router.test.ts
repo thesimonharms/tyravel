@@ -216,6 +216,25 @@ describe('Router', () => {
     expect(order).toEqual(['handler']);
   });
 
+  it('reuses TyravelRequest instances when request pooling is enabled', async () => {
+    const router = new Router();
+    router.setRequestPooling(true);
+
+    const seen: unknown[] = [];
+    router.get('/pool', (request) => {
+      seen.push(request);
+      request.user = { warmed: true };
+      return Response.json({ ok: true });
+    });
+
+    await router.dispatch(new Request('http://localhost/pool'));
+    await router.dispatch(new Request('http://localhost/pool'));
+
+    expect(seen).toHaveLength(2);
+    expect(seen[0]).toBe(seen[1]);
+    expect((seen[1] as { user: unknown }).user).toBeNull();
+  });
+
   it('keeps session middleware on routes that require it', async () => {
     const registry = new MiddlewareRegistry();
     const router = new Router(registry);
