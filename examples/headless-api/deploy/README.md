@@ -17,7 +17,7 @@ docker compose -f deploy/docker-compose.yml up --build
 | Web | `npx tyravel start` |
 | Worker | `npx tyravel queue:work` |
 | Migrations | `npx tyravel migrate` |
-| Warm caches | `npx tyravel route:cache && npx tyravel view:cache` |
+| Warm caches | `npx tyravel config:cache && npx tyravel route:cache && npx tyravel view:cache` |
 
 ## Health probes
 

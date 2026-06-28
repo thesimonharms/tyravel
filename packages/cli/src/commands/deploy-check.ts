@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import { loadConfig } from '@tyravel/config';
+import { buildConfigCacheManifest, loadConfig } from '@tyravel/config';
 import {
   Application,
   ConfigServiceProvider,
@@ -38,6 +38,13 @@ export class DeployCheckCommand extends Command {
     const routeIcon = routeCheck.ok ? '✓' : '✗';
     console.log(`${routeIcon} routes: ${routeCheck.message}`);
     if (!routeCheck.ok) {
+      failed += 1;
+    }
+
+    const configCheck = await validateConfigManifest(root);
+    const configIcon = configCheck.ok ? '✓' : '✗';
+    console.log(`${configIcon} config: ${configCheck.message}`);
+    if (!configCheck.ok) {
       failed += 1;
     }
 
@@ -91,6 +98,22 @@ async function validateRouteManifest(root: string): Promise<{ ok: boolean; messa
     return {
       ok: true,
       message: `${manifest.routes.length} route(s) compile for route:cache`,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      message: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
+async function validateConfigManifest(root: string): Promise<{ ok: boolean; message: string }> {
+  try {
+    await loadConfig(root);
+    const manifest = await buildConfigCacheManifest(root);
+    return {
+      ok: true,
+      message: `${Object.keys(manifest.config).length} config file(s) compile for config:cache`,
     };
   } catch (error) {
     return {

@@ -170,6 +170,13 @@ tyravel help <command>
 |---------|-------------|-------|
 | `session:prune` | Prune expired database sessions | `tyravel session:prune` |
 
+## config
+
+| Command | Description | Usage |
+|---------|-------------|-------|
+| `config:cache` | Serialize merged config for production boot | `tyravel config:cache` |
+| `config:clear` | Remove the cached config manifest | `tyravel config:clear` |
+
 ## deploy
 
 | Command | Description | Usage |

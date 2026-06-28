@@ -91,7 +91,7 @@ See [Testing](./testing.md) for HTTP recipes, queue draining, and parallel Vites
 
 | Laravel | Tyravel |
 |---------|---------|
-| `php artisan config:cache` | Config schemas + `tyravel doctor` (config manifest cache planned) |
+| `php artisan config:cache` | `tyravel config:cache` / `config:clear` |
 | `php artisan view:cache` | `tyravel view:cache` |
 | Forge / Vapor patterns | `deploy/` scaffold (Docker, Fly, Railway) |
 | Health checks | `/health/live` and `/health/ready` |

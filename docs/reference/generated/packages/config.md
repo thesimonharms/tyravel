@@ -26,26 +26,36 @@ From the package entry point (`dist/index.d.ts`). Deep imports are not supported
 
 ### Values
 
+- `CONFIG_CACHE_RELATIVE_PATH`
 - `ConfigRepository`
 - `ConfigValidationError`
+- `buildConfigCacheManifest`
 - `collectBootEnvFailures`
+- `collectConfigFingerprints`
 - `collectConfigValidationFailures`
+- `configCachePath`
 - `env`
 - `envBool`
 - `envInt`
+- `fingerprintsMatch`
 - `formatConfigValidationFailures`
 - `loadConfig`
 - `loadConfigWithSchemas`
 - `loadEnv`
 - `mergeConfig`
 - `parseEnv`
+- `readConfigCacheManifest`
 - `requiredEnv`
+- `resolveConfigForBoot`
 - `s`
 - `validateBootEnv`
 - `validateConfig`
 
 ### Types
 
+- `ConfigBootResult`
+- `ConfigCacheManifest`
+- `ConfigFileFingerprint`
 - `ConfigSchema`
 - `ConfigSchemaMap`
 - `ConfigTree`

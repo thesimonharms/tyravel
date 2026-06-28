@@ -2,7 +2,7 @@ import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { ConfigRepository } from '@tyravel/config';
+import { configCachePath, ConfigRepository } from '@tyravel/config';
 import { Application } from './application.js';
 import { ConfigServiceProvider } from './config-service-provider.js';
 
@@ -49,6 +49,35 @@ export default { name: env('APP_NAME', 'fallback') };`,
 
     const config = app.make<ConfigRepository>('config');
     expect(config.get<string>('app.name')).toBe('FromDotEnv');
+  });
+
+  it('loads cached config in production when manifest is fresh', async () => {
+    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-config-'));
+    mkdirSync(join(tempDir, 'config'), { recursive: true });
+    mkdirSync(join(tempDir, 'storage/framework'), { recursive: true });
+    writeFileSync(
+      join(tempDir, 'config', 'app.js'),
+      'export default { name: "CachedApp", debug: false };',
+    );
+
+    const previousEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'production';
+
+    try {
+      const { buildConfigCacheManifest } = await import('@tyravel/config');
+      const manifest = await buildConfigCacheManifest(tempDir);
+      writeFileSync(configCachePath(tempDir), `${JSON.stringify(manifest, null, 2)}\n`);
+
+      const app = new Application(tempDir);
+      app.register(ConfigServiceProvider);
+      await app.boot();
+
+      const config = app.make<ConfigRepository>('config');
+      expect(config.get<string>('app.name')).toBe('CachedApp');
+      expect(app.make<{ loaded: boolean }>('tyravel.configCache').loaded).toBe(true);
+    } finally {
+      process.env.NODE_ENV = previousEnv;
+    }
   });
 
   it('fails fast at boot when config schema validation fails', async () => {

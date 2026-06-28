@@ -23,13 +23,14 @@ export DB_CONNECTION=postgres
 
 # 4. Warm caches (run in CI release phase or container entrypoint)
 tyravel migrate
+tyravel config:cache
 tyravel route:cache
 tyravel view:cache
 ```
 
 With `NODE_ENV=production`, views default to `compiled: true` and `requireCompiledCache: true` — **you must run `tyravel view:cache` before boot** or the app throws `CompiledViewCacheMissError`.
 
-Keep `@tyravel/cli` available in the deploy environment for `migrate`, `route:cache`, and `view:cache`. Either install it as a production dependency or run those commands in a build/release step before pruning dev dependencies.
+Keep `@tyravel/cli` available in the deploy environment for `migrate`, `config:cache`, `route:cache`, and `view:cache`. Either install it as a production dependency or run those commands in a build/release step before pruning dev dependencies.
 
 ## Process model
 
@@ -41,7 +42,7 @@ Keep `@tyravel/cli` available in the deploy environment for `migrate`, `route:ca
 
 Use `tyravel serve` for local development only — it enables `TYRAVEL_VIEW_WATCH`. New apps scaffold a `deploy/` directory with Docker, Fly, and Railway manifests.
 
-`@tyravel/cli` belongs in **production** `dependencies` so `npx tyravel migrate`, `route:cache`, and `view:cache` work inside containers (`npm ci --omit=dev`).
+`@tyravel/cli` belongs in **production** `dependencies` so `npx tyravel migrate`, `config:cache`, `route:cache`, and `view:cache` work inside containers (`npm ci --omit=dev`).
 
 ## Platform guides
 

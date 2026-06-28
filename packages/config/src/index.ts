@@ -1,6 +1,20 @@
 export { ConfigValidationError, formatConfigValidationFailures } from './config-validation-error.js';
 export type { ConfigValidationFailure } from './config-validation-error.js';
 export { env, envBool, envInt, requiredEnv } from './env.js';
+export {
+  buildConfigCacheManifest,
+  collectConfigFingerprints,
+  configCachePath,
+  CONFIG_CACHE_RELATIVE_PATH,
+  fingerprintsMatch,
+  readConfigCacheManifest,
+  resolveConfigForBoot,
+} from './config-cache.js';
+export type {
+  ConfigBootResult,
+  ConfigCacheManifest,
+  ConfigFileFingerprint,
+} from './config-cache.js';
 export { loadConfig, loadConfigWithSchemas } from './loader.js';
 export type { LoadConfigOptions, LoadedConfig } from './loader.js';
 export { loadEnv, parseEnv } from './load-env.js';

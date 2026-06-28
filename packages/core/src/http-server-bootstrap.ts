@@ -14,6 +14,8 @@ export interface PrepareHttpServerResult {
   headless: boolean;
   routeCacheLoaded: boolean;
   routeCacheMessage?: string;
+  configCacheLoaded: boolean;
+  configCacheMessage?: string;
 }
 
 export function isProductionEnvironment(): boolean {
@@ -33,6 +35,19 @@ export async function prepareHttpServer(
     console.log(`[routes] ${routeCache.message}`);
   }
 
+  let configCacheLoaded = false;
+  let configCacheMessage: string | undefined;
+  try {
+    const configCache = app.make<{ loaded: boolean; message?: string }>('tyravel.configCache');
+    configCacheLoaded = configCache.loaded;
+    configCacheMessage = configCache.message;
+    if (configCache.loaded && configCache.message && !isProductionEnvironment()) {
+      console.log(`[config] ${configCache.message}`);
+    }
+  } catch {
+    // ConfigServiceProvider not registered.
+  }
+
   const hotReload =
     options.hotReload
     ?? (!isProductionEnvironment() && process.env.TYRAVEL_HOT_RELOAD === '1');
@@ -45,5 +60,7 @@ export async function prepareHttpServer(
     headless,
     routeCacheLoaded: routeCache.loaded,
     routeCacheMessage: routeCache.message,
+    configCacheLoaded,
+    configCacheMessage,
   };
 }

@@ -763,7 +763,7 @@ First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client 
 
 #### P1 — Strong want
 
-- [ ] **Config manifest cache** — `tyravel config:cache` serializes merged config for production boot (mirrors route cache workflow)
+- [x] **Config manifest cache** — `tyravel config:cache` serializes merged config for production boot (mirrors route cache workflow)
 - [ ] **Lazy provider registration** — defer `@tyravel/admin`, `@tyravel/debug`, and MCP providers until first use or explicit route hit
 - [ ] **Database pool warm-up** — fire-and-forget `SELECT 1` during boot when `DB_POOL_WARMUP=true` (default on in production scaffold)
 
