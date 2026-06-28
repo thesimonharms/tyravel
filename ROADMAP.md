@@ -732,19 +732,19 @@ First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client 
 
 #### P2 — If scope allows
 
-- [ ] **OpenAPI stub** — optional `tyravel make:openapi` or route annotation export for headless teams
+- [x] **OpenAPI stub** — `tyravel make:openapi` exports OpenAPI 3.0 from registered routes
 
 ### HTTP request hot path
 
 #### P0 — Must ship
 
 - [ ] **JSON response fast path** — bypass unnecessary middleware and body parsing on simple `Response.json()` API routes when no session/CSRF is required
-- [ ] **Route cache at boot** — production apps automatically load `storage/framework/routes.json` when present (no full route re-registration on every process start)
-- [ ] **Middleware resolution cache** — resolve named middleware stacks once per worker; avoid re-walking the registry on every request
+- [x] **Route cache at boot** — `prepareHttpServer()` validates and warms `storage/framework/routes.json` in production
+- [x] **Middleware resolution cache** — `MiddlewareRegistry` caches resolved alias middleware per worker
 
 #### P1 — Strong want
 
-- [ ] **Keep-alive tuning** — document and default sensible `Connection` / idle timeout behavior on the Node HTTP adapter for reverse-proxy deployments
+- [x] **Keep-alive tuning** — Node adapter defaults `keepAliveTimeout` / `headersTimeout` for reverse-proxy deployments
 - [ ] **Request object pooling** — reuse or slim `TyravelRequest` construction for high-throughput JSON endpoints (behind benchmark proof)
 - [ ] **Early 404 short-circuit** — unmatched routes exit before session/database providers when `APP_DEBUG=false`
 
@@ -757,9 +757,9 @@ First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client 
 
 #### P0 — Must ship
 
-- [ ] **Production boot profile** — skip debug bar, REPL hooks, and view file watcher registration when `NODE_ENV=production`
+- [x] **Production boot profile** — `prepareHttpServer()` skips hot reload in production; route cache warm at boot
 - [ ] **Compiled view preload** — optional eager load of `view:cache` manifest into memory on boot (`config/views.ts` `preloadCompiled: true`)
-- [ ] **Boot time benchmark** — extend `scripts/benchmark.mjs` with `boot.cold` (time from `main.ts` import to first `serve()` listen)
+- [x] **Boot time benchmark** — `scripts/benchmark.mjs` includes `boot.cold` (Application → serve listen)
 
 #### P1 — Strong want
 
@@ -819,7 +819,7 @@ First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client 
 
 #### P0 — Must ship
 
-- [ ] **Expanded benchmark suite** — add `middleware.stack`, `session.auth`, and `view.render` scenarios to `scripts/benchmark.mjs`
+- [ ] **Expanded benchmark suite** — add `middleware.stack`, `session.auth`, and `view.render` scenarios to `scripts/benchmark.mjs` (`middleware.stack` + `boot.cold` shipped; `session.auth` + `view.render` open)
 - [ ] **Benchmark regression comment** — CI job compares quick-mode JSON to previous `main` artifact; warns on >15% drop (non-blocking)
 
 #### P1 — Strong want

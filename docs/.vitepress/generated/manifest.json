@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-28T10:47:33.634Z",
+  "generatedAt": "2026-06-28T11:07:22.393Z",
   "version": "1.0.1",
   "packages": [
     {
@@ -304,6 +304,7 @@
     "make:middleware",
     "make:migration",
     "make:model",
+    "make:openapi",
     "make:provider",
     "make:rag-resource",
     "make:request",

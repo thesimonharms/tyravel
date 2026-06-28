@@ -60,16 +60,28 @@ Headless apps return JSON errors by default — no HTML error pages. Use Bearer 
 
 ## Boot profile
 
-After `await app.boot()`, call `applyBootProfile()` so runtime tooling knows the app is headless:
+After `await app.boot()`, call `prepareHttpServer()` — it applies the headless profile, registers HTTP middleware, loads `storage/framework/routes.json` in production, and starts hot reload in development:
 
 ```typescript
-import { applyBootProfile, ConfigRepository } from '@tyravel/core';
+import { ConfigRepository, prepareHttpServer } from '@tyravel/core';
 
-const config = app.make(ConfigRepository);
-await applyBootProfile(app, config);
+await prepareHttpServer(app, app.make(ConfigRepository));
 ```
 
 This enables JSON exception responses even when clients send `Accept: text/html`. Full-stack apps can use `registerViewStack(app)` when not headless.
+
+## OpenAPI export
+
+Generate a starter OpenAPI 3.0 document from registered routes:
+
+```bash
+tyravel make:openapi
+# writes storage/api/openapi.json
+
+tyravel make:openapi --stdout
+```
+
+Refine request/response schemas in the exported file for your API consumers.
 
 ## Development
 

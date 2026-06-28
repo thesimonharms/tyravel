@@ -114,6 +114,7 @@ From the package entry point (`dist/index.d.ts`). Deep imports are not supported
 - `View`
 - `ViewServiceProvider`
 - `applyBootProfile`
+- `bootstrapRouteCache`
 - `createControllerHandler`
 - `createTokenAbilityMiddleware`
 - `cronMatches`
@@ -127,7 +128,9 @@ From the package entry point (`dist/index.d.ts`). Deep imports are not supported
 - `isFormRequestConstructor`
 - `isHeadlessApplication`
 - `isHeadlessMode`
+- `isProductionEnvironment`
 - `loadEnv`
+- `prepareHttpServer`
 - `registerHttpMiddleware`
 - `registerViewStack`
 - `resolveHeadlessMode`
@@ -187,8 +190,11 @@ From the package entry point (`dist/index.d.ts`). Deep imports are not supported
 - `NotificationsFacade`
 - `PartialViewOptions`
 - `PasswordFacade`
+- `PrepareHttpServerOptions`
+- `PrepareHttpServerResult`
 - `QueueConnectionFacade`
 - `QueueFacade`
+- `RouteCacheBootstrapResult`
 - `RouteFacade`
 - `ScheduledEvent`
 - `ServeOptions`

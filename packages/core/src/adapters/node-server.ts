@@ -69,6 +69,10 @@ async function createNodeServer(
 
   attachBroadcastWebSocketUpgrade(server);
 
+  // Sensible defaults behind reverse proxies (Fly, Railway, nginx).
+  server.keepAliveTimeout = 5_000;
+  server.headersTimeout = 6_000;
+
   server.on('connection', (socket) => {
     connections.add(socket);
     (socket as { _activeRequests?: number })._activeRequests = 0;

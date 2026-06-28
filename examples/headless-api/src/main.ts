@@ -1,6 +1,5 @@
 import {
   Application,
-  applyBootProfile,
   AuthServiceProvider,
   CacheServiceProvider,
   ConfigRepository,
@@ -13,7 +12,7 @@ import {
   NotificationServiceProvider,
   QueueServiceProvider,
   StorageServiceProvider,
-  registerHttpMiddleware,
+  prepareHttpServer,
   setAuthApplication,
   setCacheApplication,
   setEventApplication,
@@ -26,7 +25,6 @@ import {
   setRouteApplication,
   setStorageApplication,
   serve,
-  startDevHotReload,
 } from '@tyravel/core';
 import { AppServiceProvider } from './providers/app-service-provider.js';
 import './routes/api.js';
@@ -59,10 +57,7 @@ app.register(AppServiceProvider);
 
 await app.boot();
 
-const config = app.make(ConfigRepository);
-await applyBootProfile(app, config);
-registerHttpMiddleware(app, config);
-startDevHotReload(app);
+await prepareHttpServer(app, app.make(ConfigRepository));
 
 const kernel = new HttpKernel(app);
 await serve(kernel);

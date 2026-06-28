@@ -3,6 +3,7 @@ import { DbSeedCommand } from './commands/db-seed.js';
 import { MakeEventCommand } from './commands/make-event.js';
 import { MakeFactoryCommand } from './commands/make-factory.js';
 import { MakeSeederCommand } from './commands/make-seeder.js';
+import { MakeOpenApiCommand } from './commands/make-openapi.js';
 import { MakeTestCommand } from './commands/make-test.js';
 import { MakeCommandCommand } from './commands/make-command.js';
 import { MakeControllerCommand } from './commands/make-controller.js';
@@ -108,6 +109,7 @@ export function createKernel(): ConsoleKernel {
     new MakeListenerCommand(),
     new MakeSubscriberCommand(),
     new MakeTestCommand(),
+    new MakeOpenApiCommand(),
     new QueueTableCommand(),
     new QueueFailedTableCommand(),
     new QueueFailedCommand(),

@@ -49,6 +49,7 @@ tyravel help <command>
 | `make:middleware` | Create a new HTTP middleware class | `tyravel make:middleware <Name>` |
 | `make:migration` | Create a new database migration | `tyravel make:migration <name>` |
 | `make:model` | Create a new Eloquent model class | `tyravel make:model <Name> [--uuid] [--ulid] [--migration]` |
+| `make:openapi` | Export registered routes as an OpenAPI 3.0 stub | `tyravel make:openapi [--stdout] [--output=<path>] [--server=<url>]` |
 | `make:provider` | Create a new service provider class | `tyravel make:provider <Name>` |
 | `make:rag-resource` | Scaffold a RAG model, migration, and ingest job | `tyravel make:rag-resource <Name>` |
 | `make:request` | Create a new form request class | `tyravel make:request <Name>` |

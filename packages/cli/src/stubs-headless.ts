@@ -156,7 +156,6 @@ export function headlessMainEntry(options: NewProjectOptions): string {
 
   const coreImports = [
     'Application',
-    'applyBootProfile',
     'CacheServiceProvider',
     'ConfigRepository',
     'ConfigServiceProvider',
@@ -169,7 +168,7 @@ export function headlessMainEntry(options: NewProjectOptions): string {
     'NotificationServiceProvider',
     'QueueServiceProvider',
     'StorageServiceProvider',
-    'registerHttpMiddleware',
+    'prepareHttpServer',
     'setCacheApplication',
     'setEventApplication',
     'setLogApplication',
@@ -179,7 +178,6 @@ export function headlessMainEntry(options: NewProjectOptions): string {
     'setRouteApplication',
     'setStorageApplication',
     'serve',
-    'startDevHotReload',
   ];
 
   const providerRegistrations = [
@@ -217,10 +215,7 @@ ${providerRegistrations.join('\n')}
 
 await app.boot();
 
-const config = app.make(ConfigRepository);
-await applyBootProfile(app, config);
-registerHttpMiddleware(app, config);
-startDevHotReload(app);
+await prepareHttpServer(app, app.make(ConfigRepository));
 
 const kernel = new HttpKernel(app);
 await serve(kernel);
@@ -331,7 +326,6 @@ export function headlessMainEntryWithAuth(options: NewProjectOptions): string {
 
   const coreImports = [
     'Application',
-    'applyBootProfile',
     'AuthServiceProvider',
     'CacheServiceProvider',
     'ConfigRepository',
@@ -345,7 +339,7 @@ export function headlessMainEntryWithAuth(options: NewProjectOptions): string {
     'NotificationServiceProvider',
     'QueueServiceProvider',
     'StorageServiceProvider',
-    'registerHttpMiddleware',
+    'prepareHttpServer',
     'setAuthApplication',
     'setCacheApplication',
     'setEventApplication',
@@ -358,7 +352,6 @@ export function headlessMainEntryWithAuth(options: NewProjectOptions): string {
     'setRouteApplication',
     'setStorageApplication',
     'serve',
-    'startDevHotReload',
   ];
 
   const providerRegistrations = [
@@ -401,10 +394,7 @@ ${providerRegistrations.join('\n')}
 
 await app.boot();
 
-const config = app.make(ConfigRepository);
-await applyBootProfile(app, config);
-registerHttpMiddleware(app, config);
-startDevHotReload(app);
+await prepareHttpServer(app, app.make(ConfigRepository));
 
 const kernel = new HttpKernel(app);
 await serve(kernel);

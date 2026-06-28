@@ -63,6 +63,16 @@ export {
   registerViewStack,
   shouldRegisterViewStack,
 } from './boot-profile.js';
+export {
+  isProductionEnvironment,
+  prepareHttpServer,
+} from './http-server-bootstrap.js';
+export type {
+  PrepareHttpServerOptions,
+  PrepareHttpServerResult,
+} from './http-server-bootstrap.js';
+export { bootstrapRouteCache } from './route-cache-bootstrap.js';
+export type { RouteCacheBootstrapResult } from './route-cache-bootstrap.js';
 export { isHeadlessMode, resolveHeadlessMode } from './headless-mode.js';
 export { registerHttpMiddleware } from './http-middleware.js';
 export type { CorsConfig, HttpConfig } from './http-middleware.js';

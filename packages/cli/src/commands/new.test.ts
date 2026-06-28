@@ -105,6 +105,7 @@ describe('NewCommand', () => {
     expect(readFileSync(join(projectDir, 'config/app.ts'), 'utf8')).toContain('headless: true');
     expect(readFileSync(join(projectDir, 'src/main.ts'), 'utf8')).toContain('./routes/api.js');
     expect(readFileSync(join(projectDir, 'src/main.ts'), 'utf8')).not.toContain('ViewServiceProvider');
+    expect(readFileSync(join(projectDir, 'src/main.ts'), 'utf8')).toContain('prepareHttpServer');
     expect(readFileSync(join(projectDir, 'src/routes/api.ts'), 'utf8')).toContain("Route.prefix('api/v1')");
     expect(readFileSync(join(projectDir, 'README.md'), 'utf8')).toContain('Headless Tyravel API');
   });

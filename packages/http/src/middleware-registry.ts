@@ -11,9 +11,11 @@ export type MiddlewareInput = Middleware | string | MiddlewareInput[];
 
 export class MiddlewareRegistry {
   private aliases = new Map<string, Middleware>();
+  private readonly resolvedAliases = new Map<string, Middleware>();
 
   alias(name: string, middleware: Middleware): this {
     this.aliases.set(name, middleware);
+    this.resolvedAliases.delete(name);
     return this;
   }
 
@@ -32,11 +34,17 @@ export class MiddlewareRegistry {
       return input;
     }
 
+    const cached = this.resolvedAliases.get(input);
+    if (cached) {
+      return cached;
+    }
+
     const middleware = this.aliases.get(input);
     if (!middleware) {
       throw new MiddlewareNotFoundException(input);
     }
 
+    this.resolvedAliases.set(input, middleware);
     return middleware;
   }
 

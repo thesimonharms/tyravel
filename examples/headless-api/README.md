@@ -56,10 +56,20 @@ tyravel auth:install     # if not included at scaffold time
 tyravel dev
 ```
 
+## OpenAPI stub
+
+```bash
+tyravel make:openapi
+cat storage/api/openapi.json
+```
+
 ## Pre-deploy
 
 ```bash
+tyravel route:cache
 tyravel deploy:check
 ```
+
+Production boots warm `storage/framework/routes.json` automatically via `prepareHttpServer()`.
 
 See [Headless API guide](https://tyravel.dev/guide/headless) and `deploy/README.md`.

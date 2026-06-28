@@ -113,7 +113,7 @@ export function mainEntry(options: NewProjectOptions): string {
     'NotificationServiceProvider',
     'QueueServiceProvider',
     'StorageServiceProvider',
-    'registerHttpMiddleware',
+    'prepareHttpServer',
     'setBroadcastApplication',
     'setCacheApplication',
     'setEventApplication',
@@ -128,7 +128,6 @@ export function mainEntry(options: NewProjectOptions): string {
     'setViewApplication',
     'ViewServiceProvider',
     'serve',
-    'startDevHotReload',
   ];
 
   const providerRegistrations = [
@@ -174,9 +173,7 @@ ${providerRegistrations.join('\n')}
 
 await app.boot();
 
-registerHttpMiddleware(app, app.make(ConfigRepository));
-
-startDevHotReload(app);
+await prepareHttpServer(app, app.make(ConfigRepository));
 
 const kernel = new HttpKernel(app);
 await serve(kernel);

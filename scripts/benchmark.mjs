@@ -22,8 +22,10 @@ const QUICK = process.env.BENCHMARK_QUICK === '1';
 
 const DEFAULTS = {
   http: { warmup: QUICK ? 10 : 200, requests: QUICK ? 50 : 2_000, concurrency: QUICK ? 5 : 50 },
+  middleware: { warmup: QUICK ? 10 : 100, requests: QUICK ? 50 : 1_000, concurrency: QUICK ? 5 : 25 },
   orm: { warmup: QUICK ? 5 : 50, iterations: QUICK ? 20 : 1_000 },
   views: { warmup: QUICK ? 5 : 50, iterations: QUICK ? 20 : 500 },
+  boot: { iterations: QUICK ? 3 : 10 },
 };
 
 export async function measureHttp({
@@ -70,6 +72,83 @@ export async function measureHttp({
 
 class BenchPost extends Model {
   static table = 'bench_posts';
+}
+
+export async function measureMiddlewareStack({
+  warmup = DEFAULTS.middleware.warmup,
+  requests = DEFAULTS.middleware.requests,
+  concurrency = DEFAULTS.middleware.concurrency,
+} = {}) {
+  const app = new Application();
+  setRouteApplication(app);
+
+  app.middleware('mw-a', async (_request, next) => next());
+  app.middleware('mw-b', async (_request, next) => next());
+  app.middleware('mw-c', async (_request, next) => next());
+
+  Route.middleware(['mw-a', 'mw-b', 'mw-c']).get('/mw', () => Response.json({ ok: true }));
+
+  const kernel = new HttpKernel(app);
+  const server = await serve(kernel, { port: 0, hostname: '127.0.0.1', quiet: true });
+  const url = `http://${server.hostname}:${server.port}/mw`;
+
+  const runOnce = async () => {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Middleware benchmark failed with status ${response.status}`);
+    }
+    await response.arrayBuffer();
+  };
+
+  for (let i = 0; i < warmup; i++) {
+    await runOnce();
+  }
+
+  const start = performance.now();
+  for (let offset = 0; offset < requests; offset += concurrency) {
+    const batch = Math.min(concurrency, requests - offset);
+    await Promise.all(Array.from({ length: batch }, () => runOnce()));
+  }
+  const elapsedMs = performance.now() - start;
+  await server.close();
+
+  return {
+    name: 'middleware.stack',
+    label: 'HTTP JSON with 3-middleware stack',
+    unit: 'req/s',
+    samples: requests,
+    elapsedMs,
+    value: Math.round((requests / elapsedMs) * 1000),
+  };
+}
+
+export async function measureBootCold({
+  iterations = DEFAULTS.boot.iterations,
+} = {}) {
+  const samples = [];
+
+  for (let i = 0; i < iterations; i++) {
+    const start = performance.now();
+    const app = new Application();
+    setRouteApplication(app);
+    Route.get('/boot', () => Response.json({ ok: true }));
+    const kernel = new HttpKernel(app);
+    const server = await serve(kernel, { port: 0, hostname: '127.0.0.1', quiet: true });
+    samples.push(performance.now() - start);
+    await server.close();
+  }
+
+  const elapsedMs = samples.reduce((sum, value) => sum + value, 0);
+  const averageMs = elapsedMs / samples.length;
+
+  return {
+    name: 'boot.cold',
+    label: 'Cold boot to HTTP listen',
+    unit: 'ms',
+    samples: iterations,
+    elapsedMs,
+    value: Math.max(1, Math.round(averageMs)),
+  };
 }
 
 export async function measureOrm({
@@ -154,7 +233,9 @@ export function measureViewCompile({
 
 export async function runBenchmarks(options = {}) {
   const results = [
+    await measureBootCold(options.boot),
     await measureHttp(options.http),
+    await measureMiddlewareStack(options.middleware),
     await measureOrm(options.orm),
     measureViewCompile(options.views),
   ];
