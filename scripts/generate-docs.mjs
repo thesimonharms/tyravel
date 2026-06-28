@@ -564,6 +564,15 @@ export const guideSidebar = [
     ],
   },
   {
+    text: 'Deployment',
+    items: [
+      { text: 'Overview', link: '/guide/deployment' },
+      { text: 'Docker', link: '/guide/deployment/docker' },
+      { text: 'Fly.io', link: '/guide/deployment/fly' },
+      { text: 'Railway', link: '/guide/deployment/railway' },
+    ],
+  },
+  {
     text: 'Core concepts',
     items: [
       { text: 'Configuration', link: '/guide/configuration' },

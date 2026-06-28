@@ -41,6 +41,7 @@ See the [package reference](/reference/generated/packages) for every `@tyravel/*
 | [Cookbook](/cookbook/) | Focused recipes (realtime, RAG, testing) |
 | [Configuration reference](/guide/configuration-reference) | Every `config/*.ts` key from scaffolds |
 | [Broadcasting](/guide/broadcasting) | WebSocket hub, Echo client, production deploy |
+| [Deployment](/guide/deployment) | Docker, Fly.io, Railway walkthroughs with manifests |
 | [Ecosystem](/guide/ecosystem) | Publishing third-party `@tyravel/*` extensions |
 
 ## Upgrading

@@ -31,6 +31,27 @@ Quick checklist:
 
 Tyravel runs on any Node 26+ host (container, VM, bare metal). Standard Web APIs mean adapters stay thin — see `serve()` in `@tyravel/core`.
 
+### Platform walkthroughs
+
+Copy-paste manifests live in [`examples/hello-world/deploy/`](https://github.com/thesimonharms/tyravel/tree/main/examples/hello-world/deploy).
+
+| Guide | When to use |
+|-------|-------------|
+| [Deployment overview](/guide/deployment) | Shared checklist, env vars, process model |
+| [Docker](/guide/deployment/docker) | Self-hosted, compose stacks, any orchestrator |
+| [Fly.io](/guide/deployment/fly) | Managed Postgres + Redis at the edge |
+| [Railway](/guide/deployment/railway) | Fast managed deploy with Postgres plugins |
+
+Minimum production boot:
+
+```bash
+export NODE_ENV=production TYRAVEL_HOST=0.0.0.0 TYRAVEL_PORT=${PORT:-3000}
+tyravel migrate && tyravel route:cache && tyravel view:cache
+node --experimental-strip-types src/main.ts
+```
+
+Run `tyravel queue:work` in a separate process when using the database queue.
+
 ## Cookbook & reference
 
 - [Realtime UI with Echo](/cookbook/realtime-echo) — recipe for channel auth + client bootstrap

@@ -1,0 +1,10 @@
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+preDeployCommand = "node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js migrate"
+startCommand = "./deploy/docker-entrypoint.sh"
+healthcheckPath = "/health"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"

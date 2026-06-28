@@ -562,7 +562,7 @@ Tyravel **1.0.0** is the first semver-strict era (see [STABILITY.md](STABILITY.m
 - [ ] **Complete package reference** — per-package facade method tables and deeper API prose beyond generated exports
 - [x] **Tutorial track (scaffold)** — zero-to-deploy outline: install → auth → queue → realtime/deploy (`docs/tutorials/`)
 - [x] **Tutorial track (verified links)** — hello-world feature tests cited for steps 1–3; broadcasting guide for step 4
-- [ ] **Tutorial track (complete)** — deploy provider walkthroughs (Fly, Railway, Docker) with copy-paste manifests
+- [x] **Tutorial track (complete)** — deploy provider walkthroughs (Fly, Railway, Docker) with copy-paste manifests in `examples/hello-world/deploy/` and `docs/guide/deployment/`
 - [x] **Cookbook (core recipes)** — realtime Echo, RAG Q&A, testing fakes, admin panel, multi-locale (`docs/cookbook/`)
 - [ ] **Cookbook (complete)** — additional production patterns (observability, multi-tenant, etc.)
 - [x] **Ecosystem guide** — `docs/guide/ecosystem.md` for third-party package authors

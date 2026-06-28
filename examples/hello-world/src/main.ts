@@ -1,4 +1,5 @@
 import { join } from 'node:path';
+import { PgDatabaseServiceProvider } from '@tyravel/database-pg';
 import {
   Application,
   AuthServiceProvider,
@@ -51,6 +52,7 @@ setGateApplication(app);
 setPasswordApplication(app);
 
 app.register(ConfigServiceProvider);
+app.register(PgDatabaseServiceProvider);
 app.register(DatabaseServiceProvider);
 app.register(CacheServiceProvider);
 app.register(StorageServiceProvider);

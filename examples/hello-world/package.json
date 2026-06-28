@@ -8,12 +8,14 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@tyravel/cli": "0.16.0",
     "@tyravel/auth": "0.16.0",
     "@tyravel/cache": "0.16.0",
     "@tyravel/config": "0.16.0",
     "@tyravel/core": "0.16.0",
     "@tyravel/crypto": "0.16.0",
     "@tyravel/database": "0.16.0",
+    "@tyravel/database-pg": "0.16.0",
     "@tyravel/events": "0.16.0",
     "@tyravel/http": "0.16.0",
     "@tyravel/log": "0.16.0",
@@ -25,7 +27,6 @@
     "@tyravel/views": "0.16.0"
   },
   "devDependencies": {
-    "@tyravel/cli": "0.16.0",
     "@tyravel/testing": "0.16.0",
     "tsx": "^4.20.3",
     "vitest": "^3.2.4"

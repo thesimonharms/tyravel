@@ -1,0 +1,56 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      APP_URL: http://localhost:3000
+      APP_DEBUG: "false"
+      TYRAVEL_HOST: 0.0.0.0
+      TYRAVEL_PORT: "3000"
+      DB_CONNECTION: postgres
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_DATABASE: tyravel
+      DB_USERNAME: tyravel
+      DB_PASSWORD: tyravel
+      QUEUE_CONNECTION: database
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    command: node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js queue:work
+    environment:
+      NODE_ENV: production
+      DB_CONNECTION: postgres
+      DB_HOST: postgres
+      DB_DATABASE: tyravel
+      DB_USERNAME: tyravel
+      DB_PASSWORD: tyravel
+      QUEUE_CONNECTION: database
+    depends_on:
+      - app
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: tyravel
+      POSTGRES_USER: tyravel
+      POSTGRES_PASSWORD: tyravel
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tyravel"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

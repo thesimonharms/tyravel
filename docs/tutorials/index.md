@@ -19,7 +19,7 @@ A zero-to-deploy learning path for Tyravel **0.16.x**. Each tutorial builds on t
 
 ## Example repos
 
-- [`examples/hello-world`](https://github.com/thesimonharms/tyravel/tree/main/examples/hello-world) — default scaffold with auth, queue, and mail wired
+- [`examples/hello-world`](https://github.com/thesimonharms/tyravel/tree/main/examples/hello-world) — default scaffold with auth, queue, and mail wired; [`deploy/`](https://github.com/thesimonharms/tyravel/tree/main/examples/hello-world/deploy) has Docker, Fly, and Railway manifests
 - [`examples/rag`](https://github.com/thesimonharms/tyravel/tree/main/examples/rag) — AI/RAG stack (Tier 14)
 
 When a tutorial step has a matching example file, we link to it directly.
