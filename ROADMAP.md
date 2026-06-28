@@ -848,6 +848,8 @@ Items not tied to a version number. Land when useful; do not block releases.
 - [x] **Performance benchmarks** — harness, guide, and CI trend job shipped in Tier 17
 - [x] **Developer experience (Tier 18)** — v1.2.0 complete (P0+P1+P2): `dev` concurrent workers, `--tls`, `doctor --perf`, `make:test --feature`, `.tyr` LSP stub, interactive `tyravel new`
 - [x] **Speed & snappiness (Tier 19)** — HTTP hot path, boot time, view/ORM throughput, benchmark regression gates; target v1.3.0
+- [ ] **Tyravel Cloud** — managed git-push deploy (Postgres, Redis, R2, CDN); like Laravel Cloud / Vercel for Tyravel
+- [ ] **Cloudflare Workers adapter** — headless JSON on Workers + Hyperdrive; SSR at edge later
 
 ## Shipped in v0.1.0
 

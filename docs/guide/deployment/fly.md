@@ -135,5 +135,7 @@ If you use a custom domain, update `APP_URL` and Echo client config to match.
 
 ## Next
 
-- [Broadcasting](/guide/broadcasting) — channel auth and nginx-style proxy notes
+- [Cloudflare](/guide/deployment/cloudflare) — put Fly origin behind CDN + R2
+- [Broadcasting](/guide/broadcasting) — channel auth and WebSocket proxy
 - [Docker](/guide/deployment/docker) — compose reference for local parity
+- [Platform matrix](/guide/deployment/platforms)

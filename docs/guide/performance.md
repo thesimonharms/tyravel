@@ -186,7 +186,9 @@ See [Benchmarks](/guide/benchmarks) for CI snapshots, regression gates, and Bun 
 
 ## Related
 
-- [Deployment](/guide/deployment) — workers, horizontal scaling
+- [Deployment](/guide/deployment) — platform hub, clustering, bundles
+- [Cloudflare](/guide/deployment/cloudflare) — CDN + origin patterns
+- [Platform matrix](/guide/deployment/platforms)
 - [Headless API](/guide/headless) — backend-only scaffold
 - [Views & templating](/guide/views) — streaming SSR and islands
 - [Observability cookbook](/cookbook/observability) — production latency signals

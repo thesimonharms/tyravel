@@ -69,6 +69,76 @@ const disk = manager.disk('photos');
 await disk.put('2025/sunset.jpg', buffer);
 ```
 
+## Cloudflare R2
+
+R2 is S3-compatible object storage with no egress fees to Cloudflare Workers (useful for future edge work). Tyravel ships `@tyravel/storage-r2`:
+
+```bash
+npm install @tyravel/storage-r2
+```
+
+```typescript
+// config/storage.ts
+import { env } from '@tyravel/config';
+
+export default {
+  default: 'r2',
+  disks: {
+    r2: {
+      driver: 'r2',
+      bucket: env('R2_BUCKET', 'tyravel'),
+      endpoint: env('R2_ENDPOINT'),
+      accessKeyId: env('R2_ACCESS_KEY_ID'),
+      secretAccessKey: env('R2_SECRET_ACCESS_KEY'),
+      publicUrl: env('R2_PUBLIC_URL'),
+    },
+  },
+} as const;
+```
+
+```typescript
+import { R2StorageServiceProvider } from '@tyravel/storage-r2';
+
+app.register(R2StorageServiceProvider);
+```
+
+Uploads run from your **Node origin**; R2 does not require Workers. Pair with [Cloudflare deployment](/guide/deployment/cloudflare) for CDN in front of the same app.
+
+See [@tyravel/storage-r2](/reference/generated/packages/storage-r2) for config keys.
+
+## Cloudflare R2
+
+First-party driver for S3-compatible R2 buckets. Uploads run from your Node origin; no Workers required.
+
+```bash
+npm install @tyravel/storage-r2
+```
+
+```typescript
+import { R2StorageServiceProvider } from '@tyravel/storage-r2';
+
+app.register(R2StorageServiceProvider);
+```
+
+```typescript
+// config/storage.ts
+export default {
+  default: 'r2',
+  disks: {
+    r2: {
+      driver: 'r2',
+      bucket: env('R2_BUCKET', 'tyravel'),
+      endpoint: env('R2_ENDPOINT'),
+      accessKeyId: env('R2_ACCESS_KEY_ID'),
+      secretAccessKey: env('R2_SECRET_ACCESS_KEY'),
+      publicUrl: env('R2_PUBLIC_URL'),
+    },
+  },
+} satisfies StorageConfig;
+```
+
+Pair with [Cloudflare deployment](/guide/deployment/cloudflare) for CDN + storage on the same ecosystem. See [@tyravel/storage-r2](/reference/generated/packages/storage-r2) for all config keys.
+
 ## Custom drivers
 
 Register custom storage drivers with `StorageManager.extend()`:

@@ -4,6 +4,11 @@ All notable changes to Tyravel are documented in this file.
 
 ## [1.3.0] - Unreleased
 
+### Documentation
+
+- **Deployment hub** — expanded overview, platform matrix, CI/CD, Cloudflare (partial + origin patterns), Tyravel Cloud vision
+- **Storage** — Cloudflare R2 setup; edge cache cookbook cross-links
+
 ### Added
 
 - **Tier 19 — Speed & snappiness** — headless API scaffold (`tyravel new --headless`), JSON fast path, request object pooling, early 404 short-circuit, config/route cache warm-up, lazy provider registration, database pool warm-up, view LRU cache, streaming shell flush, empty hydration manifest skip

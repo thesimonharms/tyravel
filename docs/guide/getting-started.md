@@ -80,8 +80,42 @@ tyravel make:model Post         # Generate a model
 tyravel auth:install            # Scaffold auth (User, routes, migrations)
 ```
 
+## Deploy to production
+
+When you are ready to ship:
+
+1. Read the [deployment overview](./deployment) — checklist, process model, health probes
+2. Pick a host via the [platform matrix](./deployment/platforms) (Railway, Fly, Docker, or Cloudflare + origin)
+3. Automate releases with [CI/CD](./deployment/ci-cd)
+
+```bash
+tyravel deploy:check   # doctor + route/view validation before traffic
+```
+
+Managed **Tyravel Cloud** (git-push deploy) is planned — see [Tyravel Cloud](./deployment/tyravel-cloud). Until then, copy manifests from `examples/hello-world/deploy/`.
+
+## Deploy to production
+
+| Step | Guide |
+|------|-------|
+| Pick a platform | [Platform matrix](/guide/deployment/platforms) |
+| Fastest path | [Railway](/guide/deployment/railway) or [Fly.io](/guide/deployment/fly) |
+| Cloudflare CDN + R2 | [Cloudflare](/guide/deployment/cloudflare) (Node origin required today) |
+| Automate releases | [CI/CD](/guide/deployment/ci-cd) |
+
+```bash
+tyravel migrate
+tyravel config:cache && tyravel route:cache && tyravel view:cache
+tyravel deploy:check
+tyravel start
+```
+
+Full checklist: [Deployment](/guide/deployment). Managed Tyravel hosting is planned as [Tyravel Cloud](/guide/deployment/tyravel-cloud).
+
 ## Next steps
 
 - [Application structure](./application-structure) — folders, providers, and config
 - [Routing](./routing) — groups, middleware, and controllers
 - [Database & ORM](./database) — models, migrations, and relationships
+- [Performance](/guide/performance) — production speed defaults
+- [Performance](./performance) — production speed defaults

@@ -129,5 +129,8 @@ Add a `redis` service and `--redis` app config when you need WebSocket broadcast
 
 ## Next
 
+- [Platform matrix](/guide/deployment/platforms) — compare hosting options
+- [Cloudflare](/guide/deployment/cloudflare) — CDN + R2 in front of Docker origin
+- [CI/CD](/guide/deployment/ci-cd) — automate image build and release
 - [Fly.io](/guide/deployment/fly) — managed Postgres on the same platform
 - [Railway](/guide/deployment/railway) — plugin-based Postgres

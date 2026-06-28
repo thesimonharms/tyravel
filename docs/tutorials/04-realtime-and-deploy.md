@@ -1,6 +1,6 @@
 # 4. Realtime & deploy
 
-Broadcast domain events to the browser and prepare for production.
+Broadcast domain events to the browser and ship to production.
 
 ## WebSocket broadcasting
 
@@ -21,39 +21,54 @@ Quick checklist:
 
 | Task | Command / config |
 |------|------------------|
+| Config cache | `tyravel config:cache` |
 | Route cache | `tyravel route:cache` |
-| View compile cache | `tyravel view:cache` + `config/views.ts` `compiled: true` |
-| Env validation | Per-file `schema` in `config/*.ts` |
-| Queue worker | `tyravel queue:work` under a process supervisor |
-| Graceful shutdown | `SIGTERM` handling is built into `serve()` |
+| View compile cache | `tyravel view:cache` + `compiled: true` |
+| Deploy gate | `tyravel deploy:check` |
+| Queue worker | `tyravel queue:work` (separate process) |
+| Graceful shutdown | Built into `serve()` / `tyravel start` |
 
-## Deploy targets
+## Choose a host
 
-Tyravel runs on any Node 26+ host (container, VM, bare metal). Standard Web APIs mean adapters stay thin — see `serve()` in `@tyravel/core`.
+| Guide | Best for |
+|-------|----------|
+| [Platform matrix](/guide/deployment/platforms) | Compare options |
+| [Railway](/guide/deployment/railway) | Fastest first deploy |
+| [Fly.io](/guide/deployment/fly) | Multi-region + Postgres |
+| [Docker](/guide/deployment/docker) | VPS / Kubernetes |
+| [Cloudflare](/guide/deployment/cloudflare) | CDN + R2 in front of Node |
+| [CI/CD](/guide/deployment/ci-cd) | GitHub Actions release pipeline |
+| [Tyravel Cloud](/guide/deployment/tyravel-cloud) | Future managed platform |
 
-### Platform walkthroughs
-
-Copy-paste manifests live in [`examples/hello-world/deploy/`](https://github.com/thesimonharms/tyravel/tree/main/examples/hello-world/deploy).
-
-| Guide | When to use |
-|-------|-------------|
-| [Deployment overview](/guide/deployment) | Shared checklist, env vars, process model |
-| [Docker](/guide/deployment/docker) | Self-hosted, compose stacks, any orchestrator |
-| [Fly.io](/guide/deployment/fly) | Managed Postgres + Redis at the edge |
-| [Railway](/guide/deployment/railway) | Fast managed deploy with Postgres plugins |
+Manifests: [`examples/hello-world/deploy/`](https://github.com/thesimonharms/tyravel/tree/main/examples/hello-world/deploy).
 
 Minimum production boot:
 
 ```bash
-export NODE_ENV=production TYRAVEL_HOST=0.0.0.0 TYRAVEL_PORT=${PORT:-3000}
-tyravel migrate && tyravel route:cache && tyravel view:cache
+export NODE_ENV=production APP_DEBUG=false
+export TYRAVEL_HOST=0.0.0.0 TYRAVEL_PORT=${PORT:-3000}
+tyravel migrate
+tyravel config:cache && tyravel route:cache && tyravel view:cache
 tyravel start
 ```
 
-Run `tyravel queue:work` in a separate process when using the database queue.
+Run `tyravel queue:work` in a separate process when using the database or Redis queue.
+
+## Cloudflare in one minute
+
+Full Tyravel does not run on Workers yet. The recommended pattern:
+
+1. Deploy to Fly or Railway (Node origin).
+2. Add domain in Cloudflare (proxied DNS).
+3. Optional: R2 for uploads via `@tyravel/storage-r2`.
+4. Cache public GETs with [ETag middleware](/cookbook/edge-cache).
+
+Details: [Deploy with Cloudflare](/guide/deployment/cloudflare).
 
 ## Cookbook & reference
 
-- [Realtime UI with Echo](/cookbook/realtime-echo) — recipe for channel auth + client bootstrap
-- [CLI reference](/reference/generated/cli) — full command list
-- [Upgrading to 1.0](/guide/upgrading-to-1.0) — migration checklist for apps on 0.x
+- [Realtime UI with Echo](/cookbook/realtime-echo)
+- [Edge response cache](/cookbook/edge-cache)
+- [Performance](/guide/performance)
+- [CLI reference](/reference/generated/cli)
+- [Upgrading to 1.0](/guide/upgrading-to-1.0)

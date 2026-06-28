@@ -2,14 +2,21 @@
 
 Serve cacheable public GET responses from an edge network using Tyravel's **ETag middleware** (Tier 15) and your CDN or reverse proxy replay cache.
 
+For Cloudflare-specific architecture (proxy + R2 + origin on Fly/Railway), start with the [Cloudflare deployment guide](/guide/deployment/cloudflare).
+
 ## App setup
 
 Wrap safe, idempotent GET routes with HTTP cache middleware:
 
 ```typescript
+import { createHash } from 'node:crypto';
 import { createHttpCacheMiddleware } from '@tyravel/http';
 
-Route.get('/posts/:slug', handler, {
+function hashBody(body: string): string {
+  return createHash('sha256').update(body).digest('hex');
+}
+
+Route.get('/posts/:slug', showPost, {
   middleware: [
     createHttpCacheMiddleware({
       maxAge: 300,
@@ -21,29 +28,41 @@ Route.get('/posts/:slug', handler, {
 
 Tyravel emits `ETag` and honors `If-None-Match` with `304 Not Modified` when content is unchanged.
 
-## Cloudflare
+## Cloudflare (recommended pairing)
 
-1. Enable **Cache Rules** for `GET` paths that return `Cache-Control: public` or your middleware `max-age`.
-2. Respect origin `ETag` — Cloudflare revalidates with `If-None-Match` on cache hits.
-3. Bypass cache for authenticated/session routes (cookies, `Authorization`).
+Typical stack: **Node origin** (Fly/Railway/Docker) + **Cloudflare proxy** in front.
 
-Example cache rule expression:
+1. Orange-cloud your domain to the origin hostname.
+2. SSL mode: **Full (strict)**.
+3. Add **Cache Rules** for public `GET` routes:
 
 ```
 (http.request.method eq "GET" and starts_with(http.request.uri.path, "/posts/"))
 ```
 
-Set **Edge TTL** from `Cache-Control` and enable **Origin Cache Control**.
+4. Enable **Origin Cache Control** and respect `ETag` revalidation.
+5. Create a **Cache Rule** bypass for `/dashboard/*`, `/api/me`, and any route that sets `Set-Cookie`.
+
+### Cacheable vs bypass
+
+| Route type | Edge cache? |
+|------------|-------------|
+| Public blog post HTML | Yes — short `max-age` + ETag |
+| Authenticated dashboard | **Bypass** |
+| JSON API with personal data | **Bypass** |
+| Versioned assets (`/build/*`) | Yes — long `max-age`, fingerprinted filenames |
+| WebSocket upgrade | **Bypass** (auto) |
+
+### Tiered cache
+
+Enable **Tiered Cache** in Cloudflare to reduce origin load for global audiences. Origin still runs Tyravel SSR; edge serves repeat views of cacheable pages.
 
 ## Fly.io
 
-Use Fly's [http_service concurrency](https://fly.io/docs/reference/configuration/#the-http_service-section) with Tyravel behind `fly-proxy`. For replay-style caching:
-
-- Terminate TLS at Fly; run Tyravel with `prepareHttpServer()` and route cache warm.
-- Set `Cache-Control` on public JSON/HTML responses.
-- Use `fly certs` + multiple machines; sticky sessions are **not** required for cacheable GET routes.
-
-For dynamic HTML with sessions, keep cache off and rely on Tyravel view/response caches at the origin.
+- Terminate TLS at Fly; run Tyravel with `prepareHttpServer()` and warmed route/view caches.
+- Set `Cache-Control` on public responses.
+- Multiple machines do not need sticky sessions for cacheable GET routes.
+- Dynamic session HTML: disable edge cache; use Tyravel `Cache.remember()` at origin.
 
 ## Railway / nginx
 
@@ -60,16 +79,9 @@ location /public/ {
 
 Ensure Tyravel sends `ETag` so nginx can revalidate instead of serving stale content indefinitely.
 
-## Checklist
-
-| Route type | Edge cache? |
-|------------|-------------|
-| Public blog post HTML | Yes — short `max-age` + ETag |
-| Authenticated dashboard | No |
-| JSON API with personal data | No |
-| Versioned static assets (`/build/*`) | Yes — long `max-age`, fingerprinted filenames |
-
 ## Related
 
+- [Cloudflare deployment](/guide/deployment/cloudflare)
+- [Deployment overview](/guide/deployment)
 - [Cache](/guide/cache) — `Cache.remember()` and Redis
-- [Performance](/guide/performance) — production boot and pool sizing
+- [Performance](/guide/performance) — boot profile and clustering

@@ -1,89 +1,156 @@
 # Deployment
 
-Run Tyravel in production on **Node.js 26+** (or Bun). Apps boot through `src/main.ts` → `serve()` with graceful `SIGTERM` shutdown.
+Tyravel runs in production on **Node.js 26+** (or Bun) behind `tyravel start`. This guide is the hub for shipping apps to Docker, managed platforms, Cloudflare-backed origins, and (eventually) Tyravel Cloud.
 
-## Before you deploy
+## Choose your path
 
-Complete this checklist on every target:
+| Goal | Guide |
+|------|-------|
+| Compare platforms and app shapes | [Platform matrix](/guide/deployment/platforms) |
+| Fastest managed deploy | [Railway](/guide/deployment/railway) |
+| Multi-region + Postgres | [Fly.io](/guide/deployment/fly) |
+| Containers / Kubernetes / VPS | [Docker](/guide/deployment/docker) |
+| Cloudflare CDN, R2, partial edge | [Cloudflare](/guide/deployment/cloudflare) |
+| Automated pipelines | [CI/CD](/guide/deployment/ci-cd) |
+| Future managed hosting | [Tyravel Cloud](/guide/deployment/tyravel-cloud) (planned) |
+| Backend-only API | [Headless API](/guide/headless) |
+
+Example manifests: [`examples/hello-world/deploy/`](https://github.com/thesimonharms/tyravel/tree/main/examples/hello-world/deploy), [`examples/headless-api/deploy/`](https://github.com/thesimonharms/tyravel/tree/main/examples/headless-api/deploy).
+
+## Production checklist
+
+Complete on every release:
 
 ```bash
-# 1. Production env
+# 1. Environment
 export NODE_ENV=production
 export APP_ENV=production
 export APP_DEBUG=false
 export APP_URL=https://your-domain.example
-
-# 2. Listen on all interfaces (required in containers)
 export TYRAVEL_HOST=0.0.0.0
-export TYRAVEL_PORT=${PORT:-3000}   # map platform PORT → TYRAVEL_PORT
+export TYRAVEL_PORT=${PORT:-3000}
 
-# 3. Database — use Postgres or MySQL in production (not SQLite on ephemeral disks)
+# 2. Database — Postgres or MySQL (not SQLite on ephemeral disks)
 export DB_CONNECTION=postgres
-# ... DB_HOST, DB_DATABASE, DB_USERNAME, DB_PASSWORD
 
-# 4. Warm caches (run in CI release phase or container entrypoint)
+# 3. Warm caches (CI build or release phase)
 tyravel migrate
 tyravel config:cache
 tyravel route:cache
-tyravel view:cache
+tyravel view:cache          # skip for headless
+
+# 4. Gate (optional)
+tyravel deploy:check
+
+# 5. Start
+tyravel start
 ```
 
-With `NODE_ENV=production`, views default to `compiled: true` and `requireCompiledCache: true` — **you must run `tyravel view:cache` before boot** or the app throws `CompiledViewCacheMissError`.
+With `NODE_ENV=production`, views default to `compiled: true` and `requireCompiledCache: true`. **Run `tyravel view:cache` before boot** or the app throws `CompiledViewCacheMissError`.
 
-Keep `@tyravel/cli` available in the deploy environment for `migrate`, `config:cache`, `route:cache`, and `view:cache`. Either install it as a production dependency or run those commands in a build/release step before pruning dev dependencies.
+Keep `@tyravel/cli` in production `dependencies` so cache and migrate commands work inside containers (`npm ci --omit=dev`).
+
+In `src/main.ts`, call `prepareHttpServer()` after `app.boot()` so route and middleware caches are validated at startup.
 
 ## Process model
 
-| Process | Command | Notes |
-|---------|---------|-------|
-| **Web** | `tyravel start` | Production server (no view watcher) |
-| **Queue worker** | `tyravel queue:work` | Separate container/dyno when using queued mail, events, or broadcasts |
-| **Scheduler** | `tyravel schedule:run` | Cron sidecar or platform scheduler hitting a protected route |
+| Process | Command | When |
+|---------|---------|------|
+| **Web** | `tyravel start` | Always — production HTTP server |
+| **Web (scaled)** | `tyravel start --cluster` | Multi-core Node; requires Redis/DB sessions |
+| **Queue** | `tyravel queue:work` | Separate container when using queued mail, events, notifications |
+| **Scheduler** | `tyravel schedule:run` | Cron sidecar or platform scheduler |
 
-Use `tyravel serve` for local development only — it enables `TYRAVEL_VIEW_WATCH`. New apps scaffold a `deploy/` directory with Docker, Fly, and Railway manifests.
+Use `tyravel dev` / `tyravel serve` for local development only — they enable view hot reload.
 
-`@tyravel/cli` belongs in **production** `dependencies` so `npx tyravel migrate`, `config:cache`, `route:cache`, and `view:cache` work inside containers (`npm ci --omit=dev`).
+```bash
+# Horizontal scale on a single machine (Node cluster)
+tyravel start --cluster --workers=4
+```
 
-## Platform guides
+## Architecture patterns
 
-| Guide | Best for |
-|-------|----------|
-| [Docker](/guide/deployment/docker) | Self-hosted, compose stacks, any container orchestrator |
-| [Fly.io](/guide/deployment/fly) | Global edge, managed Postgres + Redis |
-| [Railway](/guide/deployment/railway) | Fast managed deploy, plugins for Postgres/Redis |
+### Monolith (default)
 
-Example manifests live in [`examples/hello-world/deploy/`](https://github.com/thesimonharms/tyravel/tree/main/examples/hello-world/deploy).
+One deploy runs SSR, API, sessions, and optional queues. Simplest operational model. Host on Fly, Railway, or Docker.
+
+### Headless API
+
+JSON-only apps skip views and Echo. Smaller images and faster cold start. Ideal behind [Cloudflare](/guide/deployment/cloudflare) for global APIs.
+
+### CDN + origin
+
+Put Cloudflare (or another CDN) in front of a Node origin for TLS, DDoS protection, and edge caching of public GET routes. Tyravel ships `ETag` / `304` middleware — see [edge cache cookbook](/cookbook/edge-cache).
+
+### Split front-end
+
+Static SPA on Cloudflare Pages; Tyravel headless API on Fly/Railway. Common for mobile + web clients sharing one API.
+
+## Cloudflare summary
+
+| Works today | Not yet |
+|-------------|---------|
+| DNS proxy, WAF, TLS | Full app on Workers |
+| CDN + cache rules + ETag | `tyravel queue:work` on edge |
+| R2 storage (`@tyravel/storage-r2`) | D1 as Tyravel database |
+| Tunnel for previews | SSR view compile on Workers |
+
+**Recommended:** Node origin (Fly/Railway/Docker) + Cloudflare proxy + optional R2. Details in [Cloudflare deployment](/guide/deployment/cloudflare).
+
+## Tyravel Cloud (planned)
+
+Managed git-push deploy with Postgres, Redis, R2, and CDN — similar to Laravel Cloud or Vercel for Next.js. Not available yet; use platform guides above. See [Tyravel Cloud](/guide/deployment/tyravel-cloud).
 
 ## Environment variables
 
-| Variable | Production value |
-|----------|------------------|
+| Variable | Production |
+|----------|------------|
 | `NODE_ENV` | `production` |
 | `APP_DEBUG` | `false` |
-| `APP_URL` | Public HTTPS URL (signed links, mail) |
+| `APP_URL` | Public HTTPS URL |
 | `TYRAVEL_HOST` | `0.0.0.0` |
-| `TYRAVEL_PORT` | Platform `PORT` (Fly: `8080`, Railway: injected) |
-| `SESSION_ENCRYPT` | `true` when using `@tyravel/crypto` |
+| `TYRAVEL_PORT` | Platform `PORT` |
+| `DB_CONNECTION` | `postgres` or `mysql` |
+| `DB_POOL_WARMUP` | `true` |
+| `CACHE_STORE` | `redis` when Redis is available |
 | `QUEUE_CONNECTION` | `database` or `redis` |
-| `BROADCAST_CONNECTION` | `websocket` when using realtime (requires Redis) |
+| `SESSION_ENCRYPT` | `true` with `@tyravel/crypto` |
+| `BROADCAST_CONNECTION` | `websocket` + Redis for multi-instance |
 
-See [Configuration reference](/guide/configuration-reference) for the full config map.
+Full map: [Configuration reference](/guide/configuration-reference).
 
 ## Health checks
 
-Scaffolded apps expose health routes when `config/health.ts` is enabled:
+| Path | Use |
+|------|-----|
+| `/health/live` | Liveness — process up |
+| `/health/ready` | Readiness — DB + optional Redis |
+| `/health` | Alias for readiness |
 
-| Path | Purpose |
-|------|---------|
-| `/health/live` | **Liveness** — process is running (no dependency probes) |
-| `/health/ready` | **Readiness** — database and optional Redis checks |
-| `/health` | Alias for readiness (backward compatible) |
+Point load balancer readiness probes at `/health/ready`.
 
-Point load balancer **readiness** probes at `/health/ready`. Use `/health/live` only when you need a lightweight liveness signal during slow startup.
+## Performance defaults
+
+Production scaffolds enable Tier 19 speed features when `APP_DEBUG=false`:
+
+- JSON fast path, request pooling, early 404
+- Config/route cache, pool warm-up, view LRU
+- See [Performance](/guide/performance) for tuning, clustering, and `tyravel build` bundles.
+
+## Troubleshooting
+
+| Issue | Check |
+|-------|-------|
+| `CompiledViewCacheMissError` | Run `tyravel view:cache` in build |
+| 502 behind CDN | Origin listening on `0.0.0.0`; health probe path |
+| Sessions flip between workers | Redis or database session driver |
+| Queue jobs never run | Separate `queue:work` process |
+| Slow boot | `config:cache`, `preloadCompiled`, `DB_POOL_WARMUP` |
 
 ## Related
 
-- [Benchmarks](/guide/benchmarks) — local throughput baselines for HTTP, ORM, and view compile
+- [Performance](/guide/performance)
+- [Benchmarks](/guide/benchmarks)
+- [Observability cookbook](/cookbook/observability)
+- [Broadcasting](/guide/broadcasting) — WebSocket proxy
 - [Tutorial 4: Realtime & deploy](/tutorials/04-realtime-and-deploy)
-- [Broadcasting](/guide/broadcasting) — WebSocket proxy headers
-- [Upgrading to 1.0](/guide/upgrading-to-1.0)

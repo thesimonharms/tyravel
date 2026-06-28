@@ -116,5 +116,7 @@ Uses linked service variables against your local process.
 
 ## Next
 
+- [Cloudflare](/guide/deployment/cloudflare) — CDN + R2 in front of Railway origin
+- [CI/CD](/guide/deployment/ci-cd) — automate release pipelines
 - [Deployment overview](/guide/deployment) — shared checklist
 - [Tutorial 4](/tutorials/04-realtime-and-deploy) — production task list
