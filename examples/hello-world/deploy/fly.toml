@@ -29,11 +29,11 @@ primary_region = "iad"
     grace_period = "10s"
     interval = "30s"
     method = "GET"
-    path = "/health"
+    path = "/health/ready"
     timeout = "5s"
 
 [deploy]
-  release_command = "node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js migrate"
+  release_command = "npx tyravel migrate"
 
 [[vm]]
   memory = "512mb"
@@ -42,4 +42,4 @@ primary_region = "iad"
 
 [processes]
   app = "./deploy/docker-entrypoint.sh"
-  worker = "node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js queue:work"
+  worker = "npx tyravel queue:work"

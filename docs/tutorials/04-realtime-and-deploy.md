@@ -47,7 +47,7 @@ Minimum production boot:
 ```bash
 export NODE_ENV=production TYRAVEL_HOST=0.0.0.0 TYRAVEL_PORT=${PORT:-3000}
 tyravel migrate && tyravel route:cache && tyravel view:cache
-node --experimental-strip-types src/main.ts
+tyravel start
 ```
 
 Run `tyravel queue:work` in a separate process when using the database queue.

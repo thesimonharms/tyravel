@@ -747,6 +747,33 @@ export default {
         keyId: env('APPLE_KEY_ID', ''),
         privateKey: env('APPLE_PRIVATE_KEY', ''),
       },
+      gitlab: {
+        clientId: env('GITLAB_CLIENT_ID', ''),
+        clientSecret: env('GITLAB_CLIENT_SECRET', ''),
+        redirectUri: env('GITLAB_REDIRECT_URI', 'http://127.0.0.1:3000/auth/gitlab/callback'),
+        scopes: ['read_user'],
+      },
+      slack: {
+        clientId: env('SLACK_CLIENT_ID', ''),
+        clientSecret: env('SLACK_CLIENT_SECRET', ''),
+        redirectUri: env('SLACK_REDIRECT_URI', 'http://127.0.0.1:3000/auth/slack/callback'),
+        scopes: ['openid', 'profile', 'email'],
+      },
+      spotify: {
+        clientId: env('SPOTIFY_CLIENT_ID', ''),
+        clientSecret: env('SPOTIFY_CLIENT_SECRET', ''),
+        redirectUri: env('SPOTIFY_REDIRECT_URI', 'http://127.0.0.1:3000/auth/spotify/callback'),
+      },
+      twitch: {
+        clientId: env('TWITCH_CLIENT_ID', ''),
+        clientSecret: env('TWITCH_CLIENT_SECRET', ''),
+        redirectUri: env('TWITCH_REDIRECT_URI', 'http://127.0.0.1:3000/auth/twitch/callback'),
+      },
+      bitbucket: {
+        clientId: env('BITBUCKET_CLIENT_ID', ''),
+        clientSecret: env('BITBUCKET_CLIENT_SECRET', ''),
+        redirectUri: env('BITBUCKET_REDIRECT_URI', 'http://127.0.0.1:3000/auth/bitbucket/callback'),
+      },
     },
   },
   policies: {},

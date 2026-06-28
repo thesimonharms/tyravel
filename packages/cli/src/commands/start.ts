@@ -10,10 +10,10 @@ import {
   positionalArgs,
 } from '../utils.js';
 
-export class ServeCommand extends Command {
-  override readonly name = 'serve';
-  override readonly description = 'Start the development server';
-  override readonly usage = 'tyravel serve [--port=<port>] [--host=<hostname>]';
+export class StartCommand extends Command {
+  override readonly name = 'start';
+  override readonly description = 'Start the production server';
+  override readonly usage = 'tyravel start [--port=<port>] [--host=<hostname>]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -37,16 +37,16 @@ export class ServeCommand extends Command {
       return 1;
     }
 
-    console.log(`Starting Tyravel development server using ${runtime.name}...`);
+    console.log(`Starting Tyravel production server using ${runtime.name}...`);
 
     const child = spawnTypeScriptEntry({
       entry,
       cwd: root,
       env: {
         ...process.env,
+        NODE_ENV: process.env.NODE_ENV ?? 'production',
         TYRAVEL_PORT: String(port),
         TYRAVEL_HOST: hostname,
-        TYRAVEL_VIEW_WATCH: '1',
       },
     });
 

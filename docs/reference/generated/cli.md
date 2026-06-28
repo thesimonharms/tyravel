@@ -22,6 +22,7 @@ tyravel help <command>
 | `new` | Create a new Tyravel application | `tyravel new <name> [--path=<directory>] [--db=sqlite\|mysql\|postgres] [--redis\|--no-redis] [--auth\|--no-auth] [--queue=database\|redis] [--mail=log\|smtp\|array] [--ai\|--no-ai]` |
 | `serve` | Start the development server | `tyravel serve [--port=<port>] [--host=<hostname>]` |
 | `shell` | Start an interactive Tyravel shell (REPL) | — |
+| `start` | Start the production server | `tyravel start [--port=<port>] [--host=<hostname>]` |
 | `version` | Show the Tyravel CLI version | — |
 
 ## Database

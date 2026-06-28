@@ -1,3 +1,4 @@
+import { chmod } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { spawn } from 'node:child_process';
 import { Command } from '../command.js';
@@ -34,6 +35,15 @@ import {
   viewsConfig,
   webRoutes,
 } from '../stubs.js';
+import {
+  deployReadme,
+  dockerCompose,
+  dockerEntrypoint,
+  dockerfile,
+  dockerignore,
+  flyToml,
+  railwayToml,
+} from '../stubs-deploy.js';
 import { envExample } from '../stubs-project.js';
 import { featureTestStub, projectVitestConfig } from '../stubs-testing.js';
 import {
@@ -182,6 +192,15 @@ export class NewCommand extends Command {
       projectPath(targetDir, 'tests/feature/example.test.ts'),
       featureTestStub('ExampleTest'),
     );
+    const entrypointPath = projectPath(targetDir, 'deploy/docker-entrypoint.sh');
+    await writeFile(entrypointPath, dockerEntrypoint());
+    await chmod(entrypointPath, 0o755);
+    await writeFile(projectPath(targetDir, 'deploy/Dockerfile'), dockerfile());
+    await writeFile(projectPath(targetDir, 'deploy/docker-compose.yml'), dockerCompose());
+    await writeFile(projectPath(targetDir, 'deploy/fly.toml'), flyToml(name));
+    await writeFile(projectPath(targetDir, 'deploy/railway.toml'), railwayToml());
+    await writeFile(projectPath(targetDir, 'deploy/README.md'), deployReadme());
+    await writeFile(projectPath(targetDir, '.dockerignore'), dockerignore());
 
     console.log(`Tyravel application created successfully.`);
     console.log('');
@@ -195,7 +214,8 @@ export class NewCommand extends Command {
     console.log(`  cd ${name}`);
     console.log('  npm install');
     console.log('  npm test');
-    console.log('  tyravel serve');
+    console.log('  tyravel serve     # development');
+    console.log('  tyravel start     # production');
     if (projectOptions.auth) {
       console.log('');
       console.log('  Auth dependency included — run tyravel auth:install to scaffold guards and routes.');

@@ -64,7 +64,7 @@ session: {
 
 ## Social OAuth
 
-Built-in providers: **GitHub**, **Google**, **Discord**, **Microsoft**, **X**, **Facebook**, **LinkedIn**, and **Apple**.
+Built-in providers: **GitHub**, **Google**, **Discord**, **Microsoft**, **X**, **Facebook**, **LinkedIn**, **Apple**, **GitLab**, **Slack**, **Spotify**, **Twitch**, and **Bitbucket**.
 
 All built-in drivers use **PKCE** for the authorization code flow. The auth scaffold stores the PKCE verifier in session during redirect and sends it during callback.
 

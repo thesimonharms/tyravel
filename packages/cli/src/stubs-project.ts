@@ -53,12 +53,15 @@ export function projectPackageJson(name: string, options: NewProjectOptions): st
       type: 'module',
       scripts: {
         dev: 'tyravel serve',
-        start: 'tyravel serve',
+        start: 'tyravel start',
+        worker: 'tyravel queue:work',
         test: 'vitest run',
       },
-      dependencies,
-      devDependencies: {
+      dependencies: {
+        ...dependencies,
         '@tyravel/cli': CORE_VERSION,
+      },
+      devDependencies: {
         '@tyravel/testing': CORE_VERSION,
         vitest: '^3.2.4',
       },

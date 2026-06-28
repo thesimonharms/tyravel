@@ -46,6 +46,7 @@ import { QueueFailedCommand, QueueFailedTableCommand, QueueRetryCommand } from '
 import { QueueTableCommand } from './commands/queue-table.js';
 import { QueueWorkCommand } from './commands/queue-work.js';
 import { ServeCommand } from './commands/serve.js';
+import { StartCommand } from './commands/start.js';
 import { ShellCommand } from './commands/shell.js';
 import { VectorEmbedCommand } from './commands/vector-embed.js';
 import { VectorInstallCommand } from './commands/vector-install.js';
@@ -71,6 +72,7 @@ export function createKernel(): ConsoleKernel {
     new CryptoInstallCommand(),
     new CryptoGenerateKeysCommand(),
     new ServeCommand(),
+    new StartCommand(),
     new ShellCommand(),
     new MigrateCommand(),
     new DbSeedCommand(),

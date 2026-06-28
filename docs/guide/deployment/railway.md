@@ -43,9 +43,9 @@ Add a **Postgres** plugin; Railway exposes `PG*` variables you reference above.
 In **Settings → Deploy → Pre-deploy command**:
 
 ```bash
-node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js migrate \
-  && node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js route:cache \
-  && node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js view:cache
+npx tyravel migrate \
+  && npx tyravel route:cache \
+  && npx tyravel view:cache
 ```
 
 ### Start command
@@ -64,9 +64,9 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-preDeployCommand = "node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js migrate"
+preDeployCommand = "npx tyravel migrate"
 startCommand = "./deploy/docker-entrypoint.sh"
-healthcheckPath = "/health"
+healthcheckPath = "/health/ready"
 healthcheckTimeout = 30
 restartPolicyType = "ON_FAILURE"
 ```
@@ -78,7 +78,7 @@ restartPolicyType = "ON_FAILURE"
 3. **Start command:**
 
 ```bash
-node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js queue:work
+npx tyravel queue:work
 ```
 
 4. Share the same Postgres variables; disable public networking on the worker.
@@ -100,7 +100,7 @@ node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js qu
 
 ```bash
 railway link
-railway run node --experimental-strip-types src/main.ts
+railway run npx tyravel start
 ```
 
 Uses linked service variables against your local process.

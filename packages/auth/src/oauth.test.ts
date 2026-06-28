@@ -2,12 +2,17 @@ import { describe, expect, it } from 'vitest';
 import { createPkcePair } from './social/pkce.js';
 import {
   AppleOAuthDriver,
+  BitbucketOAuthDriver,
   DiscordOAuthDriver,
   FacebookOAuthDriver,
   GithubOAuthDriver,
+  GitlabOAuthDriver,
   GoogleOAuthDriver,
   LinkedInOAuthDriver,
   MicrosoftOAuthDriver,
+  SlackOAuthDriver,
+  SpotifyOAuthDriver,
+  TwitchOAuthDriver,
   XOAuthDriver,
 } from './social/builtin-drivers.js';
 
@@ -83,5 +88,42 @@ describe('OAuth drivers', () => {
     const url = new URL(new AppleOAuthDriver(config).authorizationUrl('state-apple'));
     expect(url.hostname).toBe('appleid.apple.com');
     expect(url.searchParams.get('response_mode')).toBe('query');
+  });
+
+  it('builds GitLab authorize URL with PKCE', () => {
+    const url = new URL(
+      new GitlabOAuthDriver(config).authorizationUrl('state-gl', {
+        codeChallenge: pkce.challenge,
+      }),
+    );
+    expect(url.hostname).toBe('gitlab.com');
+    expect(url.searchParams.get('code_challenge')).toBe(pkce.challenge);
+  });
+
+  it('builds Slack authorize URL', () => {
+    const url = new URL(new SlackOAuthDriver(config).authorizationUrl('state-slack'));
+    expect(url.hostname).toBe('slack.com');
+    expect(url.pathname).toBe('/openid/connect/authorize');
+  });
+
+  it('builds Spotify authorize URL with PKCE', () => {
+    const url = new URL(
+      new SpotifyOAuthDriver(config).authorizationUrl('state-spotify', {
+        codeChallenge: pkce.challenge,
+      }),
+    );
+    expect(url.hostname).toBe('accounts.spotify.com');
+    expect(url.searchParams.get('code_challenge_method')).toBe('S256');
+  });
+
+  it('builds Twitch authorize URL', () => {
+    const url = new URL(new TwitchOAuthDriver(config).authorizationUrl('state-twitch'));
+    expect(url.hostname).toBe('id.twitch.tv');
+  });
+
+  it('builds Bitbucket authorize URL', () => {
+    const url = new URL(new BitbucketOAuthDriver(config).authorizationUrl('state-bb'));
+    expect(url.hostname).toBe('bitbucket.org');
+    expect(url.searchParams.get('response_type')).toBe('code');
   });
 });

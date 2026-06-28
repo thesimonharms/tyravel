@@ -11,8 +11,7 @@ ENV NODE_ENV=production
 ENV TYRAVEL_HOST=0.0.0.0
 ENV TYRAVEL_PORT=3000
 
-RUN node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js route:cache \
- && node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js view:cache
+RUN npx tyravel route:cache && npx tyravel view:cache
 
 EXPOSE 3000
 

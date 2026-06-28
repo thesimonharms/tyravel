@@ -4,13 +4,15 @@ Health probes, structured logs, and queue failure signals for deployed Tyravel a
 
 ## Health endpoint
 
-Scaffolded apps register `HealthServiceProvider` and expose `GET /health` when `config/health.ts` is enabled:
+Scaffolded apps register `HealthServiceProvider` and expose liveness and readiness routes when `config/health.ts` is enabled:
 
 ```typescript
 // config/health.ts
 export default {
   enabled: true,
   path: '/health',
+  livenessPath: '/health/live',
+  readinessPath: '/health/ready',
   checks: {
     database: true,
     redis: true, // enable when using Redis
@@ -18,7 +20,13 @@ export default {
 } satisfies HealthConfig;
 ```
 
-Point load balancer probes at `/health`. A `503` response means a configured check failed — inspect the JSON body for per-check status.
+| Path | Use |
+|------|-----|
+| `/health/live` | Liveness — returns `{ status: 'ok' }` without probing dependencies |
+| `/health/ready` | Readiness — runs database/Redis checks; `503` when a check fails |
+| `/health` | Alias for readiness |
+
+Point load balancer **readiness** probes at `/health/ready`. A `503` on readiness means a dependency failed — inspect the JSON body for per-check status.
 
 Disable Redis checks in single-process dev when Redis is not running:
 

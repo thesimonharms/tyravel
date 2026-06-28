@@ -557,7 +557,7 @@ Tyravel **1.0.0** is the first semver-strict era (see [STABILITY.md](STABILITY.m
 - [x] **In-repo documentation system** — VitePress guide + reference + tutorials + cookbook; `npm run docs:generate` for package/CLI manifests; GitHub Pages workflow (`.github/workflows/docs.yml`)
 - [x] **Hosted documentation site (workflow)** — GitHub Pages deploy (`.github/workflows/docs.yml`); `docs/public/CNAME` for tyravel.dev
 - [x] **Hosted documentation site (live)** — GitHub Pages enabled (`build_type: workflow`); Docs workflow deploys on push to `main`; interim URL https://thesimonharms.github.io/tyravel/
-- [ ] **Custom domain (tyravel.dev)** — point DNS at GitHub Pages, then set domain in repo Pages settings; `docs/public/CNAME` is already in the build artifact
+- [x] **Custom domain (tyravel.dev)** — DNS pointed at GitHub Pages; HTTPS live at https://tyravel.dev
 - [x] **Package & CLI reference (generated)** — every `@tyravel/*` package with exports table; full `tyravel` command list from `@tyravel/cli`
 - [x] **Configuration reference** — `docs/guide/configuration-reference.md` for scaffold config keys and env vars
 - [x] **Complete package reference** — facade method tables in generated reference (`docs/reference/generated/facades.md`); per-package exports remain auto-generated
@@ -588,31 +588,41 @@ First post-1.0 minor. Focus on measurable throughput, community extensibility, a
 
 #### P1 — Strong want
 
-- [ ] **CI benchmark job** — informational workflow step on `main`; store JSON artifact for trend comparison
-- [ ] **Regression notes** — document expected ranges per Node 26 on Linux CI in the benchmark guide
+- [x] **CI benchmark job** — `.github/workflows/benchmarks.yml` on `main`; JSON artifact per commit
+- [x] **Regression notes** — expected quick-mode ranges for Node 26 on Linux CI in `docs/guide/benchmarks.md`
 
 #### P2 — If scope allows
 
 - [ ] **Hello-world route bench** — optional full-stack bench using `examples/hello-world` SSR route (not just JSON stub)
 
-### Community ecosystem
+### Built-in OAuth providers
 
 #### P1 — Strong want
 
-- [ ] **Community OAuth cookbook** — third-party social driver recipe building on `tyravel make:social-driver`
-- [ ] **Example community driver** — reference package under `examples/` showing `registerOAuthDriver()` wiring
+- [x] **Additional social providers** — GitLab, Slack, Spotify, Twitch, and Bitbucket drivers in `@tyravel/auth`
+- [ ] **Self-hosted GitLab** — optional `baseUrl` config for non-gitlab.com instances
 
 ### v1.0 ops closeout
 
-- [ ] **Custom domain (tyravel.dev)** — point DNS at GitHub Pages, verify HTTPS; `docs/public/CNAME` is already in the build artifact
+- [x] **Custom domain (tyravel.dev)** — DNS and HTTPS verified; live at https://tyravel.dev
+
+### Production DevOps (v1.1 polish)
+
+#### P1 — Strong want
+
+- [x] **`tyravel start`** — production server command (no view watcher; hides `--experimental-strip-types`)
+- [x] **Deploy scaffold** — `deploy/` directory (Docker, Compose, Fly, Railway) on `tyravel new`
+- [x] **CLI in production deps** — `@tyravel/cli` moved to `dependencies` for container `npm ci --omit=dev`
+- [x] **Health probe split** — `/health/live` (liveness) and `/health/ready` (readiness) in `HealthServiceProvider`
+- [x] **Deploy docs & manifests** — `npx tyravel start|migrate|queue:work` across guides and `examples/hello-world/deploy/`
 
 ## Tier X — Ongoing
 
 Items not tied to a version number. Land when useful; do not block releases.
 
-- [ ] **Additional OAuth / social providers** — community drivers beyond built-ins (see Tier 17)
+- [x] **Additional OAuth / social providers** — GitLab, Slack, Spotify, Twitch, Bitbucket built-ins (Tier 17)
 - [x] **Native WebSocket broadcasting guide** — proxy, Redis fan-out, and Echo setup in `docs/guide/broadcasting.md`
-- [x] **Performance benchmarks** — harness + guide shipped in Tier 17; CI trend job remains open
+- [x] **Performance benchmarks** — harness, guide, and CI trend job shipped in Tier 17
 
 ## Shipped in v0.1.0
 

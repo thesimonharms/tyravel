@@ -38,12 +38,14 @@ From the package entry point (`dist/index.d.ts`). Deep imports are not supported
 - `AuthManager`
 - `AuthenticationException`
 - `AuthorizationException`
+- `BitbucketOAuthDriver`
 - `DatabaseSessionStore`
 - `DiscordOAuthDriver`
 - `EloquentUserProvider`
 - `FacebookOAuthDriver`
 - `Gate`
 - `GithubOAuthDriver`
+- `GitlabOAuthDriver`
 - `GoogleOAuthDriver`
 - `Hasher`
 - `InvalidCredentialsException`
@@ -60,8 +62,11 @@ From the package entry point (`dist/index.d.ts`). Deep imports are not supported
 - `Session`
 - `SessionGuard`
 - `SessionManager`
+- `SlackOAuthDriver`
+- `SpotifyOAuthDriver`
 - `TokenGuard`
 - `TokenLookupContext`
+- `TwitchOAuthDriver`
 - `VerifyCsrfTokenException`
 - `XOAuthDriver`
 - `clearOAuthDriversForTesting`

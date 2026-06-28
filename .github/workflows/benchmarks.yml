@@ -1,0 +1,52 @@
+name: Benchmarks
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: benchmarks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 26
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Run benchmarks (quick mode)
+        run: BENCHMARK_QUICK=1 npm run benchmark -- --json > benchmark-report.json
+
+      - name: Print summary
+        run: node -e "
+          const report = JSON.parse(require('fs').readFileSync('benchmark-report.json', 'utf8'));
+          const lines = report.results.map((r) => \`- \${r.label}: \${r.value.toLocaleString()} \${r.unit}\`);
+          require('fs').appendFileSync(process.env.GITHUB_STEP_SUMMARY, [
+            '## Tyravel benchmarks',
+            '',
+            \`Node \${report.node} on \${report.platform}/\${report.arch} (quick mode)\`,
+            '',
+            ...lines,
+            '',
+          ].join('\n'));
+        "
+
+      - name: Upload benchmark artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-report-${{ github.sha }}
+          path: benchmark-report.json
+          retention-days: 90

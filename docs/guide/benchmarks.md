@@ -38,6 +38,24 @@ Results are **informational baselines**, not competitive claims. Throughput vari
 - Compare runs on the same machine and Node version when tracking regressions.
 - Use the observability cookbook for production latency and saturation signals — benchmarks do not replace real traffic profiling.
 
+## CI trend artifacts
+
+On every push to `main`, the [Benchmarks workflow](https://github.com/thesimonharms/tyravel/actions/workflows/benchmarks.yml) runs quick-mode benchmarks (`BENCHMARK_QUICK=1`) and uploads a JSON artifact named `benchmark-report-<sha>`. Download artifacts from the workflow run to compare throughput over time.
+
+The job is **informational only** — it does not fail on regressions. Use it to spot large swings before they reach production profiling.
+
+### Expected ranges (Node 26, Linux CI, quick mode)
+
+GitHub-hosted `ubuntu-latest` runners are noisy; treat these as ballpark ranges, not pass/fail gates:
+
+| Benchmark | Typical range |
+|-----------|---------------|
+| `http.json` | 800 – 3,000 req/s |
+| `orm.select` | 5,000 – 20,000 ops/s |
+| `view.compile` | 20,000 – 60,000 ops/s |
+
+Full local runs (`BENCHMARK_QUICK=0`) use larger sample sizes and usually report higher throughput on a dedicated machine.
+
 ## Related
 
 - [Deployment](/guide/deployment) — horizontal scaling and worker sizing

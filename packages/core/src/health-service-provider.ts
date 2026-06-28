@@ -8,7 +8,12 @@ import { ServiceProvider } from './service-provider.js';
 
 export interface HealthConfig {
   enabled?: boolean;
+  /** Full readiness report (alias for readinessPath). */
   path?: string;
+  /** Process liveness — does not probe dependencies. */
+  livenessPath?: string;
+  /** Dependency readiness — database, Redis, etc. */
+  readinessPath?: string;
   checks?: {
     database?: boolean;
     redis?: boolean;
@@ -56,10 +61,20 @@ export class HealthServiceProvider extends ServiceProvider {
       });
     }
 
-    const path = healthConfig?.path ?? '/health';
-    Route.get(path, async () => {
+    const readinessHandler = async () => {
       const report = await checker.run();
       return Response.json(report, { status: report.status === 'ok' ? 200 : 503 });
-    });
+    };
+
+    const livenessPath = healthConfig?.livenessPath ?? '/health/live';
+    Route.get(livenessPath, () => Response.json({ status: 'ok' }));
+
+    const readinessPath = healthConfig?.readinessPath ?? healthConfig?.path ?? '/health';
+    Route.get(readinessPath, readinessHandler);
+
+    const legacyPath = healthConfig?.path;
+    if (legacyPath && legacyPath !== readinessPath) {
+      Route.get(legacyPath, readinessHandler);
+    }
   }
 }

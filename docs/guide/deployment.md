@@ -35,11 +35,13 @@ Keep `@tyravel/cli` available in the deploy environment for `migrate`, `route:ca
 
 | Process | Command | Notes |
 |---------|---------|-------|
-| **Web** | `node --experimental-strip-types src/main.ts` | Primary HTTP + WebSocket upgrade |
+| **Web** | `tyravel start` | Production server (no view watcher) |
 | **Queue worker** | `tyravel queue:work` | Separate container/dyno when using queued mail, events, or broadcasts |
 | **Scheduler** | `tyravel schedule:run` | Cron sidecar or platform scheduler hitting a protected route |
 
-Do not use `tyravel serve` in production — it enables `TYRAVEL_VIEW_WATCH` and spawns a dev child process.
+Use `tyravel serve` for local development only — it enables `TYRAVEL_VIEW_WATCH`. New apps scaffold a `deploy/` directory with Docker, Fly, and Railway manifests.
+
+`@tyravel/cli` belongs in **production** `dependencies` so `npx tyravel migrate`, `route:cache`, and `view:cache` work inside containers (`npm ci --omit=dev`).
 
 ## Platform guides
 
@@ -68,7 +70,15 @@ See [Configuration reference](/guide/configuration-reference) for the full confi
 
 ## Health checks
 
-Scaffolded apps expose `GET /health` when `config/health.ts` is enabled. Point load balancer probes at `/health`.
+Scaffolded apps expose health routes when `config/health.ts` is enabled:
+
+| Path | Purpose |
+|------|---------|
+| `/health/live` | **Liveness** — process is running (no dependency probes) |
+| `/health/ready` | **Readiness** — database and optional Redis checks |
+| `/health` | Alias for readiness (backward compatible) |
+
+Point load balancer **readiness** probes at `/health/ready`. Use `/health/live` only when you need a lightweight liveness signal during slow startup.
 
 ## Related
 

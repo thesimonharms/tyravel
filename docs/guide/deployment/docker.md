@@ -6,15 +6,7 @@ Containerize a Tyravel app for any orchestrator (Kubernetes, Nomad, a VPS) using
 
 - Docker 24+
 - A Tyravel app scaffolded with **Postgres** for production: `tyravel new my-app --db=postgres`
-- Copy deploy files into your app root:
-
-```bash
-cp examples/hello-world/deploy/Dockerfile examples/hello-world/deploy/docker-compose.yml examples/hello-world/deploy/fly.toml examples/hello-world/deploy/railway.toml ./
-mkdir -p deploy
-cp examples/hello-world/deploy/docker-entrypoint.sh deploy/
-cp examples/hello-world/deploy/.dockerignore ./
-chmod +x deploy/docker-entrypoint.sh
-```
+- `tyravel new` scaffolds `deploy/` automatically. Older apps can copy from `examples/hello-world/deploy/`.
 
 ## Dockerfile
 
@@ -33,8 +25,7 @@ ENV NODE_ENV=production
 ENV TYRAVEL_HOST=0.0.0.0
 ENV TYRAVEL_PORT=3000
 
-RUN node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js route:cache \
- && node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js view:cache
+RUN npx tyravel route:cache && npx tyravel view:cache
 
 EXPOSE 3000
 
@@ -56,10 +47,10 @@ docker build -t my-tyravel-app .
 set -e
 
 echo "Running migrations..."
-node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js migrate
+npx tyravel migrate
 
 echo "Starting Tyravel..."
-exec node --experimental-strip-types src/main.ts
+exec npx tyravel start
 ```
 
 Migrations run on every container start. For large fleets, run `tyravel migrate` once in a release job instead.
@@ -91,7 +82,7 @@ services:
 
   worker:
     build: .
-    command: node --experimental-strip-types node_modules/@tyravel/cli/dist/bin/tyravel.js queue:work
+    command: npx tyravel queue:work
     environment:
       NODE_ENV: production
       DB_CONNECTION: postgres

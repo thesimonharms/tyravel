@@ -24,12 +24,17 @@ export type OAuthDriverConstructor = SocialOAuthDriverConstructor;
 
 export {
   AppleOAuthDriver,
+  BitbucketOAuthDriver,
   DiscordOAuthDriver,
   FacebookOAuthDriver,
   GithubOAuthDriver,
+  GitlabOAuthDriver,
   GoogleOAuthDriver,
   LinkedInOAuthDriver,
   MicrosoftOAuthDriver,
+  SlackOAuthDriver,
+  SpotifyOAuthDriver,
+  TwitchOAuthDriver,
   XOAuthDriver,
 } from './social/builtin-drivers.js';
 
