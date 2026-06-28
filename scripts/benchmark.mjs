@@ -12,10 +12,20 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { performance } from 'node:perf_hooks';
 import { fileURLToPath } from 'node:url';
-import { Application, HttpKernel, Route, setRouteApplication, serve } from '@tyravel/core';
+import {
+  Application,
+  ConfigServiceProvider,
+  HttpKernel,
+  Route,
+  setRouteApplication,
+  setViewApplication,
+  serve,
+  View,
+  ViewServiceProvider,
+} from '@tyravel/core';
 import { Model, SqliteConnection } from '@tyravel/database';
 import { Response } from '@tyravel/http';
-import { compile } from '@tyravel/views';
+import { compile, ViewEngine } from '@tyravel/views';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const QUICK = process.env.BENCHMARK_QUICK === '1';
@@ -249,6 +259,240 @@ const VIEW_SOURCE = readFileSync(
   'utf8',
 );
 
+const HELLO_WORLD_ROOT = join(ROOT, 'examples/hello-world');
+const WELCOME_CONTEXT = {
+  name: 'Benchmark',
+  message: 'Tier 19 throughput check',
+  tagline: 'Fast by default',
+};
+
+export async function measureViewRender({
+  warmup = DEFAULTS.views.warmup,
+  iterations = DEFAULTS.views.iterations,
+} = {}) {
+  const engine = new ViewEngine(HELLO_WORLD_ROOT, {
+    path: 'resources/views',
+    extension: '.tyr',
+    compiled: false,
+    validateProps: false,
+  });
+
+  const runOnce = async () => {
+    const html = await engine.render('welcome', WELCOME_CONTEXT);
+    if (!html.includes('Hello Benchmark')) {
+      throw new Error('View render benchmark produced unexpected HTML');
+    }
+  };
+
+  for (let i = 0; i < warmup; i++) {
+    await runOnce();
+  }
+
+  const start = performance.now();
+  for (let i = 0; i < iterations; i++) {
+    await runOnce();
+  }
+  const elapsedMs = performance.now() - start;
+
+  return {
+    name: 'view.render',
+    label: 'Render welcome.tyr template',
+    unit: 'ops/s',
+    samples: iterations,
+    elapsedMs,
+    value: Math.round((iterations / elapsedMs) * 1000),
+  };
+}
+
+export async function measureHttpSsr({
+  warmup = DEFAULTS.http.warmup,
+  requests = DEFAULTS.http.requests,
+  concurrency = DEFAULTS.http.concurrency,
+} = {}) {
+  const app = new Application(HELLO_WORLD_ROOT);
+  setRouteApplication(app);
+  setViewApplication(app);
+  app.register(ConfigServiceProvider);
+  app.register(ViewServiceProvider);
+  await app.boot();
+
+  Route.get('/', async () => Response.html(await View.render('welcome', WELCOME_CONTEXT)));
+
+  const kernel = new HttpKernel(app);
+  const server = await serve(kernel, { port: 0, hostname: '127.0.0.1', quiet: true });
+  const url = `http://${server.hostname}:${server.port}/`;
+
+  const runOnce = async () => {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`SSR benchmark failed with status ${response.status}`);
+    }
+    const html = await response.text();
+    if (!html.includes('Hello Benchmark')) {
+      throw new Error('SSR benchmark produced unexpected HTML');
+    }
+  };
+
+  for (let i = 0; i < warmup; i++) {
+    await runOnce();
+  }
+
+  const start = performance.now();
+  for (let offset = 0; offset < requests; offset += concurrency) {
+    const batch = Math.min(concurrency, requests - offset);
+    await Promise.all(Array.from({ length: batch }, () => runOnce()));
+  }
+  const elapsedMs = performance.now() - start;
+  await server.close();
+
+  return {
+    name: 'http.ssr',
+    label: 'HTTP SSR welcome.tyr through HttpKernel',
+    unit: 'req/s',
+    samples: requests,
+    elapsedMs,
+    value: Math.round((requests / elapsedMs) * 1000),
+  };
+}
+
+export async function measureSessionAuth({
+  warmup = DEFAULTS.middleware.warmup,
+  requests = DEFAULTS.middleware.requests,
+  concurrency = DEFAULTS.middleware.concurrency,
+} = {}) {
+  const {
+    AuthManager,
+    Hasher,
+    SessionGuard,
+    MemorySessionStore,
+    createAuthMiddleware,
+    createStartSessionMiddleware,
+  } = await import('@tyravel/auth');
+
+  class BenchUser {
+    constructor(id, passwordHash) {
+      this.id = id;
+      this.passwordHash = passwordHash;
+    }
+
+    getAuthIdentifier() {
+      return this.id;
+    }
+
+    getAuthPassword() {
+      return this.passwordHash;
+    }
+  }
+
+  class BenchProvider {
+    constructor(hasher) {
+      this.hasher = hasher;
+    }
+
+    async retrieveById(id) {
+      if (Number(id) === 1) {
+        return new BenchUser(1, this.hasher.make('secret'));
+      }
+      return null;
+    }
+
+    async retrieveByCredentials(credentials) {
+      if (credentials.email === 'bench@tyravel.dev') {
+        return new BenchUser(1, this.hasher.make('secret'));
+      }
+      return null;
+    }
+
+    async validateCredentials(user, credentials) {
+      return this.hasher.check(credentials.password ?? '', user.getAuthPassword());
+    }
+  }
+
+  const sessionConfig = {
+    cookie: 'tyravel_session',
+    lifetimeMinutes: 120,
+    table: 'sessions',
+  };
+  const hasher = new Hasher();
+  const provider = new BenchProvider(hasher);
+  const store = new MemorySessionStore();
+  const guard = new SessionGuard('web', provider, store, sessionConfig);
+  const auth = new AuthManager(
+    {
+      defaults: { guard: 'web' },
+      guards: { web: { driver: 'session', provider: 'users' } },
+      providers: { users: { model: 'BenchUser' } },
+      session: sessionConfig,
+    },
+    { web: () => guard },
+    'web',
+  );
+
+  const app = new Application();
+  setRouteApplication(app);
+  app.router().setJsonFastPath(false);
+  app.use(createStartSessionMiddleware(auth));
+  app.middleware('auth', createAuthMiddleware(auth));
+  Route.post('/login', async (request) => {
+    const body = await request.json();
+    const ok = await auth.attempt(body);
+    return Response.json({ ok });
+  });
+  Route.middleware('auth').get('/me', (request) => {
+    const user = request.user;
+    const id = user && typeof user.getAuthIdentifier === 'function'
+      ? user.getAuthIdentifier()
+      : null;
+    return Response.json({ id });
+  });
+
+  const kernel = new HttpKernel(app);
+  const server = await serve(kernel, { port: 0, hostname: '127.0.0.1', quiet: true });
+  const baseUrl = `http://${server.hostname}:${server.port}`;
+
+  const loginResponse = await fetch(`${baseUrl}/login`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ email: 'bench@tyravel.dev', password: 'secret' }),
+  });
+  if (!loginResponse.ok) {
+    throw new Error(`Session auth benchmark login failed with status ${loginResponse.status}`);
+  }
+
+  const cookie = loginResponse.headers.get('set-cookie') ?? '';
+  const runOnce = async () => {
+    const response = await fetch(`${baseUrl}/me`, { headers: { cookie } });
+    if (!response.ok) {
+      throw new Error(`Session auth benchmark failed with status ${response.status}`);
+    }
+    const body = await response.json();
+    if (body.id !== 1) {
+      throw new Error(`Session auth benchmark expected user id 1, got ${body.id}`);
+    }
+  };
+
+  for (let i = 0; i < warmup; i++) {
+    await runOnce();
+  }
+
+  const start = performance.now();
+  for (let offset = 0; offset < requests; offset += concurrency) {
+    const batch = Math.min(concurrency, requests - offset);
+    await Promise.all(Array.from({ length: batch }, () => runOnce()));
+  }
+  const elapsedMs = performance.now() - start;
+  await server.close();
+
+  return {
+    name: 'session.auth',
+    label: 'HTTP JSON with session + auth middleware',
+    unit: 'req/s',
+    samples: requests,
+    elapsedMs,
+    value: Math.round((requests / elapsedMs) * 1000),
+  };
+}
+
 export function measureViewCompile({
   warmup = DEFAULTS.views.warmup,
   iterations = DEFAULTS.views.iterations,
@@ -286,8 +530,11 @@ export async function runBenchmarks(options = {}) {
     await measureHttp(options.http),
     await measureHttpJsonFast(options.http),
     await measureMiddlewareStack(options.middleware),
+    await measureSessionAuth(options.middleware),
+    await measureHttpSsr(options.http),
     await measureOrm(options.orm),
     measureViewCompile(options.views),
+    await measureViewRender(options.views),
   ];
 
   return {

@@ -27,11 +27,32 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Restore benchmark baseline
+        uses: actions/cache/restore@v4
+        with:
+          path: benchmark-baseline.json
+          key: benchmark-baseline-${{ github.ref_name }}-${{ github.run_number }}
+          restore-keys: |
+            benchmark-baseline-${{ github.ref_name }}-
+            benchmark-baseline-main-
+
       - name: Run benchmarks (quick mode)
         run: BENCHMARK_QUICK=1 node scripts/benchmark.mjs --json > benchmark-report.json
 
+      - name: Compare to baseline
+        run: node scripts/benchmark-compare.mjs benchmark-report.json benchmark-baseline.json
+
       - name: Print summary
         run: node scripts/benchmark-summary.mjs benchmark-report.json
+
+      - name: Save benchmark baseline
+        run: cp benchmark-report.json benchmark-baseline.json
+
+      - name: Cache benchmark baseline
+        uses: actions/cache/save@v4
+        with:
+          path: benchmark-baseline.json
+          key: benchmark-baseline-${{ github.ref_name }}-${{ github.run_number }}
 
       - name: Upload benchmark artifact
         uses: actions/upload-artifact@v4

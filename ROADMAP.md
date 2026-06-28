@@ -746,7 +746,7 @@ First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client 
 
 - [x] **Keep-alive tuning** — Node adapter defaults `keepAliveTimeout` / `headersTimeout` for reverse-proxy deployments
 - [ ] **Request object pooling** — reuse or slim `TyravelRequest` construction for high-throughput JSON endpoints (behind benchmark proof)
-- [ ] **Early 404 short-circuit** — unmatched routes exit before session/database providers when `APP_DEBUG=false`
+- [x] **Early 404 short-circuit** — unmatched routes exit before session/database providers when `APP_DEBUG=false`
 
 #### P2 — If scope allows
 
@@ -758,7 +758,7 @@ First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client 
 #### P0 — Must ship
 
 - [x] **Production boot profile** — `prepareHttpServer()` skips hot reload in production; route cache warm at boot
-- [ ] **Compiled view preload** — optional eager load of `view:cache` manifest into memory on boot (`config/views.ts` `preloadCompiled: true`)
+- [x] **Compiled view preload** — optional eager load of `view:cache` manifest into memory on boot (`config/views.ts` `preloadCompiled: true`)
 - [x] **Boot time benchmark** — `scripts/benchmark.mjs` includes `boot.cold` (Application → serve listen)
 
 #### P1 — Strong want
@@ -775,9 +775,9 @@ First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client 
 
 #### P0 — Must ship
 
-- [ ] **Runtime compiled cache (LRU)** — in-memory hit layer above on-disk compiled views; eliminates repeated disk I/O per request in production
-- [ ] **Hello-world route bench** — full-stack benchmark: SSR `welcome.tyr` through real `HttpKernel` (carried from Tier 17 P2)
-- [ ] **Render benchmark** — `view.render` throughput (not just `compile`) in `npm run benchmark`
+- [x] **Runtime compiled cache (LRU)** — in-memory hit layer above on-disk compiled views; eliminates repeated disk I/O per request in production
+- [x] **Hello-world route bench** — full-stack benchmark: SSR `welcome.tyr` through real `HttpKernel` (carried from Tier 17 P2)
+- [x] **Render benchmark** — `view.render` throughput (not just `compile`) in `npm run benchmark`
 
 #### P1 — Strong want
 
@@ -819,8 +819,8 @@ First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client 
 
 #### P0 — Must ship
 
-- [ ] **Expanded benchmark suite** — add `middleware.stack`, `session.auth`, and `view.render` scenarios to `scripts/benchmark.mjs` (`middleware.stack` + `boot.cold` shipped; `session.auth` + `view.render` open)
-- [ ] **Benchmark regression comment** — CI job compares quick-mode JSON to previous `main` artifact; warns on >15% drop (non-blocking)
+- [x] **Expanded benchmark suite** — add `middleware.stack`, `session.auth`, `view.render`, and `http.ssr` scenarios to `scripts/benchmark.mjs`
+- [x] **Benchmark regression comment** — CI job compares quick-mode JSON to previous `main` artifact; warns on >15% drop (non-blocking)
 
 #### P1 — Strong want
 

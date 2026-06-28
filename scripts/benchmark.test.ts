@@ -3,9 +3,12 @@ import {
   measureBootCold,
   measureHttp,
   measureHttpJsonFast,
+  measureHttpSsr,
   measureMiddlewareStack,
   measureOrm,
+  measureSessionAuth,
   measureViewCompile,
+  measureViewRender,
   runBenchmarks,
 } from './benchmark.mjs';
 
@@ -46,6 +49,24 @@ describe('benchmarks', () => {
     expect(result.value).toBeGreaterThan(0);
   });
 
+  it('measures session auth throughput', async () => {
+    const result = await measureSessionAuth({ warmup: 3, requests: 10, concurrency: 5 });
+    expect(result.name).toBe('session.auth');
+    expect(result.value).toBeGreaterThan(0);
+  });
+
+  it('measures HTTP SSR throughput', async () => {
+    const result = await measureHttpSsr({ warmup: 3, requests: 10, concurrency: 5 });
+    expect(result.name).toBe('http.ssr');
+    expect(result.value).toBeGreaterThan(0);
+  });
+
+  it('measures view render throughput', async () => {
+    const result = await measureViewRender({ warmup: 2, iterations: 5 });
+    expect(result.name).toBe('view.render');
+    expect(result.value).toBeGreaterThan(0);
+  });
+
   it('runs the full benchmark report', async () => {
     const report = await runBenchmarks({
       boot: { iterations: 2 },
@@ -55,7 +76,7 @@ describe('benchmarks', () => {
       views: { warmup: 2, iterations: 5 },
     });
 
-    expect(report.results).toHaveLength(6);
+    expect(report.results).toHaveLength(9);
     for (const result of report.results) {
       expect(result.value).toBeGreaterThan(0);
     }

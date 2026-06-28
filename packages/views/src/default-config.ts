@@ -12,4 +12,6 @@ export const DEFAULT_VIEW_CONFIG: ViewConfig = {
   env: environment,
   requireCompiledCache: isProduction,
   validateProps: true,
+  compiledCacheSize: isProduction ? 256 : undefined,
+  preloadCompiled: isProduction,
 };

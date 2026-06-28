@@ -54,6 +54,7 @@ import { ViewHelpers } from './view-helpers.js';
 import { renderEchoBootstrap } from './echo-helpers.js';
 import type { EchoClientConfig } from './echo-types.js';
 import { readViteManifest, renderViteTags, type ViteManifest } from './vite-helpers.js';
+import { LruCache } from './lru-cache.js';
 
 interface CacheEntry {
   mtimeMs: number;
@@ -67,7 +68,7 @@ const DEFAULT_MANIFEST_PATH = 'public/build/manifest.json';
 const DEFAULT_VITE_BASE = '/build';
 
 export class ViewEngine {
-  private readonly cache = new Map<string, CacheEntry>();
+  private readonly cache: LruCache<string, CacheEntry> | Map<string, CacheEntry>;
   private readonly extension: string;
   private readonly registry = new ViewRegistry();
   private readonly viewsRoot: string;
@@ -110,8 +111,27 @@ export class ViewEngine {
       this.registry.setEnvironment(config.env);
     }
 
+    this.cache = this.createTemplateCache();
+
     this.reloadLocale();
     this.syncTranslatorBinding();
+  }
+
+  private createTemplateCache(): LruCache<string, CacheEntry> | Map<string, CacheEntry> {
+    const maxSize = this.config.compiledCacheSize;
+    if (maxSize === undefined || maxSize <= 0) {
+      return new Map<string, CacheEntry>();
+    }
+
+    return new LruCache<string, CacheEntry>(maxSize);
+  }
+
+  private getCachedTemplate(path: string): CacheEntry | undefined {
+    return this.cache.get(path);
+  }
+
+  private setCachedTemplate(path: string, entry: CacheEntry): void {
+    this.cache.set(path, entry);
   }
 
   directive(name: string, handler: CustomDirectiveHandler): this {
@@ -573,6 +593,14 @@ export class ViewEngine {
     return warmed;
   }
 
+  async preloadCompiledCache(): Promise<number> {
+    if (!this.compiledCacheDirectory) {
+      return 0;
+    }
+
+    return this.warmCompiledCache();
+  }
+
   async clearCompiledCache(): Promise<number> {
     if (!this.compiledCacheDirectory) {
       return 0;
@@ -632,7 +660,7 @@ export class ViewEngine {
 
       if (diskEntry && diskEntry.registryVersion === registryVersion) {
         if (this.shouldTrustDiskCache()) {
-          this.cache.set(path, {
+          this.setCachedTemplate(path, {
             mtimeMs: diskEntry.mtimeMs,
             registryVersion,
             template: diskEntry.template,
@@ -642,7 +670,7 @@ export class ViewEngine {
 
         const stats = await stat(path);
         if (diskEntry.mtimeMs === stats.mtimeMs) {
-          this.cache.set(path, {
+          this.setCachedTemplate(path, {
             mtimeMs: stats.mtimeMs,
             registryVersion,
             template: diskEntry.template,
@@ -656,7 +684,7 @@ export class ViewEngine {
       }
     }
 
-    const cached = this.cache.get(path);
+    const cached = this.getCachedTemplate(path);
     const stats = await stat(path);
 
     if (
@@ -670,7 +698,7 @@ export class ViewEngine {
     const source = await readFile(path, 'utf8');
     const template = this.compileSource(source, compileOptions);
     const memoryEntry = { mtimeMs: stats.mtimeMs, registryVersion, template };
-    this.cache.set(path, memoryEntry);
+    this.setCachedTemplate(path, memoryEntry);
 
     if (this.compiledCacheDirectory) {
       const cacheFile = cacheFileForView(this.compiledCacheDirectory, this.viewsRoot, path);

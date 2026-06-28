@@ -112,6 +112,7 @@ export class Router implements Routable {
   private readonly middlewareRegistry: MiddlewareRegistry;
   private handlerNormalizer: (handler: RouteHandler) => RouteHandler = (handler) => handler;
   private jsonFastPathEnabled = true;
+  private early404Enabled = false;
 
   constructor(middlewareRegistry = new MiddlewareRegistry()) {
     this.middlewareRegistry = middlewareRegistry;
@@ -133,6 +134,15 @@ export class Router implements Routable {
 
   isJsonFastPathEnabled(): boolean {
     return this.jsonFastPathEnabled;
+  }
+
+  setEarly404(enabled: boolean): this {
+    this.early404Enabled = enabled;
+    return this;
+  }
+
+  isEarly404Enabled(): boolean {
+    return this.early404Enabled;
   }
 
   bind(parameter: string, binding: RouteBinding | RouteBindingResolver): this {
@@ -417,10 +427,38 @@ export class Router implements Routable {
     }
 
     if (pathMatched) {
+      if (this.early404Enabled) {
+        return this.shortCircuitNotAllowed(method, url.pathname, allowedMethods);
+      }
       throw new MethodNotAllowedException(method, url.pathname, allowedMethods);
     }
 
+    if (this.early404Enabled) {
+      return this.shortCircuitNotFound(method, url.pathname);
+    }
+
     throw new RouteNotFoundException(method, url.pathname);
+  }
+
+  private shortCircuitNotFound(method: string, path: string): Response {
+    return Response.json(
+      { message: `Route not found: ${method} ${path}`, status: 404 },
+      { status: 404 },
+    );
+  }
+
+  private shortCircuitNotAllowed(
+    method: string,
+    path: string,
+    allowedMethods: string[],
+  ): Response {
+    return Response.json(
+      { message: `Method not allowed: ${method} ${path}`, status: 405 },
+      {
+        status: 405,
+        headers: { allow: allowedMethods.join(', ') },
+      },
+    );
   }
 
   private async runPipeline(

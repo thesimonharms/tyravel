@@ -153,6 +153,18 @@ describe('Router', () => {
     ).rejects.toThrow(RouteNotFoundException);
   });
 
+  it('short-circuits 404 when early404 is enabled', async () => {
+    const router = new Router();
+    router.setEarly404(true);
+
+    const response = await router.dispatch(new Request('http://localhost/missing'));
+    expect(response.status).toBe(404);
+
+    const body = await response.json();
+    expect(body.status).toBe(404);
+    expect(body.message).toContain('/missing');
+  });
+
   it('throws MethodNotAllowedException when path matches but method does not', async () => {
     const router = new Router();
 

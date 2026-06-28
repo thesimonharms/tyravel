@@ -19,6 +19,10 @@ export interface ViewConfig {
   validateProps?: boolean;
   /** Extension for programmatic TypeScript views (e.g. `.tyr.ts`). */
   programmaticExtension?: string;
+  /** Max in-memory compiled templates kept hot (LRU). Omit for unlimited. */
+  compiledCacheSize?: number;
+  /** Eagerly load disk-compiled views into memory on boot. */
+  preloadCompiled?: boolean;
 }
 
 export type RenderMode = 'full' | 'stream-shell';

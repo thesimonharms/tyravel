@@ -46,6 +46,7 @@ export function headlessHttpConfig(): string {
 export default {
   trustedProxies: ['127.0.0.1', '::1'],
   jsonFastPath: true,
+  early404: true,
   throttle: {
     enabled: true,
     limit: 120,

@@ -17,6 +17,8 @@ export interface HttpConfig {
   trustedProxies?: string[];
   /** Skip session/CSRF/view middleware on stateless JSON routes (default: true). */
   jsonFastPath?: boolean;
+  /** Return minimal 404/405 JSON without exception handler (default: !app.debug). */
+  early404?: boolean;
   throttle?: {
     enabled?: boolean;
     limit: number;
@@ -41,6 +43,12 @@ export function registerHttpMiddleware(
 
   if (httpConfig?.jsonFastPath === false) {
     app.router().setJsonFastPath(false);
+  }
+
+  const appDebug = config.get<boolean>('app.debug', false);
+  const early404 = httpConfig?.early404 ?? !appDebug;
+  if (early404) {
+    app.router().setEarly404(true);
   }
 
   if (httpConfig?.throttle && httpConfig.throttle.enabled !== false) {

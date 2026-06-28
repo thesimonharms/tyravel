@@ -140,6 +140,15 @@ export class ViewServiceProvider extends ServiceProvider {
       // Auth provider not registered — auth directives render as guest/no-op.
     }
 
+    if (viewConfig.preloadCompiled && viewConfig.compiled) {
+      const cachePath = join(
+        this.app.basePath,
+        viewConfig.compiledPath ?? 'storage/framework/views',
+      );
+      engine.setCompiledCachePath(cachePath);
+      await engine.preloadCompiledCache();
+    }
+
     this.startViewWatcherIfRequested(engine, viewConfig, environment);
   }
 
