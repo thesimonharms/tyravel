@@ -28,7 +28,21 @@ async function closeTestServer(server: Server, client?: WebSocket): Promise<void
   ]);
 }
 
-describe('WebSocketHub', () => {
+async function waitFor(
+  predicate: () => boolean,
+  { timeoutMs = 2_000, intervalMs = 25 }: { timeoutMs?: number; intervalMs?: number } = {},
+): Promise<void> {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    if (predicate()) {
+      return;
+    }
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+  }
+  throw new Error('Timed out waiting for condition.');
+}
+
+describe.sequential('WebSocketHub', () => {
   it('dispatches events to subscribed websocket clients', async () => {
     const hub = new WebSocketHub();
     const server = createServer();
@@ -40,28 +54,42 @@ describe('WebSocketHub', () => {
 
     const client = new WebSocket(`ws://127.0.0.1:${port}/tyravel/ws`);
     const messages: string[] = [];
-    await new Promise<void>((resolve, reject) => {
-      client.addEventListener('open', () => resolve());
-      client.addEventListener('error', () => reject(new Error('WebSocket connection failed.')));
-    });
     client.addEventListener('message', (event) => {
       messages.push(String((event as MessageEvent).data));
     });
+    await new Promise<void>((resolve, reject) => {
+      client.addEventListener('open', () => resolve(), { once: true });
+      client.addEventListener('error', () => reject(new Error('WebSocket connection failed.')), {
+        once: true,
+      });
+    });
 
-    await new Promise((resolve) => setTimeout(resolve, 25));
+    await waitFor(() =>
+      messages.some((raw) => {
+        try {
+          return (JSON.parse(raw) as { type?: string }).type === 'connected';
+        } catch {
+          return false;
+        }
+      }),
+    );
+
     client.send(JSON.stringify({ type: 'subscribe', channel: 'orders.1' }));
-    await new Promise((resolve) => setTimeout(resolve, 25));
 
-    hub.handleRedisMessage(JSON.stringify({
+    const broadcastPayload = JSON.stringify({
       event: 'OrderShipped',
       channels: ['orders.1'],
       data: { id: 42 },
-    }));
+    });
 
-    await new Promise((resolve) => setTimeout(resolve, 25));
-    const eventMessage = messages
-      .map((raw) => JSON.parse(raw) as { type: string; event?: string; data?: unknown })
-      .find((message) => message.type === 'event' && message.event === 'OrderShipped');
+    let eventMessage: { type: string; event?: string; data?: unknown } | undefined;
+    await waitFor(() => {
+      hub.handleRedisMessage(broadcastPayload);
+      eventMessage = messages
+        .map((raw) => JSON.parse(raw) as { type: string; event?: string; data?: unknown })
+        .find((message) => message.type === 'event' && message.event === 'OrderShipped');
+      return eventMessage !== undefined;
+    });
 
     expect(eventMessage?.data).toEqual({ id: 42 });
     await closeTestServer(server, client);
