@@ -1,6 +1,6 @@
 import { copyFile, mkdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { frameworkCatalogPath } from '@tyravel/locale';
+import { frameworkCatalogPath } from '@pondoknusa/locale';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { defaultLocaleFile } from '../stubs.js';
@@ -9,7 +9,7 @@ import { parseOptions, pathExists, projectPath, writeFile } from '../utils.js';
 export class LangPublishCommand extends Command {
   override readonly name = 'lang:publish';
   override readonly description = 'Publish application locale files';
-  override readonly usage = 'tyravel lang:publish [--locale=en] [--framework]';
+  override readonly usage = 'pondoknusa lang:publish [--locale=en] [--framework]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);

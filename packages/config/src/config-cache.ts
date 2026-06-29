@@ -149,7 +149,7 @@ export async function resolveConfigForBoot(
       return {
         loaded: false,
         config: await loadConfig(basePath),
-        message: 'Config cache is stale — run `tyravel config:cache`',
+        message: 'Config cache is stale — run `pondoknusa config:cache`',
       };
     }
 

@@ -1,5 +1,5 @@
-import type { Application } from '@tyravel/core';
-import type { DatabaseConnection, DatabaseManager } from '@tyravel/database';
+import type { Application } from '@pondoknusa/core';
+import type { DatabaseConnection, DatabaseManager } from '@pondoknusa/database';
 
 export async function beginDatabaseTransaction(app: Application): Promise<DatabaseConnection> {
   const manager = app.make<DatabaseManager>('db');

@@ -17,7 +17,7 @@ describe('Migrator', () => {
   });
 
   it('runs pending migration files', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-migrations-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-migrations-'));
     writeFileSync(
       join(tempDir, '2026_06_20_000000_create_users_table.js'),
       `export default class CreateUsersTable {

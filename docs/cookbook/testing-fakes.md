@@ -5,8 +5,8 @@ Assert side effects without hitting real mail, notification, or broadcast driver
 ## Setup
 
 ```typescript
-import { TestCase } from '@tyravel/testing';
-import { mailFake, notificationFake, broadcastFake } from '@tyravel/testing';
+import { TestCase } from '@pondoknusa/testing';
+import { mailFake, notificationFake, broadcastFake } from '@pondoknusa/testing';
 
 class FeatureTest extends TestCase {
   async setUp() {
@@ -21,7 +21,7 @@ class FeatureTest extends TestCase {
 ## Assertions
 
 ```typescript
-import { Mail } from '@tyravel/core';
+import { Mail } from '@pondoknusa/core';
 
 await Mail.to('ada@example.com').send(new WelcomeMail(user));
 

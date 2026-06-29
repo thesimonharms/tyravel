@@ -1,5 +1,5 @@
-import { discoverMcpTools, type McpTool } from '@tyravel/mcp';
-import { Application, ServiceProvider } from '@tyravel/core';
+import { discoverMcpTools, type McpTool } from '@pondoknusa/mcp';
+import { Application, ServiceProvider } from '@pondoknusa/core';
 
 export class McpToolsServiceProvider extends ServiceProvider {
   override async register(): Promise<void> {

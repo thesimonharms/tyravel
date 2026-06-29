@@ -1,12 +1,12 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { loadConfig } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
   setRouteApplication,
   type ServiceProvider,
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 
 async function importIfExists(path: string): Promise<Record<string, unknown> | undefined> {
   try {

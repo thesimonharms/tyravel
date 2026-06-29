@@ -1,6 +1,6 @@
-import type { TyravelRequest } from '@tyravel/http';
-import type { Middleware } from '@tyravel/http';
-import { Response as HttpResponse, withMiddlewareMeta } from '@tyravel/http';
+import type { PondoknusaRequest } from '@pondoknusa/http';
+import type { Middleware } from '@pondoknusa/http';
+import { Response as HttpResponse, withMiddlewareMeta } from '@pondoknusa/http';
 import { AuthorizationException } from './authorization-exceptions.js';
 import { AuthenticationException } from './exceptions.js';
 import { tokenCanAny } from './token-abilities.js';
@@ -79,13 +79,13 @@ export class AuthManager {
     await this.sessionGuard().logout();
   }
 
-  primeRequest(request: TyravelRequest): void {
+  primeRequest(request: PondoknusaRequest): void {
     for (const guard of this.guards.values()) {
       guard.setRequest(request);
     }
   }
 
-  async startRequest(request: TyravelRequest): Promise<void> {
+  async startRequest(request: PondoknusaRequest): Promise<void> {
     this.primeRequest(request);
 
     await this.sessionGuard().startSession();

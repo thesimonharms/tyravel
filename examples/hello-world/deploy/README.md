@@ -1,8 +1,8 @@
 # Deploy manifests
 
-Copy-paste production files for Tyravel apps. See the [deployment guides](https://tyravel.dev/guide/deployment) for full walkthroughs.
+Copy-paste production files for Pondoknusa apps. See the [deployment guides](https://pondoknusa.dev/guide/deployment) for full walkthroughs.
 
-New apps scaffolded with `tyravel new` already include this `deploy/` directory.
+New apps scaffolded with `pondoknusa new` already include this `deploy/` directory.
 
 ## Try with hello-world (monorepo)
 
@@ -15,12 +15,12 @@ docker compose -f deploy/docker-compose.yml up --build
 
 | Process | Command |
 |---------|---------|
-| Web | `npx tyravel start` |
-| Worker | `npx tyravel queue:work` |
-| Migrations | `npx tyravel migrate` |
-| Warm caches | `npx tyravel config:cache && npx tyravel route:cache && npx tyravel view:cache` |
+| Web | `npx pondoknusa start` |
+| Worker | `npx pondoknusa queue:work` |
+| Migrations | `npx pondoknusa migrate` |
+| Warm caches | `npx pondoknusa config:cache && npx pondoknusa route:cache && npx pondoknusa view:cache` |
 
-Ensure `@tyravel/cli` and your database driver (e.g. `@tyravel/database-pg`) are in `dependencies`, not only `devDependencies`.
+Ensure `@pondoknusa/cli` and your database driver (e.g. `@pondoknusa/database-pg`) are in `dependencies`, not only `devDependencies`.
 
 ## Cloudflare (optional)
 

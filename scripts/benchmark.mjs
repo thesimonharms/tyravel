@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Tyravel performance benchmarks.
+ * Pondoknusa performance benchmarks.
  *
  * Usage:
  *   npm run benchmark
@@ -22,10 +22,10 @@ import {
   serve,
   View,
   ViewServiceProvider,
-} from '@tyravel/core';
-import { Model, SqliteConnection } from '@tyravel/database';
-import { Response } from '@tyravel/http';
-import { compile, ViewEngine } from '@tyravel/views';
+} from '@pondoknusa/core';
+import { Model, SqliteConnection } from '@pondoknusa/database';
+import { Response } from '@pondoknusa/http';
+import { compile, ViewEngine } from '@pondoknusa/views';
 import { runCompetitiveBenchmarks } from './competitive-benchmarks.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -61,7 +61,7 @@ export async function measureHttpJsonFast({
   requests = DEFAULTS.http.requests,
   concurrency = DEFAULTS.http.concurrency,
 } = {}) {
-  const { withMiddlewareMeta } = await import('@tyravel/http');
+  const { withMiddlewareMeta } = await import('@pondoknusa/http');
 
   const app = new Application();
   setRouteApplication(app);
@@ -460,7 +460,7 @@ export async function measureSessionAuth({
     MemorySessionStore,
     createAuthMiddleware,
     createStartSessionMiddleware,
-  } = await import('@tyravel/auth');
+  } = await import('@pondoknusa/auth');
 
   class BenchUser {
     constructor(id, passwordHash) {
@@ -490,7 +490,7 @@ export async function measureSessionAuth({
     }
 
     async retrieveByCredentials(credentials) {
-      if (credentials.email === 'bench@tyravel.dev') {
+      if (credentials.email === 'bench@pondoknusa.dev') {
         return new BenchUser(1, this.hasher.make('secret'));
       }
       return null;
@@ -502,7 +502,7 @@ export async function measureSessionAuth({
   }
 
   const sessionConfig = {
-    cookie: 'tyravel_session',
+    cookie: 'pondoknusa_session',
     lifetimeMinutes: 120,
     table: 'sessions',
   };
@@ -546,7 +546,7 @@ export async function measureSessionAuth({
   const loginResponse = await fetch(`${baseUrl}/login`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ email: 'bench@tyravel.dev', password: 'secret' }),
+    body: JSON.stringify({ email: 'bench@pondoknusa.dev', password: 'secret' }),
   });
   if (!loginResponse.ok) {
     throw new Error(`Session auth benchmark login failed with status ${loginResponse.status}`);
@@ -651,7 +651,7 @@ function formatResultLine(result) {
 }
 
 function printHuman(report) {
-  console.log(`Tyravel benchmarks (Node ${report.node}, ${report.platform}/${report.arch})`);
+  console.log(`Pondoknusa benchmarks (Node ${report.node}, ${report.platform}/${report.arch})`);
   if (report.quick) {
     console.log('Quick mode — set BENCHMARK_QUICK=0 for full samples.');
   }

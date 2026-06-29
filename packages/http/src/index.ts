@@ -12,7 +12,7 @@ export type {
 } from './api-resource.js';
 export { resolveHttpResult } from './resolve-resource.js';
 export {
-  TyravelRequest,
+  PondoknusaRequest,
 } from './request.js';
 export type { SessionContract } from './session-contract.js';
 export { Response, ResponseFactory } from './response.js';

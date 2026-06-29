@@ -1,5 +1,5 @@
-import type { AuthManager } from '@tyravel/auth';
-import { ConfigRepository } from '@tyravel/config';
+import type { AuthManager } from '@pondoknusa/auth';
+import { ConfigRepository } from '@pondoknusa/config';
 import {
   BroadcastDispatcher,
   BroadcastEvent,
@@ -7,9 +7,9 @@ import {
   ChannelRegistry,
   type BroadcastQueueBridge,
   type BroadcastingConfig,
-} from '@tyravel/broadcasting';
-import { EventDispatcher } from '@tyravel/events';
-import { Dispatcher, JobRegistry, QueueManager } from '@tyravel/queue';
+} from '@pondoknusa/broadcasting';
+import { EventDispatcher } from '@pondoknusa/events';
+import { Dispatcher, JobRegistry, QueueManager } from '@pondoknusa/queue';
 import { ServiceProvider } from './service-provider.js';
 import { setBroadcastApplication } from './broadcast.js';
 

@@ -597,7 +597,7 @@ export class ViewEngine {
     }
 
     const names = await this.listViewNames();
-    const parallel = (options.parallel ?? process.env.TYRAVEL_VIEW_CACHE_WORKERS !== '0')
+    const parallel = (options.parallel ?? process.env.PONDOKNUSA_VIEW_CACHE_WORKERS !== '0')
       && isWorkerCompileAvailable();
 
     if (parallel && names.length > 1) {

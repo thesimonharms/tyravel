@@ -1,4 +1,4 @@
-import { Event } from '@tyravel/events';
+import { Event } from '@pondoknusa/events';
 
 export interface UserRegisteredPayload {
   userId: number;

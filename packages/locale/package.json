@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/locale",
+  "name": "@pondoknusa/locale",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -15,7 +15,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/http": "1.0.3"
+    "@pondoknusa/http": "1.0.3"
   },
   "files": [
     "dist",
@@ -24,11 +24,11 @@
   "engines": {
     "node": ">=26"
   },
-  "description": "Localization and translation for Tyravel",
+  "description": "Localization and translation for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/locale"
   },
   "publishConfig": {

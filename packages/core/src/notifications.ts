@@ -1,6 +1,6 @@
-import type { Notification } from '@tyravel/notifications';
-import { notify as sendNotification } from '@tyravel/notifications';
-import type { Notifiable } from '@tyravel/notifications';
+import type { Notification } from '@pondoknusa/notifications';
+import { notify as sendNotification } from '@pondoknusa/notifications';
+import type { Notifiable } from '@pondoknusa/notifications';
 import type { Application } from './application.js';
 
 let notificationApplication: Application | undefined;
@@ -13,7 +13,7 @@ function resolveManager() {
   if (!notificationApplication) {
     throw new Error('Notifications facade is not ready. Boot the application first.');
   }
-  return notificationApplication.make<import('@tyravel/notifications').NotificationManager>('notifications');
+  return notificationApplication.make<import('@pondoknusa/notifications').NotificationManager>('notifications');
 }
 
 export interface NotificationsFacade {

@@ -2,7 +2,7 @@
 
 Isolate tenant data in a shared database using request-scoped context and model global scopes.
 
-Tyravel does not ship a built-in tenancy package — this recipe uses middleware, the container, and ORM scopes you control.
+Pondoknusa does not ship a built-in tenancy package — this recipe uses middleware, the container, and ORM scopes you control.
 
 ## 1. Tenant resolution middleware
 
@@ -10,7 +10,7 @@ Resolve the tenant from subdomain or header and store it on the request containe
 
 ```typescript
 // src/middleware/resolve-tenant.ts
-import type { Middleware } from '@tyravel/http';
+import type { Middleware } from '@pondoknusa/http';
 
 export interface Tenant {
   id: string;
@@ -52,7 +52,7 @@ Route.middleware(['web', resolveTenant()]).group(() => {
 Add `tenant_id` to tenant-owned tables and scope queries automatically:
 
 ```typescript
-import { Model, createGlobalScope } from '@tyravel/database';
+import { Model, createGlobalScope } from '@pondoknusa/database';
 
 export class Post extends Model {
   static table = 'posts';

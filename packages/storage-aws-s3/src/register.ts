@@ -1,4 +1,4 @@
-import { StorageManager, type DiskConfig } from '@tyravel/storage';
+import { StorageManager, type DiskConfig } from '@pondoknusa/storage';
 import { S3Disk } from './s3-disk.js';
 import type { S3DiskConfig } from './types.js';
 

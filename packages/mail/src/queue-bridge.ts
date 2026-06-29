@@ -1,4 +1,4 @@
-import type { Job } from '@tyravel/queue';
+import type { Job } from '@pondoknusa/queue';
 
 export interface MailQueueBridge {
   dispatch(

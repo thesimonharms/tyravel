@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import type { TyravelRequest } from './request.js';
+import type { PondoknusaRequest } from './request.js';
 import type { Middleware } from './types.js';
 
 const WebResponse = globalThis.Response;
@@ -23,12 +23,12 @@ export interface ResponseCacheOptions {
   anonymousOnly?: boolean;
   /** Include selected request headers in the cache key. */
   vary?: string[];
-  cacheKey?: (request: TyravelRequest) => string;
-  shouldCache?: (request: TyravelRequest, response: Response) => boolean;
-  isAuthenticated?: (request: TyravelRequest) => boolean;
+  cacheKey?: (request: PondoknusaRequest) => string;
+  shouldCache?: (request: PondoknusaRequest, response: Response) => boolean;
+  isAuthenticated?: (request: PondoknusaRequest) => boolean;
 }
 
-function defaultCacheKey(request: TyravelRequest, vary: string[]): string {
+function defaultCacheKey(request: PondoknusaRequest, vary: string[]): string {
   const url = request.url;
   const parts = [request.method, url.pathname, url.search];
 
@@ -40,8 +40,8 @@ function defaultCacheKey(request: TyravelRequest, vary: string[]): string {
 }
 
 function isRequestAuthenticated(
-  request: TyravelRequest,
-  isAuthenticated?: (request: TyravelRequest) => boolean,
+  request: PondoknusaRequest,
+  isAuthenticated?: (request: PondoknusaRequest) => boolean,
 ): boolean {
   if (isAuthenticated) {
     return isAuthenticated(request);
@@ -64,7 +64,7 @@ function headersToRecord(headers: Headers): Record<string, string> {
 
 function rebuildResponse(cached: CachedHttpResponse, method: string): Response {
   const headers = new Headers(cached.headers);
-  headers.set('x-tyravel-cache', 'HIT');
+  headers.set('x-pondoknusa-cache', 'HIT');
 
   return new WebResponse(method === 'HEAD' ? null : cached.body, {
     status: cached.status,
@@ -119,7 +119,7 @@ export function createResponseCacheMiddleware(
     await options.cache.put(cacheKey, payload, ttlSeconds);
 
     const headers = new Headers(response.headers);
-    headers.set('x-tyravel-cache', 'MISS');
+    headers.set('x-pondoknusa-cache', 'MISS');
 
     return new WebResponse(request.method === 'HEAD' ? null : body, {
       status: response.status,

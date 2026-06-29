@@ -1,10 +1,10 @@
-import { Hasher } from '@tyravel/auth';
-import { Seeder } from '@tyravel/database';
+import { Hasher } from '@pondoknusa/auth';
+import { Seeder } from '@pondoknusa/database';
 import { User } from '../../src/models/User.js';
 
 export default class DatabaseSeeder extends Seeder {
   override async run(): Promise<void> {
-    const existing = await User.query().where('email', 'demo@tyravel.dev').first();
+    const existing = await User.query().where('email', 'demo@pondoknusa.dev').first();
     if (existing) {
       return;
     }
@@ -12,7 +12,7 @@ export default class DatabaseSeeder extends Seeder {
     const hasher = new Hasher();
     await User.create({
       name: 'Demo User',
-      email: 'demo@tyravel.dev',
+      email: 'demo@pondoknusa.dev',
       password: hasher.make('password'),
     });
   }

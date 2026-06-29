@@ -5,8 +5,8 @@ import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pat
 
 export class MakeToolCommand extends Command {
   override readonly name = 'make:tool';
-  override readonly description = 'Scaffold an MCP tool handler for @tyravel/mcp';
-  override readonly usage = 'tyravel make:tool <Name>';
+  override readonly description = 'Scaffold an MCP tool handler for @pondoknusa/mcp';
+  override readonly usage = 'pondoknusa make:tool <Name>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -14,7 +14,7 @@ export class MakeToolCommand extends Command {
 
     if (!rawName) {
       console.error('Tool name is required.');
-      console.error('Usage: tyravel make:tool <Name>');
+      console.error('Usage: pondoknusa make:tool <Name>');
       return 1;
     }
 
@@ -30,7 +30,7 @@ export class MakeToolCommand extends Command {
 
     await writeFile(target, mcpTool(name));
     console.log(`MCP tool created: src/mcp/tools/${fileName}`);
-    console.log('Register it when starting TyravelMcpServer in your MCP entrypoint.');
+    console.log('Register it when starting PondoknusaMcpServer in your MCP entrypoint.');
 
     return 0;
   }

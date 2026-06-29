@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { Model, SqliteConnection } from '@tyravel/database';
-import '@tyravel/vector';
+import { Model, SqliteConnection } from '@pondoknusa/database';
+import '@pondoknusa/vector';
 import { MemoryVectorSearchDriver, registerVectorSearchDriver } from './index.js';
 
 class Note extends Model {

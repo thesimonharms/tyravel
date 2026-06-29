@@ -6,7 +6,7 @@ export interface MiddlewareMeta {
   tag?: MiddlewareTag;
 }
 
-const META_KEY = '__tyravelMiddlewareMeta';
+const META_KEY = '__pondoknusaMiddlewareMeta';
 
 export function withMiddlewareMeta<T extends Middleware>(
   middleware: T,

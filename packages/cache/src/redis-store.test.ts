@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MemoryRedis, type RedisManager } from '@tyravel/redis';
+import { MemoryRedis, type RedisManager } from '@pondoknusa/redis';
 import { CacheManager } from './cache-manager.js';
 import { CacheRepository } from './cache-repository.js';
 import type { CacheConfig } from './types.js';
@@ -16,7 +16,7 @@ describe('RedisStore', () => {
   it('stores and retrieves values through CacheRepository', async () => {
     const config: CacheConfig = {
       default: 'redis',
-      prefix: 'tyravel',
+      prefix: 'pondoknusa',
       connections: {
         redis: { driver: 'redis', connection: 'default' },
       },
@@ -35,7 +35,7 @@ describe('RedisStore', () => {
   it('supports remember()', async () => {
     const config: CacheConfig = {
       default: 'redis',
-      prefix: 'tyravel',
+      prefix: 'pondoknusa',
       connections: {
         redis: { driver: 'redis' },
       },

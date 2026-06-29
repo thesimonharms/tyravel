@@ -2,7 +2,7 @@
 set -e
 
 echo "Running migrations..."
-npx tyravel migrate
+npx pondoknusa migrate
 
-echo "Starting Tyravel..."
-exec npx tyravel start
+echo "Starting Pondoknusa..."
+exec npx pondoknusa start

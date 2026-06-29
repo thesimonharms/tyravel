@@ -3,24 +3,24 @@ import type { CapabilityManifest } from './types.js';
 export type { CapabilityManifest, AppMcpContext, DocEntry, ModelEntry, RouteEntry } from './types.js';
 
 const STABLE_PACKAGES = [
-  '@tyravel/core',
-  '@tyravel/database',
-  '@tyravel/http',
-  '@tyravel/queue',
-  '@tyravel/events',
-  '@tyravel/broadcasting',
-  '@tyravel/broadcasting-websocket',
-  '@tyravel/vector',
-  '@tyravel/vector-pg',
-  '@tyravel/vector-qdrant',
-  '@tyravel/vector-pinecone',
-  '@tyravel/rag',
-  '@tyravel/graphql',
-  '@tyravel/mcp',
-  '@tyravel/echo',
-  '@tyravel/auth',
-  '@tyravel/views',
-  '@tyravel/cli',
+  '@pondoknusa/core',
+  '@pondoknusa/database',
+  '@pondoknusa/http',
+  '@pondoknusa/queue',
+  '@pondoknusa/events',
+  '@pondoknusa/broadcasting',
+  '@pondoknusa/broadcasting-websocket',
+  '@pondoknusa/vector',
+  '@pondoknusa/vector-pg',
+  '@pondoknusa/vector-qdrant',
+  '@pondoknusa/vector-pinecone',
+  '@pondoknusa/rag',
+  '@pondoknusa/graphql',
+  '@pondoknusa/mcp',
+  '@pondoknusa/echo',
+  '@pondoknusa/auth',
+  '@pondoknusa/views',
+  '@pondoknusa/cli',
 ] as const;
 
 const FACADES = [
@@ -35,24 +35,24 @@ const FACADES = [
 ] as const;
 
 const CLI_COMMANDS = [
-  'tyravel new',
-  'tyravel serve',
-  'tyravel migrate',
-  'tyravel queue:work',
-  'tyravel vector:embed',
-  'tyravel vector:install',
-  'tyravel make:tool',
-  'tyravel make:rag-resource',
-  'tyravel mcp:serve',
-  'tyravel mcp:export-rules',
-  'tyravel route:list',
+  'pondoknusa new',
+  'pondoknusa serve',
+  'pondoknusa migrate',
+  'pondoknusa queue:work',
+  'pondoknusa vector:embed',
+  'pondoknusa vector:install',
+  'pondoknusa make:tool',
+  'pondoknusa make:rag-resource',
+  'pondoknusa mcp:serve',
+  'pondoknusa mcp:export-rules',
+  'pondoknusa route:list',
 ] as const;
 
 export function buildCapabilityManifest(
   overrides: Partial<CapabilityManifest> = {},
 ): CapabilityManifest {
   return {
-    name: overrides.name ?? 'tyravel',
+    name: overrides.name ?? 'pondoknusa',
     version: overrides.version ?? '1.0.3',
     packages: overrides.packages ?? [...STABLE_PACKAGES],
     facades: overrides.facades ?? [...FACADES],

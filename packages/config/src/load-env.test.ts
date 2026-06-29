@@ -19,7 +19,7 @@ describe('parseEnv', () => {
   it('parses comments, quotes, exports, and escapes', () => {
     const parsed = parseEnv(`
 # comment
-APP_NAME=Tyravel
+APP_NAME=Pondoknusa
 export APP_DEBUG=true
 APP_URL="http://127.0.0.1:3000"
 MESSAGE="line1\\nline2"
@@ -27,7 +27,7 @@ EMPTY=
     `);
 
     expect(parsed).toEqual({
-      APP_NAME: 'Tyravel',
+      APP_NAME: 'Pondoknusa',
       APP_DEBUG: 'true',
       APP_URL: 'http://127.0.0.1:3000',
       MESSAGE: 'line1\nline2',

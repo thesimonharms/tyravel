@@ -2,7 +2,7 @@ export type VectorMetric = 'cosine' | 'l2' | 'inner_product';
 
 export type Embedding = number[];
 
-import type { ModelQueryBuilder } from '@tyravel/database';
+import type { ModelQueryBuilder } from '@pondoknusa/database';
 import type { MetadataFilter } from './metadata-filters.js';
 
 export interface HybridSearchOptions {

@@ -1,10 +1,10 @@
-import type { AuthManager, Gate } from '@tyravel/auth';
-import { Model } from '@tyravel/database';
-import type { ModelStatic } from '@tyravel/database';
-import { NotFoundHttpException } from '@tyravel/http';
-import type { TyravelRequest } from '@tyravel/http';
-import { Response } from '@tyravel/http';
-import type { ViewEngine } from '@tyravel/views';
+import type { AuthManager, Gate } from '@pondoknusa/auth';
+import { Model } from '@pondoknusa/database';
+import type { ModelStatic } from '@pondoknusa/database';
+import { NotFoundHttpException } from '@pondoknusa/http';
+import type { PondoknusaRequest } from '@pondoknusa/http';
+import { Response } from '@pondoknusa/http';
+import type { ViewEngine } from '@pondoknusa/views';
 import type { AdminResource } from './admin-resource.js';
 import type { AdminRegistry } from './admin-registry.js';
 import { buildAuditChanges } from './audit-diff.js';
@@ -42,7 +42,7 @@ interface IndexRow {
 export class AdminController {
   constructor(private readonly deps: AdminControllerDependencies) {}
 
-  async dashboard(_request: TyravelRequest) {
+  async dashboard(_request: PondoknusaRequest) {
     const resources = this.deps.registry.all();
     const stats = await buildDashboardStats(
       resources.map((resource) => ({
@@ -66,7 +66,7 @@ export class AdminController {
     return Response.html(html);
   }
 
-  async index(request: TyravelRequest) {
+  async index(request: PondoknusaRequest) {
     const resource = this.resolveResource(request);
     await this.authorize(resource, resource.abilities.viewAny);
 
@@ -106,7 +106,7 @@ export class AdminController {
     return Response.html(html);
   }
 
-  async show(request: TyravelRequest) {
+  async show(request: PondoknusaRequest) {
     const resource = this.resolveResource(request);
     const record = await this.findRecord(resource, this.param(request, 'id'));
     await this.authorize(resource, resource.abilities.view, record);
@@ -130,7 +130,7 @@ export class AdminController {
     return Response.html(html);
   }
 
-  async create(request: TyravelRequest) {
+  async create(request: PondoknusaRequest) {
     const resource = this.resolveResource(request);
     await this.authorize(resource, resource.abilities.create);
 
@@ -148,7 +148,7 @@ export class AdminController {
     return Response.html(html);
   }
 
-  async store(request: TyravelRequest) {
+  async store(request: PondoknusaRequest) {
     const resource = this.resolveResource(request);
     await this.authorize(resource, resource.abilities.create);
 
@@ -161,7 +161,7 @@ export class AdminController {
     return Response.redirect(this.adminPath(`/${resource.key}/${this.recordId(resource, record)}`));
   }
 
-  async edit(request: TyravelRequest) {
+  async edit(request: PondoknusaRequest) {
     const resource = this.resolveResource(request);
     const record = await this.findRecord(resource, this.param(request, 'id'));
     await this.authorize(resource, resource.abilities.update, record);
@@ -181,7 +181,7 @@ export class AdminController {
     return Response.html(html);
   }
 
-  async update(request: TyravelRequest) {
+  async update(request: PondoknusaRequest) {
     const resource = this.resolveResource(request);
     const record = await this.findRecord(resource, this.param(request, 'id'));
     await this.authorize(resource, resource.abilities.update, record);
@@ -202,7 +202,7 @@ export class AdminController {
     return Response.redirect(this.adminPath(`/${resource.key}/${this.recordId(resource, record)}`));
   }
 
-  async destroy(request: TyravelRequest) {
+  async destroy(request: PondoknusaRequest) {
     const resource = this.resolveResource(request);
     const record = await this.findRecord(resource, this.param(request, 'id'));
     await this.authorize(resource, resource.abilities.delete, record);
@@ -215,7 +215,7 @@ export class AdminController {
     return Response.redirect(this.adminPath(`/${resource.key}`));
   }
 
-  async bulk(request: TyravelRequest) {
+  async bulk(request: PondoknusaRequest) {
     const resource = this.resolveResource(request);
     await this.authorize(resource, resource.abilities.delete);
 
@@ -238,7 +238,7 @@ export class AdminController {
     return Response.redirect(`${this.adminPath(`/${resource.key}`)}${query}`);
   }
 
-  async bulkExport(request: TyravelRequest) {
+  async bulkExport(request: PondoknusaRequest) {
     const resource = this.resolveResource(request);
     await this.authorize(resource, resource.abilities.viewAny);
 
@@ -270,7 +270,7 @@ export class AdminController {
     });
   }
 
-  private param(request: TyravelRequest, name: string): string {
+  private param(request: PondoknusaRequest, name: string): string {
     const value = request.param(name);
     if (!value) {
       throw new NotFoundHttpException();
@@ -278,7 +278,7 @@ export class AdminController {
     return value;
   }
 
-  private resolveResource(request: TyravelRequest): AdminResource {
+  private resolveResource(request: PondoknusaRequest): AdminResource {
     const key = this.param(request, 'resource');
     const resource = this.deps.registry.get(key);
     if (!resource) {
@@ -410,7 +410,7 @@ export class AdminController {
   }
 
   private async recordAudit(
-    request: TyravelRequest,
+    request: PondoknusaRequest,
     resourceKey: string,
     recordId: string | number,
     action: 'create' | 'update' | 'delete',
@@ -449,7 +449,7 @@ export class AdminController {
     }));
   }
 
-  private resolveActor(request: TyravelRequest): {
+  private resolveActor(request: PondoknusaRequest): {
     actorId?: string | number;
     actorLabel?: string;
   } {
@@ -474,7 +474,7 @@ export class AdminController {
 
   private activeFilters(
     resource: AdminResource,
-    request: TyravelRequest,
+    request: PondoknusaRequest,
   ): Array<{
     name: string;
     label: string;

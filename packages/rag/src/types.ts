@@ -5,7 +5,7 @@ export interface RagChunk {
   metadata?: Record<string, unknown>;
 }
 
-import type { MetadataFilter } from '@tyravel/vector';
+import type { MetadataFilter } from '@pondoknusa/vector';
 
 export type RerankFn = (query: string, chunks: RagChunk[]) => Promise<RagChunk[]>;
 

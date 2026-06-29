@@ -23,11 +23,11 @@ describe('config cache', () => {
   });
 
   function scaffoldProject() {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-config-cache-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-config-cache-'));
     mkdirSync(join(tempDir, 'config'), { recursive: true });
     writeFileSync(
       join(tempDir, 'config', 'app.js'),
-      'export default { name: "Tyravel", debug: false };',
+      'export default { name: "Pondoknusa", debug: false };',
     );
     writeFileSync(join(tempDir, '.env'), 'APP_NAME=Cached\n');
     return tempDir;
@@ -48,7 +48,7 @@ describe('config cache', () => {
     writeFileSync(configCachePath(root), `${JSON.stringify(manifest, null, 2)}\n`);
 
     const loaded = await readConfigCacheManifest(root);
-    expect(loaded?.config.app).toEqual({ name: 'Tyravel', debug: false });
+    expect(loaded?.config.app).toEqual({ name: 'Pondoknusa', debug: false });
     expect(loaded?.files).toHaveLength(2);
   });
 
@@ -63,7 +63,7 @@ describe('config cache', () => {
     const result = await resolveConfigForBoot(root);
 
     expect(result.loaded).toBe(true);
-    expect(result.config.app).toEqual({ name: 'Tyravel', debug: false });
+    expect(result.config.app).toEqual({ name: 'Pondoknusa', debug: false });
   });
 
   it('falls back to live config when cache is stale', async () => {
@@ -77,7 +77,7 @@ describe('config cache', () => {
       version: 1 as const,
       generatedAt: new Date().toISOString(),
       files: [{ name: 'app.js', mtimeMs: 0 }, { name: '.env', mtimeMs: 0 }],
-      config: { app: { name: 'Tyravel', debug: false } },
+      config: { app: { name: 'Pondoknusa', debug: false } },
     };
 
     mkdirSync(join(root, 'storage/framework'), { recursive: true });

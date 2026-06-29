@@ -3,7 +3,7 @@
 ## Inline validation
 
 ```typescript
-import { validateRequest } from '@tyravel/validation';
+import { validateRequest } from '@pondoknusa/validation';
 
 const data = await validateRequest(request, {
   email: 'required|email',
@@ -18,7 +18,7 @@ Failed validation returns HTTP 422 with an `errors` object.
 Form requests combine authorization and validation for controller actions:
 
 ```typescript
-import { FormRequest, Gate } from '@tyravel/core';
+import { FormRequest, Gate } from '@pondoknusa/core';
 
 export class StoreUserRequest extends FormRequest<{ email: string; name: string }> {
   async authorize(): Promise<boolean> {
@@ -40,7 +40,7 @@ Wire into a route:
 Route.post('/users', [UserController, 'store', StoreUserRequest]);
 ```
 
-Generate a scaffold with `tyravel make:request StoreUser`.
+Generate a scaffold with `pondoknusa make:request StoreUser`.
 
 ## Conditional rules
 

@@ -1,4 +1,4 @@
-import type { VectorMetric } from '@tyravel/vector';
+import type { VectorMetric } from '@pondoknusa/vector';
 
 const METRIC_OPCLASS: Record<VectorMetric, string> = {
   cosine: 'vector_cosine_ops',

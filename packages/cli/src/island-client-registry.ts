@@ -21,7 +21,7 @@ export async function registerIslandInClientBundle(
   if (await pathExists(echoEntry)) {
     let source = await readFile(echoEntry, 'utf8');
     if (!source.includes(importLine)) {
-      const hydrateImport = "import { hydrate } from '@tyravel/ssr';";
+      const hydrateImport = "import { hydrate } from '@pondoknusa/ssr';";
       source = source.includes(hydrateImport)
         ? `${importLine}\n${source}`
         : `${importLine}\n${hydrateImport}\n\nhydrate();\n`;
@@ -33,7 +33,7 @@ export async function registerIslandInClientBundle(
   await writeFile(
     appEntry,
     `${importLine}
-import { hydrate } from '@tyravel/ssr';
+import { hydrate } from '@pondoknusa/ssr';
 
 hydrate();
 `,

@@ -1,4 +1,4 @@
-import { registerIsland } from '@tyravel/ssr';
+import { registerIsland } from '@pondoknusa/ssr';
 
 registerIsland('counter', ({ element, props }) => {
   const button = element.querySelector('button');

@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/database-mysql",
+  "name": "@pondoknusa/database-mysql",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -11,7 +11,7 @@
     }
   },
   "dependencies": {
-    "@tyravel/database": "1.0.3",
+    "@pondoknusa/database": "1.0.3",
     "mysql2": "^3.14.1"
   },
   "scripts": {
@@ -27,11 +27,11 @@
   "devDependencies": {
     "@types/node": "^26.0.1"
   },
-  "description": "MySQL database driver for Tyravel",
+  "description": "MySQL database driver for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/database-mysql"
   },
   "publishConfig": {

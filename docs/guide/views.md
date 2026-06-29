@@ -3,8 +3,8 @@
 Register `ViewServiceProvider` and add `config/views.ts`. Templates live in `resources/views/` as `.tyr` files.
 
 ```typescript
-import { View, setViewApplication } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+import { View, setViewApplication } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 
 setViewApplication(app);
 
@@ -33,19 +33,19 @@ Route.get('/', async () =>
 - `@layout`, `@section`, `@yield` — layouts
 - `@component` — reusable partials
 
-Generate views with `tyravel make:view pages.about`.
+Generate views with `pondoknusa make:view pages.about`.
 
 ## Server-side rendering
 
-Tyravel supports progressive enhancement: render HTML on the server, then hydrate interactive regions on the client.
+Pondoknusa supports progressive enhancement: render HTML on the server, then hydrate interactive regions on the client.
 
 ### Document shell
 
 Use `Response.ssr()` to wrap a rendered view in a complete HTML document and inject the hydration manifest:
 
 ```typescript
-import { Route, View } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+import { Route, View } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 
 Route.get('/', async () => {
   const html = await View.render('welcome', { name: 'Ada' });
@@ -56,7 +56,7 @@ Route.get('/', async () => {
 });
 ```
 
-`buildSsrDocument()` from `@tyravel/http` performs the same wrapping when you need the HTML string without building a `Response`.
+`buildSsrDocument()` from `@pondoknusa/http` performs the same wrapping when you need the HTML string without building a `Response`.
 
 The manifest is serialized into `<script type="application/json" id="tyr-hydration">` before `</body>`.
 
@@ -73,7 +73,7 @@ Mark interactive regions with `@island`. The server renders fallback HTML; the c
 Register the client mount function in `resources/client/`:
 
 ```typescript
-import { registerIsland } from '@tyravel/ssr';
+import { registerIsland } from '@pondoknusa/ssr';
 
 registerIsland('counter', ({ element, props }) => {
   const button = element.querySelector('button');
@@ -89,7 +89,7 @@ registerIsland('counter', ({ element, props }) => {
 Bootstrap hydration after the page loads:
 
 ```typescript
-import { hydrate } from '@tyravel/ssr';
+import { hydrate } from '@pondoknusa/ssr';
 
 hydrate();
 ```
@@ -116,7 +116,7 @@ Route.get('/dashboard', () =>
 );
 ```
 
-Mark expensive pure components with `@memo` (or `@@memo`) at the top of the `.tyr` file. Tyravel caches rendered HTML keyed by props hash — skip when the parent passes dynamic slots.
+Mark expensive pure components with `@memo` (or `@@memo`) at the top of the `.tyr` file. Pondoknusa caches rendered HTML keyed by props hash — skip when the parent passes dynamic slots.
 
 ```html
 @@memo(300)
@@ -137,17 +137,17 @@ return Response.ssrStream(View.renderStream('dashboard', context, handlers), {
 
 `View.renderStream()` yields HTML in document order: shell markup, then each stream section as it resolves.
 
-Scaffold a new island with `tyravel make:island counter`. That creates `resources/views/islands/counter.tyr`, `resources/client/islands/counter.ts`, and registers the client mount in your bundle entry.
+Scaffold a new island with `pondoknusa make:island counter`. That creates `resources/views/islands/counter.tyr`, `resources/client/islands/counter.ts`, and registers the client mount in your bundle entry.
 
 ### Programmatic `.tyr.ts` views (stable)
 
-Programmatic views are **stable** as of Tyravel 1.2. The contract is:
+Programmatic views are **stable** as of Pondoknusa 1.2. The contract is:
 
 1. A `.tyr.ts` file exports `render(props)` returning HTML (or a `TemplateResult`).
 2. Optional `mount(element, props)` registers client behavior for the same island id.
 3. Register with `registerProgrammaticIsland(id, module)` on the client.
 
-Use `tyravel make:island counter --programmatic` to scaffold a reference implementation:
+Use `pondoknusa make:island counter --programmatic` to scaffold a reference implementation:
 
 ```typescript
 @island('counter', { count: 0 })
@@ -156,9 +156,9 @@ Use `tyravel make:island counter --programmatic` to scaffold a reference impleme
 
 ```typescript
 import * as counterIsland from '../views/islands/counter.tyr.js';
-import { registerProgrammaticIsland } from '@tyravel/ssr';
+import { registerProgrammaticIsland } from '@pondoknusa/ssr';
 
 registerProgrammaticIsland('counter', counterIsland);
 ```
 
-`await View.catalog()` returns `{ components, islands }` so tooling can see which views declare each island id and whether a client or programmatic mount exists. For design-system JSON export, use `tyravel view:catalog --json`.
+`await View.catalog()` returns `{ components, islands }` so tooling can see which views declare each island id and whether a client or programmatic mount exists. For design-system JSON export, use `pondoknusa view:catalog --json`.

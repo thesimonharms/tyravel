@@ -1,12 +1,12 @@
 # Deploy to Fly.io
 
-Deploy a Tyravel app to [Fly.io](https://fly.io) with managed Postgres, optional Redis, and a release-phase migration.
+Deploy a Pondoknusa app to [Fly.io](https://fly.io) with managed Postgres, optional Redis, and a release-phase migration.
 
 ## Prerequisites
 
 - `flyctl` installed and authenticated
-- A Tyravel app with Postgres: `tyravel new my-app --db=postgres --redis`
-- `@tyravel/database-pg` and `@tyravel/redis-node` in `package.json`
+- A Pondoknusa app with Postgres: `pondoknusa new my-app --db=postgres --redis`
+- `@pondoknusa/database-pg` and `@pondoknusa/redis-node` in `package.json`
 
 ## 1. Initialize Fly
 
@@ -28,7 +28,7 @@ Use the same Dockerfile as [Docker](/guide/deployment/docker) or copy from `exam
 ## 3. fly.toml
 
 ```toml
-app = "my-tyravel-app"
+app = "my-pondoknusa-app"
 primary_region = "iad"
 
 [build]
@@ -36,8 +36,8 @@ primary_region = "iad"
 [env]
   NODE_ENV = "production"
   APP_DEBUG = "false"
-  TYRAVEL_HOST = "0.0.0.0"
-  TYRAVEL_PORT = "8080"
+  PONDOKNUSA_HOST = "0.0.0.0"
+  PONDOKNUSA_PORT = "8080"
   DB_CONNECTION = "postgres"
   QUEUE_CONNECTION = "database"
   BROADCAST_CONNECTION = "websocket"
@@ -63,7 +63,7 @@ primary_region = "iad"
     timeout = "5s"
 
 [deploy]
-  release_command = "npx tyravel migrate"
+  release_command = "npx pondoknusa migrate"
 
 [[vm]]
   memory = "512mb"
@@ -72,17 +72,17 @@ primary_region = "iad"
 
 [processes]
   app = "./deploy/docker-entrypoint.sh"
-  worker = "npx tyravel queue:work"
+  worker = "npx pondoknusa queue:work"
 ```
 
 ## 4. Secrets
 
 ```bash
 fly secrets set \
-  APP_URL="https://my-tyravel-app.fly.dev" \
-  DB_HOST="my-tyravel-app-db.internal" \
-  DB_DATABASE="my_tyravel_app" \
-  DB_USERNAME="my_tyravel_app" \
+  APP_URL="https://my-pondoknusa-app.fly.dev" \
+  DB_HOST="my-pondoknusa-app-db.internal" \
+  DB_DATABASE="my_pondoknusa_app" \
+  DB_USERNAME="my_pondoknusa_app" \
   DB_PASSWORD="<from-fly-postgres>" \
   REDIS_URL="redis://default:<password>@<fly-redis>.upstash.io:6379"
 ```
@@ -94,8 +94,8 @@ Attach Fly Postgres and it injects `DATABASE_URL` — map it in `config/database
 Run in your CI pipeline or locally before `fly deploy`:
 
 ```bash
-tyravel route:cache
-tyravel view:cache
+pondoknusa route:cache
+pondoknusa view:cache
 ```
 
 Commit `bootstrap/cache/routes.json` and `storage/framework/views/*.json` **or** bake caches into the Docker image `RUN` layer (see Docker guide).
@@ -128,9 +128,9 @@ If you use a custom domain, update `APP_URL` and Echo client config to match.
 
 | Symptom | Fix |
 |---------|-----|
-| `CompiledViewCacheMissError` | Run `tyravel view:cache` in Docker build or release |
+| `CompiledViewCacheMissError` | Run `pondoknusa view:cache` in Docker build or release |
 | Migrations fail on release | Check `DB_*` secrets and Postgres attachment |
-| 502 on boot | Confirm `TYRAVEL_PORT=8080` matches `internal_port` |
+| 502 on boot | Confirm `PONDOKNUSA_PORT=8080` matches `internal_port` |
 | WS disconnects | Ensure `min_machines_running >= 1` or Redis pub/sub configured |
 
 ## Next

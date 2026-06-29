@@ -16,7 +16,7 @@ describe('LocalDisk', () => {
   });
 
   it('stores, reads, checks, and deletes files', async () => {
-    directory = await mkdtemp(join(tmpdir(), 'tyravel-storage-'));
+    directory = await mkdtemp(join(tmpdir(), 'pondoknusa-storage-'));
     disk = new LocalDisk(directory);
 
     await disk.put('notes/hello.txt', 'hello world');
@@ -28,7 +28,7 @@ describe('LocalDisk', () => {
   });
 
   it('rejects path traversal', async () => {
-    directory = await mkdtemp(join(tmpdir(), 'tyravel-storage-'));
+    directory = await mkdtemp(join(tmpdir(), 'pondoknusa-storage-'));
     disk = new LocalDisk(directory);
 
     await expect(disk.put('../escape.txt', 'nope')).rejects.toThrow('Invalid storage path');

@@ -1,4 +1,4 @@
-import type { Job } from '@tyravel/queue';
+import type { Job } from '@pondoknusa/queue';
 import type { EventRegistry } from './event-registry.js';
 import type { ListenerRegistry } from './listener-registry.js';
 import type { QueuedListenerMetadata } from './should-queue.js';
@@ -13,7 +13,7 @@ export interface QueuedListenerBridge {
 import type { Event } from './types.js';
 
 export interface EventDispatcherOptions {
-  container?: import('@tyravel/container').Container;
+  container?: import('@pondoknusa/container').Container;
   eventRegistry?: EventRegistry;
   listenerRegistry?: ListenerRegistry;
   queue?: QueuedListenerBridge;

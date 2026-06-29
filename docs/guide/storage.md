@@ -21,7 +21,7 @@ export default {
 ## Using the Storage facade
 
 ```typescript
-import { Storage } from '@tyravel/core';
+import { Storage } from '@pondoknusa/core';
 
 // Write a file
 await Storage.put('avatars/ada.png', imageBuffer);
@@ -62,7 +62,7 @@ Use a specific disk:
 const url = Storage.disk('public').url('avatars/ada.png');
 
 // Or via StorageManager directly
-import { StorageManager } from '@tyravel/storage';
+import { StorageManager } from '@pondoknusa/storage';
 
 const manager = app.make(StorageManager);
 const disk = manager.disk('photos');
@@ -71,22 +71,22 @@ await disk.put('2025/sunset.jpg', buffer);
 
 ## Cloudflare R2
 
-R2 is S3-compatible object storage with no egress fees to Cloudflare Workers (useful for future edge work). Tyravel ships `@tyravel/storage-r2`:
+R2 is S3-compatible object storage with no egress fees to Cloudflare Workers (useful for future edge work). Pondoknusa ships `@pondoknusa/storage-r2`:
 
 ```bash
-npm install @tyravel/storage-r2
+npm install @pondoknusa/storage-r2
 ```
 
 ```typescript
 // config/storage.ts
-import { env } from '@tyravel/config';
+import { env } from '@pondoknusa/config';
 
 export default {
   default: 'r2',
   disks: {
     r2: {
       driver: 'r2',
-      bucket: env('R2_BUCKET', 'tyravel'),
+      bucket: env('R2_BUCKET', 'pondoknusa'),
       endpoint: env('R2_ENDPOINT'),
       accessKeyId: env('R2_ACCESS_KEY_ID'),
       secretAccessKey: env('R2_SECRET_ACCESS_KEY'),
@@ -97,25 +97,25 @@ export default {
 ```
 
 ```typescript
-import { R2StorageServiceProvider } from '@tyravel/storage-r2';
+import { R2StorageServiceProvider } from '@pondoknusa/storage-r2';
 
 app.register(R2StorageServiceProvider);
 ```
 
 Uploads run from your **Node origin**; R2 does not require Workers. Pair with [Cloudflare deployment](/guide/deployment/cloudflare) for CDN in front of the same app.
 
-See [@tyravel/storage-r2](/reference/generated/packages/storage-r2) for config keys.
+See [@pondoknusa/storage-r2](/reference/generated/packages/storage-r2) for config keys.
 
 ## Cloudflare R2
 
 First-party driver for S3-compatible R2 buckets. Uploads run from your Node origin; no Workers required.
 
 ```bash
-npm install @tyravel/storage-r2
+npm install @pondoknusa/storage-r2
 ```
 
 ```typescript
-import { R2StorageServiceProvider } from '@tyravel/storage-r2';
+import { R2StorageServiceProvider } from '@pondoknusa/storage-r2';
 
 app.register(R2StorageServiceProvider);
 ```
@@ -127,7 +127,7 @@ export default {
   disks: {
     r2: {
       driver: 'r2',
-      bucket: env('R2_BUCKET', 'tyravel'),
+      bucket: env('R2_BUCKET', 'pondoknusa'),
       endpoint: env('R2_ENDPOINT'),
       accessKeyId: env('R2_ACCESS_KEY_ID'),
       secretAccessKey: env('R2_SECRET_ACCESS_KEY'),
@@ -137,14 +137,14 @@ export default {
 } satisfies StorageConfig;
 ```
 
-Pair with [Cloudflare deployment](/guide/deployment/cloudflare) for CDN + storage on the same ecosystem. See [@tyravel/storage-r2](/reference/generated/packages/storage-r2) for all config keys.
+Pair with [Cloudflare deployment](/guide/deployment/cloudflare) for CDN + storage on the same ecosystem. See [@pondoknusa/storage-r2](/reference/generated/packages/storage-r2) for all config keys.
 
 ## Custom drivers
 
 Register custom storage drivers with `StorageManager.extend()`:
 
 ```typescript
-import { StorageManager, type Filesystem, type DiskConfig } from '@tyravel/storage';
+import { StorageManager, type Filesystem, type DiskConfig } from '@pondoknusa/storage';
 
 class S3Disk implements Filesystem {
   constructor(private config: DiskConfig) {}
@@ -195,7 +195,7 @@ interface Filesystem {
 ## Service provider registration
 
 ```typescript
-import { StorageServiceProvider } from '@tyravel/core';
+import { StorageServiceProvider } from '@pondoknusa/core';
 
 app.register(StorageServiceProvider);
 await app.boot();
@@ -204,7 +204,7 @@ await app.boot();
 Then wire the facade:
 
 ```typescript
-import { setStorageApplication } from '@tyravel/core';
+import { setStorageApplication } from '@pondoknusa/core';
 
 setStorageApplication(app);
 ```

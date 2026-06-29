@@ -1,4 +1,4 @@
-import { DatabaseManager, type ConnectionConfig } from '@tyravel/database';
+import { DatabaseManager, type ConnectionConfig } from '@pondoknusa/database';
 import { PostgresConnection } from './postgres-connection.js';
 import type { PgConnectionConfig } from './types.js';
 

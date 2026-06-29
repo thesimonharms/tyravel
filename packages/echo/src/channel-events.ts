@@ -2,7 +2,7 @@
  * Augment for typed Echo channel events:
  *
  * ```ts
- * declare module '@tyravel/echo' {
+ * declare module '@pondoknusa/echo' {
  *   interface EchoChannelEventMap {
  *     'orders.1': {
  *       OrderShipped: { id: number };

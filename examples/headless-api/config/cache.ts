@@ -1,9 +1,9 @@
-import type { CacheConfig } from '@tyravel/cache';
-import { env } from '@tyravel/config';
+import type { CacheConfig } from '@pondoknusa/cache';
+import { env } from '@pondoknusa/config';
 
 export default {
   default: env('CACHE_STORE', 'file'),
-  prefix: 'tyravel',
+  prefix: 'pondoknusa',
   connections: {
     file: {
       driver: 'file',

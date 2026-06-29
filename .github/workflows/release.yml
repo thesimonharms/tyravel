@@ -40,56 +40,56 @@ jobs:
         run: |
           set -e
           PACKAGES=(
-            @tyravel/container
-            @tyravel/collection
-            @tyravel/support
-            @tyravel/config
-            @tyravel/log
-            @tyravel/locale
-            @tyravel/http
-            @tyravel/validation
-            @tyravel/database
-            @tyravel/database-mysql
-            @tyravel/database-pg
-            @tyravel/redis
-            @tyravel/redis-node
-            @tyravel/views
-            @tyravel/ssr
-            @tyravel/echo
-            @tyravel/queue
-            @tyravel/events
-            @tyravel/broadcasting
-            @tyravel/broadcasting-websocket
-            @tyravel/vector
-            @tyravel/vector-pg
-            @tyravel/vector-qdrant
-            @tyravel/vector-pinecone
-            @tyravel/rag
-            @tyravel/graphql
-            @tyravel/mcp
-            @tyravel/crypto
-            @tyravel/auth
-            @tyravel/cache
-            @tyravel/storage
-            @tyravel/storage-aws-s3
-            @tyravel/storage-r2
-            @tyravel/storage-supabase
-            @tyravel/mail
-            @tyravel/notifications
-            @tyravel/admin
-            @tyravel/debug
-            @tyravel/testing
-            @tyravel/core
-            @tyravel/auth-oauth
-            @tyravel/repl
-            @tyravel/cli
+            @pondoknusa/container
+            @pondoknusa/collection
+            @pondoknusa/support
+            @pondoknusa/config
+            @pondoknusa/log
+            @pondoknusa/locale
+            @pondoknusa/http
+            @pondoknusa/validation
+            @pondoknusa/database
+            @pondoknusa/database-mysql
+            @pondoknusa/database-pg
+            @pondoknusa/redis
+            @pondoknusa/redis-node
+            @pondoknusa/views
+            @pondoknusa/ssr
+            @pondoknusa/echo
+            @pondoknusa/queue
+            @pondoknusa/events
+            @pondoknusa/broadcasting
+            @pondoknusa/broadcasting-websocket
+            @pondoknusa/vector
+            @pondoknusa/vector-pg
+            @pondoknusa/vector-qdrant
+            @pondoknusa/vector-pinecone
+            @pondoknusa/rag
+            @pondoknusa/graphql
+            @pondoknusa/mcp
+            @pondoknusa/crypto
+            @pondoknusa/auth
+            @pondoknusa/cache
+            @pondoknusa/storage
+            @pondoknusa/storage-aws-s3
+            @pondoknusa/storage-r2
+            @pondoknusa/storage-supabase
+            @pondoknusa/mail
+            @pondoknusa/notifications
+            @pondoknusa/admin
+            @pondoknusa/debug
+            @pondoknusa/testing
+            @pondoknusa/core
+            @pondoknusa/auth-oauth
+            @pondoknusa/repl
+            @pondoknusa/cli
           )
 
           PUBLISHED=0
           SKIPPED=0
 
           for pkg in "${PACKAGES[@]}"; do
-            SHORT="${pkg#@tyravel/}"
+            SHORT="${pkg#@pondoknusa/}"
             LOCAL_VERSION=$(node -p "require('./packages/'+'$SHORT'+'/package.json').version")
 
             REMOTE_VERSION=$(npm view "$pkg" version 2>/dev/null || echo "")

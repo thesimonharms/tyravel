@@ -1,14 +1,14 @@
-import { loadConfig } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
 import {
   Application,
   AuthServiceProvider,
   ConfigServiceProvider,
   DatabaseServiceProvider,
   ServiceProvider,
-} from '@tyravel/core';
-import type { AuthConfig } from '@tyravel/auth';
-import { DatabaseSessionStore } from '@tyravel/auth';
-import { DatabaseManager } from '@tyravel/database';
+} from '@pondoknusa/core';
+import type { AuthConfig } from '@pondoknusa/auth';
+import { DatabaseSessionStore } from '@pondoknusa/auth';
+import { DatabaseManager } from '@pondoknusa/database';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { importAppServiceProvider } from '../project-bootstrap.js';
@@ -17,7 +17,7 @@ import { parseOptions, positionalArgs } from '../utils.js';
 export class SessionPruneCommand extends Command {
   override readonly name = 'session:prune';
   override readonly description = 'Prune expired database sessions';
-  override readonly usage = 'tyravel session:prune';
+  override readonly usage = 'pondoknusa session:prune';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);

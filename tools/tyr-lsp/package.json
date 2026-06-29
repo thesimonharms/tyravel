@@ -1,11 +1,11 @@
 {
-  "name": "tyravel-tyr-lsp",
+  "name": "pondoknusa-tyr-lsp",
   "version": "0.1.0",
   "private": true,
-  "description": "Basic Language Server for Tyravel .tyr templates",
+  "description": "Basic Language Server for Pondoknusa .tyr templates",
   "type": "module",
   "bin": {
-    "tyravel-tyr-lsp": "./server.mjs"
+    "pondoknusa-tyr-lsp": "./server.mjs"
   },
   "dependencies": {
     "vscode-languageserver": "^9.0.1",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/thesimonharms/tyravel.git",
+    "url": "https://github.com/pondoknusa/pondoknusa.git",
     "directory": "tools/tyr-lsp"
   }
 }

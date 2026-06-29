@@ -7,7 +7,7 @@ import { serializeViewCatalog } from './catalog-export.js';
 
 describe('serializeViewCatalog', () => {
   it('adds typed prop schemas for design-system export', async () => {
-    const basePath = join(tmpdir(), `tyravel-catalog-export-${Date.now()}`);
+    const basePath = join(tmpdir(), `pondoknusa-catalog-export-${Date.now()}`);
     const viewsPath = join(basePath, 'resources/views/components');
     mkdirSync(viewsPath, { recursive: true });
 

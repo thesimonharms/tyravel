@@ -1,6 +1,6 @@
-import type { PayloadCipher } from '@tyravel/crypto';
-import type { DatabaseConnection } from '@tyravel/database';
-import { QueryBuilder } from '@tyravel/database';
+import type { PayloadCipher } from '@pondoknusa/crypto';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import { QueryBuilder } from '@pondoknusa/database';
 import type { SessionStore } from './session.js';
 
 interface SessionsTableRow {

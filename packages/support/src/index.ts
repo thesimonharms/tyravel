@@ -42,4 +42,4 @@ export { Conditionable } from './conditionable.js';
 export { Pipeline } from './pipeline.js';
 export { Stringable } from './stringable.js';
 export { Macroable } from './macroable.js';
-export { docsLink, TYRAVEL_DOCS_ORIGIN } from './docs-links.js';
+export { docsLink, PONDOKNUSA_DOCS_ORIGIN } from './docs-links.js';

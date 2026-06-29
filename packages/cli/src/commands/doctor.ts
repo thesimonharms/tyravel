@@ -7,7 +7,7 @@ import { parseOptions, positionalArgs } from '../utils.js';
 export class DoctorCommand extends Command {
   override readonly name = 'doctor';
   override readonly description = 'Run environment and project health checks';
-  override readonly usage = 'tyravel doctor [--perf]';
+  override readonly usage = 'pondoknusa doctor [--perf]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -25,7 +25,7 @@ export class DoctorCommand extends Command {
       });
     }
 
-    console.log('Tyravel doctor');
+    console.log('Pondoknusa doctor');
     console.log('');
 
     let failed = 0;

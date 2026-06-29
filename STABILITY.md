@@ -1,6 +1,6 @@
 # API Stability Policy
 
-Tyravel publishes the `@tyravel/*` packages as a versioned monorepo. This document defines what we treat as a **public, supported API**, what is **experimental**, and how we handle **deprecations and breaking changes**.
+Pondoknusa publishes the `@pondoknusa/*` packages as a versioned monorepo. This document defines what we treat as a **public, supported API**, what is **experimental**, and how we handle **deprecations and breaking changes**.
 
 ## Versioning
 
@@ -18,7 +18,7 @@ All first-party packages share a single version (for example `1.0.1`) and are re
 
 ### Pre-1.0 (`0.y.z`) — historical
 
-Before **1.0.0**, Tyravel followed the table above in spirit:
+Before **1.0.0**, Pondoknusa followed the table above in spirit:
 
 - **Patch releases** (`0.6.1` → `0.6.2`) did not intentionally remove or break stable APIs.
 - **Minor releases** (`0.6.x` → `0.7.0`) could introduce breaking changes to **experimental** APIs and deprecate stable APIs. Breaking changes to **stable** APIs required a deprecation window (see below) except when explicitly called out in release notes for urgent fixes.
@@ -28,12 +28,12 @@ Before **1.0.0**, Tyravel followed the table above in spirit:
 A symbol, command, or configuration key is **public** when all of the following are true:
 
 1. It is exported from a package entry point listed in that package's `package.json` `exports` field (typically the package root `.` export).
-2. It is documented in the [docs site](docs/guide/introduction.md), package README, or CLI `--help` / `tyravel list` output.
+2. It is documented in the [docs site](docs/guide/introduction.md), package README, or CLI `--help` / `pondoknusa list` output.
 3. It is not marked **experimental** or **internal** in this policy or in JSDoc.
 
 ### Not public (unsupported)
 
-- Deep imports such as `@tyravel/core/dist/...` or `@tyravel/core/src/...`.
+- Deep imports such as `@pondoknusa/core/dist/...` or `@pondoknusa/core/src/...`.
 - Any path not listed in a package's `exports` map.
 - Undocumented exports, even if reachable from the entry barrel.
 - Application-private code under `app/`, `src/`, or `resources/` in generated projects.
@@ -53,18 +53,18 @@ Stable APIs are safe to build production applications on. Patch releases preserv
 | **Facades** | `Route`, `DB`, `Auth`, `Cache`, `Queue`, `Events`, `Log`, `Mail`, `Notifications`, `Schedule`, `Storage`, `View`, `Config` (via repository) |
 | **HTTP** | `Router`, middleware registry, `Request`/`Response` helpers, CORS/throttle middleware, API resources (nested resources, conditional attributes, pagination meta) |
 | **Database** | `Model`, query builder, relations, migrations, factories, seeders, pagination; route model binding; global scopes; custom `Cast` authoring; `HasUuids` / `HasUlids` base classes; `prunable()` models; `Model.preventLazyLoading()` |
-| **Routing** | Implicit `{model}` binding with `Route.bind()` customization; `route()` URL generation; `URL.signed()` / `URL.temporarySigned()`; route caching (`tyravel route:cache` / `route:clear`); `Route.group({ prefix, middleware, as })`; per-route `throttle()` presets |
+| **Routing** | Implicit `{model}` binding with `Route.bind()` customization; `route()` URL generation; `URL.signed()` / `URL.temporarySigned()`; route caching (`pondoknusa route:cache` / `route:clear`); `Route.group({ prefix, middleware, as })`; per-route `throttle()` presets |
 | **Validation** | `Validator`, `validateRequest`, pipe rules |
 | **Config** | `env`, `envBool`, `envInt`, `requiredEnv`, `loadConfig`, `ConfigRepository`, `s` config schemas |
-| **Views** | `.tyr` directives through Tier 6; typed component props (`ViewPropsMap`, `DefineViewProps`, `tyravel view:types`); strict `view:lint`; production compiled-cache enforcement; `View.renderFragment()` / `View.partial()`; `Response.partial()`; `View.catalog()` / `View.islandCatalog()`; `tyravel view:catalog` |
-| **SSR & hydration** | `View.renderStream()`, `View.streamSsr()`, `@stream` / `@endstream`, `@island` / `@endisland`, `View.getHydrationManifest()`, `data-tyr-island` markers, `Response.ssr()` / `Response.ssrStream()` / `buildSsrDocument()` / `streamSsrDocument()`, `@tyravel/ssr` (`registerIsland`, `hydrate`, `readManifestFromDocument`), `@tyravel/testing` `assertIsland` / `assertHydrationManifest` |
+| **Views** | `.tyr` directives through Tier 6; typed component props (`ViewPropsMap`, `DefineViewProps`, `pondoknusa view:types`); strict `view:lint`; production compiled-cache enforcement; `View.renderFragment()` / `View.partial()`; `Response.partial()`; `View.catalog()` / `View.islandCatalog()`; `pondoknusa view:catalog` |
+| **SSR & hydration** | `View.renderStream()`, `View.streamSsr()`, `@stream` / `@endstream`, `@island` / `@endisland`, `View.getHydrationManifest()`, `data-tyr-island` markers, `Response.ssr()` / `Response.ssrStream()` / `buildSsrDocument()` / `streamSsrDocument()`, `@pondoknusa/ssr` (`registerIsland`, `hydrate`, `readManifestFromDocument`), `@pondoknusa/testing` `assertIsland` / `assertHydrationManifest` |
 | **Queue & events** | Job dispatch, workers, listeners, subscribers |
 | **Auth** | Session guard, API tokens, `Gate`, password reset, OAuth providers |
-| **CLI** | Commands listed in the root README (`tyravel new`, `dev`, `serve`, `start`, `doctor`, `migrate`, `make:*`, `queue:*`, `view:*`, `route:cache`, `model:prune`, etc.) |
-| **REPL** | `tyravel shell`, `@tyravel/repl` `startRepl()`, facade imports, `.routes` / `.models` / `.facades` commands, persistent history at `~/.tyravel_shell_history` |
+| **CLI** | Commands listed in the root README (`pondoknusa new`, `dev`, `serve`, `start`, `doctor`, `migrate`, `make:*`, `queue:*`, `view:*`, `route:cache`, `model:prune`, etc.) |
+| **REPL** | `pondoknusa shell`, `@pondoknusa/repl` `startRepl()`, facade imports, `.routes` / `.models` / `.facades` commands, persistent history at `~/.pondoknusa_shell_history` |
 | **Bus** | `Bus.dispatch()`, `Bus.register()` / `Bus.map()`, self-handling commands, container auto-resolution (`CommandNameHandler`) |
 | **Programmatic views** | `.tyr.ts` templates exporting `render()` and optional `mount()`; programmatic island registration via `View.catalog()` metadata |
-| **Testing** | `@tyravel/testing` `TestCase`, HTTP client, `renderView`, assertion helpers |
+| **Testing** | `@pondoknusa/testing` `TestCase`, HTTP client, `renderView`, assertion helpers |
 
 ### Experimental
 
@@ -100,19 +100,19 @@ Deprecated APIs remain functional until the removal version unless a security fi
 1. Open a ROADMAP or release-plan item describing the break and migration path.
 2. Implement with deprecation period when the old API is stable.
 3. Update `CHANGELOG.md`, docs, and scaffold stubs (`packages/cli/src/stubs*.ts`).
-4. Bump the monorepo minor (or major post-1.0) and publish all `@tyravel/*` packages together via the release workflow.
+4. Bump the monorepo minor (or major post-1.0) and publish all `@pondoknusa/*` packages together via the release workflow.
 
 ## Package scope
 
-Every published `@tyravel/*` package follows this policy for its documented exports. Optional driver packages (`@tyravel/database-mysql`, `@tyravel/redis-node`, `@tyravel/storage-aws-s3`, etc.) version in lockstep with core but may be installed independently; their public API is limited to driver registration and connection config types.
+Every published `@pondoknusa/*` package follows this policy for its documented exports. Optional driver packages (`@pondoknusa/database-mysql`, `@pondoknusa/redis-node`, `@pondoknusa/storage-aws-s3`, etc.) version in lockstep with core but may be installed independently; their public API is limited to driver registration and connection config types.
 
 ## Reporting instability
 
-If a patch release breaks documented stable behavior, please [open an issue](https://github.com/thesimonharms/tyravel/issues) with the package name, version, and API surface affected. We treat that as a bug and aim to fix forward in a patch release.
+If a patch release breaks documented stable behavior, please [open an issue](https://github.com/pondoknusa/pondoknusa/issues) with the package name, version, and API surface affected. We treat that as a bug and aim to fix forward in a patch release.
 
 ## Long-term support (1.x)
 
-Starting with **1.0.0**, Tyravel follows strict [semver](https://semver.org/) for stable APIs.
+Starting with **1.0.0**, Pondoknusa follows strict [semver](https://semver.org/) for stable APIs.
 
 | Release type | Support |
 |--------------|---------|
@@ -122,7 +122,7 @@ Starting with **1.0.0**, Tyravel follows strict [semver](https://semver.org/) fo
 
 **Node.js:** Each `1.y.0` minor targets Node versions that are Current or Active LTS at release time. Patch releases do not drop Node support without a minor bump.
 
-**npm packages:** All `@tyravel/*` packages version together. Install the same version across your dependency tree.
+**npm packages:** All `@pondoknusa/*` packages version together. Install the same version across your dependency tree.
 
 **Pre-1.0 (`0.x`):** No LTS commitment. Upgrade across minors using [docs/guide/upgrading-to-1.0.md](docs/guide/upgrading-to-1.0.md).
 

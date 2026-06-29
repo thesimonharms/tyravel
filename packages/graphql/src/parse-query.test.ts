@@ -54,9 +54,9 @@ describe('resolveArgumentValues', () => {
   it('resolves variable references', () => {
     const resolved = resolveArgumentValues(
       { name: { $var: 'name' }, limit: 5 },
-      { name: 'Tyravel' },
+      { name: 'Pondoknusa' },
     );
 
-    expect(resolved).toEqual({ name: 'Tyravel', limit: 5 });
+    expect(resolved).toEqual({ name: 'Pondoknusa', limit: 5 });
   });
 });

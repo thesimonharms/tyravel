@@ -1,5 +1,5 @@
 {
-  "Tyravel layout": {
+  "Pondoknusa layout": {
     "prefix": "tyr-layout",
     "body": [
       "@layout('${1:layouts/app}')",
@@ -10,7 +10,7 @@
     ],
     "description": "Layout section block"
   },
-  "Tyravel component": {
+  "Pondoknusa component": {
     "prefix": "tyr-component",
     "body": [
       "@component('${1:components/alert}', {",
@@ -21,7 +21,7 @@
     ],
     "description": "Component with props"
   },
-  "Tyravel props": {
+  "Pondoknusa props": {
     "prefix": "tyr-props",
     "body": [
       "@props({",

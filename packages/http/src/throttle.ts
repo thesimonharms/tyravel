@@ -1,11 +1,11 @@
 import { Response } from './response.js';
-import type { TyravelRequest } from './request.js';
+import type { PondoknusaRequest } from './request.js';
 import type { Middleware } from './types.js';
 
 export interface ThrottleOptions {
   limit: number;
   windowMs: number;
-  key?: (request: TyravelRequest) => string;
+  key?: (request: PondoknusaRequest) => string;
 }
 
 interface ThrottleEntry {

@@ -1,6 +1,6 @@
-import type { AuthManager, Gate } from '@tyravel/auth';
-import type { ModelStatic } from '@tyravel/database';
-import { AuthorizationException } from '@tyravel/auth';
+import type { AuthManager, Gate } from '@pondoknusa/auth';
+import type { ModelStatic } from '@pondoknusa/database';
+import { AuthorizationException } from '@pondoknusa/auth';
 import type { AdminResource } from './admin-resource.js';
 
 export async function authorizeAdminAccess(

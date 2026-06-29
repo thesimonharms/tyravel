@@ -1,10 +1,10 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { View } from '@tyravel/core';
-import { buildSsrDocument, Response, streamSsrDocument } from '@tyravel/http';
-import { hydrate, registerIsland, readManifestFromDocument } from '@tyravel/ssr';
-import { RenderedView } from '@tyravel/testing';
+import { View } from '@pondoknusa/core';
+import { buildSsrDocument, Response, streamSsrDocument } from '@pondoknusa/http';
+import { hydrate, registerIsland, readManifestFromDocument } from '@pondoknusa/ssr';
+import { RenderedView } from '@pondoknusa/testing';
 
 const ROOT = join(import.meta.dirname, '..');
 
@@ -18,7 +18,7 @@ describe('SSR stable API surface', () => {
       expect(doc).toMatch(/@island/);
       expect(doc).toMatch(/Response\.ssr\(\)|Response\.ssrStream\(\)|buildSsrDocument\(\)|streamSsrDocument\(\)/);
       expect(doc).toMatch(/View\.streamSsr\(\)/);
-      expect(doc).toMatch(/registerIsland|@tyravel\/ssr/);
+      expect(doc).toMatch(/registerIsland|@pondoknusa\/ssr/);
     }
 
     expect(policy).not.toMatch(

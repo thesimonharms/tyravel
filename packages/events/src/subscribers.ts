@@ -1,4 +1,4 @@
-import type { Container } from '@tyravel/container';
+import type { Container } from '@pondoknusa/container';
 import type { EventDispatcher } from './event-dispatcher.js';
 import type { EventSubscriber } from './types.js';
 import type { EventSubscriberConstructor } from './types.js';
@@ -21,7 +21,7 @@ export function registerEventSubscribers(
   for (const SubscriberClass of subscribers) {
     const instance = container
       ? container.make(
-          SubscriberClass as import('@tyravel/container').Constructor<EventSubscriber>,
+          SubscriberClass as import('@pondoknusa/container').Constructor<EventSubscriber>,
         )
       : new SubscriberClass();
     instance.subscribe(dispatcher);

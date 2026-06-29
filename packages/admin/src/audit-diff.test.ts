@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Model } from '@tyravel/database';
+import { Model } from '@pondoknusa/database';
 import { buildAuditChanges } from './audit-diff.js';
 
 describe('buildAuditChanges', () => {

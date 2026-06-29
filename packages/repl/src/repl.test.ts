@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { join } from 'node:path';
 
-describe('@tyravel/repl', () => {
+describe('@pondoknusa/repl', () => {
   it('exports startRepl as the stable shell entrypoint', async () => {
     const mod = await import('./index.js');
     expect(typeof mod.startRepl).toBe('function');

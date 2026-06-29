@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/config",
+  "name": "@pondoknusa/config",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -17,11 +17,11 @@
   "files": [
     "dist"
   ],
-  "description": "Typed configuration loading for Tyravel",
+  "description": "Typed configuration loading for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/config"
   },
   "publishConfig": {

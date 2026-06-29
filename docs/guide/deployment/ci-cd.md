@@ -1,4 +1,4 @@
-# CI/CD for Tyravel
+# CI/CD for Pondoknusa
 
 Automate build, cache warm-up, migrations, and deploy gates so production boots are fast and predictable.
 
@@ -47,10 +47,10 @@ jobs:
       - run: npm ci
       - run: npm run build
       # Warm caches into the artifact / image layer
-      - run: npx tyravel config:cache
-      - run: npx tyravel route:cache
-      - run: npx tyravel view:cache
-      - run: npx tyravel deploy:check
+      - run: npx pondoknusa config:cache
+      - run: npx pondoknusa route:cache
+      - run: npx pondoknusa view:cache
+      - run: npx pondoknusa deploy:check
       # Platform-specific deploy step (Fly, Railway, Docker push, etc.)
 ```
 
@@ -61,12 +61,12 @@ Headless apps: omit `view:cache`.
 | Step | Build time | Release / entrypoint | Every container start |
 |------|------------|----------------------|------------------------|
 | `npm ci` / `npm run build` | Yes | — | — |
-| `tyravel config:cache` | Yes | Optional refresh | Rare |
-| `tyravel route:cache` | Yes | Optional refresh | Rare |
-| `tyravel view:cache` | Yes | — | — |
-| `tyravel migrate` | — | **Yes** | Optional (see below) |
-| `tyravel start` | — | — | Yes |
-| `tyravel queue:work` | — | — | Separate process |
+| `pondoknusa config:cache` | Yes | Optional refresh | Rare |
+| `pondoknusa route:cache` | Yes | Optional refresh | Rare |
+| `pondoknusa view:cache` | Yes | — | — |
+| `pondoknusa migrate` | — | **Yes** | Optional (see below) |
+| `pondoknusa start` | — | — | Yes |
+| `pondoknusa queue:work` | — | — | Separate process |
 
 **Prefer running migrations once per release**, not on every replica start, when you run multiple containers. Use a release job or `fly deploy` hook; reserve entrypoint migrations for single-instance deploys.
 
@@ -82,7 +82,7 @@ Store secrets in the platform vault (Fly secrets, Railway variables, GitHub Envi
 
 ## Perf budgets (optional)
 
-Add to `tyravel.json`:
+Add to `pondoknusa.json`:
 
 ```json
 {
@@ -96,7 +96,7 @@ Add to `tyravel.json`:
 ```
 
 ```bash
-tyravel test --perf
+pondoknusa test --perf
 ```
 
 Fails CI when benchmarks regress against your thresholds (requires benchmark harness in the repo).
@@ -107,9 +107,9 @@ Bake caches into the image so cold starts skip compile work:
 
 ```dockerfile
 COPY . .
-RUN npx tyravel config:cache \
- && npx tyravel route:cache \
- && npx tyravel view:cache
+RUN npx pondoknusa config:cache \
+ && npx pondoknusa route:cache \
+ && npx pondoknusa view:cache
 ```
 
 Rebuild the image when routes, config, or views change — not on every code-only change if caches are unchanged.

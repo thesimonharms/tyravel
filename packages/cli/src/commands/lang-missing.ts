@@ -1,4 +1,4 @@
-import { collectLocaleKeys, diffMissingKeys } from '@tyravel/locale';
+import { collectLocaleKeys, diffMissingKeys } from '@pondoknusa/locale';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { parseOptions } from '../utils.js';
@@ -15,7 +15,7 @@ const REQUIRED_KEYS = [
 export class LangMissingCommand extends Command {
   override readonly name = 'lang:missing';
   override readonly description = 'Report missing translation keys';
-  override readonly usage = 'tyravel lang:missing [--strict]';
+  override readonly usage = 'pondoknusa lang:missing [--strict]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);

@@ -7,7 +7,7 @@ import { parseOptions, pathExists, positionalArgs } from '../utils.js';
 export class ServeCommand extends Command {
   override readonly name = 'serve';
   override readonly description = 'Start the development server';
-  override readonly usage = 'tyravel serve [--port=<port>] [--host=<hostname>] [--tls]';
+  override readonly usage = 'pondoknusa serve [--port=<port>] [--host=<hostname>] [--tls]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -22,7 +22,7 @@ export class ServeCommand extends Command {
       return 1;
     }
 
-    console.log('Prefer `tyravel dev` for the canonical local workflow.');
+    console.log('Prefer `pondoknusa dev` for the canonical local workflow.');
     const { code } = await startDevServer({ root, cliArgs: args, options });
     return code;
   }

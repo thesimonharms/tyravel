@@ -7,7 +7,7 @@ export function renderDebugBar(entry: DebugRequestEntry, debugPath: string): str
 
   return `
 <div id="tyr-debug-bar" class="tyr-debug-bar${warningClass}">
-  <span><strong>Tyravel</strong></span>
+  <span><strong>Pondoknusa</strong></span>
   <span>${entry.method} ${entry.path}</span>
   <span>${entry.status}</span>
   <span>${entry.durationMs.toFixed(1)}ms</span>

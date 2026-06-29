@@ -1,5 +1,5 @@
-import { env } from '@tyravel/config';
-import type { EventsConfig } from '@tyravel/events';
+import { env } from '@pondoknusa/config';
+import type { EventsConfig } from '@pondoknusa/events';
 import { UserRegistered } from '../src/events/user-registered.js';
 import { SendWelcomeEmail } from '../src/listeners/send-welcome-email.js';
 

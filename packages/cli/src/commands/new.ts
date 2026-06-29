@@ -75,9 +75,9 @@ import { optionString, parseOptions, positionalArgs, projectPath, toKebabCase, w
 
 export class NewCommand extends Command {
   override readonly name = 'new';
-  override readonly description = 'Create a new Tyravel application';
+  override readonly description = 'Create a new Pondoknusa application';
   override readonly usage =
-    'tyravel new <name> [--path=<directory>] [--headless] [--template=default|api|ssr|saas|headless] [--db=sqlite|mysql|postgres] [--redis|--no-redis] [--auth|--no-auth] [--queue=database|redis] [--mail=log|smtp|array] [--ai|--no-ai]';
+    'pondoknusa new <name> [--path=<directory>] [--headless] [--template=default|api|ssr|saas|headless] [--db=sqlite|mysql|postgres] [--redis|--no-redis] [--auth|--no-auth] [--queue=database|redis] [--mail=log|smtp|array] [--ai|--no-ai]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -116,7 +116,7 @@ export class NewCommand extends Command {
     await writeFile(projectPath(targetDir, '.env.example'), envContents);
     await writeFile(projectPath(targetDir, '.env'), envContents);
     await writeFile(
-      projectPath(targetDir, 'tyravel.json'),
+      projectPath(targetDir, 'pondoknusa.json'),
       headless ? headlessProjectConfig(name) : projectConfig(name),
     );
     await writeFile(
@@ -267,7 +267,7 @@ export class NewCommand extends Command {
       );
     }
 
-    console.log(`Tyravel application created successfully.`);
+    console.log(`Pondoknusa application created successfully.`);
     console.log('');
     console.log(`  Template: ${projectOptions.template}`);
     if (headless) {

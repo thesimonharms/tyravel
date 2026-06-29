@@ -1,10 +1,10 @@
 # Application structure
 
-A freshly scaffolded Tyravel app looks like this:
+A freshly scaffolded Pondoknusa app looks like this:
 
 ```
 my-app/
-├── tyravel.json
+├── pondoknusa.json
 ├── package.json
 ├── .env
 ├── config/
@@ -41,7 +41,7 @@ app.register(AppServiceProvider);
 
 ### Async-first `register()` / `boot()`
 
-`ServiceProvider.register()` and `ServiceProvider.boot()` may return `void` or `Promise<void>`. Tyravel is moving to an async-native runtime: **prefer `async register()` and `async boot()`** whenever a hook touches the filesystem, config, or other I/O.
+`ServiceProvider.register()` and `ServiceProvider.boot()` may return `void` or `Promise<void>`. Pondoknusa is moving to an async-native runtime: **prefer `async register()` and `async boot()`** whenever a hook touches the filesystem, config, or other I/O.
 
 `Application.boot()` always `await`s each provider hook in registration order:
 
@@ -53,7 +53,7 @@ Synchronous hooks remain valid for quick, non-blocking setup (for example `this.
 ```typescript
 export class AppServiceProvider extends ServiceProvider {
   override async register() {
-    this.app.instance('app.name', 'Tyravel');
+    this.app.instance('app.name', 'Pondoknusa');
   }
 
   override async boot() {
@@ -75,4 +75,4 @@ export class LontarServiceProvider extends ServiceProvider {
 }
 ```
 
-Register the package provider from `AppServiceProvider` so `tyravel migrate` and config loading pick it up.
+Register the package provider from `AppServiceProvider` so `pondoknusa migrate` and config loading pick it up.

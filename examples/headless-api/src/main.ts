@@ -25,7 +25,7 @@ import {
   setRouteApplication,
   setStorageApplication,
   serve,
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 import { AppServiceProvider } from './providers/app-service-provider.js';
 import './routes/api.js';
 import './routes/auth.js';

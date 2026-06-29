@@ -1,10 +1,10 @@
 import { isAbsolute, join } from 'node:path';
-import type { AuthManager, Gate } from '@tyravel/auth';
-import type { ConfigRepository } from '@tyravel/config';
-import type { Constructor } from '@tyravel/container';
-import type { DatabaseManager } from '@tyravel/database';
-import type { Middleware } from '@tyravel/http';
-import type { ViewEngine } from '@tyravel/views';
+import type { AuthManager, Gate } from '@pondoknusa/auth';
+import type { ConfigRepository } from '@pondoknusa/config';
+import type { Constructor } from '@pondoknusa/container';
+import type { DatabaseManager } from '@pondoknusa/database';
+import type { Middleware } from '@pondoknusa/http';
+import type { ViewEngine } from '@pondoknusa/views';
 import { AdminAuditLogger } from './audit-log.js';
 import { AdminRegistry } from './admin-registry.js';
 import type { AdminDashboardDependencies } from './dashboard.js';
@@ -88,7 +88,7 @@ export class AdminServiceProvider {
       return new AdminAuditLogger({ maxEntries: config.auditLog?.maxEntries ?? 500 });
     }
 
-    const relative = config.auditLog?.persistPath ?? '.tyravel/admin-audit.json';
+    const relative = config.auditLog?.persistPath ?? '.pondoknusa/admin-audit.json';
     const persistPath = isAbsolute(relative)
       ? relative
       : join(this.app.basePath, relative);

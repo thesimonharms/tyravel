@@ -11,11 +11,11 @@ See [Queues & jobs](/guide/queues) for Redis workers and failed-job retry.
 ## Event + listener
 
 ```bash
-tyravel make:event UserRegistered
-tyravel make:listener SendWelcomeEmail --event=UserRegistered
+pondoknusa make:event UserRegistered
+pondoknusa make:listener SendWelcomeEmail --event=UserRegistered
 ```
 
-Register the listener in your event service provider (scaffolded by `tyravel new`).
+Register the listener in your event service provider (scaffolded by `pondoknusa new`).
 
 ## Queued listener
 
@@ -24,7 +24,7 @@ Implement `ShouldQueue` on the listener (or dispatch a job from `handle`) so mai
 ## Run the worker
 
 ```bash
-tyravel queue:work
+pondoknusa queue:work
 ```
 
 In tests, drain the queue explicitly — see [Testing](/guide/testing).

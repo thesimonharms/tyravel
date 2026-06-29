@@ -1,4 +1,4 @@
-import type { Event } from '@tyravel/events';
+import type { Event } from '@pondoknusa/events';
 import type { BroadcastPayload, ShouldBroadcast } from './types.js';
 
 export function eventShouldBroadcast(event: Event): event is Event & ShouldBroadcast {

@@ -2,15 +2,15 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { describe, expect, it } from 'vitest';
-import { Application } from '@tyravel/core';
-import { ViewServiceProvider } from '@tyravel/core';
-import { ConfigServiceProvider } from '@tyravel/core';
+import { Application } from '@pondoknusa/core';
+import { ViewServiceProvider } from '@pondoknusa/core';
+import { ConfigServiceProvider } from '@pondoknusa/core';
 import { renderView } from './render-view.js';
 import { wireFacades } from './application-helpers.js';
 
 describe('renderView', () => {
   it('renders views through a booted application', async () => {
-    const basePath = join(tmpdir(), `tyravel-render-view-${Date.now()}`);
+    const basePath = join(tmpdir(), `pondoknusa-render-view-${Date.now()}`);
     const viewsPath = join(basePath, 'resources/views');
     mkdirSync(viewsPath, { recursive: true });
     mkdirSync(join(basePath, 'config'), { recursive: true });

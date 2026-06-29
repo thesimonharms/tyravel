@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Bus } from '../src/bus.js';
-import { Container } from '@tyravel/container';
+import { Container } from '@pondoknusa/container';
 
 /* ──── Command Bus ───────────────────────────────────────────────────── */
 
@@ -131,7 +131,7 @@ describe('Auto-discovery', () => {
     'discoverProviders() is safe on non-existent dirs',
     async () => {
       const { Application } = await import('../src/application.js');
-      const app = new Application('/tmp/nonexistent-tyravel-project');
+      const app = new Application('/tmp/nonexistent-pondoknusa-project');
       await app.discoverProviders();
       // Should not throw — no providers dir to scan
     },
@@ -140,7 +140,7 @@ describe('Auto-discovery', () => {
 
   it('discoverCommands() returns empty for non-existent dirs', async () => {
     const { Application } = await import('../src/application.js');
-    const app = new Application('/tmp/nonexistent-tyravel-project');
+    const app = new Application('/tmp/nonexistent-pondoknusa-project');
     const cmds = await app.discoverCommands();
     expect(cmds).toEqual([]);
   });

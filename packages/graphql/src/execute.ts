@@ -1,4 +1,4 @@
-import type { CacheStore } from '@tyravel/cache';
+import type { CacheStore } from '@pondoknusa/cache';
 import { GraphQLError } from './errors.js';
 import { buildGraphQLCacheKey, rememberGraphQLResponse } from './cache.js';
 import { parseQuery, resolveArgumentValues } from './parse-query.js';

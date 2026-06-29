@@ -7,7 +7,7 @@ import { projectPath, writeFile, pathExists } from '../utils.js';
 export class DebugInstallCommand extends Command {
   override readonly name = 'debug:install';
   override readonly description = 'Scaffold debug bar, timeline routes, and config';
-  override readonly usage = 'tyravel debug:install';
+  override readonly usage = 'pondoknusa debug:install';
 
   async handle(): Promise<number> {
     const root = await requireProjectRoot();
@@ -29,7 +29,7 @@ export class DebugInstallCommand extends Command {
     console.log('Debug scaffolding installed.');
     console.log('');
     console.log('Next steps:');
-    console.log('  npm install @tyravel/debug');
+    console.log('  npm install @pondoknusa/debug');
     console.log('  Set APP_DEBUG=true in .env');
     console.log('  Visit any HTML page to see the debug bar');
     console.log('  Open /__debug for recent request JSON');

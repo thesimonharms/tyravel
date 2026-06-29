@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MemoryRedis, type RedisManager } from '@tyravel/redis';
+import { MemoryRedis, type RedisManager } from '@pondoknusa/redis';
 import { SessionManager } from './session-manager.js';
 import { MemorySessionStore } from './session-store.js';
 import { RedisSessionStore } from './redis-session-store.js';
@@ -16,7 +16,7 @@ describe('SessionManager', () => {
   it('uses the array driver', () => {
     const manager = new SessionManager({
       driver: 'array',
-      cookie: 'tyravel_session',
+      cookie: 'pondoknusa_session',
       lifetimeMinutes: 120,
     });
 
@@ -27,7 +27,7 @@ describe('SessionManager', () => {
     const manager = new SessionManager(
       {
         driver: 'redis',
-        cookie: 'tyravel_session',
+        cookie: 'pondoknusa_session',
         lifetimeMinutes: 120,
         prefix: 'app:session',
       },
@@ -47,7 +47,7 @@ describe('SessionManager', () => {
   it('throws when redis driver is configured without redis manager', () => {
     const manager = new SessionManager({
       driver: 'redis',
-      cookie: 'tyravel_session',
+      cookie: 'pondoknusa_session',
       lifetimeMinutes: 120,
     });
 

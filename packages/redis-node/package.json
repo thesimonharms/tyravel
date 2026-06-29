@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/redis-node",
+  "name": "@pondoknusa/redis-node",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -11,7 +11,7 @@
     }
   },
   "dependencies": {
-    "@tyravel/redis": "1.0.3",
+    "@pondoknusa/redis": "1.0.3",
     "redis": "^4.7.1"
   },
   "scripts": {
@@ -27,11 +27,11 @@
   "devDependencies": {
     "@types/node": "^26.0.1"
   },
-  "description": "node-redis client driver for Tyravel",
+  "description": "node-redis client driver for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/redis-node"
   },
   "publishConfig": {

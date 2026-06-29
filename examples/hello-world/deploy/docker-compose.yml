@@ -9,14 +9,14 @@ services:
       NODE_ENV: production
       APP_URL: http://localhost:3000
       APP_DEBUG: "false"
-      TYRAVEL_HOST: 0.0.0.0
-      TYRAVEL_PORT: "3000"
+      PONDOKNUSA_HOST: 0.0.0.0
+      PONDOKNUSA_PORT: "3000"
       DB_CONNECTION: postgres
       DB_HOST: postgres
       DB_PORT: "5432"
-      DB_DATABASE: tyravel
-      DB_USERNAME: tyravel
-      DB_PASSWORD: tyravel
+      DB_DATABASE: pondoknusa
+      DB_USERNAME: pondoknusa
+      DB_PASSWORD: pondoknusa
       QUEUE_CONNECTION: database
     depends_on:
       postgres:
@@ -38,14 +38,14 @@ services:
     build:
       context: ..
       dockerfile: deploy/Dockerfile
-    command: npx tyravel queue:work
+    command: npx pondoknusa queue:work
     environment:
       NODE_ENV: production
       DB_CONNECTION: postgres
       DB_HOST: postgres
-      DB_DATABASE: tyravel
-      DB_USERNAME: tyravel
-      DB_PASSWORD: tyravel
+      DB_DATABASE: pondoknusa
+      DB_USERNAME: pondoknusa
+      DB_PASSWORD: pondoknusa
       QUEUE_CONNECTION: database
     depends_on:
       app:
@@ -54,13 +54,13 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: tyravel
-      POSTGRES_USER: tyravel
-      POSTGRES_PASSWORD: tyravel
+      POSTGRES_DB: pondoknusa
+      POSTGRES_USER: pondoknusa
+      POSTGRES_PASSWORD: pondoknusa
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U tyravel"]
+      test: ["CMD-SHELL", "pg_isready -U pondoknusa"]
       interval: 5s
       timeout: 5s
       retries: 5

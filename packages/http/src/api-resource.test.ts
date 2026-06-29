@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { JsonResource } from './api-resource.js';
 import { resolveHttpResult } from './resolve-resource.js';
-import { TyravelRequest } from './request.js';
+import { PondoknusaRequest } from './request.js';
 
 type UserLike = {
   id: number;
@@ -79,7 +79,7 @@ describe('API resources', () => {
   });
 
   it('resolves resources returned from controllers', async () => {
-    const request = new TyravelRequest(new Request('http://localhost/users/1'));
+    const request = new PondoknusaRequest(new Request('http://localhost/users/1'));
     const response = await resolveHttpResult(
       UserResource.make({ id: 1, name: 'Ada', email: 'ada@example.com' }),
       request,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { StorageManager } from '@tyravel/storage';
+import { StorageManager } from '@pondoknusa/storage';
 import { registerR2StorageDriver } from './register.js';
 import { R2Disk } from './r2-disk.js';
 

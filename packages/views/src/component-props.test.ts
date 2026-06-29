@@ -30,7 +30,7 @@ describe('component props', () => {
       dashboard: { count: 0 },
     });
 
-    expect(output).toContain("declare module '@tyravel/views'");
+    expect(output).toContain("declare module '@pondoknusa/views'");
     expect(output).toContain('"welcome": {');
     expect(output).toContain('"name": unknown;');
     expect(output).toContain('"count"?: number;');

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Model, SqliteConnection } from '@tyravel/database';
+import { Model, SqliteConnection } from '@pondoknusa/database';
 import './index.js';
 import { registerInMemoryVectorSearchDriver } from './register-local.js';
 

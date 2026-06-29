@@ -1,4 +1,4 @@
-import type { Groupable, MiddlewareInput } from '@tyravel/http';
+import type { Groupable, MiddlewareInput } from '@pondoknusa/http';
 
 export interface LocalizedRouteGroupOptions {
   parameter?: string;

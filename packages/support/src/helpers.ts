@@ -1,4 +1,4 @@
-import { collect, Collection } from '@tyravel/collection';
+import { collect, Collection } from '@pondoknusa/collection';
 
 /* ──── Time ──────────────────────────────────────────────────────────── */
 
@@ -133,7 +133,7 @@ export function dump(...args: unknown[]): void {
 
 /** Resolve a path relative to the project root. */
 export function base_path(path = ''): string {
-  // In a Tyravel app, the cwd is the project root
+  // In a Pondoknusa app, the cwd is the project root
   return path ? `${process.cwd()}/${path}` : process.cwd();
 }
 

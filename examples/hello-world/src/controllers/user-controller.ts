@@ -1,5 +1,5 @@
-import type { TyravelRequest } from '@tyravel/http';
-import { Response } from '@tyravel/http';
+import type { PondoknusaRequest } from '@pondoknusa/http';
+import { Response } from '@pondoknusa/http';
 import { User } from '../models/user.js';
 
 export class UserController {
@@ -8,7 +8,7 @@ export class UserController {
     return Response.json({ users: users.map((user) => user.toJSON()) });
   }
 
-  async show(request: TyravelRequest) {
+  async show(request: PondoknusaRequest) {
     const user = await User.find(Number(request.param('id')));
 
     if (!user) {

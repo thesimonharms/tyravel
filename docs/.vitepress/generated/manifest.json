@@ -1,281 +1,281 @@
 {
-  "generatedAt": "2026-06-28T17:28:27.861Z",
+  "generatedAt": "2026-06-29T07:38:24.936Z",
   "version": "1.0.3",
   "packages": [
     {
-      "name": "@tyravel/admin",
+      "name": "@pondoknusa/admin",
       "slug": "admin",
-      "description": "Optional CRUD admin panel for Tyravel",
+      "description": "Optional CRUD admin panel for Pondoknusa",
       "path": "reference/generated/packages/admin"
     },
     {
-      "name": "@tyravel/auth",
+      "name": "@pondoknusa/auth",
       "slug": "auth",
-      "description": "Authentication and authorization for Tyravel",
+      "description": "Authentication and authorization for Pondoknusa",
       "path": "reference/generated/packages/auth"
     },
     {
-      "name": "@tyravel/auth-oauth",
+      "name": "@pondoknusa/auth-oauth",
       "slug": "auth-oauth",
-      "description": "OAuth2 authorization server for Tyravel",
+      "description": "OAuth2 authorization server for Pondoknusa",
       "path": "reference/generated/packages/auth-oauth"
     },
     {
-      "name": "@tyravel/broadcasting",
+      "name": "@pondoknusa/broadcasting",
       "slug": "broadcasting",
-      "description": "Real-time event broadcasting for Tyravel",
+      "description": "Real-time event broadcasting for Pondoknusa",
       "path": "reference/generated/packages/broadcasting"
     },
     {
-      "name": "@tyravel/broadcasting-websocket",
+      "name": "@pondoknusa/broadcasting-websocket",
       "slug": "broadcasting-websocket",
-      "description": "Native WebSocket broadcast driver and hub for Tyravel",
+      "description": "Native WebSocket broadcast driver and hub for Pondoknusa",
       "path": "reference/generated/packages/broadcasting-websocket"
     },
     {
-      "name": "@tyravel/cache",
+      "name": "@pondoknusa/cache",
       "slug": "cache",
-      "description": "Cache stores and repository for Tyravel",
+      "description": "Cache stores and repository for Pondoknusa",
       "path": "reference/generated/packages/cache"
     },
     {
-      "name": "@tyravel/cache-dynamodb",
+      "name": "@pondoknusa/cache-dynamodb",
       "slug": "cache-dynamodb",
-      "description": "DynamoDB cache driver for Tyravel",
+      "description": "DynamoDB cache driver for Pondoknusa",
       "path": "reference/generated/packages/cache-dynamodb"
     },
     {
-      "name": "@tyravel/cache-memcached",
+      "name": "@pondoknusa/cache-memcached",
       "slug": "cache-memcached",
-      "description": "Memcached cache driver for Tyravel",
+      "description": "Memcached cache driver for Pondoknusa",
       "path": "reference/generated/packages/cache-memcached"
     },
     {
-      "name": "@tyravel/cache-upstash",
+      "name": "@pondoknusa/cache-upstash",
       "slug": "cache-upstash",
-      "description": "Upstash Redis REST cache driver for Tyravel",
+      "description": "Upstash Redis REST cache driver for Pondoknusa",
       "path": "reference/generated/packages/cache-upstash"
     },
     {
-      "name": "@tyravel/cli",
+      "name": "@pondoknusa/cli",
       "slug": "cli",
-      "description": "The Tyravel command-line interface",
+      "description": "The Pondoknusa command-line interface",
       "path": "reference/generated/packages/cli"
     },
     {
-      "name": "@tyravel/collection",
+      "name": "@pondoknusa/collection",
       "slug": "collection",
-      "description": "Fluent, typed collection pipeline for Tyravel",
+      "description": "Fluent, typed collection pipeline for Pondoknusa",
       "path": "reference/generated/packages/collection"
     },
     {
-      "name": "@tyravel/config",
+      "name": "@pondoknusa/config",
       "slug": "config",
-      "description": "Typed configuration loading for Tyravel",
+      "description": "Typed configuration loading for Pondoknusa",
       "path": "reference/generated/packages/config"
     },
     {
-      "name": "@tyravel/container",
+      "name": "@pondoknusa/container",
       "slug": "container",
-      "description": "IoC service container for Tyravel",
+      "description": "IoC service container for Pondoknusa",
       "path": "reference/generated/packages/container"
     },
     {
-      "name": "@tyravel/core",
+      "name": "@pondoknusa/core",
       "slug": "core",
-      "description": "Tyravel application kernel, providers, and facades",
+      "description": "Pondoknusa application kernel, providers, and facades",
       "path": "reference/generated/packages/core"
     },
     {
-      "name": "@tyravel/crypto",
+      "name": "@pondoknusa/crypto",
       "slug": "crypto",
-      "description": "Post-quantum cryptography for Tyravel",
+      "description": "Post-quantum cryptography for Pondoknusa",
       "path": "reference/generated/packages/crypto"
     },
     {
-      "name": "@tyravel/database",
+      "name": "@pondoknusa/database",
       "slug": "database",
-      "description": "Database ORM, query builder, and migrations for Tyravel",
+      "description": "Database ORM, query builder, and migrations for Pondoknusa",
       "path": "reference/generated/packages/database"
     },
     {
-      "name": "@tyravel/database-mysql",
+      "name": "@pondoknusa/database-mysql",
       "slug": "database-mysql",
-      "description": "MySQL database driver for Tyravel",
+      "description": "MySQL database driver for Pondoknusa",
       "path": "reference/generated/packages/database-mysql"
     },
     {
-      "name": "@tyravel/database-pg",
+      "name": "@pondoknusa/database-pg",
       "slug": "database-pg",
-      "description": "PostgreSQL database driver for Tyravel",
+      "description": "PostgreSQL database driver for Pondoknusa",
       "path": "reference/generated/packages/database-pg"
     },
     {
-      "name": "@tyravel/debug",
+      "name": "@pondoknusa/debug",
       "slug": "debug",
-      "description": "Request timeline and debug bar for Tyravel",
+      "description": "Request timeline and debug bar for Pondoknusa",
       "path": "reference/generated/packages/debug"
     },
     {
-      "name": "@tyravel/echo",
+      "name": "@pondoknusa/echo",
       "slug": "echo",
-      "description": "Laravel Echo-style browser client for Tyravel broadcasting",
+      "description": "Laravel Echo-style browser client for Pondoknusa broadcasting",
       "path": "reference/generated/packages/echo"
     },
     {
-      "name": "@tyravel/events",
+      "name": "@pondoknusa/events",
       "slug": "events",
-      "description": "Domain events and listeners for Tyravel",
+      "description": "Domain events and listeners for Pondoknusa",
       "path": "reference/generated/packages/events"
     },
     {
-      "name": "@tyravel/graphql",
+      "name": "@pondoknusa/graphql",
       "slug": "graphql",
-      "description": "Zero-dependency GraphQL server with programmatic schema and operation caching for Tyravel",
+      "description": "Zero-dependency GraphQL server with programmatic schema and operation caching for Pondoknusa",
       "path": "reference/generated/packages/graphql"
     },
     {
-      "name": "@tyravel/http",
+      "name": "@pondoknusa/http",
       "slug": "http",
-      "description": "HTTP router and middleware for Tyravel",
+      "description": "HTTP router and middleware for Pondoknusa",
       "path": "reference/generated/packages/http"
     },
     {
-      "name": "@tyravel/locale",
+      "name": "@pondoknusa/locale",
       "slug": "locale",
-      "description": "Localization and translation for Tyravel",
+      "description": "Localization and translation for Pondoknusa",
       "path": "reference/generated/packages/locale"
     },
     {
-      "name": "@tyravel/log",
+      "name": "@pondoknusa/log",
       "slug": "log",
-      "description": "Structured logging channels and repository for Tyravel",
+      "description": "Structured logging channels and repository for Pondoknusa",
       "path": "reference/generated/packages/log"
     },
     {
-      "name": "@tyravel/mail",
+      "name": "@pondoknusa/mail",
       "slug": "mail",
-      "description": "Mail manager, mailables, and SMTP for Tyravel",
+      "description": "Mail manager, mailables, and SMTP for Pondoknusa",
       "path": "reference/generated/packages/mail"
     },
     {
-      "name": "@tyravel/mcp",
+      "name": "@pondoknusa/mcp",
       "slug": "mcp",
-      "description": "MCP server and capability manifest for Tyravel agents",
+      "description": "MCP server and capability manifest for Pondoknusa agents",
       "path": "reference/generated/packages/mcp"
     },
     {
-      "name": "@tyravel/notifications",
+      "name": "@pondoknusa/notifications",
       "slug": "notifications",
-      "description": "Multi-channel notifications for Tyravel",
+      "description": "Multi-channel notifications for Pondoknusa",
       "path": "reference/generated/packages/notifications"
     },
     {
-      "name": "@tyravel/queue",
+      "name": "@pondoknusa/queue",
       "slug": "queue",
-      "description": "Queue and background jobs for Tyravel",
+      "description": "Queue and background jobs for Pondoknusa",
       "path": "reference/generated/packages/queue"
     },
     {
-      "name": "@tyravel/rag",
+      "name": "@pondoknusa/rag",
       "slug": "rag",
-      "description": "RAG ingestion and retrieval helpers for Tyravel",
+      "description": "RAG ingestion and retrieval helpers for Pondoknusa",
       "path": "reference/generated/packages/rag"
     },
     {
-      "name": "@tyravel/redis",
+      "name": "@pondoknusa/redis",
       "slug": "redis",
-      "description": "Redis connection manager for Tyravel",
+      "description": "Redis connection manager for Pondoknusa",
       "path": "reference/generated/packages/redis"
     },
     {
-      "name": "@tyravel/redis-node",
+      "name": "@pondoknusa/redis-node",
       "slug": "redis-node",
-      "description": "node-redis client driver for Tyravel",
+      "description": "node-redis client driver for Pondoknusa",
       "path": "reference/generated/packages/redis-node"
     },
     {
-      "name": "@tyravel/repl",
+      "name": "@pondoknusa/repl",
       "slug": "repl",
-      "description": "Interactive Tyravel REPL (tyravel shell)",
+      "description": "Interactive Pondoknusa REPL (pondoknusa shell)",
       "path": "reference/generated/packages/repl"
     },
     {
-      "name": "@tyravel/ssr",
+      "name": "@pondoknusa/ssr",
       "slug": "ssr",
-      "description": "Client-side hydration runtime for Tyravel SSR islands",
+      "description": "Client-side hydration runtime for Pondoknusa SSR islands",
       "path": "reference/generated/packages/ssr"
     },
     {
-      "name": "@tyravel/storage",
+      "name": "@pondoknusa/storage",
       "slug": "storage",
-      "description": "Filesystem storage and repository for Tyravel",
+      "description": "Filesystem storage and repository for Pondoknusa",
       "path": "reference/generated/packages/storage"
     },
     {
-      "name": "@tyravel/storage-aws-s3",
+      "name": "@pondoknusa/storage-aws-s3",
       "slug": "storage-aws-s3",
-      "description": "AWS S3 storage driver for Tyravel",
+      "description": "AWS S3 storage driver for Pondoknusa",
       "path": "reference/generated/packages/storage-aws-s3"
     },
     {
-      "name": "@tyravel/storage-r2",
+      "name": "@pondoknusa/storage-r2",
       "slug": "storage-r2",
-      "description": "Cloudflare R2 storage driver for Tyravel",
+      "description": "Cloudflare R2 storage driver for Pondoknusa",
       "path": "reference/generated/packages/storage-r2"
     },
     {
-      "name": "@tyravel/storage-supabase",
+      "name": "@pondoknusa/storage-supabase",
       "slug": "storage-supabase",
-      "description": "Supabase storage driver for Tyravel",
+      "description": "Supabase storage driver for Pondoknusa",
       "path": "reference/generated/packages/storage-supabase"
     },
     {
-      "name": "@tyravel/support",
+      "name": "@pondoknusa/support",
       "slug": "support",
-      "description": "String and utility helpers for Tyravel",
+      "description": "String and utility helpers for Pondoknusa",
       "path": "reference/generated/packages/support"
     },
     {
-      "name": "@tyravel/testing",
+      "name": "@pondoknusa/testing",
       "slug": "testing",
-      "description": "Testing utilities for Tyravel applications",
+      "description": "Testing utilities for Pondoknusa applications",
       "path": "reference/generated/packages/testing"
     },
     {
-      "name": "@tyravel/validation",
+      "name": "@pondoknusa/validation",
       "slug": "validation",
-      "description": "Request validation for Tyravel",
+      "description": "Request validation for Pondoknusa",
       "path": "reference/generated/packages/validation"
     },
     {
-      "name": "@tyravel/vector",
+      "name": "@pondoknusa/vector",
       "slug": "vector",
-      "description": "Embedding storage and vector similarity search for Tyravel",
+      "description": "Embedding storage and vector similarity search for Pondoknusa",
       "path": "reference/generated/packages/vector"
     },
     {
-      "name": "@tyravel/vector-pg",
+      "name": "@pondoknusa/vector-pg",
       "slug": "vector-pg",
-      "description": "pgvector driver for Tyravel vector search",
+      "description": "pgvector driver for Pondoknusa vector search",
       "path": "reference/generated/packages/vector-pg"
     },
     {
-      "name": "@tyravel/vector-pinecone",
+      "name": "@pondoknusa/vector-pinecone",
       "slug": "vector-pinecone",
-      "description": "Pinecone vector store driver for Tyravel",
+      "description": "Pinecone vector store driver for Pondoknusa",
       "path": "reference/generated/packages/vector-pinecone"
     },
     {
-      "name": "@tyravel/vector-qdrant",
+      "name": "@pondoknusa/vector-qdrant",
       "slug": "vector-qdrant",
-      "description": "Qdrant vector store driver for Tyravel",
+      "description": "Qdrant vector store driver for Pondoknusa",
       "path": "reference/generated/packages/vector-qdrant"
     },
     {
-      "name": "@tyravel/views",
+      "name": "@pondoknusa/views",
       "slug": "views",
-      "description": "Blade-like view engine for Tyravel",
+      "description": "Blade-like view engine for Pondoknusa",
       "path": "reference/generated/packages/views"
     }
   ],

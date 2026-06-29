@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, toKebabCase, toPascalCase, w
 export class MakeFactoryCommand extends Command {
   override readonly name = 'make:factory';
   override readonly description = 'Create a new model factory class';
-  override readonly usage = 'tyravel make:factory <Model>';
+  override readonly usage = 'pondoknusa make:factory <Model>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -14,7 +14,7 @@ export class MakeFactoryCommand extends Command {
 
     if (!rawName) {
       console.error('Model name is required.');
-      console.error('Usage: tyravel make:factory <Model>');
+      console.error('Usage: pondoknusa make:factory <Model>');
       return 1;
     }
 

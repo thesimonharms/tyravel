@@ -1,22 +1,22 @@
 {
-  "name": "tyravel-rag-example",
+  "name": "pondoknusa-rag-example",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tyravel serve",
+    "dev": "pondoknusa serve",
     "test": "vitest run"
   },
   "dependencies": {
-    "@tyravel/cache": "1.0.3",
-    "@tyravel/cli": "1.0.3",
-    "@tyravel/config": "1.0.3",
-    "@tyravel/core": "1.0.3",
-    "@tyravel/database": "1.0.3",
-    "@tyravel/graphql": "1.0.3",
-    "@tyravel/http": "1.0.3",
-    "@tyravel/queue": "1.0.3",
-    "@tyravel/rag": "1.0.3",
-    "@tyravel/vector": "1.0.3"
+    "@pondoknusa/cache": "1.0.3",
+    "@pondoknusa/cli": "1.0.3",
+    "@pondoknusa/config": "1.0.3",
+    "@pondoknusa/core": "1.0.3",
+    "@pondoknusa/database": "1.0.3",
+    "@pondoknusa/graphql": "1.0.3",
+    "@pondoknusa/http": "1.0.3",
+    "@pondoknusa/queue": "1.0.3",
+    "@pondoknusa/rag": "1.0.3",
+    "@pondoknusa/vector": "1.0.3"
   },
   "devDependencies": {
     "vitest": "^3.2.4"

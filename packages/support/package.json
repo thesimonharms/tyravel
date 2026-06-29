@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/support",
+  "name": "@pondoknusa/support",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -17,11 +17,11 @@
   "files": [
     "dist"
   ],
-  "description": "String and utility helpers for Tyravel",
+  "description": "String and utility helpers for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/support"
   },
   "publishConfig": {
@@ -31,6 +31,6 @@
     "node": ">=26"
   },
   "dependencies": {
-    "@tyravel/collection": "1.0.3"
+    "@pondoknusa/collection": "1.0.3"
   }
 }

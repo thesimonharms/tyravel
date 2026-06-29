@@ -1,4 +1,4 @@
-import { Route } from '@tyravel/core';
+import { Route } from '@pondoknusa/core';
 import { AuthController } from '../controllers/auth-controller.js';
 
 export function registerAuthRoutes(): void {

@@ -44,7 +44,7 @@ Node **${report.node}** on **${report.platform}/${report.arch}** — updated ${g
 |-----------|-----|------:|------|
 ${coreRows}${compareRows}
 
-[View workflow runs](https://github.com/thesimonharms/tyravel/actions/workflows/benchmarks.yml) for historical artifacts.
+[View workflow runs](https://github.com/pondoknusa/pondoknusa/actions/workflows/benchmarks.yml) for historical artifacts.
 `;
 
 mkdirSync(dirname(outputPath), { recursive: true });

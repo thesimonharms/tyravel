@@ -28,8 +28,8 @@ describe('Migrator paths', () => {
   });
 
   it('runs migrations from multiple directories in filename order', async () => {
-    const appDir = mkdtempSync(join(tmpdir(), 'tyravel-app-migrations-'));
-    const packageDir = mkdtempSync(join(tmpdir(), 'tyravel-package-migrations-'));
+    const appDir = mkdtempSync(join(tmpdir(), 'pondoknusa-app-migrations-'));
+    const packageDir = mkdtempSync(join(tmpdir(), 'pondoknusa-package-migrations-'));
     tempDirs.push(appDir, packageDir);
 
     writeFileSync(

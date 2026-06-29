@@ -1,9 +1,9 @@
-import { ConfigRepository } from '@tyravel/config';
+import { ConfigRepository } from '@pondoknusa/config';
 import {
   StorageManager,
   StorageRepository,
   type StorageConfig,
-} from '@tyravel/storage';
+} from '@pondoknusa/storage';
 import { ServiceProvider } from './service-provider.js';
 
 export class StorageServiceProvider extends ServiceProvider {

@@ -1,4 +1,4 @@
-import { registerVectorSearchDriver } from '@tyravel/vector';
+import { registerVectorSearchDriver } from '@pondoknusa/vector';
 import { QdrantVectorSearchDriver } from './qdrant-search-driver.js';
 import type { QdrantVectorConfig } from './qdrant-client.js';
 

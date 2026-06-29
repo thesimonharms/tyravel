@@ -1,4 +1,4 @@
-import type { ConfigRepository } from '@tyravel/config';
+import type { ConfigRepository } from '@pondoknusa/config';
 import type { Application } from './application.js';
 import { applyBootProfile } from './boot-profile.js';
 import { startDevHotReload } from './dev-hot-reload.js';
@@ -6,7 +6,7 @@ import { registerHttpMiddleware } from './http-middleware.js';
 import { bootstrapRouteCache } from './route-cache-bootstrap.js';
 
 export interface PrepareHttpServerOptions {
-  /** Enable config/route hot reload (default: non-production with TYRAVEL_HOT_RELOAD=1). */
+  /** Enable config/route hot reload (default: non-production with PONDOKNUSA_HOT_RELOAD=1). */
   hotReload?: boolean;
 }
 
@@ -38,7 +38,7 @@ export async function prepareHttpServer(
   let configCacheLoaded = false;
   let configCacheMessage: string | undefined;
   try {
-    const configCache = app.make<{ loaded: boolean; message?: string }>('tyravel.configCache');
+    const configCache = app.make<{ loaded: boolean; message?: string }>('pondoknusa.configCache');
     configCacheLoaded = configCache.loaded;
     configCacheMessage = configCache.message;
     if (configCache.loaded && configCache.message && !isProductionEnvironment()) {
@@ -50,7 +50,7 @@ export async function prepareHttpServer(
 
   const hotReload =
     options.hotReload
-    ?? (!isProductionEnvironment() && process.env.TYRAVEL_HOT_RELOAD === '1');
+    ?? (!isProductionEnvironment() && process.env.PONDOKNUSA_HOT_RELOAD === '1');
 
   if (hotReload) {
     startDevHotReload(app);

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { Event } from '@tyravel/events';
+import { Event } from '@pondoknusa/events';
 import { BroadcastDispatcher } from './broadcast-dispatcher.js';
 import { BroadcastManager } from './broadcast-manager.js';
 import { ChannelRegistry } from './channel-registry.js';

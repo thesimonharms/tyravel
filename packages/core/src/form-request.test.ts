@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { AuthorizationException } from '@tyravel/auth';
-import { TyravelRequest } from '@tyravel/http';
-import { ValidationException } from '@tyravel/validation';
+import { AuthorizationException } from '@pondoknusa/auth';
+import { PondoknusaRequest } from '@pondoknusa/http';
+import { ValidationException } from '@pondoknusa/validation';
 import { Application } from './application.js';
 import { FormRequest } from './form-request.js';
 
 function jsonRequest(
   body: Record<string, unknown>,
   user: { id: number } | null = null,
-): TyravelRequest {
-  const request = new TyravelRequest(
+): PondoknusaRequest {
+  const request = new PondoknusaRequest(
     new Request('http://localhost/users', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },

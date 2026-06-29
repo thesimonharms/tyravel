@@ -1,11 +1,11 @@
 # Support utilities
 
-`@tyravel/support` provides string helpers, global functions, Pipeline, Macroable, and Conditionable — all modeled after Laravel's `Illuminate\Support` namespace.
+`@pondoknusa/support` provides string helpers, global functions, Pipeline, Macroable, and Conditionable — all modeled after Laravel's `Illuminate\Support` namespace.
 
 ## Str helpers
 
 ```typescript
-import { Str, slug, camelCase } from '@tyravel/support';
+import { Str, slug, camelCase } from '@pondoknusa/support';
 
 slug('  My Post Title!  ');              // "my-post-title"
 camelCase('hello_world');                // "helloWorld"
@@ -37,7 +37,7 @@ Str.random(16);                         // "X7kL9m..."
 Fluent string chaining:
 
 ```typescript
-import { Stringable } from '@tyravel/support';
+import { Stringable } from '@pondoknusa/support';
 
 Stringable.of('  hello world  ')
   .slug()
@@ -47,9 +47,9 @@ Stringable.of('  hello world  ')
 
 Stringable.of('HelloWorld')
   .kebab()
-  .prepend('tyravel-')
+  .prepend('pondoknusa-')
   .toString();
-// => "tyravel-hello-world"
+// => "pondoknusa-hello-world"
 ```
 
 ### Content detection
@@ -118,7 +118,7 @@ Stringable.of('hello')
 Send data through a series of pipes:
 
 ```typescript
-import { Pipeline } from '@tyravel/support';
+import { Pipeline } from '@pondoknusa/support';
 
 const result = Pipeline
   .send(request)
@@ -166,7 +166,7 @@ const processed = Pipeline.send(input).through(pipes).thenReturn();
 Add methods to classes at runtime:
 
 ```typescript
-import { Macroable } from '@tyravel/support';
+import { Macroable } from '@pondoknusa/support';
 
 class MyClass extends Macroable {}
 
@@ -217,12 +217,12 @@ stringable.unless(shouldTrim, s => s.trim());
 
 ## Global helpers
 
-These are also available from `@tyravel/support`:
+These are also available from `@pondoknusa/support`:
 
 ### Time
 
 ```typescript
-import { now, today } from '@tyravel/support';
+import { now, today } from '@pondoknusa/support';
 
 now();          // new Date()
 today();        // "2025-06-21"
@@ -231,7 +231,7 @@ today();        // "2025-06-21"
 ### Collection
 
 ```typescript
-import { collect } from '@tyravel/support';
+import { collect } from '@pondoknusa/support';
 
 collect([1, 2, 3]).map(n => n * 2);
 ```
@@ -239,7 +239,7 @@ collect([1, 2, 3]).map(n => n * 2);
 ### Error handling
 
 ```typescript
-import { rescue, retry, report } from '@tyravel/support';
+import { rescue, retry, report } from '@pondoknusa/support';
 
 rescue(() => riskyOperation(), fallbackValue);  // try, return fallback on error
 await retry(3, () => fetchData(), 200);         // retry 3× with 200ms delay
@@ -249,7 +249,7 @@ report(error);                                  // console.error
 ### Conditionals
 
 ```typescript
-import { throw_if, throw_unless } from '@tyravel/support';
+import { throw_if, throw_unless } from '@pondoknusa/support';
 
 throw_if(!user, new Error('User not found'));
 throw_unless(user, new Error('User not found'));
@@ -258,7 +258,7 @@ throw_unless(user, new Error('User not found'));
 ### Value manipulation
 
 ```typescript
-import { value, withValue, transform, optional } from '@tyravel/support';
+import { value, withValue, transform, optional } from '@pondoknusa/support';
 
 value('hello');               // "hello"
 value(() => 'computed');      // "computed" (calls it)
@@ -276,7 +276,7 @@ optional(null, 'name');                        // undefined
 ### Array helpers
 
 ```typescript
-import { head, last } from '@tyravel/support';
+import { head, last } from '@pondoknusa/support';
 
 head([1, 2, 3]);              // 1
 last([1, 2, 3]);              // 3
@@ -285,7 +285,7 @@ last([1, 2, 3]);              // 3
 ### Debug
 
 ```typescript
-import { dd, dump } from '@tyravel/support';
+import { dd, dump } from '@pondoknusa/support';
 
 dump(value);                  // console.log + continue
 dd(valu1, value2);            // console.log + exit
@@ -298,7 +298,7 @@ import {
   base_path, app_path, config_path,
   database_path, storage_path,
   public_path, resource_path,
-} from '@tyravel/support';
+} from '@pondoknusa/support';
 
 base_path();                  // project root (cwd)
 app_path('models/User.ts');   // app/models/User.ts
@@ -312,7 +312,7 @@ resource_path('views');       // resources/views
 ### Reflection
 
 ```typescript
-import { class_basename } from '@tyravel/support';
+import { class_basename } from '@pondoknusa/support';
 
 class_basename(User);                    // "User"
 class_basename(new User());              // "User"

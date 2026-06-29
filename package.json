@@ -1,5 +1,5 @@
 {
-  "name": "tyravel",
+  "name": "pondoknusa",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -10,7 +10,7 @@
     "node": ">=26"
   },
   "scripts": {
-    "build": "tsc -b && npm run build --workspace=@tyravel/cli",
+    "build": "tsc -b && npm run build --workspace=@pondoknusa/cli",
     "check:node": "node scripts/check-node.mjs",
     "pretest": "npm run check:node",
     "test": "vitest run",
@@ -23,7 +23,7 @@
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "tyravel": "node packages/cli/dist/bin/tyravel.js",
+    "pondoknusa": "node packages/cli/dist/bin/pondoknusa.js",
     "prebenchmark": "npm run build",
     "benchmark": "node scripts/benchmark.mjs",
     "release:prepare": "node scripts/prepare-release.mjs"

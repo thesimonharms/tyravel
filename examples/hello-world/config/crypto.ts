@@ -1,5 +1,5 @@
-import type { CryptoConfig } from '@tyravel/crypto';
-import { env } from '@tyravel/config';
+import type { CryptoConfig } from '@pondoknusa/crypto';
+import { env } from '@pondoknusa/config';
 
 export default {
   kem: 'hybrid-x25519-ml-kem-768',

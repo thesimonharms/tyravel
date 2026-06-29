@@ -7,7 +7,7 @@ import { optionFlag, parseOptions, positionalArgs, projectPath, toKebabCase, toP
 export class MakeComponentCommand extends Command {
   override readonly name = 'make:component';
   override readonly description = 'Create a new anonymous Tyr component template';
-  override readonly usage = 'tyravel make:component <name> [--class]';
+  override readonly usage = 'pondoknusa make:component <name> [--class]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -15,7 +15,7 @@ export class MakeComponentCommand extends Command {
 
     if (!rawName) {
       console.error('Component name is required.');
-      console.error('Usage: tyravel make:component <name> [--class]');
+      console.error('Usage: pondoknusa make:component <name> [--class]');
       return 1;
     }
 

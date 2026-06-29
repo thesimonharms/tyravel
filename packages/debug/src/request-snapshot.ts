@@ -1,4 +1,4 @@
-import type { TyravelRequest } from '@tyravel/http';
+import type { PondoknusaRequest } from '@pondoknusa/http';
 
 const REDACTED_HEADERS = new Set(['authorization', 'cookie', 'set-cookie', 'x-csrf-token']);
 
@@ -10,7 +10,7 @@ export interface RequestSnapshot {
 }
 
 export async function captureRequestSnapshot(
-  request: TyravelRequest,
+  request: PondoknusaRequest,
 ): Promise<RequestSnapshot> {
   const headers: Record<string, string> = {};
   request.headers.forEach((value, key) => {

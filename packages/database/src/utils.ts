@@ -1,4 +1,4 @@
-import { snakeCase } from '@tyravel/support';
+import { snakeCase } from '@pondoknusa/support';
 
 export { snakeCase };
 

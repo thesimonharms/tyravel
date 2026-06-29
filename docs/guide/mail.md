@@ -5,7 +5,7 @@ Register `MailServiceProvider` and add `config/mail.ts`:
 ```typescript
 export default {
   default: 'log',
-  from: { address: 'hello@example.com', name: 'Tyravel' },
+  from: { address: 'hello@example.com', name: 'Pondoknusa' },
   connections: {
     log: { driver: 'log', channel: 'stdout' },
     array: { driver: 'array' },
@@ -26,7 +26,7 @@ export default {
 Use the `Mail` facade:
 
 ```typescript
-import { Mail } from '@tyravel/core';
+import { Mail } from '@pondoknusa/core';
 
 // Quick message
 await Mail.to('ada@example.com').send({
@@ -41,7 +41,7 @@ await Mail.to('ada@example.com').send({
 For reusable mail logic, extend `Mailable`:
 
 ```typescript
-import { Mailable, type MailMessage } from '@tyravel/mail';
+import { Mailable, type MailMessage } from '@pondoknusa/mail';
 
 export class WelcomeMail extends Mailable {
   constructor(private readonly name: string) {
@@ -82,7 +82,7 @@ resources/views/emails/welcome.tyr
 resources/views/emails/welcome-text.tyr
 ```
 
-The mail package ships with default HTML and text message layouts at `@tyravel/mail` namespace — use them in your views:
+The mail package ships with default HTML and text message layouts at `@pondoknusa/mail` namespace — use them in your views:
 
 ```html
 @layout('mail::html.message')
@@ -119,7 +119,7 @@ export class WelcomeMail extends Mailable {
 ## Service provider registration
 
 ```typescript
-import { MailServiceProvider } from '@tyravel/core';
+import { MailServiceProvider } from '@pondoknusa/core';
 
 app.register(MailServiceProvider);
 await app.boot();
@@ -128,7 +128,7 @@ await app.boot();
 Then wire the facade:
 
 ```typescript
-import { setMailApplication } from '@tyravel/core';
+import { setMailApplication } from '@pondoknusa/core';
 
 setMailApplication(app);
 ```

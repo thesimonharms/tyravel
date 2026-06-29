@@ -1,4 +1,4 @@
-# Tyravel Roadmap
+# Pondoknusa Roadmap
 
 Post-v0.1.0 direction. v0.1 shipped the core Laravel-shaped stack; subsequent releases focus on polish, production adapters, and real-world ergonomics.
 
@@ -18,7 +18,7 @@ Make the framework trustworthy for early adopters.
 Close gaps developers hit on day two of a real project.
 
 - [x] **ORM eager loading** — `with()` to avoid N+1 queries on relationships
-- [x] **Seeders + factories** — Dev data and test ergonomics (`tyravel make:factory`, `db:seed`)
+- [x] **Seeders + factories** — Dev data and test ergonomics (`pondoknusa make:factory`, `db:seed`)
 - [x] **Redis queue + cache drivers** — First production-grade external adapter
 - [x] **Driver-aware migrations** — Postgres/MySQL schema parity beyond SQLite-centric blueprints
 
@@ -45,9 +45,9 @@ TypeScript-native depth for any full-stack app — not domain-specific features.
 ### Operations
 
 - [x] **Logging** — structured `Log` facade with typed context (stdout, file, stack drivers)
-- [x] **Scheduler** — task registration API and `tyravel schedule:run` for cron
+- [x] **Scheduler** — task registration API and `pondoknusa schedule:run` for cron
 - [x] **Health checks** — connectivity probes for database, Redis, and app readiness
-- [x] **Session maintenance** — `tyravel session:prune` for database session driver
+- [x] **Session maintenance** — `pondoknusa session:prune` for database session driver
 
 ### HTTP & deployment
 
@@ -62,9 +62,9 @@ TypeScript-native depth for any full-stack app — not domain-specific features.
 
 ### CLI & DX
 
-- [x] **`tyravel route:list`** — named routes, methods, middleware, and handlers
-- [x] **`tyravel make:middleware`** — scaffold custom middleware
-- [x] **`tyravel make:command`** — scaffold console commands
+- [x] **`pondoknusa route:list`** — named routes, methods, middleware, and handlers
+- [x] **`pondoknusa make:middleware`** — scaffold custom middleware
+- [x] **`pondoknusa make:command`** — scaffold console commands
 
 ## Tier 5 — Magic DX (v0.5.0)
 
@@ -72,9 +72,9 @@ Recreate the magic of Laravel in a way that feels TypeScript native, with develo
 
 ### P0 — Must ship
 
-- [x] **Collection** — `@tyravel/collection` fluent, type-safe chainable collection with 50+ methods, lazy evaluation, and a `collect()` helper. The single most iconic Laravel DX moment, made TypeScript-native.
-- [x] **`tyravel shell`** — Interactive TypeScript REPL that boots the full application. All facades pre-imported (`Route`, `DB`, `Auth`, `Cache`, …), app models auto-loaded, top-level `await` support. Drop into a prompt and play.
-- [x] **Global helpers** — `now()`, `today()`, `collect()`, `throw_if()`, `throw_unless()`, `optional()`, `with()`, `transform()`, `retry()`, `report()`, `dd()`, `dump()`, `base_path()`, `app_path()`, and more — all in `@tyravel/support`.
+- [x] **Collection** — `@pondoknusa/collection` fluent, type-safe chainable collection with 50+ methods, lazy evaluation, and a `collect()` helper. The single most iconic Laravel DX moment, made TypeScript-native.
+- [x] **`pondoknusa shell`** — Interactive TypeScript REPL that boots the full application. All facades pre-imported (`Route`, `DB`, `Auth`, `Cache`, …), app models auto-loaded, top-level `await` support. Drop into a prompt and play.
+- [x] **Global helpers** — `now()`, `today()`, `collect()`, `throw_if()`, `throw_unless()`, `optional()`, `with()`, `transform()`, `retry()`, `report()`, `dd()`, `dump()`, `base_path()`, `app_path()`, and more — all in `@pondoknusa/support`.
 
 ### P1 — Strong want
 
@@ -86,12 +86,12 @@ Recreate the magic of Laravel in a way that feels TypeScript native, with develo
 ### P2 — If scope allows
 
 - [x] **Auto-discovery** — Convention-based scanning of `app/providers/` and `app/commands/`. Drop a provider or command file in the right directory, it's auto-registered.
-- [x] **Interactive `tyravel new`** — Prompt for database driver, auth guard, queue driver, mail driver, redis. Progress bar (`npm install`) in interactive mode. Builds on the existing `tyravel new` which already handled DB + redis prompts.
+- [x] **Interactive `pondoknusa new`** — Prompt for database driver, auth guard, queue driver, mail driver, redis. Progress bar (`npm install`) in interactive mode. Builds on the existing `pondoknusa new` which already handled DB + redis prompts.
 - [x] **Command bus** — `Bus.dispatch(new SendWelcomeEmail(user))`. Auto-resolve handlers from the container, explicit mapping via `Bus.map()`, self-handling commands supported.
 
 ## Tier 6 — Templating engine (v0.6.0)
 
-Make `.tyr` feel as productive as Blade for full-stack apps — TypeScript-native, compiled, and testable. Builds on the existing `@tyravel/views` compiler (layouts, sections, `@if`/`@foreach`, `@include`, one-line `@component`).
+Make `.tyr` feel as productive as Blade for full-stack apps — TypeScript-native, compiled, and testable. Builds on the existing `@pondoknusa/views` compiler (layouts, sections, `@if`/`@foreach`, `@include`, one-line `@component`).
 
 ### P0 — Must ship
 
@@ -105,14 +105,14 @@ Make `.tyr` feel as productive as Blade for full-stack apps — TypeScript-nativ
 - [x] **Custom directives** — `View::directive('datetime', handler)` to register project-specific `@datetime(...)` tags without forking the compiler.
 - [x] **View composers** — attach shared data to named views or wildcards (`View::composer('posts.*', fn => ...)`).
 - [x] **Conditional includes** — `@includeIf`, `@includeWhen` for partials.
-- [x] **Auth-aware directives** — `@auth`, `@guest`, `@can` wired to `@tyravel/auth` (optional when auth provider is registered).
+- [x] **Auth-aware directives** — `@auth`, `@guest`, `@can` wired to `@pondoknusa/auth` (optional when auth provider is registered).
 - [x] **View helpers in templates** — `route()`, `asset()`, `config()` (and `old()` for forms) available in expression context.
 
 ### P2 — If scope allows
 
-- [x] **Compiled view cache** — write compiled ops to `storage/framework/views`; `tyravel view:cache` and `view:clear` commands.
+- [x] **Compiled view cache** — write compiled ops to `storage/framework/views`; `pondoknusa view:cache` and `view:clear` commands.
 - [x] **Anonymous components** — `resources/views/components/*.tyr` auto-resolvable as `@component('alert')` without manual paths.
-- [x] **View testing** — `assertSee` / `assertDontSee` helpers in `@tyravel/testing` for rendered HTML assertions.
+- [x] **View testing** — `assertSee` / `assertDontSee` helpers in `@pondoknusa/testing` for rendered HTML assertions.
 - [x] **`make:component`** — scaffold component templates with slot stubs and optional class binding.
 - [x] **@once** — render a block only once per request (useful for push/stack deduplication).
 
@@ -144,7 +144,7 @@ Templating that works across packages, environments, and outbound channels.
 - [x] **View namespaces** — `vendor::view.name` syntax for package-published templates (e.g. `@include('admin::partials.nav')`).
 - [x] **Environment directives** — `@env`, `@production`, and `@local` for environment-specific markup without `config()` noise.
 - [x] **Localization** — `@lang('messages.welcome')` / `__()` helpers in expression context; optional JSON locale files.
-- [x] **Mail & notification views** — render `.tyr` templates from `@tyravel/mail` and `@tyravel/notifications` (HTML + plain-text layouts).
+- [x] **Mail & notification views** — render `.tyr` templates from `@pondoknusa/mail` and `@pondoknusa/notifications` (HTML + plain-text layouts).
 - [x] **Build manifest integration** — `@vite` or `@mix`-style helper reading a manifest for versioned CSS/JS in layouts.
 - [x] **`@includeFirst`** — try a list of partials and include the first view that exists.
 
@@ -156,13 +156,13 @@ Make large apps maintainable: faster compiles, clearer errors, and better local 
 - [x] **`@inject`** — `@inject('stats', 'PostStats')` resolves a container binding into the view context.
 - [x] **Fragment caching** — `@fragment('sidebar')` … `@endfragment` with TTL/store-backed cache for expensive partials.
 - [x] **Compile error locations** — parse failures report view path and line/column (not opaque regex misses).
-- [x] **`tyravel view:watch`** — recompile changed `.tyr` files during `tyravel serve` (dev-only file watcher).
-- [x] **`tyravel view:lint`** — static pass for unclosed directives, unknown components, and unsafe `{!! !!}` usage.
+- [x] **`pondoknusa view:watch`** — recompile changed `.tyr` files during `pondoknusa serve` (dev-only file watcher).
+- [x] **`pondoknusa view:lint`** — static pass for unclosed directives, unknown components, and unsafe `{!! !!}` usage.
 - [x] **Production compile mode** — `config/views.ts` `compiled: true` by default in production; skip source reads when cache is warm.
 
 ### P7 — Typed, testable, advanced rendering
 
-Longer-horizon bets that keep Tyravel TypeScript-native while closing the gap with mature Blade/Livewire workflows.
+Longer-horizon bets that keep Pondoknusa TypeScript-native while closing the gap with mature Blade/Livewire workflows.
 
 - [x] **Typed view props** — `View.render<WelcomeProps>('welcome', props)` with generated or hand-authored prop interfaces per view.
 - [x] **Component catalog** — auto-discovered registry of `resources/views/components/*` with names, props, and slots (feeds docs/IDE).
@@ -176,7 +176,7 @@ Longer-horizon bets that keep Tyravel TypeScript-native while closing the gap wi
 
 Close the polish gaps found during the Tier 6 audit. Ship before v0.7.0 production work.
 
-- [x] **CLI view commands boot the app** — `tyravel view:cache`, `view:clear`, and `view:lint` boot the application so custom directives, composers, and escape contexts registered in providers are available (not a bare `ViewEngine`).
+- [x] **CLI view commands boot the app** — `pondoknusa view:cache`, `view:clear`, and `view:lint` boot the application so custom directives, composers, and escape contexts registered in providers are available (not a bare `ViewEngine`).
 - [x] **`serve` watcher in server child** — run `view:watch` inside the served process so recompiles apply to the running app, not only the CLI parent.
 - [x] **`make:component --class` registration** — scaffolded class-based components auto-register via `View.component()` in the generated provider or service provider stub.
 - [x] **`@inject` diagnostics** — warn or fail in dev when `@inject` is used without a registered injector; avoid silent empty context.
@@ -184,11 +184,11 @@ Close the polish gaps found during the Tier 6 audit. Ship before v0.7.0 producti
 
 ## Tier 7 — Production credibility (v0.7.0) ✓
 
-Make Tyravel deployable with confidence. Builds on Tier 6.1 hardening.
+Make Pondoknusa deployable with confidence. Builds on Tier 6.1 hardening.
 
 - [X] **Config validation** — fail fast at boot when required environment variables are missing or invalid; typed schema per config file.
 - [x] **Graceful shutdown** — drain in-flight HTTP requests and queue workers on `SIGTERM` / `SIGINT`; cooperative timeout before force exit.
-- [x] **API stability policy** — documented semver guarantees for public `@tyravel/*` surfaces (what is stable, what is experimental, deprecation window). See [STABILITY.md](STABILITY.md).
+- [x] **API stability policy** — documented semver guarantees for public `@pondoknusa/*` surfaces (what is stable, what is experimental, deprecation window). See [STABILITY.md](STABILITY.md).
 
 ## Tier 8 — Ecosystem & advanced capabilities (v0.8.0) ✓
 
@@ -202,7 +202,7 @@ Rich developer tooling, async utilities, and real-time operations.
 
 ## Tier 9 — Async-native platform (v0.9.0) ✓
 
-Make Tyravel fully async by default: no sync fallbacks, no blocking I/O in the public API, and drivers that assume `await` everywhere.
+Make Pondoknusa fully async by default: no sync fallbacks, no blocking I/O in the public API, and drivers that assume `await` everywhere.
 
 - [x] **Async-native kernel** — application boot, config load, provider register/boot, and facades expose async-first APIs; deprecate sync-only code paths
   - [x] **9.1** — `loadEnv()` async via `fs/promises`; deprecate `loadEnvSync()`
@@ -222,16 +222,16 @@ Make Tyravel fully async by default: no sync fallbacks, no blocking I/O in the p
 - [x] **Async-native queue & events** — dispatch, listen, and broadcast are always async; sync driver retained only for tests
   - [x] **9.10** — `SyncQueue` test-only; removed from `QueueManager` production switch
   - [x] **9.11** — remove `?? 'sync'` queue connection fallbacks
-  - [x] **9.12** — remove `sync` from `tyravel new` scaffold; default `database`
+  - [x] **9.12** — remove `sync` from `pondoknusa new` scaffold; default `database`
 - [x] **Async-native filesystem & cache** — storage, cache, and session I/O are non-blocking across all drivers
   - [x] Storage drivers (`LocalDisk`, S3, R2, Supabase) — fetch/async APIs (pre-existing)
   - [x] Cache drivers (`ArrayStore`, `FileStore`, Redis) — async public API (pre-existing)
   - [x] `Queue.dispatch`, `Events.dispatch`, `Broadcast.dispatch` — async facades (pre-existing)
-- [x] **Supabase storage driver** — `@tyravel/storage-supabase` with bucket config, upload/download, and signed URLs via the Supabase Storage API
+- [x] **Supabase storage driver** — `@pondoknusa/storage-supabase` with bucket config, upload/download, and signed URLs via the Supabase Storage API
 
 ## Tier 10 — Full-stack interactivity (v0.10.0)
 
-Ship a complete server-rendered UI + real-time client story. Tyravel already renders `.tyr` on the server (`View.render`, `Response.html`) and broadcasts events over WebSockets (`@tyravel/broadcasting`, `/broadcasting/auth`). Tier 6 P7 added experimental streaming layouts and `@island` hydration hooks — Tier 10 turns that foundation into a production full-stack path and adds a Laravel Echo–style browser client.
+Ship a complete server-rendered UI + real-time client story. Pondoknusa already renders `.tyr` on the server (`View.render`, `Response.html`) and broadcasts events over WebSockets (`@pondoknusa/broadcasting`, `/broadcasting/auth`). Tier 6 P7 added experimental streaming layouts and `@island` hydration hooks — Tier 10 turns that foundation into a production full-stack path and adds a Laravel Echo–style browser client.
 
 ### Server-side rendering
 
@@ -240,7 +240,7 @@ Move from “render HTML strings in controllers” to a first-class SSR workflow
 #### P0 — Must ship
 
 - [x] **SSR document shell** — `Response.ssr()` (or equivalent) wraps rendered views in a complete HTML document: `<head>` meta, `@vite` assets, and an injected hydration manifest script tag
-- [x] **Hydration runtime** — `@tyravel/ssr` (or `@tyravel/views/client`) browser package that reads `data-tyr-island` markers and mounts island components from a client registry
+- [x] **Hydration runtime** — `@pondoknusa/ssr` (or `@pondoknusa/views/client`) browser package that reads `data-tyr-island` markers and mounts island components from a client registry
 - [x] **Island registry API** — `registerIsland('counter', Counter)` on the client; server `@island('counter', props)` maps to the same id
 - [x] **Promote SSR APIs to stable** — graduate `View.renderStream()`, `@stream` / `@endstream`, `@island`, and the hydration manifest from experimental (see [STABILITY.md](STABILITY.md))
 - [x] **SSR reference example** — extend `examples/hello-world` (or add `examples/ssr`) with at least one hydrated island and a streaming layout section
@@ -248,21 +248,21 @@ Move from “render HTML strings in controllers” to a first-class SSR workflow
 #### P1 — Strong want
 
 - [x] **Streaming SSR middleware** — first-class chunked `Response` integration so `View.renderStream()` flushes early shell HTML without manual async iteration in every controller
-- [x] **SSR test helpers** — assert rendered HTML *and* hydration manifest contents in `@tyravel/testing` (`assertIsland`, `assertHydrationManifest`)
-- [x] **`tyravel make:island`** — scaffold a paired server partial + client mount function with registry wiring
+- [x] **SSR test helpers** — assert rendered HTML *and* hydration manifest contents in `@pondoknusa/testing` (`assertIsland`, `assertHydrationManifest`)
+- [x] **`pondoknusa make:island`** — scaffold a paired server partial + client mount function with registry wiring
 
 #### P2 — If scope allows
 
 - [x] **Island catalog** — extend `View.catalog()` with client-mount metadata for docs / IDE tooling
 - [x] **Programmatic SSR** — `.tyr.ts` views participate in the island registry without a separate client file
 
-### Laravel Echo equivalent (`@tyravel/echo`)
+### Laravel Echo equivalent (`@pondoknusa/echo`)
 
 Browser-side channel subscriptions that mirror the server broadcasting API. Server-side broadcasting ships in Tier 8; this tier adds the missing client half.
 
 #### P0 — Must ship
 
-- [x] **`@tyravel/echo` package** — TypeScript-first browser library published alongside core
+- [x] **`@pondoknusa/echo` package** — TypeScript-first browser library published alongside core
 - [x] **Channel API** — `echo.channel('orders')`, `echo.private('orders.${id}')`, `echo.join('chat')` with Laravel-compatible naming (`private-`, `presence-` prefixes)
 - [x] **Event listeners** — `.listen('.OrderShipped', handler)` and `.stopListening()`; respect `broadcastAs()` dot-prefix convention
 - [x] **Socket.io connector** — shipped in v0.10.x; removed in v0.13.0 in favor of native WebSocket
@@ -272,7 +272,7 @@ Browser-side channel subscriptions that mirror the server broadcasting API. Serv
 #### P1 — Strong want
 
 - [x] **Presence events** — `.here()`, `.joining()`, `.leaving()`, `.error()` callbacks on presence channels
-- [x] **Scaffold integration** — `tyravel new` / layout stub emits an `@echo` or `@vite` companion script that bootstraps Echo from `config/broadcasting.ts` values safe for the client (key, host, driver)
+- [x] **Scaffold integration** — `pondoknusa new` / layout stub emits an `@echo` or `@vite` companion script that bootstraps Echo from `config/broadcasting.ts` values safe for the client (key, host, driver)
 - [x] **Echo + views** — `@echo` directive or layout stack helper to load the Echo client bundle only on pages that need real-time updates
 
 #### P2 — If scope allows
@@ -286,14 +286,14 @@ Harden auth for production APIs and add OAuth2 server + post-quantum crypto prim
 
 - [x] **Auth security hardening** — global CSRF middleware (HTTP 419), timing-safe password reset, `SESSION_SECURE` / `sameSite`, token ability middleware, `registerOAuthDriver()`
 - [x] **API token hardening** — `tyr_` prefix, `token_prefix` / `last_used_ip` / `revoked_at` / `ip_whitelist`, `Auth.createToken()` options, revoke APIs, `request.tokenId`
-- [x] **Social OAuth depth** — PKCE on built-in providers; X, Facebook, LinkedIn, Apple; `tyravel make:social-driver`
-- [x] **OAuth2 authorization server** — `@tyravel/auth-oauth` (authorization code + PKCE, client credentials, refresh token); `oauth:install`, `oauth:client:create`, `auth:oauth` middleware
-- [x] **Post-quantum cryptography** — `@tyravel/crypto` (ML-KEM, ML-DSA, SLH-DSA, hybrid X25519 + ML-KEM-768); native OpenSSL PQC on Node 26+ (no JS fallback)
+- [x] **Social OAuth depth** — PKCE on built-in providers; X, Facebook, LinkedIn, Apple; `pondoknusa make:social-driver`
+- [x] **OAuth2 authorization server** — `@pondoknusa/auth-oauth` (authorization code + PKCE, client credentials, refresh token); `oauth:install`, `oauth:client:create`, `auth:oauth` middleware
+- [x] **Post-quantum cryptography** — `@pondoknusa/crypto` (ML-KEM, ML-DSA, SLH-DSA, hybrid X25519 + ML-KEM-768); native OpenSSL PQC on Node 26+ (no JS fallback)
 - [x] **Crypto integrations** — optional AES-256-GCM session encryption at rest, ML-DSA signed OAuth tokens; `crypto:install`, `crypto:generate-keys`
 
 ## Tier 12 — Production ergonomics (v0.12.x) ✓
 
-Make Tyravel comfortable for multi-locale teams, day-two operations, and optional back-office UIs. Builds on Tier 6 P5 view localization, Tier 7 health checks, and Tier 8 query profiling.
+Make Pondoknusa comfortable for multi-locale teams, day-two operations, and optional back-office UIs. Builds on Tier 6 P5 view localization, Tier 7 health checks, and Tier 8 query profiling.
 
 ### Full localization
 
@@ -312,18 +312,18 @@ Tier 6 shipped `@lang` / `__()` and JSON locale files in views. v0.12 completes 
 - [x] **Per-user locale** — store preference on the user model; middleware resolves authenticated locale
 - [x] **Date/number/currency formatting** — `formatDate()`, `formatNumber()`, `formatCurrency()` helpers wired to active locale
 - [x] **Localized route prefixes** — optional `/{locale}/…` route group with `URL::defaults(['locale' => …])` style helpers
-- [x] **`tyravel lang:publish` / `lang:missing`** — scaffold locale files and report untranslated keys in CI
+- [x] **`pondoknusa lang:publish` / `lang:missing`** — scaffold locale files and report untranslated keys in CI
 
 ### Optional admin panel
 
-Ship as an **optional** package (`@tyravel/admin`) — not a required core dependency. Goal: CRUD back-office for internal tools, not a Filament competitor.
+Ship as an **optional** package (`@pondoknusa/admin`) — not a required core dependency. Goal: CRUD back-office for internal tools, not a Filament competitor.
 
 #### P0 — Must ship
 
-- [x] **`tyravel admin:install`** — opt-in routes, layout, auth gate (`can:access-admin` or config), and `.tyr` resource views
+- [x] **`pondoknusa admin:install`** — opt-in routes, layout, auth gate (`can:access-admin` or config), and `.tyr` resource views
 - [x] **Resource CRUD** — list / show / create / edit / delete generated from Eloquent-style models
 - [x] **Filters, search, and pagination** — query-builder-driven index tables
-- [x] **Policy integration** — respect `@tyravel/auth` policies on admin actions
+- [x] **Policy integration** — respect `@pondoknusa/auth` policies on admin actions
 
 #### P1 — Strong want
 
@@ -342,10 +342,10 @@ Laravel Telescope / Debugbar–shaped DX, TypeScript-native. Builds on `HealthCh
 
 #### P0 — Must ship
 
-- [x] **`@tyravel/debug` package** — request timeline: HTTP, queries, cache, queue dispatches, broadcasts, mail/notifications
+- [x] **`@pondoknusa/debug` package** — request timeline: HTTP, queries, cache, queue dispatches, broadcasts, mail/notifications
 - [x] **Dev debug bar** — middleware injects collapsible toolbar (or `/__debug` JSON panel) gated to `APP_DEBUG`
 - [x] **Slow query + N+1 warnings** — threshold config; surface in debug bar and structured logs
-- [x] **`tyravel debug:clear`** — prune stored debug entries
+- [x] **`pondoknusa debug:clear`** — prune stored debug entries
 
 #### P1 — Strong want
 
@@ -356,7 +356,7 @@ Laravel Telescope / Debugbar–shaped DX, TypeScript-native. Builds on `HealthCh
 #### P2 — If scope allows
 
 - [x] **Job / event timeline** — correlate queued work with the HTTP request that dispatched it
-- [x] **`tyravel debug:watch`** — tail recent entries during `tyravel serve`
+- [x] **`pondoknusa debug:watch`** — tail recent entries during `pondoknusa serve`
 
 ## Tier 13 — Native stack & lean dependencies (v0.13.0)
 
@@ -365,33 +365,33 @@ Laravel Telescope / Debugbar–shaped DX, TypeScript-native. Builds on `HealthCh
 ### Runtime & crypto
 
 - [x] **Node 26 minimum** — `engines`, CI, release workflow, and `pretest` guard; native `node:sqlite`, WebSocket, and OpenSSL PQC
-- [x] **Native PQC only** — `@tyravel/crypto` uses OpenSSL exclusively; removed `@noble/post-quantum` (started in v0.12.1, completed for v0.13.0)
+- [x] **Native PQC only** — `@pondoknusa/crypto` uses OpenSSL exclusively; removed `@noble/post-quantum` (started in v0.12.1, completed for v0.13.0)
 
 ### Native realtime
 
-- [x] **`@tyravel/broadcasting-websocket`** — RFC 6455 framing, in-process hub, Redis pub/sub fan-out; upgrade path `/tyravel/ws`
+- [x] **`@pondoknusa/broadcasting-websocket`** — RFC 6455 framing, in-process hub, Redis pub/sub fan-out; upgrade path `/pondoknusa/ws`
 - [x] **WebSocket broadcast driver** — replaces Socket.io and Pusher server drivers; channel auth tokens compatible with `/broadcasting/auth`
-- [x] **`WebSocketConnector` in `@tyravel/echo`** — browser/native `WebSocket`; zero peer dependencies (no `socket.io-client`, no `pusher-js`)
-- [x] **Removed legacy drivers** — `@tyravel/broadcasting-socket-io` and `@tyravel/broadcasting-pusher` dropped from the monorepo and release train
-- [x] **Scaffold updates** — `tyravel new --redis` installs `@tyravel/broadcasting-websocket` only; Echo bootstrap is `new Echo(config)` with no IO factory wiring
+- [x] **`WebSocketConnector` in `@pondoknusa/echo`** — browser/native `WebSocket`; zero peer dependencies (no `socket.io-client`, no `pusher-js`)
+- [x] **Removed legacy drivers** — `@pondoknusa/broadcasting-socket-io` and `@pondoknusa/broadcasting-pusher` dropped from the monorepo and release train
+- [x] **Scaffold updates** — `pondoknusa new --redis` installs `@pondoknusa/broadcasting-websocket` only; Echo bootstrap is `new Echo(config)` with no IO factory wiring
 
 ### Supply chain
 
-- [x] **Five optional third-party production deps** — entire monorepo: `pg`, `mysql2`, `redis`, and two AWS SDK packages; everything else is `@tyravel/*`
-- [x] **Default app footprint** — SQLite + database queue + log mail ships with no external production npm dependencies beyond Tyravel packages
+- [x] **Five optional third-party production deps** — entire monorepo: `pg`, `mysql2`, `redis`, and two AWS SDK packages; everything else is `@pondoknusa/*`
+- [x] **Default app footprint** — SQLite + database queue + log mail ships with no external production npm dependencies beyond Pondoknusa packages
 
 ## Tier 14 — AI-native platform (v0.14.0)
 
-First-class vector search, RAG workflows, and agent tooling. **No unified LLM provider interface** — apps use native TypeScript SDKs (`openai`, `@anthropic-ai/sdk`, etc.) directly; Tyravel focuses on data layer, retrieval, orchestration, and MCP.
+First-class vector search, RAG workflows, and agent tooling. **No unified LLM provider interface** — apps use native TypeScript SDKs (`openai`, `@anthropic-ai/sdk`, etc.) directly; Pondoknusa focuses on data layer, retrieval, orchestration, and MCP.
 
 ### Vector database
 
 #### P0 — Must ship
 
-- [x] **`@tyravel/vector` package** — embedding storage and similarity search API
-- [x] **pgvector driver** — `vector` column blueprint, migration helper, cosine / L2 / inner-product operators via `@tyravel/database-pg`
+- [x] **`@pondoknusa/vector` package** — embedding storage and similarity search API
+- [x] **pgvector driver** — `vector` column blueprint, migration helper, cosine / L2 / inner-product operators via `@pondoknusa/database-pg`
 - [x] **`VectorSearch` query API** — `Model.similarTo(embedding, { limit, threshold })` and `scopeNearest()` on query builder
-- [x] **Chunk + embed pipeline** — `tyravel vector:embed` command; queue-backed batch embedding jobs
+- [x] **Chunk + embed pipeline** — `pondoknusa vector:embed` command; queue-backed batch embedding jobs
 
 #### P1 — Strong want
 
@@ -402,7 +402,7 @@ First-class vector search, RAG workflows, and agent tooling. **No unified LLM pr
 #### P2 — If scope allows
 
 - [x] **Qdrant / Pinecone adapters** — external vector store drivers for apps that outgrow pgvector
-- [x] **Embedding cache** — deduplicate embed calls via `@tyravel/cache`
+- [x] **Embedding cache** — deduplicate embed calls via `@pondoknusa/cache`
 
 ### RAG
 
@@ -423,14 +423,14 @@ First-class vector search, RAG workflows, and agent tooling. **No unified LLM pr
 
 #### P0 — Must ship
 
-- [x] **`tyravel-mcp` package** — MCP server exposing framework capabilities: routes, models, config keys, artisan commands, and docs index
+- [x] **`pondoknusa-mcp` package** — MCP server exposing framework capabilities: routes, models, config keys, artisan commands, and docs index
 - [x] **Capability manifest** — machine-readable index of facades, CLI commands, and stable package exports (feeds agents and IDE tooling)
-- [x] **`tyravel make:tool`** — scaffold MCP tool handlers that call app services
+- [x] **`pondoknusa make:tool`** — scaffold MCP tool handlers that call app services
 
 #### P1 — Strong want
 
-- [x] **Agent-safe scaffolds** — `tyravel make:rag-resource` pairs model + vector migration + ingest job
-- [x] **Prompt stubs in CLI** — `tyravel new --ai` adds RAG example routes and vector config
+- [x] **Agent-safe scaffolds** — `pondoknusa make:rag-resource` pairs model + vector migration + ingest job
+- [x] **Prompt stubs in CLI** — `pondoknusa new --ai` adds RAG example routes and vector config
 
 #### P2 — If scope allows
 
@@ -438,7 +438,7 @@ First-class vector search, RAG workflows, and agent tooling. **No unified LLM pr
 
 ## Tier 15 — Infrastructure depth (v0.15.0)
 
-Deepen cache, notifications, and testing beyond the v0.1 foundations (`@tyravel/cache`, `@tyravel/notifications`, `@tyravel/testing`). Production polish, not greenfield packages.
+Deepen cache, notifications, and testing beyond the v0.1 foundations (`@pondoknusa/cache`, `@pondoknusa/notifications`, `@pondoknusa/testing`). Production polish, not greenfield packages.
 
 ### Cache
 
@@ -446,14 +446,14 @@ Deepen cache, notifications, and testing beyond the v0.1 foundations (`@tyravel/
 
 - [x] **Taggable cache** — `Cache.tags(['posts', 'user:1']).flush()` across drivers that support it
 - [x] **Cache events** — `cache:hit`, `cache:miss`, `cache:write` hooks for debug bar and metrics
-- [x] **Memcached driver** — `@tyravel/cache-memcached` production adapter
+- [x] **Memcached driver** — `@pondoknusa/cache-memcached` production adapter
 - [x] **HTTP cache headers** — middleware for `ETag`, `Cache-Control`, and `304` short-circuit on safe routes
 
 #### P1 — Strong want
 
 - [x] **Stampede protection** — `Cache::remember()` lock wrapper (extends existing cache-lock primitive)
 - [x] **DynamoDB / Upstash drivers** — serverless-friendly cache backends
-- [x] **Redis cluster / sentinel config** — connection options on `@tyravel/cache` Redis store
+- [x] **Redis cluster / sentinel config** — connection options on `@pondoknusa/cache` Redis store
 
 #### P2 — If scope allows
 
@@ -466,7 +466,7 @@ Deepen cache, notifications, and testing beyond the v0.1 foundations (`@tyravel/
 
 - [x] **Slack + webhook channels** — first-party notification drivers beyond mail and database
 - [x] **Notification batching** — `Notification::sendNow()` vs queued; batch digest notifications
-- [x] **Failed notification handling** — dead-letter queue entry + `tyravel notification:retry`
+- [x] **Failed notification handling** — dead-letter queue entry + `pondoknusa notification:retry`
 
 #### P1 — Strong want
 
@@ -480,7 +480,7 @@ Deepen cache, notifications, and testing beyond the v0.1 foundations (`@tyravel/
 
 - [x] **Mail / notification fakes** — `Mail.fake()`, `Notification.fake()` with assertion helpers
 - [x] **Broadcast fake** — assert events dispatched to channels without a socket server
-- [x] **Database transactions per test** — automatic `begin` / `rollback` wrapper in `@tyravel/testing`
+- [x] **Database transactions per test** — automatic `begin` / `rollback` wrapper in `@pondoknusa/testing`
 - [x] **Time travel** — `travel(2).days()` for testing scheduled jobs and token expiry
 
 #### P1 — Strong want
@@ -491,7 +491,7 @@ Deepen cache, notifications, and testing beyond the v0.1 foundations (`@tyravel/
 
 #### P2 — If scope allows
 
-- [x] **Parallel test runner docs** — vitest workspace guidance for large Tyravel apps
+- [x] **Parallel test runner docs** — vitest workspace guidance for large Pondoknusa apps
 - [x] **Pest-style API** — optional thin wrapper for describe/it ergonomics (not a hard dependency)
 
 ## Tier 16 — Core surface polish (v0.16.0) ✓
@@ -509,7 +509,7 @@ Final API pass on the three surfaces developers touch daily — models, routes, 
 
 #### P1 — Strong want
 
-- [x] **Prunable models** — `tyravel model:prune` for models with `prunable()` definition
+- [x] **Prunable models** — `pondoknusa model:prune` for models with `prunable()` definition
 - [x] **Model:uuid / ulid** — trait + migration helper for non-incrementing keys
 - [x] **Lazy loading prevention** — dev-mode exception on unguarded relation access (opt-in)
 
@@ -519,14 +519,14 @@ Final API pass on the three surfaces developers touch daily — models, routes, 
 
 - [x] **Named route URL generation** — `route('posts.show', { post: 1 })` with type-safe params where possible
 - [x] **Signed URLs** — `URL.signed()` / `URL.temporarySigned()` for expiring links
-- [x] **Route caching** — `tyravel route:cache` / `route:clear` for production boot performance
+- [x] **Route caching** — `pondoknusa route:cache` / `route:clear` for production boot performance
 - [x] **Improved `route:list`** — filters by middleware, domain, and controller; JSON output for tooling
 
 #### P1 — Strong want
 
 - [x] **Route groups in TypeScript** — `Route.group({ prefix, middleware }, () => { … })` with inferred name prefixes
 - [x] **Rate limit per route** — fluent `->throttle('api')` on individual routes
-- [x] **`tyravel make:controller --api`** — invokable + resource controller scaffolds aligned with binding
+- [x] **`pondoknusa make:controller --api`** — invokable + resource controller scaffolds aligned with binding
 
 ### Views
 
@@ -538,7 +538,7 @@ Final API pass on the three surfaces developers touch daily — models, routes, 
 
 #### P1 — Strong want
 
-- [x] **View component docs export** — `tyravel view:catalog --json` for design-system tooling
+- [x] **View component docs export** — `pondoknusa view:catalog --json` for design-system tooling
 - [x] **Partial reload helpers** — Turbo/HTMX-friendly fragment response helpers building on `@fragment`
 - [x] **Broadcast channel scaffold** — `routes/channels.ts` uses `private-` prefix patterns matching Echo
 
@@ -550,15 +550,15 @@ Final API pass on the three surfaces developers touch daily — models, routes, 
 
 ## v1.0.0 — Documentation & semver strict
 
-Tyravel **1.0.0** is the first semver-strict era (see [STABILITY.md](STABILITY.md)). Feature work for 1.0 lands in Tiers 12–16; **1.0 itself is the full documentation release**.
+Pondoknusa **1.0.0** is the first semver-strict era (see [STABILITY.md](STABILITY.md)). Feature work for 1.0 lands in Tiers 12–16; **1.0 itself is the full documentation release**.
 
 ### Documentation (primary 1.0 deliverable)
 
 - [x] **In-repo documentation system** — VitePress guide + reference + tutorials + cookbook; `npm run docs:generate` for package/CLI manifests; GitHub Pages workflow (`.github/workflows/docs.yml`)
-- [x] **Hosted documentation site (workflow)** — GitHub Pages deploy (`.github/workflows/docs.yml`); `docs/public/CNAME` for tyravel.dev
-- [x] **Hosted documentation site (live)** — GitHub Pages enabled (`build_type: workflow`); Docs workflow deploys on push to `main`; interim URL https://thesimonharms.github.io/tyravel/
-- [x] **Custom domain (tyravel.dev)** — DNS pointed at GitHub Pages; HTTPS live at https://tyravel.dev
-- [x] **Package & CLI reference (generated)** — every `@tyravel/*` package with exports table; full `tyravel` command list from `@tyravel/cli`
+- [x] **Hosted documentation site (workflow)** — GitHub Pages deploy (`.github/workflows/docs.yml`); `docs/public/CNAME` for pondoknusa.dev
+- [x] **Hosted documentation site (live)** — GitHub Pages enabled (`build_type: workflow`); Docs workflow deploys on push to `main`; interim URL https://thesimonharms.github.io/pondoknusa/
+- [x] **Custom domain (pondoknusa.dev)** — DNS pointed at GitHub Pages; HTTPS live at https://pondoknusa.dev
+- [x] **Package & CLI reference (generated)** — every `@pondoknusa/*` package with exports table; full `pondoknusa` command list from `@pondoknusa/cli`
 - [x] **Configuration reference** — `docs/guide/configuration-reference.md` for scaffold config keys and env vars
 - [x] **Complete package reference** — facade method tables in generated reference (`docs/reference/generated/facades.md`); per-package exports remain auto-generated
 - [x] **Tutorial track (scaffold)** — zero-to-deploy outline: install → auth → queue → realtime/deploy (`docs/tutorials/`)
@@ -571,7 +571,7 @@ Tyravel **1.0.0** is the first semver-strict era (see [STABILITY.md](STABILITY.m
 
 ### 1.0 gate
 
-- [x] **No experimental APIs in core facades** — `View.catalog()` / `View.islandCatalog()` promoted to stable; programmatic `.tyr.ts`, `tyravel shell`, and `Bus` conventions remain experimental (non-facade)
+- [x] **No experimental APIs in core facades** — `View.catalog()` / `View.islandCatalog()` promoted to stable; programmatic `.tyr.ts`, `pondoknusa shell`, and `Bus` conventions remain experimental (non-facade)
 - [x] **LTS support policy** — documented in `STABILITY.md` (6-month security window on previous minor)
 - [x] **Security disclosure process** — `SECURITY.md` with reporting instructions
 
@@ -599,51 +599,51 @@ First post-1.0 minor. Focus on measurable throughput, community extensibility, a
 
 #### P1 — Strong want
 
-- [x] **Additional social providers** — GitLab, Slack, Spotify, Twitch, and Bitbucket drivers in `@tyravel/auth`
+- [x] **Additional social providers** — GitLab, Slack, Spotify, Twitch, and Bitbucket drivers in `@pondoknusa/auth`
 - [x] **Self-hosted GitLab** — optional `baseUrl` config for non-gitlab.com instances
 
 ### v1.0 ops closeout
 
-- [x] **Custom domain (tyravel.dev)** — DNS and HTTPS verified; live at https://tyravel.dev
+- [x] **Custom domain (pondoknusa.dev)** — DNS and HTTPS verified; live at https://pondoknusa.dev
 
 ### Production DevOps (v1.1 polish)
 
 #### P1 — Strong want
 
-- [x] **`tyravel start`** — production server command (no view watcher; hides `--experimental-strip-types`)
-- [x] **Deploy scaffold** — `deploy/` directory (Docker, Compose, Fly, Railway) on `tyravel new`
-- [x] **CLI in production deps** — `@tyravel/cli` moved to `dependencies` for container `npm ci --omit=dev`
+- [x] **`pondoknusa start`** — production server command (no view watcher; hides `--experimental-strip-types`)
+- [x] **Deploy scaffold** — `deploy/` directory (Docker, Compose, Fly, Railway) on `pondoknusa new`
+- [x] **CLI in production deps** — `@pondoknusa/cli` moved to `dependencies` for container `npm ci --omit=dev`
 - [x] **Health probe split** — `/health/live` (liveness) and `/health/ready` (readiness) in `HealthServiceProvider`
-- [x] **Deploy docs & manifests** — `npx tyravel start|migrate|queue:work` across guides and `examples/hello-world/deploy/`
+- [x] **Deploy docs & manifests** — `npx pondoknusa start|migrate|queue:work` across guides and `examples/hello-world/deploy/`
 
 ## Tier 18 — Developer experience (v1.2.0)
 
-Make Tyravel feel as smooth on day one as Laravel does: fast local iteration, obvious errors, and tooling that stays out of the way until you need it. Builds on Tier 5 (magic DX), Tier 12 (debug bar), and Tier 17 (production commands).
+Make Pondoknusa feel as smooth on day one as Laravel does: fast local iteration, obvious errors, and tooling that stays out of the way until you need it. Builds on Tier 5 (magic DX), Tier 12 (debug bar), and Tier 17 (production commands).
 
 ### Local development loop
 
 #### P0 — Must ship
 
-- [x] **`tyravel dev` alias** — single entry for `serve` + `debug:watch` hints; document the canonical local workflow in the tutorial
-- [x] **Config/route hot reload** — reload `config/*.ts` and route files on change during `tyravel serve` without full process restart (views already watch via `TYRAVEL_VIEW_WATCH`)
-- [x] **Runtime transparency** — `tyravel serve` prints which runtime is active (Node strip-types vs Bun) and links to troubleshooting when Node is below 26
+- [x] **`pondoknusa dev` alias** — single entry for `serve` + `debug:watch` hints; document the canonical local workflow in the tutorial
+- [x] **Config/route hot reload** — reload `config/*.ts` and route files on change during `pondoknusa serve` without full process restart (views already watch via `PONDOKNUSA_VIEW_WATCH`)
+- [x] **Runtime transparency** — `pondoknusa serve` prints which runtime is active (Node strip-types vs Bun) and links to troubleshooting when Node is below 26
 
 #### P1 — Strong want
 
-- [x] **Queue worker in dev** — `tyravel dev --queue` or `npm run dev:worker` script in scaffold; docs for mail/event testing without a second terminal guess
+- [x] **Queue worker in dev** — `pondoknusa dev --queue` or `npm run dev:worker` script in scaffold; docs for mail/event testing without a second terminal guess
 - [x] **`.env` validation on boot** — fail fast with actionable messages when required env vars for the active `DB_CONNECTION`, `QUEUE_CONNECTION`, or OAuth providers are missing
-- [x] **First-run checklist** — post-`tyravel new` output: migrate, serve, test, optional `auth:install` — with copy-paste commands per scaffold flags
+- [x] **First-run checklist** — post-`pondoknusa new` output: migrate, serve, test, optional `auth:install` — with copy-paste commands per scaffold flags
 
 #### P2 — If scope allows
 
-- [x] **HTTPS local dev** — optional `tyravel serve --tls` with generated certs for OAuth redirect testing
-- [x] **Concurrent dev processes** — `tyravel dev` spawns web + queue worker + `debug:watch` with one Ctrl+C shutdown
+- [x] **HTTPS local dev** — optional `pondoknusa serve --tls` with generated certs for OAuth redirect testing
+- [x] **Concurrent dev processes** — `pondoknusa dev` spawns web + queue worker + `debug:watch` with one Ctrl+C shutdown
 
 ### Experimental → stable
 
 #### P0 — Must ship
 
-- [x] **Stable `tyravel shell`** — graduate `@tyravel/repl` and document supported REPL APIs; compatibility tests for facade imports and model autoload
+- [x] **Stable `pondoknusa shell`** — graduate `@pondoknusa/repl` and document supported REPL APIs; compatibility tests for facade imports and model autoload
 - [x] **Stable programmatic `.tyr.ts` views** — lock island mount contract; document in views guide with a reference example
 
 #### P1 — Strong want
@@ -655,30 +655,30 @@ Make Tyravel feel as smooth on day one as Laravel does: fast local iteration, ob
 
 #### P0 — Must ship
 
-- [x] **`npm create tyravel@latest`** — `create-tyravel` package wrapping `tyravel new` with interactive prompts (db, redis, auth, ai)
-- [x] **Stack templates** — `tyravel new --template=api|ssr|saas` presets for routes, config, and example features
+- [x] **`npm create pondoknusa@latest`** — `create-pondoknusa` package wrapping `pondoknusa new` with interactive prompts (db, redis, auth, ai)
+- [x] **Stack templates** — `pondoknusa new --template=api|ssr|saas` presets for routes, config, and example features
 
 #### P1 — Strong want
 
 - [x] **Migrating from Laravel guide** — mental-model map (routes, Eloquent, Blade → `.tyr`, Artisan → CLI) in `docs/guide/migrating-from-laravel.md`
 - [x] **SaaS starter example** — forkable app under `examples/` with auth, admin, queue, and deploy manifests (complements hello-world + rag)
-- [x] **VS Code / Cursor extension stub** — `.tyr` syntax highlighting, snippet pack, and link to `tyravel view:types` generated props
+- [x] **VS Code / Cursor extension stub** — `.tyr` syntax highlighting, snippet pack, and link to `pondoknusa view:types` generated props
 
 #### P2 — If scope allows
 
-- [x] **Interactive `tyravel new`** — TUI when no flags passed (database, redis, auth) instead of requiring full flag list
-- [x] **Headless API template (planning)** — `tyravel new --headless` / `--template=headless` option on roadmap; first-class backend-only scaffold ships in Tier 19
+- [x] **Interactive `pondoknusa new`** — TUI when no flags passed (database, redis, auth) instead of requiring full flag list
+- [x] **Headless API template (planning)** — `pondoknusa new --headless` / `--template=headless` option on roadmap; first-class backend-only scaffold ships in Tier 19
 
 ### Diagnostics & errors
 
 #### P0 — Must ship
 
-- [x] **`tyravel doctor`** — checks Node version, writable `storage/`, database connectivity, Redis when configured, compiled view cache in production, and OAuth redirect URI shape
+- [x] **`pondoknusa doctor`** — checks Node version, writable `storage/`, database connectivity, Redis when configured, compiled view cache in production, and OAuth redirect URI shape
 - [x] **Actionable exceptions** — link common boot failures (`CompiledViewCacheMissError`, missing provider, bad `.env`) to docs URLs in the error message
 
 #### P1 — Strong want
 
-- [x] **Pre-deploy command** — `tyravel deploy:check` runs doctor + `route:cache` dry-run + `view:cache` validation; CI-friendly exit codes
+- [x] **Pre-deploy command** — `pondoknusa deploy:check` runs doctor + `route:cache` dry-run + `view:cache` validation; CI-friendly exit codes
 - [x] **Debug bar deep links** — request id in toolbar links to `/__debug?correlation=` JSON for the current entry
 - [x] **N+1 source maps** — show file:line of the query origin in slow-query warnings when `APP_DEBUG=true`
 
@@ -690,8 +690,8 @@ Make Tyravel feel as smooth on day one as Laravel does: fast local iteration, ob
 
 #### P1 — Strong want
 
-- [x] **`tyravel view:types` in CI** — scaffold GitHub Action snippet; fail PR when component props drift from `.tyr` signatures
-- [x] **View catalog IDE export** — `tyravel view:catalog --ide=vscode` emits JSON for extension consumption
+- [x] **`pondoknusa view:types` in CI** — scaffold GitHub Action snippet; fail PR when component props drift from `.tyr` signatures
+- [x] **View catalog IDE export** — `pondoknusa view:catalog --ide=vscode` emits JSON for extension consumption
 - [x] **Stricter dev defaults** — `view:lint` recommended in `precommit` stub; `--strict` documented for team adoption
 
 #### P2 — If scope allows
@@ -702,8 +702,8 @@ Make Tyravel feel as smooth on day one as Laravel does: fast local iteration, ob
 
 #### P1 — Strong want
 
-- [x] **`tyravel test` wrapper** — delegates to vitest with project config; sets `APP_ENV=testing` consistently
-- [x] **HTTP test recipes** — expand `@tyravel/testing` docs for OAuth, broadcasting, and partial reload assertions with copy-paste examples
+- [x] **`pondoknusa test` wrapper** — delegates to vitest with project config; sets `APP_ENV=testing` consistently
+- [x] **HTTP test recipes** — expand `@pondoknusa/testing` docs for OAuth, broadcasting, and partial reload assertions with copy-paste examples
 - [x] **In-memory SQLite default** — testing guide recommends `:memory:` per worker; document parallel vitest workspace setup (extends Tier 15 P2 docs)
 
 #### P2 — If scope allows
@@ -712,27 +712,27 @@ Make Tyravel feel as smooth on day one as Laravel does: fast local iteration, ob
 
 ## Tier 19 — Speed & snappiness (v1.3.0)
 
-Make Tyravel feel **fast by default**: low cold-start latency, high request throughput, and instant feedback in dev. Builds on Tier 17 benchmarks, Tier 15 response/model caching, and Tier 16 route/view compile caches. Success is measurable — higher benchmark baselines, lower p95 in real apps, and fewer “why is boot slow?” surprises.
+Make Pondoknusa feel **fast by default**: low cold-start latency, high request throughput, and instant feedback in dev. Builds on Tier 17 benchmarks, Tier 15 response/model caching, and Tier 16 route/view compile caches. Success is measurable — higher benchmark baselines, lower p95 in real apps, and fewer “why is boot slow?” surprises.
 
 ### Headless API mode
 
-First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client assets. Planned in Tier 18; ships here as a stable scaffold and tooling path.
+First-class backend-only Pondoknusa: JSON APIs without views, SSR, Echo, or client assets. Planned in Tier 18; ships here as a stable scaffold and tooling path.
 
 #### P0 — Must ship
 
-- [x] **`tyravel new --headless`** — slim `package.json`, `src/routes/api.ts`, `config/app.ts` with `headless: true`, `tyravel.json` `mode: "headless"`
-- [x] **Headless-aware CLI** — `doctor` skips view-cache checks; `deploy:check` skips view compilation; `tyravel dev` omits view watch; `auth:install` uses API routes
+- [x] **`pondoknusa new --headless`** — slim `package.json`, `src/routes/api.ts`, `config/app.ts` with `headless: true`, `pondoknusa.json` `mode: "headless"`
+- [x] **Headless-aware CLI** — `doctor` skips view-cache checks; `deploy:check` skips view compilation; `pondoknusa dev` omits view watch; `auth:install` uses API routes
 - [x] **Headless guide** — `docs/guide/headless.md` with quick start, auth, deploy, and conversion notes
 
 #### P1 — Strong want
 
 - [x] **Headless example app** — `examples/headless-api` with auth tokens, queue worker, and deploy manifests
-- [x] **`npm create tyravel@latest -- --headless`** — document in getting-started and create-tyravel README
+- [x] **`npm create pondoknusa@latest -- --headless`** — document in getting-started and create-pondoknusa README
 - [x] **Headless boot profile** — `applyBootProfile()` + JSON errors by default; `registerViewStack()` helper when not headless
 
 #### P2 — If scope allows
 
-- [x] **OpenAPI stub** — `tyravel make:openapi` exports OpenAPI 3.0 from registered routes
+- [x] **OpenAPI stub** — `pondoknusa make:openapi` exports OpenAPI 3.0 from registered routes
 
 ### HTTP request hot path
 
@@ -745,13 +745,13 @@ First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client 
 #### P1 — Strong want
 
 - [x] **Keep-alive tuning** — Node adapter defaults `keepAliveTimeout` / `headersTimeout` for reverse-proxy deployments
-- [x] **Request object pooling** — reuse or slim `TyravelRequest` construction for high-throughput JSON endpoints (behind benchmark proof)
+- [x] **Request object pooling** — reuse or slim `PondoknusaRequest` construction for high-throughput JSON endpoints (behind benchmark proof)
 - [x] **Early 404 short-circuit** — unmatched routes exit before session/database providers when `APP_DEBUG=false`
 
 #### P2 — If scope allows
 
 - [x] **HTTP/2 opt-in** — `serve({ http2: true })` for TLS-terminated local benchmarks and HTTP/2-aware load balancers
-- [x] **`tyravel start --cluster`** — `node:cluster` worker fork mode with shared route/view caches and Redis session store
+- [x] **`pondoknusa start --cluster`** — `node:cluster` worker fork mode with shared route/view caches and Redis session store
 
 ### Boot & cold start
 
@@ -763,13 +763,13 @@ First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client 
 
 #### P1 — Strong want
 
-- [x] **Config manifest cache** — `tyravel config:cache` serializes merged config for production boot (mirrors route cache workflow)
-- [x] **Lazy provider registration** — defer `@tyravel/admin`, `@tyravel/debug`, and MCP providers until first use or explicit route hit
+- [x] **Config manifest cache** — `pondoknusa config:cache` serializes merged config for production boot (mirrors route cache workflow)
+- [x] **Lazy provider registration** — defer `@pondoknusa/admin`, `@pondoknusa/debug`, and MCP providers until first use or explicit route hit
 - [x] **Database pool warm-up** — fire-and-forget `SELECT 1` during boot when `DB_POOL_WARMUP=true` (default on in production scaffold)
 
 #### P2 — If scope allows
 
-- [x] **Single-file production bundle** — optional `tyravel build` esbuild bundle for edge deploys (Fly Machines, Lambda-style) with documented trade-offs
+- [x] **Single-file production bundle** — optional `pondoknusa build` esbuild bundle for edge deploys (Fly Machines, Lambda-style) with documented trade-offs
 
 ### Views & SSR throughput
 
@@ -825,12 +825,12 @@ First-class backend-only Tyravel: JSON APIs without views, SSR, Echo, or client 
 #### P1 — Strong want
 
 - [x] **Weekly full benchmark workflow** — scheduled `BENCHMARK_QUICK=0` run on `main`; longer retention for trend charts
-- [x] **Public perf page** — `tyravel.dev/guide/benchmarks` section with latest CI numbers and historical graph (manual or generated)
+- [x] **Public perf page** — `pondoknusa.dev/guide/benchmarks` section with latest CI numbers and historical graph (manual or generated)
 - [x] **Bun vs Node comparison** — document relative throughput when running on Bun for dev and production
 
 #### P2 — If scope allows
 
-- [x] **Opt-in perf budget in apps** — `tyravel test --perf` fails when app-specific benchmark thresholds regress (user-defined in `tyravel.json`)
+- [x] **Opt-in perf budget in apps** — `pondoknusa test --perf` fails when app-specific benchmark thresholds regress (user-defined in `pondoknusa.json`)
 
 ### Speed documentation
 
@@ -864,9 +864,9 @@ Items not tied to a version number. Land when useful; do not block releases.
 - [x] **Additional OAuth / social providers** — GitLab, Slack, Spotify, Twitch, Bitbucket built-ins (Tier 17)
 - [x] **Native WebSocket broadcasting guide** — proxy, Redis fan-out, and Echo setup in `docs/guide/broadcasting.md`
 - [x] **Performance benchmarks** — harness, guide, and CI trend job shipped in Tier 17
-- [x] **Developer experience (Tier 18)** — v1.2.0 complete (P0+P1+P2): `dev` concurrent workers, `--tls`, `doctor --perf`, `make:test --feature`, `.tyr` LSP stub, interactive `tyravel new`
+- [x] **Developer experience (Tier 18)** — v1.2.0 complete (P0+P1+P2): `dev` concurrent workers, `--tls`, `doctor --perf`, `make:test --feature`, `.tyr` LSP stub, interactive `pondoknusa new`
 - [x] **Speed & snappiness (Tier 19)** — HTTP hot path, boot time, view/ORM throughput, benchmark regression gates; target v1.3.0
-- [ ] **Tyravel Cloud** — managed git-push deploy (Postgres, Redis, R2, CDN); like Laravel Cloud / Vercel for Tyravel
+- [ ] **Pondoknusa Cloud** — managed git-push deploy (Postgres, Redis, R2, CDN); like Laravel Cloud / Vercel for Pondoknusa
 - [ ] **Cloudflare Workers adapter** — headless JSON on Workers + Hyperdrive; SSR at edge later
 
 ## Shipped in v0.1.0
@@ -875,4 +875,4 @@ Items not tied to a version number. Land when useful; do not block releases.
 - Route groups, controllers, config, middleware, validation, Node `serve()`
 - Eloquent-style ORM, views, queue/events
 - Auth (session, tokens, OAuth, policies, password reset)
-- `@tyravel/testing`, cache, mail (SMTP + queued), notifications (queued)
+- `@pondoknusa/testing`, cache, mail (SMTP + queued), notifications (queued)

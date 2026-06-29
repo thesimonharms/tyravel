@@ -6,7 +6,7 @@ import { buildViewCatalog } from './island-catalog.js';
 
 describe('buildViewCatalog', () => {
   it('indexes islands from views, client mounts, and programmatic modules', async () => {
-    const basePath = join(tmpdir(), `tyravel-island-catalog-${Date.now()}`);
+    const basePath = join(tmpdir(), `pondoknusa-island-catalog-${Date.now()}`);
     mkdirSync(join(basePath, 'resources/views/islands'), { recursive: true });
     mkdirSync(join(basePath, 'resources/client/islands'), { recursive: true });
 
@@ -19,7 +19,7 @@ describe('buildViewCatalog', () => {
     );
     writeFileSync(
       join(basePath, 'resources/client/islands/counter.ts'),
-      "import { registerIsland } from '@tyravel/ssr';\nregisterIsland('counter', () => {});\n",
+      "import { registerIsland } from '@pondoknusa/ssr';\nregisterIsland('counter', () => {});\n",
     );
     writeFileSync(
       join(basePath, 'resources/views/islands/timer.tyr.ts'),

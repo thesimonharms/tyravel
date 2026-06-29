@@ -1,4 +1,4 @@
-import type { ViewEngine } from '@tyravel/views';
+import type { ViewEngine } from '@pondoknusa/views';
 import { ArrayMailTransport, LogMailTransport, type MailTransport } from './transport.js';
 import { SmtpMailTransport } from './smtp-transport.js';
 import type { MailAddress, MailConfig, MailConnectionConfig, MailMessage } from './types.js';

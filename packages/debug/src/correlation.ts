@@ -1,6 +1,6 @@
 import { getDebugContext } from './context.js';
 
-export const DEBUG_REQUEST_ID_KEY = '_tyravelDebugRequestId';
+export const DEBUG_REQUEST_ID_KEY = '_pondoknusaDebugRequestId';
 
 export function getCurrentDebugRequestId(): string | undefined {
   return getDebugContext()?.id;

@@ -22,7 +22,7 @@ describe('fragment ops', () => {
   });
 
   it('renders only a named fragment from a view', async () => {
-    const basePath = join(tmpdir(), `tyravel-fragment-${Date.now()}`);
+    const basePath = join(tmpdir(), `pondoknusa-fragment-${Date.now()}`);
     const viewsPath = join(basePath, 'resources/views');
     mkdirSync(viewsPath, { recursive: true });
 
@@ -44,7 +44,7 @@ describe('fragment ops', () => {
   });
 
   it('throws when a fragment name is missing', async () => {
-    const basePath = join(tmpdir(), `tyravel-fragment-miss-${Date.now()}`);
+    const basePath = join(tmpdir(), `pondoknusa-fragment-miss-${Date.now()}`);
     const viewsPath = join(basePath, 'resources/views');
     mkdirSync(viewsPath, { recursive: true });
     writeFileSync(join(viewsPath, 'empty.tyr'), '<p>Full page</p>');

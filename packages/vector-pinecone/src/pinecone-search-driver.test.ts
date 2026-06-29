@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Model } from '@tyravel/database';
+import { Model } from '@pondoknusa/database';
 import { PineconeVectorSearchDriver } from './pinecone-search-driver.js';
 
 class Document extends Model {
@@ -7,7 +7,7 @@ class Document extends Model {
 }
 
 describe('PineconeVectorSearchDriver', () => {
-  it('maps Pinecone metadata into ranked Tyravel rows', async () => {
+  it('maps Pinecone metadata into ranked Pondoknusa rows', async () => {
     const fetchImpl = async () =>
       new Response(
         JSON.stringify({

@@ -4,13 +4,13 @@ Broadcast domain events to the browser and ship to production.
 
 ## WebSocket broadcasting
 
-Since **v0.13.0**, Tyravel ships a native WebSocket hub (`@tyravel/broadcasting-websocket`) — no Socket.io or Pusher.
+Since **v0.13.0**, Pondoknusa ships a native WebSocket hub (`@pondoknusa/broadcasting-websocket`) — no Socket.io or Pusher.
 
 Follow the full [Broadcasting & realtime](/guide/broadcasting) guide for config, channel auth, Echo client setup, and nginx proxy notes.
 
 Quick checklist:
 
-1. Scaffold with Redis: `tyravel new my-app --redis`
+1. Scaffold with Redis: `pondoknusa new my-app --redis`
 2. Set `BROADCAST_CONNECTION=websocket` in `.env`
 3. Register `WebSocketBroadcastServiceProvider` in `src/main.ts`
 4. Define channels in `routes/channels.ts` (private channel prefixes ship in current scaffolds since **v0.16**)
@@ -21,12 +21,12 @@ Quick checklist:
 
 | Task | Command / config |
 |------|------------------|
-| Config cache | `tyravel config:cache` |
-| Route cache | `tyravel route:cache` |
-| View compile cache | `tyravel view:cache` + `compiled: true` |
-| Deploy gate | `tyravel deploy:check` |
-| Queue worker | `tyravel queue:work` (separate process) |
-| Graceful shutdown | Built into `serve()` / `tyravel start` |
+| Config cache | `pondoknusa config:cache` |
+| Route cache | `pondoknusa route:cache` |
+| View compile cache | `pondoknusa view:cache` + `compiled: true` |
+| Deploy gate | `pondoknusa deploy:check` |
+| Queue worker | `pondoknusa queue:work` (separate process) |
+| Graceful shutdown | Built into `serve()` / `pondoknusa start` |
 
 ## Choose a host
 
@@ -38,29 +38,29 @@ Quick checklist:
 | [Docker](/guide/deployment/docker) | VPS / Kubernetes |
 | [Cloudflare](/guide/deployment/cloudflare) | CDN + R2 in front of Node |
 | [CI/CD](/guide/deployment/ci-cd) | GitHub Actions release pipeline |
-| [Tyravel Cloud](/guide/deployment/tyravel-cloud) | Future managed platform |
+| [Pondoknusa Cloud](/guide/deployment/pondoknusa-cloud) | Future managed platform |
 
-Manifests: [`examples/hello-world/deploy/`](https://github.com/thesimonharms/tyravel/tree/main/examples/hello-world/deploy).
+Manifests: [`examples/hello-world/deploy/`](https://github.com/pondoknusa/pondoknusa/tree/main/examples/hello-world/deploy).
 
 Minimum production boot:
 
 ```bash
 export NODE_ENV=production APP_DEBUG=false
-export TYRAVEL_HOST=0.0.0.0 TYRAVEL_PORT=${PORT:-3000}
-tyravel migrate
-tyravel config:cache && tyravel route:cache && tyravel view:cache
-tyravel start
+export PONDOKNUSA_HOST=0.0.0.0 PONDOKNUSA_PORT=${PORT:-3000}
+pondoknusa migrate
+pondoknusa config:cache && pondoknusa route:cache && pondoknusa view:cache
+pondoknusa start
 ```
 
-Run `tyravel queue:work` in a separate process when using the database or Redis queue.
+Run `pondoknusa queue:work` in a separate process when using the database or Redis queue.
 
 ## Cloudflare in one minute
 
-Full Tyravel does not run on Workers yet. The recommended pattern:
+Full Pondoknusa does not run on Workers yet. The recommended pattern:
 
 1. Deploy to Fly or Railway (Node origin).
 2. Add domain in Cloudflare (proxied DNS).
-3. Optional: R2 for uploads via `@tyravel/storage-r2`.
+3. Optional: R2 for uploads via `@pondoknusa/storage-r2`.
 4. Cache public GETs with [ETag middleware](/cookbook/edge-cache).
 
 Details: [Deploy with Cloudflare](/guide/deployment/cloudflare).

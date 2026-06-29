@@ -1,4 +1,4 @@
-import type { Job } from '@tyravel/queue';
+import type { Job } from '@pondoknusa/queue';
 import { CallQueuedListener } from './call-queued-listener.js';
 import type { Event } from './types.js';
 import { Listener } from './types.js';

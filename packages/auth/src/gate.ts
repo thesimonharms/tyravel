@@ -1,5 +1,5 @@
-import type { Container } from '@tyravel/container';
-import type { Constructor } from '@tyravel/container';
+import type { Container } from '@pondoknusa/container';
+import type { Constructor } from '@pondoknusa/container';
 import type { Authenticatable } from './types.js';
 import type { PolicyConstructor } from './types.js';
 import { Policy } from './policy.js';
@@ -92,8 +92,8 @@ export class Gate {
 export function createAuthorizeMiddleware(
   gate: Gate,
   ability: string,
-  resolveModel?: (request: import('@tyravel/http').TyravelRequest) => Promise<unknown> | unknown,
-): import('@tyravel/http').Middleware {
+  resolveModel?: (request: import('@pondoknusa/http').PondoknusaRequest) => Promise<unknown> | unknown,
+): import('@pondoknusa/http').Middleware {
   return async (request, next) => {
     const user = request.user as Authenticatable | null;
     const model = resolveModel ? await resolveModel(request) : undefined;

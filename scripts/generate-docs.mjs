@@ -90,7 +90,7 @@ const PACKAGE_CATEGORIES = [
 const FACADES = [
   {
     name: 'Route',
-    package: '@tyravel/core',
+    package: '@pondoknusa/core',
     guide: '/guide/routing',
     methods: [
       'get(pattern, handler)', 'post(pattern, handler)', 'put / patch / delete',
@@ -101,13 +101,13 @@ const FACADES = [
   },
   {
     name: 'DB',
-    package: '@tyravel/core',
+    package: '@pondoknusa/core',
     guide: '/guide/database',
     methods: ['connection(name?)', 'transaction(callback, name?)'],
   },
   {
     name: 'Auth',
-    package: '@tyravel/core',
+    package: '@pondoknusa/core',
     guide: '/guide/auth',
     methods: [
       'user(guard?)', 'id(guard?)', 'check(guard?)', 'attempt(credentials)',
@@ -117,7 +117,7 @@ const FACADES = [
   },
   {
     name: 'Cache',
-    package: '@tyravel/core',
+    package: '@pondoknusa/core',
     guide: '/guide/cache',
     methods: [
       'get(key)', 'put(key, value, ttl?)', 'forget(key)', 'has(key)',
@@ -126,44 +126,44 @@ const FACADES = [
   },
   {
     name: 'Queue',
-    package: '@tyravel/core',
+    package: '@pondoknusa/core',
     guide: '/guide/queues',
     methods: ['connection(name?)', 'dispatch(job, queue?)', 'later(seconds, job, queue?)'],
   },
   {
     name: 'Events',
-    package: '@tyravel/core',
+    package: '@pondoknusa/core',
     guide: '/guide/events',
     methods: ['listen(EventClass, handler)', 'dispatch(event)', 'dispatchUntil(event, predicate)'],
   },
   {
     name: 'Log',
-    package: '@tyravel/core',
+    package: '@pondoknusa/core',
     guide: '/guide/configuration',
     methods: ['debug(message, context?)', 'info(...)', 'warn(...)', 'error(...)'],
   },
   {
     name: 'Mail',
-    package: '@tyravel/core',
+    package: '@pondoknusa/core',
     guide: '/guide/mail',
     methods: ['mailer(connection?)', 'to(address)', 'send(mailable)'],
   },
   {
     name: 'Notifications',
-    package: '@tyravel/core',
+    package: '@pondoknusa/core',
     guide: '/guide/notifications',
     methods: ['send(notifiable, notification)', 'sendNow(notifiable, notification)'],
   },
   {
     name: 'Schedule',
-    package: '@tyravel/core',
+    package: '@pondoknusa/core',
     guide: '/guide/queues',
     note: 'Resolved from the container: `app.make(Schedule)`',
     methods: ['everyMinute(cb)', 'hourly(cb)', 'daily(cb)', 'call(cb, cron)', 'getDueEvents(date?)'],
   },
   {
     name: 'Storage',
-    package: '@tyravel/core',
+    package: '@pondoknusa/core',
     guide: '/guide/storage',
     methods: [
       'put(path, contents)', 'get(path)', 'exists(path)', 'delete(path)',
@@ -172,7 +172,7 @@ const FACADES = [
   },
   {
     name: 'View',
-    package: '@tyravel/core',
+    package: '@pondoknusa/core',
     guide: '/guide/views',
     methods: [
       'render(name, props?)', 'renderFragment(name, fragment, props?)',
@@ -183,14 +183,14 @@ const FACADES = [
   },
   {
     name: 'Config',
-    package: '@tyravel/config',
+    package: '@pondoknusa/config',
     guide: '/guide/configuration',
     note: 'Use `app.make(ConfigRepository)` — not a static facade',
     methods: ['get(key, default?)', 'set(key, value)', 'has(key)', 'merge(key, defaults)', 'all()'],
   },
   {
     name: 'Broadcast',
-    package: '@tyravel/core',
+    package: '@pondoknusa/core',
     guide: '/guide/broadcasting',
     methods: [
       'connection(name?)', 'dispatch(ShouldBroadcast event)', 'channel(pattern, authorizer)',
@@ -201,7 +201,7 @@ const FACADES = [
 function ensureBuiltCli() {
   const kernelPath = join(ROOT, 'packages/cli/dist/kernel.js');
   if (!existsSync(kernelPath)) {
-    execSync('npm run build --workspace=@tyravel/cli', { cwd: ROOT, stdio: 'inherit' });
+    execSync('npm run build --workspace=@pondoknusa/cli', { cwd: ROOT, stdio: 'inherit' });
   }
 }
 
@@ -216,22 +216,22 @@ function readPackages() {
     }
 
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
-    if (!pkg.name?.startsWith('@tyravel/')) {
+    if (!pkg.name?.startsWith('@pondoknusa/')) {
       continue;
     }
 
-    const shortName = pkg.name.replace('@tyravel/', '');
+    const shortName = pkg.name.replace('@pondoknusa/', '');
     const dtsPath = join(packagesDir, dir, 'dist/index.d.ts');
     entries.push({
       name: pkg.name,
       shortName,
       slug: shortName,
       version: pkg.version ?? '0.0.0',
-      description: pkg.description ?? 'Tyravel package',
+      description: pkg.description ?? 'Pondoknusa package',
       directory: `packages/${dir}`,
       engines: pkg.engines?.node,
       dependencies: Object.keys(pkg.dependencies ?? {})
-        .filter((dep) => dep.startsWith('@tyravel/'))
+        .filter((dep) => dep.startsWith('@pondoknusa/'))
         .sort(),
       exports: existsSync(dtsPath) ? parseTypeScriptExports(readFileSync(dtsPath, 'utf8')) : { values: [], types: [] },
     });
@@ -360,7 +360,7 @@ function writePackagePages(packages) {
       '| Field | Value |',
       '|-------|-------|',
       `| Version | \`${pkg.version}\` |`,
-      `| Source | [\`${pkg.directory}\`](https://github.com/thesimonharms/tyravel/tree/main/${pkg.directory}) |`,
+      `| Source | [\`${pkg.directory}\`](https://github.com/pondoknusa/pondoknusa/tree/main/${pkg.directory}) |`,
       `| Category | ${category.title} |`,
     ];
 
@@ -371,9 +371,9 @@ function writePackagePages(packages) {
     lines.push('');
 
     if (pkg.dependencies.length > 0) {
-      lines.push('## Tyravel dependencies', '');
+      lines.push('## Pondoknusa dependencies', '');
       for (const dependency of pkg.dependencies) {
-        const slug = dependency.replace('@tyravel/', '');
+        const slug = dependency.replace('@pondoknusa/', '');
         lines.push(`- [${dependency}](/reference/generated/packages/${slug})`);
       }
       lines.push('');
@@ -495,15 +495,15 @@ function writeCliReference(commands, version) {
     generatedBanner(),
     '# CLI reference',
     '',
-    'Auto-generated from `tyravel list` via `@tyravel/cli`.',
+    'Auto-generated from `pondoknusa list` via `@pondoknusa/cli`.',
     '',
     `Monorepo version: **${version}**.`,
     '',
     '## Usage',
     '',
     '```bash',
-    'tyravel <command> [options] [arguments]',
-    'tyravel help <command>',
+    'pondoknusa <command> [options] [arguments]',
+    'pondoknusa help <command>',
     '```',
     '',
   ];
@@ -552,7 +552,7 @@ function writeFacadesReference(version) {
     '',
     'Facades provide a static entry point to services resolved from the application container.',
     '',
-    `Documented for Tyravel **${version}**. See [API stability](/guide/api-stability) for stability tiers.`,
+    `Documented for Pondoknusa **${version}**. See [API stability](/guide/api-stability) for stability tiers.`,
     '',
     '| Facade | Package | Guide |',
     '|--------|---------|-------|',
@@ -580,11 +580,11 @@ function writeFacadesReference(version) {
   lines.push(
     '## Usage',
     '',
-    'Import facades from `@tyravel/core` (or `@tyravel/config` for `Config`) after booting the application:',
+    'Import facades from `@pondoknusa/core` (or `@pondoknusa/config` for `Config`) after booting the application:',
     '',
     '```typescript',
-    "import { Route, View, DB } from '@tyravel/core';",
-    "import { env } from '@tyravel/config';",
+    "import { Route, View, DB } from '@pondoknusa/core';",
+    "import { env } from '@pondoknusa/config';",
     '```',
     '',
   );
@@ -680,7 +680,7 @@ export const guideSidebar = [
       { text: 'Platform matrix', link: '/guide/deployment/platforms' },
       { text: 'Cloudflare', link: '/guide/deployment/cloudflare' },
       { text: 'CI/CD', link: '/guide/deployment/ci-cd' },
-      { text: 'Tyravel Cloud (planned)', link: '/guide/deployment/tyravel-cloud' },
+      { text: 'Pondoknusa Cloud (planned)', link: '/guide/deployment/pondoknusa-cloud' },
       { text: 'Docker', link: '/guide/deployment/docker' },
       { text: 'Fly.io', link: '/guide/deployment/fly' },
       { text: 'Railway', link: '/guide/deployment/railway' },
@@ -773,7 +773,7 @@ async function main() {
 
   const packages = readPackages();
   const commands = await readCliCommands();
-  const version = packages.find((pkg) => pkg.name === '@tyravel/core')?.version ?? '0.0.0';
+  const version = packages.find((pkg) => pkg.name === '@pondoknusa/core')?.version ?? '0.0.0';
 
   writePackagePages(packages);
   writeCliReference(commands, version);

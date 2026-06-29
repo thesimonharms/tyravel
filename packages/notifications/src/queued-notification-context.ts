@@ -1,4 +1,4 @@
-import type { Container } from '@tyravel/container';
+import type { Container } from '@pondoknusa/container';
 import type { NotificationManager } from './notification-manager.js';
 import type { NotificationRegistry } from './notification-registry.js';
 import { SerializedNotifiable } from './serialized-notifiable.js';

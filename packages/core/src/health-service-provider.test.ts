@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ConfigRepository } from '@tyravel/config';
+import { ConfigRepository } from '@pondoknusa/config';
 import { Application, HealthServiceProvider, setRouteApplication } from './index.js';
 
 describe('HealthServiceProvider', () => {

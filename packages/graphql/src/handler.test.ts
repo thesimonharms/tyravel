@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TyravelRequest } from '@tyravel/http';
+import { PondoknusaRequest } from '@pondoknusa/http';
 import { createGraphQLHandler } from './handler.js';
 import { createOperationRegistry } from './operations.js';
 import { defineSchema } from './schema.js';
@@ -15,7 +15,7 @@ const schema = defineSchema({
 describe('createGraphQLHandler', () => {
   it('handles POST requests with inline queries', async () => {
     const handler = createGraphQLHandler({ schema });
-    const request = new TyravelRequest(
+    const request = new PondoknusaRequest(
       new Request('http://localhost/graphql', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
@@ -30,7 +30,7 @@ describe('createGraphQLHandler', () => {
 
   it('handles GET requests with query parameters', async () => {
     const handler = createGraphQLHandler({ schema });
-    const request = new TyravelRequest(
+    const request = new PondoknusaRequest(
       new Request('http://localhost/graphql?query=%7B%20hello%20%7D'),
     );
 
@@ -47,7 +47,7 @@ describe('createGraphQLHandler', () => {
       },
     ]);
     const handler = createGraphQLHandler({ schema, operations });
-    const request = new TyravelRequest(
+    const request = new PondoknusaRequest(
       new Request('http://localhost/graphql', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },

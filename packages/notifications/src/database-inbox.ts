@@ -1,6 +1,6 @@
-import type { DatabaseConnection } from '@tyravel/database';
-import { QueryBuilder } from '@tyravel/database';
-import { LengthAwarePaginator, type PaginatedResponse } from '@tyravel/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import { QueryBuilder } from '@pondoknusa/database';
+import { LengthAwarePaginator, type PaginatedResponse } from '@pondoknusa/database';
 import type { Notifiable } from './types.js';
 
 export interface DatabaseNotificationRecord {

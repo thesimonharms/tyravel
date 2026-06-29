@@ -1,6 +1,6 @@
 import type { Application } from './application.js';
-import type { Gate as AuthorizationGate } from '@tyravel/auth';
-import type { Authenticatable } from '@tyravel/auth';
+import type { Gate as AuthorizationGate } from '@pondoknusa/auth';
+import type { Authenticatable } from '@pondoknusa/auth';
 
 let gateApplication: Application | undefined;
 

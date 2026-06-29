@@ -1,5 +1,5 @@
 import { connect } from 'node:net';
-import type { RedisSentinelConfig } from '@tyravel/redis';
+import type { RedisSentinelConfig } from '@pondoknusa/redis';
 
 export async function resolveSentinelMasterUrl(config: RedisSentinelConfig): Promise<string> {
   for (const sentinel of config.sentinels) {

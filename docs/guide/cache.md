@@ -5,7 +5,7 @@ Register `CacheServiceProvider` and add `config/cache.ts`:
 ```typescript
 export default {
   default: 'array',
-  prefix: 'tyravel',
+  prefix: 'pondoknusa',
   connections: {
     array: { driver: 'array' },
     file: { driver: 'file', path: storage_path('framework/cache/data') },
@@ -21,7 +21,7 @@ export default {
 ## Using the Cache facade
 
 ```typescript
-import { Cache } from '@tyravel/core';
+import { Cache } from '@pondoknusa/core';
 
 // Store a value for 60 seconds
 await Cache.put('post:42', { title: 'Hello' }, 60);
@@ -69,7 +69,7 @@ redis: {
 Access a specific connection directly via `CacheManager`:
 
 ```typescript
-import { CacheManager } from '@tyravel/cache';
+import { CacheManager } from '@pondoknusa/cache';
 
 const manager = app.make<CacheManager>('cache');
 const store = manager.store('file');
@@ -79,7 +79,7 @@ await store.put('key', 'value', 60);
 ## Service provider registration
 
 ```typescript
-import { CacheServiceProvider } from '@tyravel/core';
+import { CacheServiceProvider } from '@pondoknusa/core';
 
 app.register(CacheServiceProvider);
 await app.boot();
@@ -88,18 +88,18 @@ await app.boot();
 Then wire the facade:
 
 ```typescript
-import { setCacheApplication } from '@tyravel/core';
+import { setCacheApplication } from '@pondoknusa/core';
 
 setCacheApplication(app);
 ```
 
 ## Response cache middleware
 
-Cache full GET responses for anonymous visitors with `createResponseCacheMiddleware()` from `@tyravel/http`:
+Cache full GET responses for anonymous visitors with `createResponseCacheMiddleware()` from `@pondoknusa/http`:
 
 ```typescript
-import { createResponseCacheMiddleware } from '@tyravel/http';
-import { Cache } from '@tyravel/core';
+import { createResponseCacheMiddleware } from '@pondoknusa/http';
+import { Cache } from '@pondoknusa/core';
 
 app.use(createResponseCacheMiddleware({
   cache: Cache.store(),
@@ -108,15 +108,15 @@ app.use(createResponseCacheMiddleware({
 }));
 ```
 
-Authenticated requests (`request.user`) bypass the cache by default. Cached entries include an `x-tyravel-cache: HIT|MISS` header for debugging.
+Authenticated requests (`request.user`) bypass the cache by default. Cached entries include an `x-pondoknusa-cache: HIT|MISS` header for debugging.
 
 ## Model attribute caching
 
 Wire the cache once, then call `rememberAttribute()` inside expensive accessors:
 
 ```typescript
-import { Model } from '@tyravel/database';
-import { Cache } from '@tyravel/core';
+import { Model } from '@pondoknusa/database';
+import { Cache } from '@pondoknusa/core';
 
 Model.setCacheResolver(() => Cache.store());
 

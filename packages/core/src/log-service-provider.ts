@@ -1,5 +1,5 @@
-import { ConfigRepository } from '@tyravel/config';
-import { LogManager, LogRepository, type LogConfig } from '@tyravel/log';
+import { ConfigRepository } from '@pondoknusa/config';
+import { LogManager, LogRepository, type LogConfig } from '@pondoknusa/log';
 import { ServiceProvider } from './service-provider.js';
 
 export class LogServiceProvider extends ServiceProvider {

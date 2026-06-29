@@ -1,11 +1,11 @@
 # 1. Install & first route
 
-Create a Tyravel app, boot the HTTP kernel, and return your first HTML page.
+Create a Pondoknusa app, boot the HTTP kernel, and return your first HTML page.
 
 ## Create the project
 
 ```bash
-npm create tyravel@latest blog
+npm create pondoknusa@latest blog
 cd blog
 npm install
 ```
@@ -26,11 +26,11 @@ See [Application structure](/guide/application-structure) for the full map.
 ## First route
 
 ```typescript
-import { Route, View } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+import { Route, View } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 
 Route.get('/', async () =>
-  Response.html(await View.render('welcome', { title: 'Hello Tyravel' })),
+  Response.html(await View.render('welcome', { title: 'Hello Pondoknusa' })),
 );
 
 Route.get('/health', async () => Response.json({ ok: true }));
@@ -39,22 +39,22 @@ Route.get('/health', async () => Response.json({ ok: true }));
 Create the view:
 
 ```bash
-tyravel make:view welcome
+pondoknusa make:view welcome
 ```
 
 ## Run the dev server
 
 ```bash
-tyravel dev
+pondoknusa dev
 ```
 
-`tyravel dev` starts the server with view, config, and route hot reload. Use `tyravel debug:watch` in a second terminal after `tyravel debug:install` to tail request timelines.
+`pondoknusa dev` starts the server with view, config, and route hot reload. Use `pondoknusa debug:watch` in a second terminal after `pondoknusa debug:install` to tail request timelines.
 
 Visit `http://127.0.0.1:3000` and `/health`.
 
 ### Verified in CI
 
-The [`examples/hello-world`](https://github.com/thesimonharms/tyravel/tree/main/examples/hello-world) reference app exercises this step. Its feature test asserts the welcome page contains `Hello Tyravel`:
+The [`examples/hello-world`](https://github.com/pondoknusa/pondoknusa/tree/main/examples/hello-world) reference app exercises this step. Its feature test asserts the welcome page contains `Hello Pondoknusa`:
 
 ```bash
 cd examples/hello-world && npm test
@@ -66,7 +66,7 @@ cd examples/hello-world && npm test
 Route.get('/posts', async () => Response.json([])).name('posts.index');
 ```
 
-List routes with `tyravel route:list` — filters and JSON output are documented in the [routing guide](/guide/routing).
+List routes with `pondoknusa route:list` — filters and JSON output are documented in the [routing guide](/guide/routing).
 
 ## Next
 

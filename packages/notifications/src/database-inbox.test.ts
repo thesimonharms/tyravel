@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { SqliteConnection } from '@tyravel/database';
+import { SqliteConnection } from '@pondoknusa/database';
 import { DatabaseNotificationInbox } from './database-inbox.js';
 import type { Notifiable } from './types.js';
 

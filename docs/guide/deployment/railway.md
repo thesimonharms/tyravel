@@ -1,12 +1,12 @@
 # Deploy to Railway
 
-Deploy a Tyravel app to [Railway](https://railway.app) using a Dockerfile or Nixpacks with managed Postgres.
+Deploy a Pondoknusa app to [Railway](https://railway.app) using a Dockerfile or Nixpacks with managed Postgres.
 
 ## Prerequisites
 
 - Railway account and CLI (optional)
-- Tyravel app with Postgres: `tyravel new my-app --db=postgres`
-- `@tyravel/database-pg` installed
+- Pondoknusa app with Postgres: `pondoknusa new my-app --db=postgres`
+- `@pondoknusa/database-pg` installed
 
 ## Option A — Dockerfile (recommended)
 
@@ -25,8 +25,8 @@ Set in the Railway dashboard (**Variables** tab):
 | `APP_ENV` | `production` |
 | `APP_DEBUG` | `false` |
 | `APP_URL` | `https://${{RAILWAY_PUBLIC_DOMAIN}}` |
-| `TYRAVEL_HOST` | `0.0.0.0` |
-| `TYRAVEL_PORT` | `${{PORT}}` |
+| `PONDOKNUSA_HOST` | `0.0.0.0` |
+| `PONDOKNUSA_PORT` | `${{PORT}}` |
 | `DB_CONNECTION` | `postgres` |
 | `DB_HOST` | `${{Postgres.PGHOST}}` |
 | `DB_PORT` | `${{Postgres.PGPORT}}` |
@@ -43,9 +43,9 @@ Add a **Postgres** plugin; Railway exposes `PG*` variables you reference above.
 In **Settings → Deploy → Pre-deploy command**:
 
 ```bash
-npx tyravel migrate \
-  && npx tyravel route:cache \
-  && npx tyravel view:cache
+npx pondoknusa migrate \
+  && npx pondoknusa route:cache \
+  && npx pondoknusa view:cache
 ```
 
 ### Start command
@@ -64,7 +64,7 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-preDeployCommand = "npx tyravel migrate"
+preDeployCommand = "npx pondoknusa migrate"
 startCommand = "./deploy/docker-entrypoint.sh"
 healthcheckPath = "/health/ready"
 healthcheckTimeout = 30
@@ -78,7 +78,7 @@ restartPolicyType = "ON_FAILURE"
 3. **Start command:**
 
 ```bash
-npx tyravel queue:work
+npx pondoknusa queue:work
 ```
 
 4. Share the same Postgres variables; disable public networking on the worker.
@@ -88,7 +88,7 @@ npx tyravel queue:work
 1. Add Railway **Redis** plugin (or Upstash Redis)
 2. Set `REDIS_URL` / `REDIS_HOST` variables
 3. Scaffold with `--redis` and `BROADCAST_CONNECTION=websocket`
-4. Add `@tyravel/broadcasting-websocket` provider in `src/main.ts`
+4. Add `@pondoknusa/broadcasting-websocket` provider in `src/main.ts`
 
 ## Custom domain
 
@@ -100,7 +100,7 @@ npx tyravel queue:work
 
 ```bash
 railway link
-railway run npx tyravel start
+railway run npx pondoknusa start
 ```
 
 Uses linked service variables against your local process.
@@ -109,7 +109,7 @@ Uses linked service variables against your local process.
 
 | Symptom | Fix |
 |---------|-----|
-| Port binding error | Set `TYRAVEL_PORT` to Railway's `PORT` variable — Railway injects `PORT` at runtime |
+| Port binding error | Set `PONDOKNUSA_PORT` to Railway's `PORT` variable — Railway injects `PORT` at runtime |
 | View cache miss | Add `view:cache` to pre-deploy command |
 | DB connection refused | Confirm Postgres plugin is linked to the same service |
 | Worker not processing | Deploy worker service; check `jobs` table |

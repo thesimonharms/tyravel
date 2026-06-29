@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { DatabaseConnection } from '@tyravel/database';
-import { SchemaBuilder, SqliteConnection } from '@tyravel/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import { SchemaBuilder, SqliteConnection } from '@pondoknusa/database';
 import { DatabaseQueue } from './database-queue.js';
 import { FailedJobRepository } from './failed-job-repository.js';
 import { Job } from './job.js';
@@ -19,7 +19,7 @@ class ExplodingJob extends Job<{ message: string }> {
 function asDatabaseManager(connection: DatabaseConnection) {
   return {
     connection: () => connection,
-  } as import('@tyravel/database').DatabaseManager;
+  } as import('@pondoknusa/database').DatabaseManager;
 }
 
 async function createJobsTable(connection: DatabaseConnection) {

@@ -2,7 +2,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { ConfigRepository } from '@tyravel/config';
+import { ConfigRepository } from '@pondoknusa/config';
 import { Application } from './application.js';
 import { ConfigServiceProvider } from './config-service-provider.js';
 import { ServiceProvider } from './service-provider.js';
@@ -23,8 +23,8 @@ describe('ServiceProvider.mergeConfigFrom', () => {
   });
 
   it('merges package defaults with app config overrides', async () => {
-    root = mkdtempSync(join(tmpdir(), 'tyravel-consumer-'));
-    packageConfig = mkdtempSync(join(tmpdir(), 'tyravel-lontar-config-'));
+    root = mkdtempSync(join(tmpdir(), 'pondoknusa-consumer-'));
+    packageConfig = mkdtempSync(join(tmpdir(), 'pondoknusa-lontar-config-'));
 
     mkdirSync(join(root, 'config'), { recursive: true });
     writeFileSync(
@@ -60,8 +60,8 @@ describe('ServiceProvider.mergeConfigFrom', () => {
   });
 
   it('uses package defaults when the app has no config file', async () => {
-    root = mkdtempSync(join(tmpdir(), 'tyravel-consumer-'));
-    packageConfig = mkdtempSync(join(tmpdir(), 'tyravel-lontar-config-'));
+    root = mkdtempSync(join(tmpdir(), 'pondoknusa-consumer-'));
+    packageConfig = mkdtempSync(join(tmpdir(), 'pondoknusa-lontar-config-'));
     mkdirSync(join(root, 'config'), { recursive: true });
 
     writeFileSync(
@@ -90,7 +90,7 @@ describe('ServiceProvider.mergeConfigFrom', () => {
   });
 
   it('supports app.mergeConfig directly', async () => {
-    root = mkdtempSync(join(tmpdir(), 'tyravel-consumer-'));
+    root = mkdtempSync(join(tmpdir(), 'pondoknusa-consumer-'));
     mkdirSync(join(root, 'config'), { recursive: true });
     writeFileSync(
       join(root, 'config', 'lontar.js'),

@@ -1,4 +1,4 @@
-import type { SessionContract, TyravelRequest } from '@tyravel/http';
+import type { SessionContract, PondoknusaRequest } from '@pondoknusa/http';
 
 export function readUserLocale(user: unknown): string | undefined {
   if (!user || typeof user !== 'object' || !('locale' in user)) {
@@ -24,7 +24,7 @@ export interface UpdateLocalePreferenceOptions {
 }
 
 export async function updateLocalePreference(
-  request: TyravelRequest,
+  request: PondoknusaRequest,
   locale: string,
   options: UpdateLocalePreferenceOptions,
 ): Promise<boolean> {

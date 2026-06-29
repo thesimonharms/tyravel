@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { TyravelRequest } from './request.js';
+import { PondoknusaRequest } from './request.js';
 import { createCorsMiddleware } from './cors.js';
 
 describe('createCorsMiddleware', () => {
   it('adds cors headers to responses', async () => {
     const middleware = createCorsMiddleware({ origins: '*' });
-    const request = new TyravelRequest(
+    const request = new PondoknusaRequest(
       new Request('http://localhost/users', {
         headers: { origin: 'http://localhost:3000' },
       }),
@@ -21,7 +21,7 @@ describe('createCorsMiddleware', () => {
       origins: ['http://localhost:3000'],
       credentials: true,
     });
-    const request = new TyravelRequest(
+    const request = new PondoknusaRequest(
       new Request('http://localhost/users', {
         method: 'OPTIONS',
         headers: { origin: 'http://localhost:3000' },

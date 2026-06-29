@@ -3,10 +3,10 @@
 ## Create a new application
 
 ```bash
-npx tyravel new my-app
+npx pondoknusa new my-app
 cd my-app
 npm install
-tyravel serve
+pondoknusa serve
 ```
 
 Visit `http://127.0.0.1:3000`.
@@ -16,11 +16,11 @@ Visit `http://127.0.0.1:3000`.
 For JSON APIs without views, SSR, or client assets:
 
 ```bash
-npm create tyravel@latest my-api -- --headless
+npm create pondoknusa@latest my-api -- --headless
 cd my-api
 npm install
-tyravel migrate
-tyravel dev
+pondoknusa migrate
+pondoknusa dev
 curl http://127.0.0.1:3000/api/v1/health
 ```
 
@@ -28,7 +28,7 @@ See the [Headless API guide](./headless) and `examples/headless-api` in the repo
 
 ## Run from the monorepo
 
-If you are developing Tyravel itself, build the workspace first:
+If you are developing Pondoknusa itself, build the workspace first:
 
 ```bash
 npm install
@@ -40,14 +40,14 @@ Then try the reference apps:
 ```bash
 cd examples/hello-world
 npm install
-tyravel serve
+pondoknusa serve
 ```
 
 ```bash
 cd examples/headless-api
 npm install
-tyravel migrate
-tyravel dev
+pondoknusa migrate
+pondoknusa dev
 ```
 
 ## Application entry point
@@ -55,7 +55,7 @@ tyravel dev
 Every app boots through `src/main.ts`:
 
 ```typescript
-import { Application, ConfigServiceProvider, Route, serve } from '@tyravel/core';
+import { Application, ConfigServiceProvider, Route, serve } from '@pondoknusa/core';
 import { AppServiceProvider } from './providers/app-service-provider.js';
 import './routes/web.js';
 
@@ -72,12 +72,12 @@ Routes are registered in `src/routes/web.ts` using the `Route` facade after `set
 ## CLI essentials
 
 ```bash
-tyravel list                    # Available commands
-tyravel serve                   # Dev server (reads tyravel.json)
-tyravel migrate                 # Run migrations
-tyravel make:controller User    # Generate a controller
-tyravel make:model Post         # Generate a model
-tyravel auth:install            # Scaffold auth (User, routes, migrations)
+pondoknusa list                    # Available commands
+pondoknusa serve                   # Dev server (reads pondoknusa.json)
+pondoknusa migrate                 # Run migrations
+pondoknusa make:controller User    # Generate a controller
+pondoknusa make:model Post         # Generate a model
+pondoknusa auth:install            # Scaffold auth (User, routes, migrations)
 ```
 
 ## Deploy to production
@@ -89,10 +89,10 @@ When you are ready to ship:
 3. Automate releases with [CI/CD](./deployment/ci-cd)
 
 ```bash
-tyravel deploy:check   # doctor + route/view validation before traffic
+pondoknusa deploy:check   # doctor + route/view validation before traffic
 ```
 
-Managed **Tyravel Cloud** (git-push deploy) is planned — see [Tyravel Cloud](./deployment/tyravel-cloud). Until then, copy manifests from `examples/hello-world/deploy/`.
+Managed **Pondoknusa Cloud** (git-push deploy) is planned — see [Pondoknusa Cloud](./deployment/pondoknusa-cloud). Until then, copy manifests from `examples/hello-world/deploy/`.
 
 ## Deploy to production
 
@@ -104,13 +104,13 @@ Managed **Tyravel Cloud** (git-push deploy) is planned — see [Tyravel Cloud](.
 | Automate releases | [CI/CD](/guide/deployment/ci-cd) |
 
 ```bash
-tyravel migrate
-tyravel config:cache && tyravel route:cache && tyravel view:cache
-tyravel deploy:check
-tyravel start
+pondoknusa migrate
+pondoknusa config:cache && pondoknusa route:cache && pondoknusa view:cache
+pondoknusa deploy:check
+pondoknusa start
 ```
 
-Full checklist: [Deployment](/guide/deployment). Managed Tyravel hosting is planned as [Tyravel Cloud](/guide/deployment/tyravel-cloud).
+Full checklist: [Deployment](/guide/deployment). Managed Pondoknusa hosting is planned as [Pondoknusa Cloud](/guide/deployment/pondoknusa-cloud).
 
 ## Next steps
 

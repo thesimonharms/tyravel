@@ -1,13 +1,13 @@
-import type { TyravelRequest } from '@tyravel/http';
-import { Response } from '@tyravel/http';
-import { Auth, Password } from '@tyravel/core';
-import type { Application } from '@tyravel/core';
-import { OAuthManager } from '@tyravel/auth';
+import type { PondoknusaRequest } from '@pondoknusa/http';
+import { Response } from '@pondoknusa/http';
+import { Auth, Password } from '@pondoknusa/core';
+import type { Application } from '@pondoknusa/core';
+import { OAuthManager } from '@pondoknusa/auth';
 
 export class AuthController {
   constructor(private readonly app: Application) {}
 
-  async login(request: TyravelRequest) {
+  async login(request: PondoknusaRequest) {
     const body = await request.json<{ email?: string; password?: string }>();
     await Auth.attempt({
       email: body.email ?? '',
@@ -21,18 +21,18 @@ export class AuthController {
     });
   }
 
-  async logout(_request: TyravelRequest) {
+  async logout(_request: PondoknusaRequest) {
     await Auth.logout();
     return Response.json({ message: 'Logged out.' });
   }
 
-  me(request: TyravelRequest) {
+  me(request: PondoknusaRequest) {
     return Response.json({
       user: request.user,
     });
   }
 
-  async forgotPassword(request: TyravelRequest) {
+  async forgotPassword(request: PondoknusaRequest) {
     const body = await request.json<{ email?: string }>();
     await Password.sendResetLink(body.email ?? '');
     return Response.json({
@@ -40,7 +40,7 @@ export class AuthController {
     });
   }
 
-  async resetPassword(request: TyravelRequest) {
+  async resetPassword(request: PondoknusaRequest) {
     const body = await request.json<{
       email?: string;
       token?: string;
@@ -54,7 +54,7 @@ export class AuthController {
     return Response.json({ message: 'Password has been reset.' });
   }
 
-  async createToken(request: TyravelRequest) {
+  async createToken(request: PondoknusaRequest) {
     const body = await request.json<{
       name?: string;
       abilities?: string[];
@@ -75,7 +75,7 @@ export class AuthController {
     });
   }
 
-  async revokeToken(request: TyravelRequest) {
+  async revokeToken(request: PondoknusaRequest) {
     const tokenId = Number(request.param('id'));
     const revoked = await Auth.revokeToken(tokenId);
     if (!revoked) {
@@ -84,7 +84,7 @@ export class AuthController {
     return Response.json({ message: 'Token revoked.' });
   }
 
-  oauthRedirect(request: TyravelRequest) {
+  oauthRedirect(request: PondoknusaRequest) {
     const provider = request.param('provider');
     const oauth = this.app.make(OAuthManager);
     const state = oauth.createState();
@@ -102,7 +102,7 @@ export class AuthController {
     return Response.redirect(url, 302);
   }
 
-  async oauthCallback(request: TyravelRequest) {
+  async oauthCallback(request: PondoknusaRequest) {
     const provider = request.param('provider');
     const oauth = this.app.make(OAuthManager);
     const url = new URL(request.url);

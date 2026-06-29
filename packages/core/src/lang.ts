@@ -6,7 +6,7 @@ import {
   type FormatDateOptions,
   type FormatNumberOptions,
   type Translator,
-} from '@tyravel/locale';
+} from '@pondoknusa/locale';
 import type { Application } from './application.js';
 
 let langApplication: Application | undefined;

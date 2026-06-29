@@ -1,4 +1,4 @@
-import type { CacheStore } from '@tyravel/cache';
+import type { CacheStore } from '@pondoknusa/cache';
 import { UpstashClient } from './upstash-client.js';
 
 export interface UpstashStoreConfig {

@@ -1,15 +1,15 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { loadConfig } from '@tyravel/config';
-import { OAuthServer, OAuthServerServiceProvider } from '@tyravel/auth-oauth';
+import { loadConfig } from '@pondoknusa/config';
+import { OAuthServer, OAuthServerServiceProvider } from '@pondoknusa/auth-oauth';
 import {
   Application,
   AuthServiceProvider,
   ConfigServiceProvider,
   DatabaseServiceProvider,
   ServiceProvider,
-} from '@tyravel/core';
-import type { DatabaseConfig } from '@tyravel/database';
+} from '@pondoknusa/core';
+import type { DatabaseConfig } from '@pondoknusa/database';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { optionFlag, optionString, parseOptions, positionalArgs } from '../utils.js';
@@ -18,7 +18,7 @@ export class OAuthClientCreateCommand extends Command {
   override readonly name = 'oauth:client:create';
   override readonly description = 'Register a new OAuth2 client';
   override readonly usage =
-    'tyravel oauth:client:create <name> [--redirect=uri] [--public] [--grants=authorization_code,refresh_token]';
+    'pondoknusa oauth:client:create <name> [--redirect=uri] [--public] [--grants=authorization_code,refresh_token]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);

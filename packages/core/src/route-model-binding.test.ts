@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Model } from '@tyravel/database';
-import { Response } from '@tyravel/http';
-import { SqliteConnection } from '@tyravel/database';
+import { Model } from '@pondoknusa/database';
+import { Response } from '@pondoknusa/http';
+import { SqliteConnection } from '@pondoknusa/database';
 import { Application, HttpKernel, Route, setRouteApplication } from './index.js';
 
 type PostRow = { id: number; title: string; [key: string]: unknown };

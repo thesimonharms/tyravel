@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pat
 export class MakeRagResourceCommand extends Command {
   override readonly name = 'make:rag-resource';
   override readonly description = 'Scaffold a RAG model, migration, and ingest job';
-  override readonly usage = 'tyravel make:rag-resource <Name>';
+  override readonly usage = 'pondoknusa make:rag-resource <Name>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -14,7 +14,7 @@ export class MakeRagResourceCommand extends Command {
 
     if (!rawName) {
       console.error('Resource name is required.');
-      console.error('Usage: tyravel make:rag-resource <Name>');
+      console.error('Usage: pondoknusa make:rag-resource <Name>');
       return 1;
     }
 

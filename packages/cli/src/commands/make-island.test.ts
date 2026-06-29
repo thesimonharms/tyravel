@@ -20,14 +20,14 @@ describe('MakeIslandCommand', () => {
   });
 
   it('scaffolds island view and client mount files', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-make-island-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-make-island-'));
     mkdirSync(join(tempDir, 'src'), { recursive: true });
     mkdirSync(join(tempDir, 'resources/client'), { recursive: true });
-    writeFileSync(join(tempDir, 'tyravel.json'), JSON.stringify({ name: 'app', entry: 'src/main.ts' }));
+    writeFileSync(join(tempDir, 'pondoknusa.json'), JSON.stringify({ name: 'app', entry: 'src/main.ts' }));
     writeFileSync(join(tempDir, 'src/main.ts'), 'export {};\n');
     writeFileSync(
       join(tempDir, 'resources/client/app.ts'),
-      "import { hydrate } from '@tyravel/ssr';\n\nhydrate();\n",
+      "import { hydrate } from '@pondoknusa/ssr';\n\nhydrate();\n",
     );
 
     previousCwd = process.cwd();

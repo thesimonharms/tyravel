@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 
 describe('benchmark-compare', () => {
   it('reports regressions above the threshold', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'tyravel-bench-compare-'));
+    const dir = mkdtempSync(join(tmpdir(), 'pondoknusa-bench-compare-'));
     const currentPath = join(dir, 'current.json');
     const baselinePath = join(dir, 'baseline.json');
 

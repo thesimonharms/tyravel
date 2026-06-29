@@ -1,11 +1,11 @@
-import { Route } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+import { Route } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 
 Route.get('/', () =>
   Response.json({
     mode: 'headless',
-    message: 'Tyravel headless API example',
-    docs: 'https://tyravel.dev/guide/headless',
+    message: 'Pondoknusa headless API example',
+    docs: 'https://pondoknusa.dev/guide/headless',
     endpoints: {
       health: '/api/v1/health',
       login: 'POST /api/v1/login',

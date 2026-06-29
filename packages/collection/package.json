@@ -1,7 +1,7 @@
 {
-  "name": "@tyravel/collection",
+  "name": "@pondoknusa/collection",
   "version": "1.0.3",
-  "description": "Fluent, typed collection pipeline for Tyravel",
+  "description": "Fluent, typed collection pipeline for Pondoknusa",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -23,7 +23,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/collection"
   },
   "publishConfig": {

@@ -1,15 +1,15 @@
 # Broadcasting & realtime
 
-Push server events to browser clients over Tyravel's native WebSocket hub (since **v0.13.0**).
+Push server events to browser clients over Pondoknusa's native WebSocket hub (since **v0.13.0**).
 
 ## Architecture
 
 ```
-Controller / Event  →  Broadcast facade  →  WebSocket hub (/tyravel/ws)
+Controller / Event  →  Broadcast facade  →  WebSocket hub (/pondoknusa/ws)
                               ↓
                          Redis pub/sub (multi-process fan-out)
                               ↓
-                         @tyravel/echo (browser WebSocket client)
+                         @pondoknusa/echo (browser WebSocket client)
 ```
 
 No Socket.io or Pusher — the browser uses the native `WebSocket` API.
@@ -19,10 +19,10 @@ No Socket.io or Pusher — the browser uses the native `WebSocket` API.
 ### 1. Scaffold with Redis
 
 ```bash
-tyravel new my-app --redis
+pondoknusa new my-app --redis
 ```
 
-Or add `@tyravel/broadcasting-websocket` and `@tyravel/redis-node` manually.
+Or add `@pondoknusa/broadcasting-websocket` and `@pondoknusa/redis-node` manually.
 
 ### 2. Config
 
@@ -34,8 +34,8 @@ export default {
     websocket: {
       driver: 'websocket',
       redisConnection: env('REDIS_CONNECTION', 'default'),
-      channel: env('BROADCAST_REDIS_CHANNEL', 'tyravel:broadcast'),
-      path: '/tyravel/ws',
+      channel: env('BROADCAST_REDIS_CHANNEL', 'pondoknusa:broadcast'),
+      path: '/pondoknusa/ws',
     },
   },
 };
@@ -44,7 +44,7 @@ export default {
 ### 3. Provider
 
 ```typescript
-import { WebSocketBroadcastServiceProvider } from '@tyravel/broadcasting-websocket';
+import { WebSocketBroadcastServiceProvider } from '@pondoknusa/broadcasting-websocket';
 ```
 
 ### 4. Channel authorization
@@ -52,7 +52,7 @@ import { WebSocketBroadcastServiceProvider } from '@tyravel/broadcasting-websock
 `routes/channels.ts` (scaffolded since v0.16; included in 1.x scaffolds):
 
 ```typescript
-import { Broadcast } from '@tyravel/core';
+import { Broadcast } from '@pondoknusa/core';
 
 Broadcast.channel('orders', () => true);
 
@@ -66,17 +66,17 @@ Private channels use the `private-` prefix to match Echo client subscriptions.
 ## Broadcasting events
 
 ```typescript
-import { Broadcast } from '@tyravel/core';
+import { Broadcast } from '@pondoknusa/core';
 
 await Broadcast.to('orders').emit('OrderShipped', { id: order.id });
 ```
 
 Queue broadcast jobs when `config/broadcasting.ts` sets `queue` / `queueConnection`.
 
-## Client (`@tyravel/echo`)
+## Client (`@pondoknusa/echo`)
 
 ```typescript
-import { Echo, readEchoConfigFromDocument } from '@tyravel/echo';
+import { Echo, readEchoConfigFromDocument } from '@pondoknusa/echo';
 
 const config = readEchoConfigFromDocument();
 if (config) {
@@ -91,7 +91,7 @@ if (config) {
 
 | Concern | Recommendation |
 |---------|----------------|
-| **Path** | Reverse-proxy `/tyravel/ws` with WebSocket upgrade headers |
+| **Path** | Reverse-proxy `/pondoknusa/ws` with WebSocket upgrade headers |
 | **Redis** | Required when running multiple app processes |
 | **TLS** | Terminate WSS at the proxy; Echo uses `wss://` from `APP_URL` |
 | **Auth** | `/broadcasting/auth` issues channel tokens — keep behind session middleware |
@@ -99,7 +99,7 @@ if (config) {
 
 ### Redis fan-out
 
-Each app process runs a local WebSocket hub. When one process broadcasts, it publishes to the Redis channel configured in `config/broadcasting.ts` (`BROADCAST_REDIS_CHANNEL`, default `tyravel:broadcast`). Other processes subscribe and push the event to their connected clients.
+Each app process runs a local WebSocket hub. When one process broadcasts, it publishes to the Redis channel configured in `config/broadcasting.ts` (`BROADCAST_REDIS_CHANNEL`, default `pondoknusa:broadcast`). Other processes subscribe and push the event to their connected clients.
 
 Single-process deploys work for development. Production with horizontal scale **requires** Redis — see [Deploy with Docker](/guide/deployment/docker) for adding a `redis` service to compose.
 
@@ -109,13 +109,13 @@ Terminate TLS at the proxy and forward upgrade headers for both the WebSocket pa
 
 | Path | Purpose |
 |------|---------|
-| `/tyravel/ws` | WebSocket upgrade |
+| `/pondoknusa/ws` | WebSocket upgrade |
 | `/broadcasting/auth` | Private/presence channel authorization (session + CSRF) |
 
 #### Nginx
 
 ```nginx
-location /tyravel/ws {
+location /pondoknusa/ws {
   proxy_pass http://127.0.0.1:3000;
   proxy_http_version 1.1;
   proxy_set_header Upgrade $http_upgrade;
@@ -134,7 +134,7 @@ location /broadcasting/auth {
 #### Caddy
 
 ```caddyfile
-reverse_proxy /tyravel/ws 127.0.0.1:3000 {
+reverse_proxy /pondoknusa/ws 127.0.0.1:3000 {
   header_up Host {host}
   transport http {
     versions h2c 1.1
@@ -152,7 +152,7 @@ Both platforms pass WebSocket upgrades on the same HTTP port as your app. Set `B
 const echo = new Echo({
   broadcaster: 'websocket',
   host: window.location.host,
-  path: '/tyravel/ws',
+  path: '/pondoknusa/ws',
   forceTLS: window.location.protocol === 'https:',
 });
 ```
@@ -162,7 +162,7 @@ const echo = new Echo({
 ## Local development
 
 ```bash
-tyravel serve
+pondoknusa serve
 ```
 
 Single-process mode works without Redis; add Redis when testing multi-worker fan-out.
@@ -171,4 +171,4 @@ Single-process mode works without Redis; add Redis when testing multi-worker fan
 
 - [Cookbook: Realtime UI with Echo](/cookbook/realtime-echo)
 - [Tutorial 4: Realtime & deploy](/tutorials/04-realtime-and-deploy)
-- [0.13.0 migration](https://github.com/thesimonharms/tyravel/blob/main/CHANGELOG.md#0130---2026-06-25)
+- [0.13.0 migration](https://github.com/pondoknusa/pondoknusa/blob/main/CHANGELOG.md#0130---2026-06-25)

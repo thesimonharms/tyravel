@@ -1,4 +1,4 @@
-import type { ModelStatic } from '@tyravel/database';
+import type { ModelStatic } from '@pondoknusa/database';
 import { MemoryVectorSearchDriver } from './memory-search-driver.js';
 import type { Embedding, VectorSearchOptions } from './types.js';
 

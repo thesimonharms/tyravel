@@ -1,5 +1,5 @@
-import type { StorageConfig } from '@tyravel/storage';
-import { env } from '@tyravel/config';
+import type { StorageConfig } from '@pondoknusa/storage';
+import { env } from '@pondoknusa/config';
 
 export default {
   default: env('FILESYSTEM_DISK', 'local'),

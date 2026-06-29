@@ -1,4 +1,4 @@
-import type { Embedding, VectorMetric } from '@tyravel/vector';
+import type { Embedding, VectorMetric } from '@pondoknusa/vector';
 
 const METRIC_OPERATORS: Record<VectorMetric, string> = {
   cosine: '<=>',

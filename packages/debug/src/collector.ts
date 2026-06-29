@@ -1,4 +1,4 @@
-import type { QueryProfileEntry } from '@tyravel/database';
+import type { QueryProfileEntry } from '@pondoknusa/database';
 import { analyzeQueries } from './query-analysis.js';
 import type { DebugRequestContext } from './context.js';
 import { buildReplaySnippets } from './replay.js';

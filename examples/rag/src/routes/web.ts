@@ -1,6 +1,6 @@
 import { join } from 'node:path';
-import { Route } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+import { Route } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 import {
   ConversationMemory,
   Rag,
@@ -10,7 +10,7 @@ import {
   renderGroundedPrompt,
   streamRagResponse,
   type RerankFn,
-} from '@tyravel/rag';
+} from '@pondoknusa/rag';
 import { Document } from '../models/document.js';
 import { ConversationMessage } from '../models/conversation-message.js';
 import { embed } from '../embed.js';

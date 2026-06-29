@@ -19,7 +19,7 @@ export function headlessProjectConfig(name: string): string {
 }
 
 export function headlessAppConfig(name: string): string {
-  return `import { env, s } from '@tyravel/config';
+  return `import { env, s } from '@pondoknusa/config';
 
 export const schema = s.object({
   name: s.string({ required: true, minLength: 1 }),
@@ -41,7 +41,7 @@ export default {
 }
 
 export function headlessHttpConfig(): string {
-  return `import type { HttpConfig } from '@tyravel/core';
+  return `import type { HttpConfig } from '@pondoknusa/core';
 
 export default {
   trustedProxies: ['127.0.0.1', '::1'],
@@ -61,14 +61,14 @@ export default {
 }
 
 export function headlessApiRoutes(): string {
-  return `import { Route } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+  return `import { Route } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 
 Route.get('/', () =>
   Response.json({
     mode: 'headless',
-    message: 'Tyravel API — routes live under /api/v1',
-    docs: 'https://tyravel.dev/guide/headless',
+    message: 'Pondoknusa API — routes live under /api/v1',
+    docs: 'https://pondoknusa.dev/guide/headless',
   }),
 );
 
@@ -82,33 +82,33 @@ Route.prefix('api/v1').middleware('throttle:api').group((routes) => {
 
 export function headlessPackageJson(name: string, options: NewProjectOptions): string {
   const dependencies: Record<string, string> = {
-    '@tyravel/cache': CORE_VERSION,
-    '@tyravel/collection': CORE_VERSION,
-    '@tyravel/config': CORE_VERSION,
-    '@tyravel/core': CORE_VERSION,
-    '@tyravel/database': CORE_VERSION,
-    '@tyravel/events': CORE_VERSION,
-    '@tyravel/http': CORE_VERSION,
-    '@tyravel/log': CORE_VERSION,
-    '@tyravel/mail': CORE_VERSION,
-    '@tyravel/notifications': CORE_VERSION,
-    '@tyravel/queue': CORE_VERSION,
-    '@tyravel/support': CORE_VERSION,
-    '@tyravel/validation': CORE_VERSION,
+    '@pondoknusa/cache': CORE_VERSION,
+    '@pondoknusa/collection': CORE_VERSION,
+    '@pondoknusa/config': CORE_VERSION,
+    '@pondoknusa/core': CORE_VERSION,
+    '@pondoknusa/database': CORE_VERSION,
+    '@pondoknusa/events': CORE_VERSION,
+    '@pondoknusa/http': CORE_VERSION,
+    '@pondoknusa/log': CORE_VERSION,
+    '@pondoknusa/mail': CORE_VERSION,
+    '@pondoknusa/notifications': CORE_VERSION,
+    '@pondoknusa/queue': CORE_VERSION,
+    '@pondoknusa/support': CORE_VERSION,
+    '@pondoknusa/validation': CORE_VERSION,
   };
 
   if (options.auth !== false) {
-    dependencies['@tyravel/auth'] = CORE_VERSION;
+    dependencies['@pondoknusa/auth'] = CORE_VERSION;
   }
 
   if (options.database === 'mysql') {
-    dependencies['@tyravel/database-mysql'] = CORE_VERSION;
+    dependencies['@pondoknusa/database-mysql'] = CORE_VERSION;
   }
   if (options.database === 'postgres') {
-    dependencies['@tyravel/database-pg'] = CORE_VERSION;
+    dependencies['@pondoknusa/database-pg'] = CORE_VERSION;
   }
   if (options.redis) {
-    dependencies['@tyravel/redis-node'] = CORE_VERSION;
+    dependencies['@pondoknusa/redis-node'] = CORE_VERSION;
   }
 
   return JSON.stringify(
@@ -117,17 +117,17 @@ export function headlessPackageJson(name: string, options: NewProjectOptions): s
       private: true,
       type: 'module',
       scripts: {
-        dev: 'tyravel dev',
-        start: 'tyravel start',
-        'dev:worker': 'tyravel queue:work',
-        test: 'tyravel test',
+        dev: 'pondoknusa dev',
+        start: 'pondoknusa start',
+        'dev:worker': 'pondoknusa queue:work',
+        test: 'pondoknusa test',
       },
       dependencies: {
         ...dependencies,
-        '@tyravel/cli': CORE_VERSION,
+        '@pondoknusa/cli': CORE_VERSION,
       },
       devDependencies: {
-        '@tyravel/testing': CORE_VERSION,
+        '@pondoknusa/testing': CORE_VERSION,
         vitest: '^3.2.4',
       },
     },
@@ -142,18 +142,18 @@ export function headlessMainEntry(options: NewProjectOptions): string {
 
   if (options.database === 'mysql') {
     driverImports.push(
-      "import { MysqlDatabaseServiceProvider } from '@tyravel/database-mysql';",
+      "import { MysqlDatabaseServiceProvider } from '@pondoknusa/database-mysql';",
     );
     driverProviders.push('app.register(MysqlDatabaseServiceProvider);');
   } else if (options.database === 'postgres') {
     driverImports.push(
-      "import { PgDatabaseServiceProvider } from '@tyravel/database-pg';",
+      "import { PgDatabaseServiceProvider } from '@pondoknusa/database-pg';",
     );
     driverProviders.push('app.register(PgDatabaseServiceProvider);');
   }
 
   if (options.redis) {
-    driverImports.push("import { NodeRedisServiceProvider } from '@tyravel/redis-node';");
+    driverImports.push("import { NodeRedisServiceProvider } from '@pondoknusa/redis-node';");
     driverProviders.push('app.register(NodeRedisServiceProvider);');
   }
 
@@ -200,7 +200,7 @@ export function headlessMainEntry(options: NewProjectOptions): string {
 
   return `${driverImports.length > 0 ? `${driverImports.join('\n')}\n` : ''}import {
   ${coreImports.join(',\n  ')},
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 import { AppServiceProvider } from './providers/app-service-provider.js';
 import './routes/api.js';
 
@@ -226,8 +226,8 @@ await serve(kernel);
 }
 
 export function headlessAuthConfig(): string {
-  return `import type { AuthConfig } from '@tyravel/auth';
-import { env } from '@tyravel/config';
+  return `import type { AuthConfig } from '@pondoknusa/auth';
+import { env } from '@pondoknusa/config';
 import { User } from '../src/models/User.js';
 
 export default {
@@ -252,7 +252,7 @@ export default {
   },
   session: {
     driver: 'database',
-    cookie: 'tyravel_session',
+    cookie: 'pondoknusa_session',
     lifetimeMinutes: 120,
     secure: env('SESSION_SECURE', 'false') === 'true',
     table: 'sessions',
@@ -289,7 +289,7 @@ export default {
 }
 
 export function headlessAuthRoutes(): string {
-  return `import { Route } from '@tyravel/core';
+  return `import { Route } from '@pondoknusa/core';
 import { AuthController } from '../controllers/AuthController.js';
 
 Route.prefix('api/v1').middleware('throttle:api').group((routes) => {
@@ -312,18 +312,18 @@ export function headlessMainEntryWithAuth(options: NewProjectOptions): string {
 
   if (options.database === 'mysql') {
     driverImports.push(
-      "import { MysqlDatabaseServiceProvider } from '@tyravel/database-mysql';",
+      "import { MysqlDatabaseServiceProvider } from '@pondoknusa/database-mysql';",
     );
     driverProviders.push('app.register(MysqlDatabaseServiceProvider);');
   } else if (options.database === 'postgres') {
     driverImports.push(
-      "import { PgDatabaseServiceProvider } from '@tyravel/database-pg';",
+      "import { PgDatabaseServiceProvider } from '@pondoknusa/database-pg';",
     );
     driverProviders.push('app.register(PgDatabaseServiceProvider);');
   }
 
   if (options.redis) {
-    driverImports.push("import { NodeRedisServiceProvider } from '@tyravel/redis-node';");
+    driverImports.push("import { NodeRedisServiceProvider } from '@pondoknusa/redis-node';");
     driverProviders.push('app.register(NodeRedisServiceProvider);');
   }
 
@@ -375,7 +375,7 @@ export function headlessMainEntryWithAuth(options: NewProjectOptions): string {
 
   return `${driverImports.length > 0 ? `${driverImports.join('\n')}\n` : ''}import {
   ${coreImports.join(',\n  ')},
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 import { AppServiceProvider } from './providers/app-service-provider.js';
 import './routes/api.js';
 import './routes/auth.js';
@@ -406,8 +406,8 @@ await serve(kernel);
 
 export function headlessFeatureTestStub(className: string): string {
   return `import { describe, expect, it } from 'vitest';
-import { Application, ConfigServiceProvider, DatabaseServiceProvider, setRouteApplication } from '@tyravel/core';
-import { TestCase, withTyravelTest } from '@tyravel/testing';
+import { Application, ConfigServiceProvider, DatabaseServiceProvider, setRouteApplication } from '@pondoknusa/core';
+import { TestCase, withPondoknusaTest } from '@pondoknusa/testing';
 
 class ${className} extends TestCase {
   protected createApplication() {
@@ -426,7 +426,7 @@ class ${className} extends TestCase {
   }
 }
 
-const t = withTyravelTest(${className});
+const t = withPondoknusaTest(${className});
 
 describe('headless API', () => {
   it('returns the headless index payload', async () => {
@@ -447,13 +447,13 @@ describe('headless API', () => {
 export function headlessReadme(name: string): string {
   return `# ${name}
 
-Headless Tyravel API — backend only, no views, SSR, or client assets.
+Headless Pondoknusa API — backend only, no views, SSR, or client assets.
 
 ## Quick start
 
 \`\`\`bash
-tyravel migrate
-tyravel dev
+pondoknusa migrate
+pondoknusa dev
 curl http://127.0.0.1:3000/api/v1/health
 \`\`\`
 
@@ -461,14 +461,14 @@ curl http://127.0.0.1:3000/api/v1/health
 
 - \`src/routes/api.ts\` — versioned JSON routes (\`/api/v1/*\`)
 - \`config/app.ts\` — \`headless: true\` enables headless-aware tooling
-- \`tyravel.json\` — \`"mode": "headless"\`
+- \`pondoknusa.json\` — \`"mode": "headless"\`
 
 ## Auth
 
-Run \`tyravel auth:install\` for API token and session guards. Headless apps default to JSON responses — no Blade-style views.
+Run \`pondoknusa auth:install\` for API token and session guards. Headless apps default to JSON responses — no Blade-style views.
 
 ## Docs
 
-https://tyravel.dev/guide/headless
+https://pondoknusa.dev/guide/headless
 `;
 }

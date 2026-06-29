@@ -1,4 +1,4 @@
-import { Job } from '@tyravel/queue';
+import { Job } from '@pondoknusa/queue';
 import { getQueuedNotificationContext } from './queued-notification-context.js';
 
 export interface SendQueuedNotificationData extends Record<string, unknown> {

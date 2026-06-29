@@ -1,5 +1,5 @@
-import type { Event } from '@tyravel/events';
-import type { Job } from '@tyravel/queue';
+import type { Event } from '@pondoknusa/events';
+import type { Job } from '@pondoknusa/queue';
 import { BroadcastEvent } from './broadcast-event.js';
 import type { BroadcastManager } from './broadcast-manager.js';
 import { buildBroadcastPayload, eventShouldBroadcast } from './should-broadcast.js';

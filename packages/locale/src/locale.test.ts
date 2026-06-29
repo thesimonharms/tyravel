@@ -6,7 +6,7 @@ import { parsePluralPipe, pluralCategory } from './pluralization.js';
 import { Translator } from './translator.js';
 import { updateLocalePreference } from './user-locale.js';
 
-describe('@tyravel/locale', () => {
+describe('@pondoknusa/locale', () => {
   it('flattens nested translation trees', () => {
     expect(
       flattenTranslations({

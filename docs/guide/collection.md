@@ -1,9 +1,9 @@
 # Collections
 
-`@tyravel/collection` provides a fluent, type-safe, chainable collection — inspired by Laravel's `Collection`. Every method returns a new instance (immutable) unless noted.
+`@pondoknusa/collection` provides a fluent, type-safe, chainable collection — inspired by Laravel's `Collection`. Every method returns a new instance (immutable) unless noted.
 
 ```typescript
-import { collect, Collection } from '@tyravel/collection';
+import { collect, Collection } from '@pondoknusa/collection';
 ```
 
 ## Creating collections
@@ -174,8 +174,8 @@ users.random(3);                                 // array of 3 random items
 
 ## `collect()` helper
 
-The `collect()` function is also available from `@tyravel/support`:
+The `collect()` function is also available from `@pondoknusa/support`:
 
 ```typescript
-import { collect } from '@tyravel/support';
+import { collect } from '@pondoknusa/support';
 ```

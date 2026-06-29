@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { Notification } from '../notification.js';
 import type { Notifiable } from '../types.js';
 import { NotificationManager } from '../notification-manager.js';
-import { MailManager } from '@tyravel/mail';
+import { MailManager } from '@pondoknusa/mail';
 
 class TestNotifiable implements Notifiable {
   constructor(readonly key: string) {}

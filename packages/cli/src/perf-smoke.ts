@@ -1,5 +1,5 @@
-import { Application, HttpKernel, Route, serve, setRouteApplication } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+import { Application, HttpKernel, Route, serve, setRouteApplication } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 
 export interface PerfSmokeResult {
   ok: boolean;

@@ -25,7 +25,7 @@ export interface ViewLintOptions {
   componentExists?: (name: string) => boolean | Promise<boolean>;
   escapeContexts?: ReadonlySet<string>;
   customDirectives?: ReadonlySet<string>;
-  /** When true, every rule fails the lint run. Defaults to CI / TYRAVEL_VIEW_LINT_STRICT. */
+  /** When true, every rule fails the lint run. Defaults to CI / PONDOKNUSA_VIEW_LINT_STRICT. */
   strict?: boolean;
 }
 
@@ -39,7 +39,7 @@ export function resolveViewLintStrict(options: ViewLintOptions = {}): boolean {
     return options.strict;
   }
 
-  return process.env.TYRAVEL_VIEW_LINT_STRICT === '1' || process.env.CI === 'true';
+  return process.env.PONDOKNUSA_VIEW_LINT_STRICT === '1' || process.env.CI === 'true';
 }
 
 function issueSeverity(rule: ViewLintRule, strict: boolean): ViewLintSeverity {

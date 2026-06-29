@@ -19,7 +19,7 @@ jobs:
           node-version: '26'
           cache: npm
       - run: npm ci
-      - run: npx tyravel view:types --check
+      - run: npx pondoknusa view:types --check
 `;
 }
 
@@ -42,8 +42,8 @@ export interface FeatureTestStubOptions {
 export function featureTestStub(className: string, options: FeatureTestStubOptions = {}): string {
   if (!options.feature) {
     return `import { describe, it } from 'vitest';
-import { Application } from '@tyravel/core';
-import { TestCase, withTyravelTest } from '@tyravel/testing';
+import { Application } from '@pondoknusa/core';
+import { TestCase, withPondoknusaTest } from '@pondoknusa/testing';
 import '../src/routes/web.js';
 
 class ${className} extends TestCase {
@@ -52,7 +52,7 @@ class ${className} extends TestCase {
   }
 }
 
-const t = withTyravelTest(${className});
+const t = withPondoknusaTest(${className});
 
 describe('feature / example', () => {
   it('responds on the home route', async () => {
@@ -93,9 +93,9 @@ import {
   QueueServiceProvider,
   ViewServiceProvider,
   setRouteApplication,
-} from '@tyravel/core';
-import { DatabaseManager, Migrator } from '@tyravel/database';
-import { TestCase, withTyravelTest } from '@tyravel/testing';
+} from '@pondoknusa/core';
+import { DatabaseManager, Migrator } from '@pondoknusa/database';
+import { TestCase, withPondoknusaTest } from '@pondoknusa/testing';
 
 class ${className} extends TestCase {
   protected usesDatabaseTransactions = true;
@@ -132,7 +132,7 @@ ${authProvider}    ];
   }
 }
 
-const t = withTyravelTest(${className});
+const t = withPondoknusaTest(${className});
 
 describe('feature / ${className}', () => {
   it('responds on the home route', async () => {

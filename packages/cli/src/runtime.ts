@@ -1,6 +1,6 @@
 import { spawn, spawnSync, type ChildProcess } from 'node:child_process';
 
-export const NODE_REQUIREMENT_URL = 'https://tyravel.dev/guide/deployment#before-you-deploy';
+export const NODE_REQUIREMENT_URL = 'https://pondoknusa.dev/guide/deployment#before-you-deploy';
 
 export interface TypeScriptRuntime {
   name: string;
@@ -49,7 +49,7 @@ export function describeRuntimeIssue(): string {
 
   return [
     `Node.js ${process.versions.node} is not supported for local development.`,
-    'Tyravel requires Node.js 26+ or Bun.',
+    'Pondoknusa requires Node.js 26+ or Bun.',
     `See ${NODE_REQUIREMENT_URL}`,
   ].join('\n');
 }

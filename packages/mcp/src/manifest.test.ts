@@ -4,11 +4,11 @@ import { buildCapabilityManifest } from './manifest.js';
 describe('buildCapabilityManifest', () => {
   it('includes core packages, facades, and CLI commands', () => {
     const manifest = buildCapabilityManifest();
-    expect(manifest.packages).toContain('@tyravel/vector');
-    expect(manifest.packages).toContain('@tyravel/graphql');
-    expect(manifest.packages).toContain('@tyravel/mcp');
+    expect(manifest.packages).toContain('@pondoknusa/vector');
+    expect(manifest.packages).toContain('@pondoknusa/graphql');
+    expect(manifest.packages).toContain('@pondoknusa/mcp');
     expect(manifest.facades).toContain('Route');
-    expect(manifest.commands).toContain('tyravel vector:embed');
-    expect(manifest.commands).toContain('tyravel mcp:serve');
+    expect(manifest.commands).toContain('pondoknusa vector:embed');
+    expect(manifest.commands).toContain('pondoknusa mcp:serve');
   });
 });

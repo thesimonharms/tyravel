@@ -4,14 +4,14 @@
 
 ```typescript
 // .env
-APP_NAME=Tyravel
+APP_NAME=Pondoknusa
 APP_DEBUG=true
 
 // config/app.ts
-import { env } from '@tyravel/config';
+import { env } from '@pondoknusa/config';
 
 export default {
-  name: env('APP_NAME', 'Tyravel'),
+  name: env('APP_NAME', 'Pondoknusa'),
   debug: env('APP_DEBUG', true),
 } as const;
 ```

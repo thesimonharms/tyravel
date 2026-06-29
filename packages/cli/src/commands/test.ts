@@ -9,7 +9,7 @@ import { parseOptions, positionalArgs } from '../utils.js';
 export class TestCommand extends Command {
   override readonly name = 'test';
   override readonly description = 'Run the project test suite via Vitest';
-  override readonly usage = 'tyravel test [--perf] [-- <vitest args>]';
+  override readonly usage = 'pondoknusa test [--perf] [-- <vitest args>]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -55,7 +55,7 @@ export class TestCommand extends Command {
   ): Promise<number> {
     if (!config.perf?.budgets || Object.keys(config.perf.budgets).length === 0) {
       console.error(
-        'No perf budgets configured. Add a "perf.budgets" section to tyravel.json.',
+        'No perf budgets configured. Add a "perf.budgets" section to pondoknusa.json.',
       );
       return 1;
     }

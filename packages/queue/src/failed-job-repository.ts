@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
-import type { DatabaseConnection } from '@tyravel/database';
-import { QueryBuilder } from '@tyravel/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import { QueryBuilder } from '@pondoknusa/database';
 import { decodePayload, encodePayload } from './payload.js';
 import type {
   FailedJobRecord,

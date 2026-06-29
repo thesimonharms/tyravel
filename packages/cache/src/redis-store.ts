@@ -1,4 +1,4 @@
-import type { RedisManager } from '@tyravel/redis';
+import type { RedisManager } from '@pondoknusa/redis';
 import type { CacheStore } from './types.js';
 
 export class RedisStore implements CacheStore {

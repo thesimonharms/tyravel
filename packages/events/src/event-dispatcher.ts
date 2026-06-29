@@ -1,5 +1,5 @@
-import type { Constructor } from '@tyravel/container';
-import type { Container } from '@tyravel/container';
+import type { Constructor } from '@pondoknusa/container';
+import type { Container } from '@pondoknusa/container';
 import type { EventRegistry } from './event-registry.js';
 import type { ListenerRegistry } from './listener-registry.js';
 import type { EventDispatcherOptions } from './dispatcher-options.js';

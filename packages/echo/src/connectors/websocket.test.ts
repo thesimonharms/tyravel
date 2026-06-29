@@ -26,7 +26,7 @@ describe('WebSocketConnector', () => {
 
     const connector = new WebSocketConnector({
       host: 'http://127.0.0.1:3000',
-      path: '/tyravel/ws',
+      path: '/pondoknusa/ws',
       webSocket: () => socket,
       authTransport: {
         authorize: async () => ({ auth: 'signed' }),

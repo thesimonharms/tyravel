@@ -1,6 +1,6 @@
 import { createHash, randomBytes } from 'node:crypto';
-import type { DatabaseConnection } from '@tyravel/database';
-import { QueryBuilder } from '@tyravel/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import { QueryBuilder } from '@pondoknusa/database';
 import { parseTokenAbilities } from './token-abilities.js';
 import { parseExpiresIn } from './token-expiry.js';
 import type { Authenticatable } from './types.js';

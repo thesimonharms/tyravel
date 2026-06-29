@@ -18,7 +18,7 @@ describe('framework MCP tools', () => {
       routes: [],
       models: [],
       configKeys: keys,
-      commands: ['tyravel serve'],
+      commands: ['pondoknusa serve'],
       docs: [{ path: 'guide/intro.md', title: 'Introduction' }],
       getConfig(key: string) {
         if (key === 'app.name') {
@@ -32,8 +32,8 @@ describe('framework MCP tools', () => {
     };
 
     const tools = createFrameworkTools(context);
-    const configTool = tools.find((tool) => tool.name === 'tyravel.config');
-    const docsTool = tools.find((tool) => tool.name === 'tyravel.docs');
+    const configTool = tools.find((tool) => tool.name === 'pondoknusa.config');
+    const docsTool = tools.find((tool) => tool.name === 'pondoknusa.docs');
 
     expect(await configTool?.handler({})).toEqual(keys);
     expect(await configTool?.handler({ key: 'app.name' })).toBe('demo');

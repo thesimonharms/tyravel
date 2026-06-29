@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { TyravelRequest } from '@tyravel/http';
-import type { ModelStatic } from '@tyravel/database';
+import { PondoknusaRequest } from '@pondoknusa/http';
+import type { ModelStatic } from '@pondoknusa/database';
 import { defineAdminResource } from './admin-resource.js';
 import { applyAdminSearch, resolveAdminSort } from './query.js';
 
@@ -44,7 +44,7 @@ describe('resolveAdminSort', () => {
       fields: [{ name: 'title', sortable: true }],
     });
 
-    const request = new TyravelRequest(
+    const request = new PondoknusaRequest(
       new Request('http://localhost/admin/articles?sort=missing'),
     );
     expect(resolveAdminSort(resource, request)).toEqual({

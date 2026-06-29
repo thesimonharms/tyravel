@@ -1,13 +1,13 @@
 import { join } from 'node:path';
-import { loadConfig } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
   ServiceProvider,
   setViewApplication,
   ViewServiceProvider,
-} from '@tyravel/core';
-import type { ViewEngine, ViewConfig } from '@tyravel/views';
+} from '@pondoknusa/core';
+import type { ViewEngine, ViewConfig } from '@pondoknusa/views';
 import { importAppServiceProvider } from './project-bootstrap.js';
 import { loadViewConfig } from './view-config.js';
 
@@ -18,7 +18,7 @@ export interface BootedViewApplication {
 }
 
 /**
- * Boot the Tyravel application so view commands use the same engine as HTTP
+ * Boot the Pondoknusa application so view commands use the same engine as HTTP
  * requests — custom directives, composers, component bindings, and injectors
  * registered in AppServiceProvider are available.
  */

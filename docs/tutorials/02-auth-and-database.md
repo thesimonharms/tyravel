@@ -5,7 +5,7 @@ Add users, run migrations, and protect routes with session authentication.
 ## Install auth scaffolding
 
 ```bash
-tyravel auth:install
+pondoknusa auth:install
 ```
 
 This wires session guards, user model stubs, login routes, and CSRF middleware. See [Authentication](/guide/auth) for token guards and social OAuth.
@@ -13,8 +13,8 @@ This wires session guards, user model stubs, login routes, and CSRF middleware. 
 ## Migration
 
 ```bash
-tyravel make:migration create_users_table
-tyravel migrate
+pondoknusa make:migration create_users_table
+pondoknusa migrate
 ```
 
 Define columns in the generated migration using the blueprint API documented in [Database & ORM](/guide/database).
@@ -22,8 +22,8 @@ Define columns in the generated migration using the blueprint API documented in 
 ## Protect a route
 
 ```typescript
-import { Route, Auth } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+import { Route, Auth } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 
 Route.get('/dashboard', async () => {
   const user = await Auth.user();
@@ -39,8 +39,8 @@ Prefer policies and middleware for production apps — covered in the [controlle
 ## Seed data
 
 ```bash
-tyravel make:seeder UserSeeder
-tyravel db:seed
+pondoknusa make:seeder UserSeeder
+pondoknusa db:seed
 ```
 
 ### Verified in CI

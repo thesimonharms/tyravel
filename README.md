@@ -1,11 +1,11 @@
 <p align="center">
-  <a href="https://tyravel.dev"><img src="logo.svg" alt="Tyravel" width="96" height="96" /></a>
+  <a href="https://pondoknusa.dev"><img src="logo.svg" alt="Pondoknusa" width="96" height="96" /></a>
 </p>
 
-<h1 align="center">Tyravel</h1>
+<h1 align="center">Pondoknusa</h1>
 
 <p align="center">
-  <strong>v1.0.1</strong> — TypeScript-native web framework with Laravel-style ergonomics (service container, routing, middleware, queues, auth, post-quantum crypto, and an Artisan-like CLI) on standard Web APIs.
+  <strong>v1.0.3</strong> — TypeScript-native full-stack web framework (service container, routing, middleware, queues, auth, post-quantum crypto, and a first-class CLI) on standard Web APIs.
 </p>
 
 <p align="center">
@@ -14,49 +14,49 @@
 
 ## Lean by default
 
-A vanilla `tyravel new` app is almost entirely `@tyravel/*` packages. The default scaffold uses **SQLite** (no extra driver), **database queues**, and **log mail** — no Redis, no cloud SDKs, no realtime client libraries.
+A vanilla `pondoknusa new` app is almost entirely `@pondoknusa/*` packages. The default scaffold uses **SQLite** (no extra driver), **database queues**, and **log mail** — no Redis, no cloud SDKs, no realtime client libraries.
 
 | What you add | Optional driver package | Third-party npm dep |
 |--------------|-------------------------|---------------------|
-| PostgreSQL | `@tyravel/database-pg` | `pg` |
-| MySQL | `@tyravel/database-mysql` | `mysql2` |
-| Redis (cache, queue, broadcast) | `@tyravel/redis-node` | `redis` |
-| S3 / R2 storage | `@tyravel/storage-aws-s3` | `@aws-sdk/client-s3`, `@aws-sdk/s3-request-presigner` |
+| PostgreSQL | `@pondoknusa/database-pg` | `pg` |
+| MySQL | `@pondoknusa/database-mysql` | `mysql2` |
+| Redis (cache, queue, broadcast) | `@pondoknusa/redis-node` | `redis` |
+| S3 / R2 storage | `@pondoknusa/storage-aws-s3` | `@aws-sdk/client-s3`, `@aws-sdk/s3-request-presigner` |
 
-That is the full set of external production dependencies across the Tyravel monorepo. Real-time broadcasting uses a **native WebSocket** hub (`@tyravel/broadcasting-websocket`) and browser `WebSocket` via `@tyravel/echo` — no `socket.io-client`, no `pusher-js`, no separate socket server to run.
+That is the full set of external production dependencies across the Pondoknusa monorepo. Real-time broadcasting uses a **native WebSocket** hub (`@pondoknusa/broadcasting-websocket`) and browser `WebSocket` via `@pondoknusa/echo` — no `socket.io-client`, no `pusher-js`, no separate socket server to run.
 
 ## API stability
 
-Published `@tyravel/*` packages follow the semver and deprecation rules in [STABILITY.md](STABILITY.md). Patch releases preserve documented stable APIs; experimental features (programmatic `.tyr.ts` views, REPL, etc.) may change in minors. See [Upgrading to 1.0](docs/guide/upgrading-to-1.0.md) when moving from 0.x.
+Published `@pondoknusa/*` packages follow the semver and deprecation rules in [STABILITY.md](STABILITY.md). Patch releases preserve documented stable APIs; experimental features (programmatic `.tyr.ts` views, REPL, etc.) may change in minors. See [Upgrading to 1.0](docs/guide/upgrading-to-1.0.md) when moving from 0.x.
 
 ## Packages
 
 | Package | Description |
 |---------|-------------|
-| `@tyravel/container` | IoC container with bindings, singletons, aliases, and callable injection |
-| `@tyravel/support` | String helpers (`Str.slug`, `camelCase`, `snakeCase`, `random`, etc.) |
-| `@tyravel/http` | Router, middleware, request/response helpers, API resources (`JsonResource`) |
-| `@tyravel/config` | Typed config loading and dotted-key `ConfigRepository` |
-| `@tyravel/validation` | Request validation with pipe rules and 422 error responses |
-| `@tyravel/database` | Eloquent-style models, query builder, schema, and migrations |
-| `@tyravel/views` | Blade-like `.tyr` templates with layouts, sections, components, and SSR directives |
-| `@tyravel/ssr` | Client hydration runtime for `@island` partials (`registerIsland`, `hydrate`) |
-| `@tyravel/echo` | Laravel Echo-style browser client (native `WebSocket`, zero peer dependencies) |
-| `@tyravel/broadcasting-websocket` | Native WebSocket broadcast hub and Redis fan-out driver |
-| `@tyravel/queue` | Typed jobs, database/redis drivers, dispatch facade, and queue worker |
-| `@tyravel/events` | Typed domain events, listeners, dispatcher, and `Events` facade |
-| `@tyravel/core` | Application kernel, controllers, service providers, HTTP kernel, `Route` facade |
-| `@tyravel/cli` | Project scaffolding, dev server, and code generators |
-| `@tyravel/testing` | `TestCase`, HTTP test client, Vitest hooks, container fakes |
-| `@tyravel/redis` | Redis connection manager for cache and queue drivers |
-| `@tyravel/cache` | Array, file, and Redis cache stores, `Cache` facade, `remember()` |
-| `@tyravel/mail` | `Mailable` classes, log/array transports, `Mail` facade |
-| `@tyravel/notifications` | Multi-channel notifications (mail, database), `Notifications` facade |
-| `@tyravel/auth` | Session and token guards, social OAuth, CSRF, policies, password reset |
-| `@tyravel/auth-oauth` | OAuth2 authorization server (authorization code, client credentials, refresh) |
-| `@tyravel/crypto` | Post-quantum KEM/signatures, session encryption, signed OAuth tokens |
-| `@tyravel/broadcasting` | Real-time event broadcasting, channel auth, and Echo client config |
-| `@tyravel/storage` | File storage with local, S3, R2, and Supabase adapters |
+| `@pondoknusa/container` | IoC container with bindings, singletons, aliases, and callable injection |
+| `@pondoknusa/support` | String helpers (`Str.slug`, `camelCase`, `snakeCase`, `random`, etc.) |
+| `@pondoknusa/http` | Router, middleware, request/response helpers, API resources (`JsonResource`) |
+| `@pondoknusa/config` | Typed config loading and dotted-key `ConfigRepository` |
+| `@pondoknusa/validation` | Request validation with pipe rules and 422 error responses |
+| `@pondoknusa/database` | Eloquent-style models, query builder, schema, and migrations |
+| `@pondoknusa/views` | Blade-like `.tyr` templates with layouts, sections, components, and SSR directives |
+| `@pondoknusa/ssr` | Client hydration runtime for `@island` partials (`registerIsland`, `hydrate`) |
+| `@pondoknusa/echo` | Laravel Echo-style browser client (native `WebSocket`, zero peer dependencies) |
+| `@pondoknusa/broadcasting-websocket` | Native WebSocket broadcast hub and Redis fan-out driver |
+| `@pondoknusa/queue` | Typed jobs, database/redis drivers, dispatch facade, and queue worker |
+| `@pondoknusa/events` | Typed domain events, listeners, dispatcher, and `Events` facade |
+| `@pondoknusa/core` | Application kernel, controllers, service providers, HTTP kernel, `Route` facade |
+| `@pondoknusa/cli` | Project scaffolding, dev server, and code generators |
+| `@pondoknusa/testing` | `TestCase`, HTTP test client, Vitest hooks, container fakes |
+| `@pondoknusa/redis` | Redis connection manager for cache and queue drivers |
+| `@pondoknusa/cache` | Array, file, and Redis cache stores, `Cache` facade, `remember()` |
+| `@pondoknusa/mail` | `Mailable` classes, log/array transports, `Mail` facade |
+| `@pondoknusa/notifications` | Multi-channel notifications (mail, database), `Notifications` facade |
+| `@pondoknusa/auth` | Session and token guards, social OAuth, CSRF, policies, password reset |
+| `@pondoknusa/auth-oauth` | OAuth2 authorization server (authorization code, client credentials, refresh) |
+| `@pondoknusa/crypto` | Post-quantum KEM/signatures, session encryption, signed OAuth tokens |
+| `@pondoknusa/broadcasting` | Real-time event broadcasting, channel auth, and Echo client config |
+| `@pondoknusa/storage` | File storage with local, S3, R2, and Supabase adapters |
 
 ## Quick start
 
@@ -70,10 +70,10 @@ npm run build
 Create a new application:
 
 ```bash
-npx tyravel new my-app
+npx pondoknusa new my-app
 cd my-app
 npm install
-tyravel serve
+pondoknusa serve
 ```
 
 Visit `http://127.0.0.1:3000`.
@@ -85,47 +85,47 @@ The `examples/hello-world` app is also runnable from the monorepo:
 ```bash
 cd examples/hello-world
 npm install
-tyravel serve
+pondoknusa serve
 ```
 
 ## CLI
 
 ```bash
-tyravel list                         # List available commands
-tyravel new <name> [--path=<dir>]    # Scaffold a new application
-tyravel serve [--port=3000] [--host=127.0.0.1]
-tyravel make:controller <Name>       # Create src/controllers/<Name>Controller.ts
-tyravel make:request <Name>          # Create src/requests/<Name>Request.ts
-tyravel make:resource <Name>         # Create src/resources/<Name>Resource.ts
-tyravel make:provider <Name>           # Create src/providers/<Name>ServiceProvider.ts
-tyravel make:model <Name>              # Create src/models/<Name>.ts
-tyravel make:factory <Model>             # Create database/factories/<model>-factory.ts
-tyravel make:seeder <Name>               # Create database/seeders/<name>-seeder.ts
-tyravel make:migration <name>            # Create database/migrations/<timestamp>_<name>.ts
-tyravel make:view <name>                 # Create resources/views/<name>.tyr
-tyravel make:island <name>                # Scaffold island view + client mount
-tyravel make:job <Name>                  # Create src/jobs/<Name>.ts
-tyravel make:event <Name>                # Create src/events/<Name>.ts
-tyravel make:listener <Name>             # Create src/listeners/<Name>.ts
-tyravel make:subscriber <Name>           # Create src/subscribers/<Name>.ts
-tyravel queue:table                      # Migration for the jobs table
-tyravel queue:failed-table               # Migration for failed_jobs
-tyravel queue:work [--queue=default]     # Process database queue jobs
-tyravel queue:failed                     # List failed jobs
-tyravel queue:retry <id>                 # Re-queue a failed job
-tyravel make:test <Name>                 # Create tests/feature/<name>.ts
-tyravel auth:install                     # Scaffold session auth (User, routes, migrations)
-tyravel oauth:install                    # Scaffold OAuth2 authorization server
-tyravel oauth:client:create <name> --redirect=<uri>  # Register an OAuth2 client
-tyravel crypto:install                   # Scaffold config/crypto.ts
-tyravel crypto:generate-keys [--algorithm=ml-dsa-65] # Generate post-quantum key material
-tyravel make:social-driver <name>        # Scaffold a custom social OAuth provider
-tyravel migrate                        # Run pending migrations
-tyravel db:seed [--class=DatabaseSeeder]  # Seed the database
-tyravel version                      # Show CLI version
+pondoknusa list                         # List available commands
+pondoknusa new <name> [--path=<dir>]    # Scaffold a new application
+pondoknusa serve [--port=3000] [--host=127.0.0.1]
+pondoknusa make:controller <Name>       # Create src/controllers/<Name>Controller.ts
+pondoknusa make:request <Name>          # Create src/requests/<Name>Request.ts
+pondoknusa make:resource <Name>         # Create src/resources/<Name>Resource.ts
+pondoknusa make:provider <Name>           # Create src/providers/<Name>ServiceProvider.ts
+pondoknusa make:model <Name>              # Create src/models/<Name>.ts
+pondoknusa make:factory <Model>             # Create database/factories/<model>-factory.ts
+pondoknusa make:seeder <Name>               # Create database/seeders/<name>-seeder.ts
+pondoknusa make:migration <name>            # Create database/migrations/<timestamp>_<name>.ts
+pondoknusa make:view <name>                 # Create resources/views/<name>.tyr
+pondoknusa make:island <name>                # Scaffold island view + client mount
+pondoknusa make:job <Name>                  # Create src/jobs/<Name>.ts
+pondoknusa make:event <Name>                # Create src/events/<Name>.ts
+pondoknusa make:listener <Name>             # Create src/listeners/<Name>.ts
+pondoknusa make:subscriber <Name>           # Create src/subscribers/<Name>.ts
+pondoknusa queue:table                      # Migration for the jobs table
+pondoknusa queue:failed-table               # Migration for failed_jobs
+pondoknusa queue:work [--queue=default]     # Process database queue jobs
+pondoknusa queue:failed                     # List failed jobs
+pondoknusa queue:retry <id>                 # Re-queue a failed job
+pondoknusa make:test <Name>                 # Create tests/feature/<name>.ts
+pondoknusa auth:install                     # Scaffold session auth (User, routes, migrations)
+pondoknusa oauth:install                    # Scaffold OAuth2 authorization server
+pondoknusa oauth:client:create <name> --redirect=<uri>  # Register an OAuth2 client
+pondoknusa crypto:install                   # Scaffold config/crypto.ts
+pondoknusa crypto:generate-keys [--algorithm=ml-dsa-65] # Generate post-quantum key material
+pondoknusa make:social-driver <name>        # Scaffold a custom social OAuth provider
+pondoknusa migrate                        # Run pending migrations
+pondoknusa db:seed [--class=DatabaseSeeder]  # Seed the database
+pondoknusa version                      # Show CLI version
 ```
 
-New projects include a `tyravel.json` config file:
+New projects include a `pondoknusa.json` config file:
 
 ```json
 {
@@ -138,19 +138,19 @@ New projects include a `tyravel.json` config file:
 }
 ```
 
-`tyravel serve` reads this config and passes `TYRAVEL_PORT` / `TYRAVEL_HOST` to the app. Bun is the recommended runtime; Node 26+ is also supported natively via the built-in HTTP adapter.
+`pondoknusa serve` reads this config and passes `PONDOKNUSA_PORT` / `PONDOKNUSA_HOST` to the app. Bun is the recommended runtime; Node 26+ is also supported natively via the built-in HTTP adapter.
 
 ## Application structure
 
 ```
 my-app/
-├── tyravel.json
+├── pondoknusa.json
 ├── package.json
 ├── config/
 │   ├── app.ts
-│   ├── auth.ts          # after tyravel auth:install
+│   ├── auth.ts          # after pondoknusa auth:install
 │   ├── crypto.ts        # optional — session encryption, OAuth signing
-│   └── oauthServer.ts   # after tyravel oauth:install
+│   └── oauthServer.ts   # after pondoknusa oauth:install
 └── src/
     ├── main.ts
     ├── routes/
@@ -163,12 +163,12 @@ my-app/
 ### Routes
 
 ```typescript
-import { Route } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+import { Route } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 import { UserController } from '../controllers/user-controller.js';
 
 Route.get('/', (request) =>
-  Response.json({ message: 'Welcome to Tyravel', path: request.path }),
+  Response.json({ message: 'Welcome to Pondoknusa', path: request.path }),
 );
 
 Route.prefix('api')
@@ -206,14 +206,14 @@ Route.middleware('auth').get('/profile', handler);
 
 ```typescript
 // .env
-APP_NAME=Tyravel
+APP_NAME=Pondoknusa
 APP_DEBUG=true
 
 // config/app.ts
-import { env } from '@tyravel/config';
+import { env } from '@pondoknusa/config';
 
 export default {
-  name: env('APP_NAME', 'Tyravel'),
+  name: env('APP_NAME', 'Pondoknusa'),
   debug: env('APP_DEBUG', true),
 } as const;
 
@@ -226,10 +226,10 @@ New apps scaffold `.env` and `.env.example`. Existing shell variables are not ov
 
 ### String helpers
 
-Laravel-style string utilities live in `@tyravel/support`:
+Laravel-style string utilities live in `@pondoknusa/support`:
 
 ```typescript
-import { Str, slug } from '@tyravel/support';
+import { Str, slug } from '@pondoknusa/support';
 
 slug('  My Post Title!  '); // "my-post-title"
 Str.camel('foo_bar');        // "fooBar"
@@ -242,7 +242,7 @@ Str.random(32);              // alphanumeric token
 ### Validation
 
 ```typescript
-import { validateRequest } from '@tyravel/validation';
+import { validateRequest } from '@pondoknusa/validation';
 
 const data = await validateRequest(request, {
   email: 'required|email',
@@ -257,8 +257,8 @@ Invalid requests return HTTP 422 with a structured `errors` object.
 Form requests combine validation and authorization for controller actions:
 
 ```typescript
-import { FormRequest } from '@tyravel/core';
-import { Gate } from '@tyravel/core';
+import { FormRequest } from '@pondoknusa/core';
+import { Gate } from '@pondoknusa/core';
 
 export class StoreUserRequest extends FormRequest<{ email: string; name: string }> {
   async authorize(): Promise<boolean> {
@@ -280,7 +280,7 @@ Wire a form request into a route by passing it as the third element of a control
 Route.post('/users', [UserController, 'store', StoreUserRequest]);
 ```
 
-The controller receives the validated form request as its first argument (or as the second argument when the action also needs the raw `TyravelRequest`):
+The controller receives the validated form request as its first argument (or as the second argument when the action also needs the raw `PondoknusaRequest`):
 
 ```typescript
 store(form: StoreUserRequest) {
@@ -289,18 +289,18 @@ store(form: StoreUserRequest) {
 }
 ```
 
-Generate a scaffold with `tyravel make:request StoreUser`.
+Generate a scaffold with `pondoknusa make:request StoreUser`.
 
 ### API resources
 
 Transform models and paginated results into consistent JSON API responses:
 
 ```typescript
-import { JsonResource } from '@tyravel/http';
-import type { TyravelRequest } from '@tyravel/http';
+import { JsonResource } from '@pondoknusa/http';
+import type { PondoknusaRequest } from '@pondoknusa/http';
 
 export class UserResource extends JsonResource<User> {
-  toArray(_request?: TyravelRequest) {
+  toArray(_request?: PondoknusaRequest) {
     return {
       id: this.resource.getAttribute('id'),
       name: this.resource.getAttribute('name'),
@@ -320,13 +320,13 @@ const page = await User.query().orderBy('id').paginateModels(request.perPage(), 
 return UserResource.collection(page);
 ```
 
-Set `static wrap = null` on a resource class to disable the default `data` envelope. Generate a scaffold with `tyravel make:resource User`.
+Set `static wrap = null` on a resource class to disable the default `data` envelope. Generate a scaffold with `pondoknusa make:resource User`.
 
 ### Database / ORM
 
 ```typescript
-import { Model } from '@tyravel/database';
-import type { ModelQueryBuilder } from '@tyravel/database';
+import { Model } from '@pondoknusa/database';
+import type { ModelQueryBuilder } from '@pondoknusa/database';
 
 export interface UserAttributes {
   id: number;
@@ -359,7 +359,7 @@ const roles = await user.belongsToMany(Role).get();
 Register `DatabaseServiceProvider`, add `config/database.ts`, then run migrations:
 
 ```bash
-tyravel migrate
+pondoknusa migrate
 ```
 
 `config/database.ts` supports SQLite, PostgreSQL, and MySQL:
@@ -372,14 +372,14 @@ export default {
     postgres: {
       driver: 'postgres',
       host: '127.0.0.1',
-      database: 'tyravel',
+      database: 'pondoknusa',
       username: 'postgres',
       password: '',
     },
     mysql: {
       driver: 'mysql',
       host: '127.0.0.1',
-      database: 'tyravel',
+      database: 'pondoknusa',
       username: 'root',
       password: '',
     },
@@ -397,11 +397,11 @@ await schema.create('users', (table) => {
 });
 ```
 
-Packages can contribute migrations via `ServiceProvider.loadMigrationsFrom()`. Register the package provider from `AppServiceProvider` so `tyravel migrate` picks them up:
+Packages can contribute migrations via `ServiceProvider.loadMigrationsFrom()`. Register the package provider from `AppServiceProvider` so `pondoknusa migrate` picks them up:
 
 ```typescript
 import { join } from 'node:path';
-import { ServiceProvider } from '@tyravel/core';
+import { ServiceProvider } from '@pondoknusa/core';
 
 export class LontarServiceProvider extends ServiceProvider {
   override register() {
@@ -413,7 +413,7 @@ export class LontarServiceProvider extends ServiceProvider {
 this.app.register(LontarServiceProvider);
 ```
 
-`tyravel migrate` boots `AppServiceProvider` and runs all registered migration paths in filename order.
+`pondoknusa migrate` boots `AppServiceProvider` and runs all registered migration paths in filename order.
 
 **Drivers:** SQLite (Node 26+ via `node:sqlite`), PostgreSQL (`pg`), and MySQL (`mysql2`).
 
@@ -438,7 +438,7 @@ Loaded relations can be appended too: `post.append('author')` or `static appends
 **Pagination:** paginate query builder or model results with total counts and page metadata:
 
 ```typescript
-import { LengthAwarePaginator } from '@tyravel/database';
+import { LengthAwarePaginator } from '@pondoknusa/database';
 
 // From a model (shorthand)
 const page = await User.paginate(15, 2);
@@ -464,8 +464,8 @@ return Response.json(users.toArray());
 Register `ViewServiceProvider`, add `config/views.ts`, and place templates in `resources/views/`:
 
 ```typescript
-import { View, ViewServiceProvider, setViewApplication } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+import { View, ViewServiceProvider, setViewApplication } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 
 setViewApplication(app);
 app.register(ViewServiceProvider);
@@ -495,14 +495,14 @@ Route.get('/', async () =>
 @endsection
 ```
 
-Layouts use `@yield('section')`. Values in `{{ }}` are HTML-escaped; use `{!! html !!}` for raw output. Generate views with `tyravel make:view pages.about`.
+Layouts use `@yield('section')`. Values in `{{ }}` are HTML-escaped; use `{!! html !!}` for raw output. Generate views with `pondoknusa make:view pages.about`.
 
 ### Queue / Jobs
 
 Register `QueueServiceProvider`, add `config/queue.ts`, and register job classes on the `JobRegistry` in `AppServiceProvider`:
 
 ```typescript
-import { JobRegistry } from '@tyravel/queue';
+import { JobRegistry } from '@pondoknusa/queue';
 import { SendWelcomeEmail } from '../jobs/send-welcome-email.js';
 
 this.app.make<JobRegistry>('jobs.registry').register(SendWelcomeEmail);
@@ -511,7 +511,7 @@ this.app.make<JobRegistry>('jobs.registry').register(SendWelcomeEmail);
 Dispatch from routes or services:
 
 ```typescript
-import { dispatch, Queue } from '@tyravel/core';
+import { dispatch, Queue } from '@pondoknusa/core';
 import { SendWelcomeEmail } from '../jobs/send-welcome-email.js';
 
 await dispatch(new SendWelcomeEmail({ email: 'ada@example.com' }));
@@ -527,7 +527,7 @@ await Queue.later(60, new SendWelcomeEmail({ email: 'later@example.com' }));
 Typed job classes:
 
 ```typescript
-import { Job } from '@tyravel/queue';
+import { Job } from '@pondoknusa/queue';
 
 export interface SendWelcomeEmailPayload {
   email: string;
@@ -543,24 +543,24 @@ export class SendWelcomeEmail extends Job<SendWelcomeEmailPayload> {
 For the database driver, create the jobs table and run a worker:
 
 ```bash
-tyravel queue:table
-tyravel migrate
-tyravel queue:work --connection=database --queue=default
+pondoknusa queue:table
+pondoknusa migrate
+pondoknusa queue:work --connection=database --queue=default
 ```
 
 Jobs that exhaust retries are written to `failed_jobs` (when the table exists and `queue.failed` is configured). Inspect and retry:
 
 ```bash
-tyravel queue:failed-table
-tyravel migrate
-tyravel queue:failed
-tyravel queue:retry 1
+pondoknusa queue:failed-table
+pondoknusa migrate
+pondoknusa queue:failed
+pondoknusa queue:retry 1
 ```
 
 `config/queue.ts` defaults to `database` (persistent, worker-driven). Use `redis` for production-grade external queues. New apps scaffold `QUEUE_CONNECTION=database` in `.env`:
 
 ```typescript
-import { env } from '@tyravel/config';
+import { env } from '@pondoknusa/config';
 
 export default {
   default: env('QUEUE_CONNECTION', 'database'),
@@ -588,13 +588,13 @@ export default {
   listen: [
     [UserRegistered, [SendWelcomeEmail]],
   ],
-} satisfies import('@tyravel/events').EventsConfig;
+} satisfies import('@pondoknusa/events').EventsConfig;
 ```
 
 Dispatch from routes, jobs, or services:
 
 ```typescript
-import { Events, fire } from '@tyravel/core';
+import { Events, fire } from '@pondoknusa/core';
 import { UserRegistered } from '../events/user-registered.js';
 
 await fire(new UserRegistered({ userId: 1 }));
@@ -609,7 +609,7 @@ await Events.dispatch(new UserRegistered({ userId: 2 }));
 Typed event and listener classes:
 
 ```typescript
-import { Event, Listener } from '@tyravel/events';
+import { Event, Listener } from '@pondoknusa/events';
 
 export interface UserRegisteredPayload {
   userId: number;
@@ -629,8 +629,8 @@ Listeners resolve from the container when registered as classes, so constructor 
 **Event subscribers** group listener registration in one class (Laravel-style):
 
 ```typescript
-import { EventSubscriber } from '@tyravel/events';
-import type { EventDispatcher } from '@tyravel/events';
+import { EventSubscriber } from '@pondoknusa/events';
+import type { EventDispatcher } from '@pondoknusa/events';
 
 export class AuthEventSubscriber extends EventSubscriber {
   subscribe(dispatcher: EventDispatcher): void {
@@ -647,13 +647,13 @@ import { AuthEventSubscriber } from '../src/subscribers/auth-event-subscriber.js
 export default {
   listen: [],
   subscribers: [AuthEventSubscriber],
-} satisfies import('@tyravel/events').EventsConfig;
+} satisfies import('@pondoknusa/events').EventsConfig;
 ```
 
 **Queued listeners** extend `QueuedListener` (Laravel's `ShouldQueue`). They are serialized to a `CallQueuedListener` job instead of running inline:
 
 ```typescript
-import { QueuedListener } from '@tyravel/events';
+import { QueuedListener } from '@pondoknusa/events';
 
 export class SendInvoiceEmail extends QueuedListener<InvoicePaid> {
   static connection = 'database';
@@ -673,18 +673,18 @@ export default {
   listen: [[InvoicePaid, [SendInvoiceEmail]]],
   queueConnection: 'database',
   queue: 'default',
-} satisfies import('@tyravel/events').EventsConfig;
+} satisfies import('@pondoknusa/events').EventsConfig;
 ```
 
-Register `QueueServiceProvider` **before** `EventServiceProvider`, run `tyravel queue:work`, and queued listeners execute on the worker.
+Register `QueueServiceProvider` **before** `EventServiceProvider`, run `pondoknusa queue:work`, and queued listeners execute on the worker.
 
 ### Authentication
 
 Session-based **web guard**, **API token guard** (`auth:api`), policies, password reset, social OAuth, and an optional **OAuth2 authorization server**.
 
 ```bash
-tyravel auth:install
-tyravel migrate
+pondoknusa auth:install
+pondoknusa migrate
 ```
 
 Register facades in `main.ts`: `setAuthApplication`, `setGateApplication`, `setPasswordApplication`.
@@ -692,7 +692,7 @@ Register facades in `main.ts`: `setAuthApplication`, `setGateApplication`, `setP
 `AuthServiceProvider` registers **StartSession**, global **CSRF** (419 on failure), **`auth`**, **`auth:api`**, and **`guest`** middleware.
 
 ```typescript
-import { Auth, Gate, Password } from '@tyravel/core';
+import { Auth, Gate, Password } from '@pondoknusa/core';
 
 await Auth.attempt({ email, password });
 const token = await Auth.createToken('mobile', ['posts:read'], { expiresIn: '90d' });
@@ -708,8 +708,8 @@ await Gate.authorize(Auth.user(), 'update', post);
 | **API tokens** | `tyr_<secret>` format; hashed at rest; `token_prefix`, expiry, IP whitelist, revocation |
 | **Token abilities** | `createTokenAbilityMiddleware('ability')`; `request.tokenAbilities` on bearer auth |
 | **Social OAuth** | GitHub, Google, Discord, Microsoft, X, Facebook, LinkedIn, Apple — all with **PKCE** |
-| **Custom providers** | `tyravel make:social-driver acme` + `registerOAuthDriver()` |
-| **OAuth2 server** | `tyravel oauth:install`; grants: authorization_code (+ PKCE), client_credentials, refresh_token |
+| **Custom providers** | `pondoknusa make:social-driver acme` + `registerOAuthDriver()` |
+| **OAuth2 server** | `pondoknusa oauth:install`; grants: authorization_code (+ PKCE), client_credentials, refresh_token |
 | **Session drivers** | `array`, `database`, `redis`; `SESSION_SECURE` for production cookies |
 
 Full guide: [docs/guide/auth.md](./docs/guide/auth.md).
@@ -717,21 +717,21 @@ Full guide: [docs/guide/auth.md](./docs/guide/auth.md).
 #### OAuth2 authorization server
 
 ```bash
-tyravel oauth:install
-npm install @tyravel/auth-oauth
-tyravel migrate
-tyravel oauth:client:create "My App" --redirect=http://127.0.0.1:3000/callback
+pondoknusa oauth:install
+npm install @pondoknusa/auth-oauth
+pondoknusa migrate
+pondoknusa oauth:client:create "My App" --redirect=http://127.0.0.1:3000/callback
 ```
 
 Register `OAuthServerServiceProvider` in `src/main.ts` (done by `oauth:install`). Protect routes with `auth:oauth` middleware. Endpoints: `/oauth/authorize`, `/oauth/token`, `/oauth/revoke`, `/oauth/userinfo`.
 
 ### Post-quantum cryptography
 
-`@tyravel/crypto` provides ML-KEM, ML-DSA, SLH-DSA, and hybrid X25519 + ML-KEM-768 encryption via native OpenSSL PQC on Node.js 26+.
+`@pondoknusa/crypto` provides ML-KEM, ML-DSA, SLH-DSA, and hybrid X25519 + ML-KEM-768 encryption via native OpenSSL PQC on Node.js 26+.
 
 ```bash
-tyravel crypto:generate-keys --algorithm=hybrid-x25519-ml-kem-768
-tyravel crypto:generate-keys --algorithm=ml-dsa-65
+pondoknusa crypto:generate-keys --algorithm=hybrid-x25519-ml-kem-768
+pondoknusa crypto:generate-keys --algorithm=ml-dsa-65
 ```
 
 Add `config/crypto.ts` to enable framework integrations:
@@ -742,7 +742,7 @@ Add `config/crypto.ts` to enable framework integrations:
 | **OAuth token signing** | `oauth.signTokens: true` | ML-DSA signed `oat_<payload>.<signature>` access tokens |
 
 ```typescript
-import { CryptoManager } from '@tyravel/crypto';
+import { CryptoManager } from '@pondoknusa/crypto';
 
 const crypto = new CryptoManager();
 const keys = crypto.generateKeys('hybrid-x25519-ml-kem-768');
@@ -753,16 +753,16 @@ Full guide: [docs/guide/crypto.md](./docs/guide/crypto.md).
 
 ### Testing
 
-`@tyravel/testing` brings Laravel-style feature tests on top of Vitest:
+`@pondoknusa/testing` brings Laravel-style feature tests on top of Vitest:
 
 ```bash
-npm test                    # in an app created with tyravel new
-tyravel make:test Posts     # tests/feature/posts.test.ts
+npm test                    # in an app created with pondoknusa new
+pondoknusa make:test Posts     # tests/feature/posts.test.ts
 ```
 
 ```typescript
-import { Application } from '@tyravel/core';
-import { TestCase, withTyravelTest, fake, mockInstance } from '@tyravel/testing';
+import { Application } from '@pondoknusa/core';
+import { TestCase, withPondoknusaTest, fake, mockInstance } from '@pondoknusa/testing';
 
 class AppTest extends TestCase {
   protected createApplication() {
@@ -773,7 +773,7 @@ class AppTest extends TestCase {
   }
 }
 
-const t = withTyravelTest(AppTest);
+const t = withPondoknusaTest(AppTest);
 
 it('returns JSON', async () => {
   const res = await t.http.post('http://localhost/login', {
@@ -790,14 +790,14 @@ it('returns JSON', async () => {
 | **`fake` / `mockInstance`** | Swap container bindings for test doubles |
 | **`wireFacades`** | Point `Route`, `Auth`, `Gate`, etc. at the test app |
 
-New apps get `vitest.config.ts`, `tests/feature/example.test.ts`, and `@tyravel/testing` as a dev dependency.
+New apps get `vitest.config.ts`, `tests/feature/example.test.ts`, and `@pondoknusa/testing` as a dev dependency.
 
 ### Cache, mail, and notifications
 
 New projects ship `config/cache.ts`, `config/mail.ts`, and `config/notifications.ts`, with providers registered in `src/main.ts`.
 
 ```typescript
-import { Cache, Mail, Notifications, Mailable, Notification } from '@tyravel/core';
+import { Cache, Mail, Notifications, Mailable, Notification } from '@pondoknusa/core';
 
 await Cache.remember('stats', 300, async () => computeStats());
 await Mail.to('user@example.com').send(new WelcomeMail());
@@ -814,20 +814,20 @@ Use the **array** mail connection in tests to assert `mail.transport('array').me
 
 **SMTP** (`config/mail.ts` → `smtp` connection): set `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, then `default: 'smtp'`.
 
-**Queued mailables**: override `shouldQueue()` on your `Mailable`; Tyravel serializes the built message into `SendMailable` (`mail.queueConnection` / `queue` in config, default **`database`**).
+**Queued mailables**: override `shouldQueue()` on your `Mailable`; Pondoknusa serializes the built message into `SendMailable` (`mail.queueConnection` / `queue` in config, default **`database`**).
 
-**Queued notifications**: override `shouldQueue()` on your `Notification` class; Tyravel pushes `SendQueuedNotification` via the app queue (`notifications.queueConnection` / `queue` — default **`database`**). Run `tyravel queue:work` to process the `jobs` table.
+**Queued notifications**: override `shouldQueue()` on your `Notification` class; Pondoknusa pushes `SendQueuedNotification` via the app queue (`notifications.queueConnection` / `queue` — default **`database`**). Run `pondoknusa queue:work` to process the `jobs` table.
 
 New apps scaffold `jobs`, `failed_jobs`, and `notifications` migrations and set `config/queue.ts` default to **`database`**.
 
 ### Service providers
 
 ```typescript
-import { ServiceProvider } from '@tyravel/core';
+import { ServiceProvider } from '@pondoknusa/core';
 
 export class AppServiceProvider extends ServiceProvider {
   override register() {
-    this.app.instance('app.name', 'Tyravel');
+    this.app.instance('app.name', 'Pondoknusa');
   }
 }
 ```
@@ -840,15 +840,15 @@ npm run build     # Build all packages
 npm run typecheck # Type-check via project references
 ```
 
-## Publishing (`@tyravel/*` v0.11.0)
+## Publishing (`@pondoknusa/*` v0.11.0)
 
 From the monorepo root after `npm run build`:
 
 ```bash
 # Publish in dependency order (container → … → core → cli)
-npm publish -w @tyravel/container --access public
+npm publish -w @pondoknusa/container --access public
 # … repeat for each package, or use your preferred release script
-npm publish -w @tyravel/cli --access public
+npm publish -w @pondoknusa/cli --access public
 ```
 
 See [CHANGELOG.md](./CHANGELOG.md) for release notes.
@@ -858,7 +858,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for release notes.
 The [docs site](./docs/) includes:
 
 - **Guide** — concepts (routing, ORM, auth, views, …)
-- **Reference** — auto-generated `@tyravel/*` package exports and CLI commands (`npm run docs:generate`)
+- **Reference** — auto-generated `@pondoknusa/*` package exports and CLI commands (`npm run docs:generate`)
 - **Tutorials** — zero-to-deploy track
 - **Cookbook** — focused recipes (realtime, RAG, testing)
 
@@ -869,7 +869,7 @@ npm run docs:dev      # regenerates reference + starts VitePress
 npm run docs:build    # production build (also runs in CI)
 ```
 
-Published to [tyravel.dev](https://tyravel.dev) via GitHub Pages (`.github/workflows/docs.yml`). Security: [SECURITY.md](./SECURITY.md).
+Published to [pondoknusa.dev](https://pondoknusa.dev) via GitHub Pages (`.github/workflows/docs.yml`). Security: [SECURITY.md](./SECURITY.md).
 
 ## Roadmap
 
@@ -880,13 +880,13 @@ See [ROADMAP.md](./ROADMAP.md) for release tiers.
 - [x] Service container, HTTP router, kernel, `Route` facade, CLI scaffolding
 - [x] Eloquent-style ORM, views, queue/events, cache, mail, notifications, broadcasting, storage
 - [x] Auth: session + API tokens, CSRF, social OAuth (PKCE), policies, password reset
-- [x] OAuth2 authorization server (`@tyravel/auth-oauth`) and `@tyravel/testing` HTTP client
-- [x] Post-quantum crypto on Node 26+ (`@tyravel/crypto`): ML-KEM, ML-DSA, SLH-DSA, hybrid encryption
-- [x] Native WebSocket broadcasting (`@tyravel/broadcasting-websocket`) and Echo client with zero peer deps
+- [x] OAuth2 authorization server (`@pondoknusa/auth-oauth`) and `@pondoknusa/testing` HTTP client
+- [x] Post-quantum crypto on Node 26+ (`@pondoknusa/crypto`): ML-KEM, ML-DSA, SLH-DSA, hybrid encryption
+- [x] Native WebSocket broadcasting (`@pondoknusa/broadcasting-websocket`) and Echo client with zero peer deps
 - [x] AI-native stack (v0.14): vector search, RAG, GraphQL, MCP server
 - [x] Infrastructure depth (v0.15): taggable cache, notification channels, testing fakes
 - [x] Core surface polish (v0.16): route model binding, signed URLs, typed view props, `view:catalog`, prunable models — sync API sweep complete ahead of 1.0
-- [x] Documentation site & semver strict (v1.0): hosted docs at [tyravel.dev](https://tyravel.dev), facade reference, deploy walkthroughs, cookbook complete
+- [x] Documentation site & semver strict (v1.0): hosted docs at [pondoknusa.dev](https://pondoknusa.dev), facade reference, deploy walkthroughs, cookbook complete
 - [x] Optional drivers only when you need them — five third-party production deps across the whole monorepo
 
 ## License

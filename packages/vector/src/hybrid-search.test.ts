@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Model, SqliteConnection } from '@tyravel/database';
+import { Model, SqliteConnection } from '@pondoknusa/database';
 import './index.js';
 import { registerSqliteVectorSearchDriver } from './register-local.js';
 
@@ -24,7 +24,7 @@ describe('hybrid search', () => {
 
     await Article.query().insert({
       title: 'Broadcasting',
-      content: 'Tyravel uses native WebSockets for broadcasting.',
+      content: 'Pondoknusa uses native WebSockets for broadcasting.',
       embedding: JSON.stringify([1, 0]),
     });
     await Article.query().insert({

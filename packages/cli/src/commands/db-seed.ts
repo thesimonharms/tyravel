@@ -1,11 +1,11 @@
 import { join } from 'node:path';
-import { loadConfig } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
   DatabaseServiceProvider,
-} from '@tyravel/core';
-import { SeederRunner } from '@tyravel/database';
+} from '@pondoknusa/core';
+import { SeederRunner } from '@pondoknusa/database';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { optionString, parseOptions, positionalArgs } from '../utils.js';
@@ -13,7 +13,7 @@ import { optionString, parseOptions, positionalArgs } from '../utils.js';
 export class DbSeedCommand extends Command {
   override readonly name = 'db:seed';
   override readonly description = 'Seed the database with records';
-  override readonly usage = 'tyravel db:seed [--class=DatabaseSeeder]';
+  override readonly usage = 'pondoknusa db:seed [--class=DatabaseSeeder]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);

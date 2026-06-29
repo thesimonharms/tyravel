@@ -94,7 +94,7 @@ export class ConsoleKernel {
     const command = this.find(parsed.command);
     if (!command) {
       console.error(`Unknown command: ${parsed.command}`);
-      console.error('Run `tyravel list` to see available commands.');
+      console.error('Run `pondoknusa list` to see available commands.');
       return 1;
     }
 
@@ -106,10 +106,10 @@ export class ConsoleKernel {
   }
 
   private printHelp(commands = this.list()): void {
-    console.log('Tyravel CLI');
+    console.log('Pondoknusa CLI');
     console.log('');
     console.log('Usage:');
-    console.log('  tyravel <command> [options] [arguments]');
+    console.log('  pondoknusa <command> [options] [arguments]');
     console.log('');
     console.log('Available commands:');
 

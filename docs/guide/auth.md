@@ -3,8 +3,8 @@
 Install auth scaffolding:
 
 ```bash
-tyravel auth:install
-tyravel migrate
+pondoknusa auth:install
+pondoknusa migrate
 ```
 
 ## Guards
@@ -33,7 +33,7 @@ Configure the session store in `config/auth.ts`:
 ```typescript
 session: {
   driver: 'database', // array | database | redis
-  cookie: 'tyravel_session',
+  cookie: 'pondoknusa_session',
   lifetimeMinutes: 120,
   secure: env('SESSION_SECURE', 'false') === 'true',
   sameSite: 'Lax', // Lax | Strict | None
@@ -55,10 +55,10 @@ Redis sessions:
 ```typescript
 session: {
   driver: 'redis',
-  cookie: 'tyravel_session',
+  cookie: 'pondoknusa_session',
   lifetimeMinutes: 120,
   redisConnection: 'default',
-  prefix: 'tyravel:session',
+  prefix: 'pondoknusa:session',
 },
 ```
 
@@ -93,7 +93,7 @@ Routes (from `auth:install`):
 Register custom providers before auth boots:
 
 ```typescript
-import { registerOAuthDriver } from '@tyravel/auth';
+import { registerOAuthDriver } from '@pondoknusa/auth';
 import { AcmeOAuthDriver } from '../social/drivers/AcmeOAuthDriver.js';
 
 registerOAuthDriver('acme', AcmeOAuthDriver);
@@ -102,7 +102,7 @@ registerOAuthDriver('acme', AcmeOAuthDriver);
 Scaffold a custom driver:
 
 ```bash
-tyravel make:social-driver acme
+pondoknusa make:social-driver acme
 ```
 
 Apple supports either a pre-generated `clientSecret` or dynamic JWT generation via `teamId`, `keyId`, and `privateKey` in the provider config.
@@ -181,7 +181,7 @@ tokens: {
 Token `abilities` are enforced at runtime. Gate routes with `createTokenAbilityMiddleware`:
 
 ```typescript
-import { createTokenAbilityMiddleware } from '@tyravel/auth';
+import { createTokenAbilityMiddleware } from '@pondoknusa/auth';
 
 Route.middleware(['auth:api', createTokenAbilityMiddleware('posts:write')])
   .post('/api/posts', handler);
@@ -191,19 +191,19 @@ The wildcard ability `*` grants full access.
 
 ## OAuth2 authorization server
 
-Issue access tokens to third-party apps with `@tyravel/auth-oauth`.
+Issue access tokens to third-party apps with `@pondoknusa/auth-oauth`.
 
 ```bash
-tyravel oauth:install
-npm install @tyravel/auth-oauth
-tyravel migrate
-tyravel oauth:client:create "My App" --redirect=http://127.0.0.1:3000/callback
+pondoknusa oauth:install
+npm install @pondoknusa/auth-oauth
+pondoknusa migrate
+pondoknusa oauth:client:create "My App" --redirect=http://127.0.0.1:3000/callback
 ```
 
 Register the provider in `src/main.ts` (done automatically by `oauth:install`):
 
 ```typescript
-import { OAuthServerServiceProvider } from '@tyravel/auth-oauth';
+import { OAuthServerServiceProvider } from '@pondoknusa/auth-oauth';
 
 app.register(OAuthServerServiceProvider);
 ```
@@ -232,7 +232,7 @@ Route.middleware('auth:oauth').get('/api/external', handler);
 
 ## Security hardening
 
-Tyravel includes several security defaults and opt-in hardening features.
+Pondoknusa includes several security defaults and opt-in hardening features.
 
 ### CSRF protection
 
@@ -281,7 +281,7 @@ Quick setup:
 
 1. Add `config/crypto.ts`
 2. Enable `SESSION_ENCRYPT` and/or `OAUTH_SIGN_TOKENS`
-3. Generate keys with `tyravel crypto:generate-keys`
+3. Generate keys with `pondoknusa crypto:generate-keys`
 
 ## Policies
 

@@ -1,11 +1,11 @@
-import { Route, View } from '@tyravel/core';
-import { coalesceHydrationManifest, Response } from '@tyravel/http';
+import { Route, View } from '@pondoknusa/core';
+import { coalesceHydrationManifest, Response } from '@pondoknusa/http';
 import { UserController } from '../controllers/user-controller.js';
 
 export function registerWebRoutes(): void {
   Route.get('/', async () => {
     const html = await View.render('welcome', {
-      name: 'Tyravel',
+      name: 'Pondoknusa',
       message: 'A TypeScript-native web framework with Laravel ergonomics.',
       tagline: 'Views, routes, models, and migrations — all in TypeScript.',
     });
@@ -17,7 +17,7 @@ export function registerWebRoutes(): void {
 
   Route.get('/stream', () =>
     View.streamSsr('streamed', {
-      name: 'Tyravel',
+      name: 'Pondoknusa',
     }),
   );
 

@@ -1,6 +1,6 @@
 # Cookbook
 
-Short, goal-oriented recipes for common Tyravel tasks. Each recipe assumes **1.0.x** and links to guide chapters for depth.
+Short, goal-oriented recipes for common Pondoknusa tasks. Each recipe assumes **1.0.x** and links to guide chapters for depth.
 
 ## Recipes
 
@@ -20,8 +20,8 @@ Short, goal-oriented recipes for common Tyravel tasks. Each recipe assumes **1.0
 
 ## Conventions
 
-- Recipes use `tyravel new` defaults (SQLite + database queue) unless noted.
-- Optional driver packages (`@tyravel/redis-node`, `@tyravel/database-pg`, …) are called out explicitly.
+- Recipes use `pondoknusa new` defaults (SQLite + database queue) unless noted.
+- Optional driver packages (`@pondoknusa/redis-node`, `@pondoknusa/database-pg`, …) are called out explicitly.
 - Stable vs experimental APIs follow [API stability](/guide/api-stability).
 
 ## Contributing a recipe

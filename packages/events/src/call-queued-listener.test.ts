@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { Container } from '@tyravel/container';
-import { JobRegistry, QueueWorker } from '@tyravel/queue';
+import { Container } from '@pondoknusa/container';
+import { JobRegistry, QueueWorker } from '@pondoknusa/queue';
 import {
   CallQueuedListener,
   Event,

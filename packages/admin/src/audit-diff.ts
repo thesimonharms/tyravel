@@ -1,4 +1,4 @@
-import { Model } from '@tyravel/database';
+import { Model } from '@pondoknusa/database';
 import type { AdminField } from './types.js';
 
 export function buildAuditChanges(

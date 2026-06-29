@@ -1,5 +1,5 @@
-import type { ModelStatic } from '@tyravel/database';
-import { chunkText } from '@tyravel/vector';
+import type { ModelStatic } from '@pondoknusa/database';
+import { chunkText } from '@pondoknusa/vector';
 import type { IngestDocumentInput, IngestDocumentOptions } from './types.js';
 
 export async function ingestDocument(

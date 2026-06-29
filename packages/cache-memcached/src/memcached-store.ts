@@ -1,4 +1,4 @@
-import type { CacheStore } from '@tyravel/cache';
+import type { CacheStore } from '@pondoknusa/cache';
 import { MemcachedClient } from './memcached-client.js';
 
 export interface MemcachedStoreConfig {

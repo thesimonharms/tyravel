@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { DEFAULT_VIEW_CONFIG, ViewEngine, type ViewConfig } from '@tyravel/views';
+import { DEFAULT_VIEW_CONFIG, ViewEngine, type ViewConfig } from '@pondoknusa/views';
 
 export { DEFAULT_VIEW_CONFIG };
 

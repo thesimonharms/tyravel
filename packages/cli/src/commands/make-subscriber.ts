@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pat
 export class MakeSubscriberCommand extends Command {
   override readonly name = 'make:subscriber';
   override readonly description = 'Create an event subscriber class';
-  override readonly usage = 'tyravel make:subscriber <Name>';
+  override readonly usage = 'pondoknusa make:subscriber <Name>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);

@@ -1,5 +1,5 @@
-import type { LogConfig } from '@tyravel/log';
-import { env } from '@tyravel/config';
+import type { LogConfig } from '@pondoknusa/log';
+import { env } from '@pondoknusa/config';
 
 export default {
   default: env('LOG_CHANNEL', 'stack'),
@@ -7,7 +7,7 @@ export default {
     stdout: { channel: 'stdout' },
     file: {
       channel: 'file',
-      path: 'storage/logs/tyravel.log',
+      path: 'storage/logs/pondoknusa.log',
     },
     stack: {
       channel: 'stack',

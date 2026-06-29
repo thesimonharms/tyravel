@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Response } from '@tyravel/http';
+import { Response } from '@pondoknusa/http';
 import { Application } from './application.js';
 import { HttpKernel } from './http-kernel.js';
 import { Route, setRouteApplication } from './route.js';

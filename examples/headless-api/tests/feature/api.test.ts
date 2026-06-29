@@ -6,8 +6,8 @@ import {
   DatabaseServiceProvider,
   setAuthApplication,
   setRouteApplication,
-} from '@tyravel/core';
-import { TestCase, withTyravelTest } from '@tyravel/testing';
+} from '@pondoknusa/core';
+import { TestCase, withPondoknusaTest } from '@pondoknusa/testing';
 
 class HeadlessApiTest extends TestCase {
   protected createApplication() {
@@ -28,7 +28,7 @@ class HeadlessApiTest extends TestCase {
   }
 }
 
-const t = withTyravelTest(HeadlessApiTest);
+const t = withPondoknusaTest(HeadlessApiTest);
 
 describe('headless API example', () => {
   it('returns the headless index payload', async () => {

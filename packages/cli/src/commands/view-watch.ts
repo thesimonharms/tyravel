@@ -1,4 +1,4 @@
-import { createViewWatcher } from '@tyravel/views';
+import { createViewWatcher } from '@pondoknusa/views';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { parseOptions, positionalArgs } from '../utils.js';
@@ -7,7 +7,7 @@ import { bootViewApplication, enableCompiledCache } from '../view-bootstrap.js';
 export class ViewWatchCommand extends Command {
   override readonly name = 'view:watch';
   override readonly description = 'Watch Tyr templates and recompile on change';
-  override readonly usage = 'tyravel view:watch';
+  override readonly usage = 'pondoknusa view:watch';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);

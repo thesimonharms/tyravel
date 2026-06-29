@@ -1,6 +1,6 @@
-import type { PayloadCipher } from '@tyravel/crypto';
-import type { DatabaseManager } from '@tyravel/database';
-import type { RedisManager } from '@tyravel/redis';
+import type { PayloadCipher } from '@pondoknusa/crypto';
+import type { DatabaseManager } from '@pondoknusa/database';
+import type { RedisManager } from '@pondoknusa/redis';
 import { DatabaseSessionStore, MemorySessionStore } from './session-store.js';
 import { RedisSessionStore } from './redis-session-store.js';
 import type { SessionStore } from './session.js';
@@ -45,7 +45,7 @@ export class SessionManager {
         this.store = new RedisSessionStore(
           this.redis,
           this.config.redisConnection ?? 'default',
-          this.config.prefix ?? 'tyravel:session',
+          this.config.prefix ?? 'pondoknusa:session',
           this.cipher,
         );
         break;

@@ -1,4 +1,4 @@
-import type { TyravelRequest } from './request.js';
+import type { PondoknusaRequest } from './request.js';
 import type { Middleware } from './types.js';
 
 export interface TrustedProxiesOptions {
@@ -15,7 +15,7 @@ export function createTrustedProxiesMiddleware(
 }
 
 export function resolveClientIp(
-  request: TyravelRequest,
+  request: PondoknusaRequest,
   remoteAddress?: string,
 ): string {
   const forwardedFor = request.header('x-forwarded-for');
@@ -29,7 +29,7 @@ export function resolveClientIp(
   return remoteAddress ?? request.header('x-real-ip') ?? '127.0.0.1';
 }
 
-export function resolveSecure(request: TyravelRequest): boolean {
+export function resolveSecure(request: PondoknusaRequest): boolean {
   const forwardedProto = request.header('x-forwarded-proto');
   if (request.hasTrustedProxies() && forwardedProto) {
     return forwardedProto.toLowerCase() === 'https';

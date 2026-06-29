@@ -1,4 +1,4 @@
-import type { RedisManager } from '@tyravel/redis';
+import type { RedisManager } from '@pondoknusa/redis';
 import { ArrayStore } from './array-store.js';
 import { FileStore } from './file-store.js';
 import { RedisStore } from './redis-store.js';

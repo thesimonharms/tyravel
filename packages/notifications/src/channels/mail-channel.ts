@@ -1,4 +1,4 @@
-import type { MailManager } from '@tyravel/mail';
+import type { MailManager } from '@pondoknusa/mail';
 import type { Notification } from '../notification.js';
 import type { Notifiable } from '../types.js';
 

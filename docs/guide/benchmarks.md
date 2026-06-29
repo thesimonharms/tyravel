@@ -1,6 +1,6 @@
 # Performance benchmarks
 
-Tyravel ships a benchmark harness for baseline throughput on HTTP, ORM, views, middleware, and boot paths.
+Pondoknusa ships a benchmark harness for baseline throughput on HTTP, ORM, views, middleware, and boot paths.
 
 ## Run locally
 
@@ -42,12 +42,12 @@ Same machine, same Node version, same `GET /bench` → `{ "ok": true }` payload,
 
 | Benchmark | Key | Framework |
 |-----------|-----|-----------|
-| Compare Tyravel | `compare.tyravel` | Tyravel `HttpKernel` |
+| Compare Pondoknusa | `compare.pondoknusa` | Pondoknusa `HttpKernel` |
 | Compare Express | `compare.express` | Express 5 |
 | Compare Fastify | `compare.fastify` | Fastify 5 |
 | Compare Hono | `compare.hono` | Hono + `@hono/node-server` |
 
-These are **informational baselines** on a minimal JSON route — not a full framework shootout. Tyravel’s value is the integrated stack (ORM, views, auth, queues). Use competitive rows to sanity-check HTTP overhead, not to pick a winner in isolation.
+These are **informational baselines** on a minimal JSON route — not a full framework shootout. Pondoknusa’s value is the integrated stack (ORM, views, auth, queues). Use competitive rows to sanity-check HTTP overhead, not to pick a winner in isolation.
 
 Throughput varies with CPU, Node version, and concurrent load.
 
@@ -65,9 +65,9 @@ If the snapshot is missing locally, run `npm run benchmark -- --json > benchmark
 
 ## CI trend artifacts
 
-On every push to `main`, the [Benchmarks workflow](https://github.com/thesimonharms/tyravel/actions/workflows/benchmarks.yml) runs quick-mode benchmarks (`BENCHMARK_QUICK=1`), compares against the previous baseline (warns on >15% drop), and uploads a JSON artifact named `benchmark-report-<sha>`.
+On every push to `main`, the [Benchmarks workflow](https://github.com/pondoknusa/pondoknusa/actions/workflows/benchmarks.yml) runs quick-mode benchmarks (`BENCHMARK_QUICK=1`), compares against the previous baseline (warns on >15% drop), and uploads a JSON artifact named `benchmark-report-<sha>`.
 
-A [weekly full benchmark](https://github.com/thesimonharms/tyravel/actions/workflows/benchmarks-weekly.yml) runs every Monday with `BENCHMARK_QUICK=0`, larger sample sizes, and **365-day** artifact retention for trend charts.
+A [weekly full benchmark](https://github.com/pondoknusa/pondoknusa/actions/workflows/benchmarks-weekly.yml) runs every Monday with `BENCHMARK_QUICK=0`, larger sample sizes, and **365-day** artifact retention for trend charts.
 
 The job is **informational only** — it does not fail the build on regressions. Use it to spot large swings before they reach production profiling.
 
@@ -89,7 +89,7 @@ Full local runs (`BENCHMARK_QUICK=0`) use larger sample sizes and usually report
 
 ## Bun vs Node
 
-Tyravel targets **Node.js 26+** as the production runtime. [Bun](https://bun.sh) can run Tyravel for development and experiments:
+Pondoknusa targets **Node.js 26+** as the production runtime. [Bun](https://bun.sh) can run Pondoknusa for development and experiments:
 
 ```bash
 bun run npm run benchmark

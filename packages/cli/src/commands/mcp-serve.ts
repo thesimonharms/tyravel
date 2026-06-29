@@ -1,19 +1,19 @@
-import { loadConfig } from '@tyravel/config';
-import { ConfigRepository } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
+import { ConfigRepository } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
   setRouteApplication,
   ServiceProvider,
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 import {
   buildCapabilityManifest,
   discoverDocs,
   discoverModels,
   flattenConfigKeys,
-  TyravelMcpServer,
+  PondoknusaMcpServer,
   type AppMcpContext,
-} from '@tyravel/mcp';
+} from '@pondoknusa/mcp';
 import { createKernel } from '../kernel.js';
 import { McpToolsServiceProvider, resolveMcpTools } from '../mcp-tools-provider.js';
 import { Command } from '../command.js';
@@ -24,8 +24,8 @@ import { importRoutes } from './mcp-serve-shared.js';
 
 export class McpServeCommand extends Command {
   override readonly name = 'mcp:serve';
-  override readonly description = 'Run the Tyravel MCP server over stdio for agents';
-  override readonly usage = 'tyravel mcp:serve';
+  override readonly description = 'Run the Pondoknusa MCP server over stdio for agents';
+  override readonly usage = 'pondoknusa mcp:serve';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -63,7 +63,7 @@ export class McpServeCommand extends Command {
       configKeys: flattenConfigKeys(config.all()),
       commands: createKernel()
         .list()
-        .map((command) => `tyravel ${command.name}`),
+        .map((command) => `pondoknusa ${command.name}`),
       docs: await discoverDocs(root),
       getConfig(key: string) {
         return config.has(key) ? config.get(key) : undefined;
@@ -71,7 +71,7 @@ export class McpServeCommand extends Command {
     };
 
     const appTools = await resolveMcpTools(app);
-    const server = TyravelMcpServer.fromApp(context, appTools);
+    const server = PondoknusaMcpServer.fromApp(context, appTools);
     await server.runStdio();
 
     return 0;

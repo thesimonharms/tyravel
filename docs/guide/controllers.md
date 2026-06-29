@@ -2,7 +2,7 @@
 
 ## Controllers
 
-Point routes at controller classes. Tyravel resolves controllers through the container:
+Point routes at controller classes. Pondoknusa resolves controllers through the container:
 
 ```typescript
 Route.get('/users', [UserController, 'index']);
@@ -35,7 +35,7 @@ Middleware receives `(request, next)` and may short-circuit with a response:
 ```typescript
 app.middleware('json', async (_request, next) => {
   const response = await next();
-  response.headers.set('x-tyravel-api', '1');
+  response.headers.set('x-pondoknusa-api', '1');
   return response;
 });
 ```

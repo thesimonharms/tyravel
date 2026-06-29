@@ -1,0 +1,28 @@
+{
+  "name": "create-pondoknusa",
+  "version": "1.0.3",
+  "description": "Create a new Pondoknusa application",
+  "type": "module",
+  "bin": {
+    "create-pondoknusa": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "README.md"
+  ],
+  "dependencies": {
+    "@pondoknusa/cli": "1.0.3"
+  },
+  "engines": {
+    "node": ">=26"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
+    "directory": "packages/create-pondoknusa"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

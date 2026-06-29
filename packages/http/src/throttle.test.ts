@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TyravelRequest } from './request.js';
+import { PondoknusaRequest } from './request.js';
 import { createThrottleMiddleware, resetThrottleStore } from './throttle.js';
 
 describe('createThrottleMiddleware', () => {
@@ -10,7 +10,7 @@ describe('createThrottleMiddleware', () => {
       windowMs: 60_000,
       key: () => 'test-key',
     });
-    const request = new TyravelRequest(new Request('http://localhost/users'));
+    const request = new PondoknusaRequest(new Request('http://localhost/users'));
 
     const ok = await middleware(request, async () => new Response('ok'));
     expect(ok.status).toBe(200);

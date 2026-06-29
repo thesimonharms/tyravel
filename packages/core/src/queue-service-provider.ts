@@ -1,6 +1,6 @@
-import { ConfigRepository } from '@tyravel/config';
-import { DatabaseManager } from '@tyravel/database';
-import { RedisManager } from '@tyravel/redis';
+import { ConfigRepository } from '@pondoknusa/config';
+import { DatabaseManager } from '@pondoknusa/database';
+import { RedisManager } from '@pondoknusa/redis';
 import {
   Dispatcher,
   FailedJobRepository,
@@ -9,7 +9,7 @@ import {
   QueueProcessor,
   QueueWorker,
   type QueueConfig,
-} from '@tyravel/queue';
+} from '@pondoknusa/queue';
 import { ServiceProvider } from './service-provider.js';
 
 export class QueueServiceProvider extends ServiceProvider {

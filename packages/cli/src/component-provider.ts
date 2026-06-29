@@ -27,14 +27,14 @@ export async function registerComponentInProvider(
   }
 
   if (!/\bView\b/.test(source)) {
-    const coreImport = /import\s*\{([^}]+)\}\s*from\s*'@tyravel\/core';/;
+    const coreImport = /import\s*\{([^}]+)\}\s*from\s*'@pondoknusa\/core';/;
     if (coreImport.test(source)) {
       source = source.replace(coreImport, (_match, imports: string) => {
         const trimmed = imports.trim().replace(/,\s*$/, '');
-        return `import { ${trimmed}, View } from '@tyravel/core';`;
+        return `import { ${trimmed}, View } from '@pondoknusa/core';`;
       });
     } else {
-      source = `import { View } from '@tyravel/core';\n${source}`;
+      source = `import { View } from '@pondoknusa/core';\n${source}`;
     }
   }
 

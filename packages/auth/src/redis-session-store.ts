@@ -1,12 +1,12 @@
-import type { PayloadCipher } from '@tyravel/crypto';
-import type { RedisManager } from '@tyravel/redis';
+import type { PayloadCipher } from '@pondoknusa/crypto';
+import type { RedisManager } from '@pondoknusa/redis';
 import type { SessionStore } from './session.js';
 
 export class RedisSessionStore implements SessionStore {
   constructor(
     private readonly redis: RedisManager,
     private readonly connectionName: string,
-    private readonly prefix = 'tyravel:session',
+    private readonly prefix = 'pondoknusa:session',
     private readonly cipher?: PayloadCipher,
   ) {}
 

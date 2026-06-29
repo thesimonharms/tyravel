@@ -6,7 +6,7 @@ import { AdminAuditLogger } from './audit-log.js';
 
 describe('AdminAuditLogger', () => {
   it('records and retrieves resource audit entries', async () => {
-    const dir = await mkdtemp(join(tmpdir(), 'tyravel-admin-audit-'));
+    const dir = await mkdtemp(join(tmpdir(), 'pondoknusa-admin-audit-'));
     const logger = new AdminAuditLogger({
       persistPath: join(dir, 'audit.json'),
       maxEntries: 10,

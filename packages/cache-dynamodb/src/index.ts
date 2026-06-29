@@ -1,4 +1,4 @@
-import { CacheManager } from '@tyravel/cache';
+import { CacheManager } from '@pondoknusa/cache';
 import { DynamoDbStore, type DynamoDbStoreConfig } from './dynamodb-store.js';
 
 export { DynamoDbStore, type DynamoDbStoreConfig } from './dynamodb-store.js';

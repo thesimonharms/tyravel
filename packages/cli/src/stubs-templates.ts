@@ -33,8 +33,8 @@ export function applyTemplateDefaults(
 
 export function webRoutesForTemplate(template: ProjectTemplate): string {
   if (template === 'api') {
-    return `import { Route } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+    return `import { Route } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 
 Route.prefix('api').group((routes) => {
   routes.get('/health', () => Response.json({ ok: true }));
@@ -45,23 +45,23 @@ Route.prefix('api').group((routes) => {
   }
 
   if (template === 'ssr') {
-    return `import { Route, View } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+    return `import { Route, View } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 
 Route.get('/', async () =>
-  Response.html(await View.render('welcome', { title: 'Welcome to Tyravel' })),
+  Response.html(await View.render('welcome', { title: 'Welcome to Pondoknusa' })),
 );
 `;
   }
 
   if (template === 'saas') {
-    return `import { Route, View } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+    return `import { Route, View } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 
 Route.get('/', async () =>
   Response.html(await View.render('welcome', {
     title: 'SaaS starter',
-    subtitle: 'Run tyravel auth:install to scaffold login and OAuth routes.',
+    subtitle: 'Run pondoknusa auth:install to scaffold login and OAuth routes.',
   })),
 );
 
@@ -69,12 +69,12 @@ Route.get('/dashboard', () => Response.json({ message: 'Protected area — add a
 `;
   }
 
-  return `import { Route } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+  return `import { Route } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 
 Route.get('/', (request) =>
   Response.json({
-    message: 'Welcome to Tyravel',
+    message: 'Welcome to Pondoknusa',
     path: request.path,
   }),
 );

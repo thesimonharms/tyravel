@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import type { CacheStore } from '@tyravel/cache';
+import type { CacheStore } from '@pondoknusa/cache';
 import type { GraphQLExecutionResult, GraphQLRequestPayload } from './types.js';
 
 export function buildGraphQLCacheKey(payload: GraphQLRequestPayload): string {

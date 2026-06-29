@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ArrayMailTransport, MailManager, Mailable } from './index.js';
-import { JobRegistry, QueueWorker, SyncQueue } from '@tyravel/queue';
+import { JobRegistry, QueueWorker, SyncQueue } from '@pondoknusa/queue';
 import { SendMailable } from './send-mailable.js';
 import { setQueuedMailContext } from './queued-mail-context.js';
 import type { MailMessage } from './types.js';

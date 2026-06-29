@@ -1,18 +1,18 @@
 # Admin panel
 
-Add the optional Tyravel admin UI for CRUD, policies, and audit logging.
+Add the optional Pondoknusa admin UI for CRUD, policies, and audit logging.
 
 ## Install
 
 ```bash
-tyravel admin:install
+pondoknusa admin:install
 ```
 
 Scaffolds:
 
 - `config/admin.ts` — prefix, middleware, audit log
 - Admin routes and policies
-- `@tyravel/admin` provider registration
+- `@pondoknusa/admin` provider registration
 
 ## Config
 
@@ -38,7 +38,7 @@ Gate access with a policy ability (`access-admin`) on your user model.
 
 ## Testing
 
-Use `@tyravel/testing` HTTP sugar:
+Use `@pondoknusa/testing` HTTP sugar:
 
 ```typescript
 const response = await t.http
@@ -47,4 +47,4 @@ const response = await t.http
 await response.assertOk();
 ```
 
-See `@tyravel/admin` in the [package reference](/reference/generated/packages/admin).
+See `@pondoknusa/admin` in the [package reference](/reference/generated/packages/admin).

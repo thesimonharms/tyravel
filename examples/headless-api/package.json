@@ -3,30 +3,30 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tyravel dev",
-    "start": "tyravel start",
-    "dev:worker": "tyravel queue:work",
-    "test": "tyravel test"
+    "dev": "pondoknusa dev",
+    "start": "pondoknusa start",
+    "dev:worker": "pondoknusa queue:work",
+    "test": "pondoknusa test"
   },
   "dependencies": {
-    "@tyravel/auth": "1.0.1",
-    "@tyravel/cache": "1.0.1",
-    "@tyravel/cli": "1.0.1",
-    "@tyravel/collection": "1.0.1",
-    "@tyravel/config": "1.0.1",
-    "@tyravel/core": "1.0.1",
-    "@tyravel/database": "1.0.1",
-    "@tyravel/events": "1.0.1",
-    "@tyravel/http": "1.0.1",
-    "@tyravel/log": "1.0.1",
-    "@tyravel/mail": "1.0.1",
-    "@tyravel/notifications": "1.0.1",
-    "@tyravel/queue": "1.0.1",
-    "@tyravel/support": "1.0.1",
-    "@tyravel/validation": "1.0.1"
+    "@pondoknusa/auth": "1.0.3",
+    "@pondoknusa/cache": "1.0.3",
+    "@pondoknusa/cli": "1.0.3",
+    "@pondoknusa/collection": "1.0.3",
+    "@pondoknusa/config": "1.0.3",
+    "@pondoknusa/core": "1.0.3",
+    "@pondoknusa/database": "1.0.3",
+    "@pondoknusa/events": "1.0.3",
+    "@pondoknusa/http": "1.0.3",
+    "@pondoknusa/log": "1.0.3",
+    "@pondoknusa/mail": "1.0.3",
+    "@pondoknusa/notifications": "1.0.3",
+    "@pondoknusa/queue": "1.0.3",
+    "@pondoknusa/support": "1.0.3",
+    "@pondoknusa/validation": "1.0.3"
   },
   "devDependencies": {
-    "@tyravel/testing": "1.0.1",
+    "@pondoknusa/testing": "1.0.3",
     "vitest": "^3.2.4"
   }
 }

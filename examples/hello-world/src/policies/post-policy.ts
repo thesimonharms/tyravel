@@ -1,5 +1,5 @@
-import { Policy } from '@tyravel/auth';
-import type { Authenticatable } from '@tyravel/auth';
+import { Policy } from '@pondoknusa/auth';
+import type { Authenticatable } from '@pondoknusa/auth';
 import type { Post } from '../models/post.js';
 
 export class PostPolicy extends Policy {

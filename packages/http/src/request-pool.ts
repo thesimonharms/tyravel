@@ -1,27 +1,27 @@
-import { TyravelRequest } from './request.js';
+import { PondoknusaRequest } from './request.js';
 import type { RouteParams } from './types.js';
 
 const DEFAULT_POOL_SIZE = 128;
 
-export class TyravelRequestPool {
+export class PondoknusaRequestPool {
   private readonly maxSize: number;
-  private readonly pool: TyravelRequest[] = [];
+  private readonly pool: PondoknusaRequest[] = [];
 
   constructor(maxSize = DEFAULT_POOL_SIZE) {
     this.maxSize = Math.max(1, maxSize);
   }
 
-  acquire(raw: Request, params: RouteParams, routeName?: string): TyravelRequest {
+  acquire(raw: Request, params: RouteParams, routeName?: string): PondoknusaRequest {
     const request = this.pool.pop();
     if (request) {
       request.reinitialize(raw, params, routeName);
       return request;
     }
 
-    return new TyravelRequest(raw, params, routeName);
+    return new PondoknusaRequest(raw, params, routeName);
   }
 
-  release(request: TyravelRequest): void {
+  release(request: PondoknusaRequest): void {
     request.resetMutableState();
     if (this.pool.length < this.maxSize) {
       this.pool.push(request);

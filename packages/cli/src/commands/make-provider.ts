@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pat
 export class MakeProviderCommand extends Command {
   override readonly name = 'make:provider';
   override readonly description = 'Create a new service provider class';
-  override readonly usage = 'tyravel make:provider <Name>';
+  override readonly usage = 'pondoknusa make:provider <Name>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -14,7 +14,7 @@ export class MakeProviderCommand extends Command {
 
     if (!rawName) {
       console.error('Provider name is required.');
-      console.error('Usage: tyravel make:provider <Name>');
+      console.error('Usage: pondoknusa make:provider <Name>');
       return 1;
     }
 

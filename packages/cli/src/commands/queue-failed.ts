@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { loadConfig } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
@@ -8,8 +8,8 @@ import {
   QueueServiceProvider,
   ServiceProvider,
   setQueueApplication,
-} from '@tyravel/core';
-import type { FailedJobRepository } from '@tyravel/queue';
+} from '@pondoknusa/core';
+import type { FailedJobRepository } from '@pondoknusa/queue';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { failedJobsTableMigration } from '../stubs.js';
@@ -18,7 +18,7 @@ import { parseOptions, pathExists, positionalArgs, projectPath, writeFile } from
 export class QueueFailedCommand extends Command {
   override readonly name = 'queue:failed';
   override readonly description = 'List failed queue jobs';
-  override readonly usage = 'tyravel queue:failed';
+  override readonly usage = 'pondoknusa queue:failed';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -56,7 +56,7 @@ export class QueueFailedCommand extends Command {
 export class QueueRetryCommand extends Command {
   override readonly name = 'queue:retry';
   override readonly description = 'Retry a failed queue job by id';
-  override readonly usage = 'tyravel queue:retry <id>';
+  override readonly usage = 'pondoknusa queue:retry <id>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -73,7 +73,7 @@ export class QueueRetryCommand extends Command {
       return 1;
     }
 
-    const manager = app.make<import('@tyravel/queue').QueueManager>('queue');
+    const manager = app.make<import('@pondoknusa/queue').QueueManager>('queue');
     const failedJobs = app.make<FailedJobRepository>('queue.failed');
 
     const record = await failedJobs.find(id);
@@ -104,7 +104,7 @@ export class QueueRetryCommand extends Command {
 export class QueueFailedTableCommand extends Command {
   override readonly name = 'queue:failed-table';
   override readonly description = 'Create a migration for the failed_jobs table';
-  override readonly usage = 'tyravel queue:failed-table';
+  override readonly usage = 'pondoknusa queue:failed-table';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -121,7 +121,7 @@ export class QueueFailedTableCommand extends Command {
 
     await writeFile(projectPath(root, 'database/migrations', fileName), failedJobsTableMigration());
     console.log(`Migration created: database/migrations/${fileName}`);
-    console.log('Run tyravel migrate to create the failed_jobs table.');
+    console.log('Run pondoknusa migrate to create the failed_jobs table.');
 
     return 0;
   }

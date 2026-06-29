@@ -7,14 +7,14 @@ describe('readEchoConfigFromDocument', () => {
     const window = new Window();
     window.document.write(`
       <script type="application/json" id="${ECHO_CONFIG_SCRIPT_ID}">
-        {"broadcaster":"websocket","host":"http://127.0.0.1:3000","path":"/tyravel/ws","authEndpoint":"/broadcasting/auth"}
+        {"broadcaster":"websocket","host":"http://127.0.0.1:3000","path":"/pondoknusa/ws","authEndpoint":"/broadcasting/auth"}
       </script>
     `);
 
     expect(readEchoConfigFromDocument(window.document)).toEqual({
       broadcaster: 'websocket',
       host: 'http://127.0.0.1:3000',
-      path: '/tyravel/ws',
+      path: '/pondoknusa/ws',
       authEndpoint: '/broadcasting/auth',
     });
   });

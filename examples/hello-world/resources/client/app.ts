@@ -1,4 +1,4 @@
 import './islands/counter.js';
-import { hydrate } from '@tyravel/ssr';
+import { hydrate } from '@pondoknusa/ssr';
 
 hydrate();

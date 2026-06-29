@@ -12,7 +12,7 @@ import type {
   PresenceCallbacks,
 } from '../types.js';
 
-const DEFAULT_WS_PATH = '/tyravel/ws';
+const DEFAULT_WS_PATH = '/pondoknusa/ws';
 
 export interface WebSocketLike {
   readonly readyState: number;

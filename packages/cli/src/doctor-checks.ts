@@ -1,13 +1,13 @@
 import { access, constants } from 'node:fs/promises';
 import { join } from 'node:path';
-import { loadConfig, loadEnv } from '@tyravel/config';
+import { loadConfig, loadEnv } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
   DatabaseServiceProvider,
   setRouteApplication,
-} from '@tyravel/core';
-import { docsLink } from '@tyravel/support';
+} from '@pondoknusa/core';
+import { docsLink } from '@pondoknusa/support';
 import { isHeadlessProject } from './headless-project.js';
 
 export interface DoctorCheck {
@@ -80,7 +80,7 @@ export async function runDoctorChecks(root: string): Promise<DoctorCheck[]> {
       checks.push({
         name: 'view-cache',
         ok: false,
-        message: `Production requires compiled views — run \`tyravel view:cache\`. See ${docsLink('/guide/deployment')}`,
+        message: `Production requires compiled views — run \`pondoknusa view:cache\`. See ${docsLink('/guide/deployment')}`,
       });
     }
   }
@@ -97,7 +97,7 @@ export async function runDoctorChecks(root: string): Promise<DoctorCheck[]> {
       app.register(ConfigServiceProvider);
       app.register(DatabaseServiceProvider);
       await app.boot();
-      await app.make<import('@tyravel/database').DatabaseManager>('db').connection().query('SELECT 1');
+      await app.make<import('@pondoknusa/database').DatabaseManager>('db').connection().query('SELECT 1');
       checks.push({ name: 'database', ok: true, message: `${defaultConnection} connection OK` });
     } catch (error) {
       checks.push({
@@ -111,16 +111,16 @@ export async function runDoctorChecks(root: string): Promise<DoctorCheck[]> {
   const redisConfig = config.redis as { default?: string } | undefined;
   if (redisConfig?.default) {
     try {
-      const { registerNodeRedisDriver } = await import('@tyravel/redis-node');
-      const { RedisServiceProvider } = await import('@tyravel/core');
+      const { registerNodeRedisDriver } = await import('@pondoknusa/redis-node');
+      const { RedisServiceProvider } = await import('@pondoknusa/core');
       registerNodeRedisDriver();
       const app = new Application(root);
       app.register(ConfigServiceProvider);
       app.register(RedisServiceProvider);
       await app.boot();
-      const redis = app.make<import('@tyravel/redis').RedisManager>('redis');
+      const redis = app.make<import('@pondoknusa/redis').RedisManager>('redis');
       const client = await redis.connection();
-      await client.set('tyravel:doctor:probe', '1', { EX: 5 });
+      await client.set('pondoknusa:doctor:probe', '1', { EX: 5 });
       checks.push({ name: 'redis', ok: true, message: 'Redis connection OK' });
     } catch (error) {
       checks.push({

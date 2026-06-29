@@ -5,14 +5,14 @@ import { Command } from '../command.js';
 
 export class VersionCommand extends Command {
   override readonly name = 'version';
-  override readonly description = 'Show the Tyravel CLI version';
+  override readonly description = 'Show the Pondoknusa CLI version';
 
   async handle(): Promise<number> {
     const currentDir = dirname(fileURLToPath(import.meta.url));
     const packageJsonPath = join(currentDir, '..', '..', 'package.json');
     const pkg = JSON.parse(await readFile(packageJsonPath, 'utf8')) as { version: string };
 
-    console.log(`Tyravel CLI ${pkg.version}`);
+    console.log(`Pondoknusa CLI ${pkg.version}`);
     return 0;
   }
 }

@@ -3,7 +3,7 @@ import type { NewProjectOptions } from './new-project-options.js';
 export function ragResourceModel(name: string): string {
   const table = `${name.charAt(0).toLowerCase()}${name.slice(1)}s`;
 
-  return `import { Model } from '@tyravel/database';
+  return `import { Model } from '@pondoknusa/database';
 
 export interface ${name}Attributes {
   id: number;
@@ -23,9 +23,9 @@ export class ${name} extends Model<${name}Attributes> {
 export function ragResourceMigration(name: string, timestamp: string): string {
   const table = `${name.charAt(0).toLowerCase()}${name.slice(1)}s`;
 
-  return `import { Migration } from '@tyravel/database';
-import type { DatabaseConnection } from '@tyravel/database';
-import type { SchemaBuilder } from '@tyravel/database';
+  return `import { Migration } from '@pondoknusa/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import type { SchemaBuilder } from '@pondoknusa/database';
 
 export default class Create${name}sTable extends Migration {
   override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
@@ -50,8 +50,8 @@ export function ragIngestJob(name: string): string {
   const modelImport = `${name}.js`;
   const variable = `${name.charAt(0).toLowerCase()}${name.slice(1)}`;
 
-  return `import { Job } from '@tyravel/queue';
-import { ingestFile } from '@tyravel/rag';
+  return `import { Job } from '@pondoknusa/queue';
+import { ingestFile } from '@pondoknusa/rag';
 import { ${name} } from '../models/${modelImport}';
 
 export interface Ingest${name}Payload extends Record<string, unknown> {
@@ -68,7 +68,7 @@ export class Ingest${name} extends Job<Ingest${name}Payload> {
 }
 
 export function vectorConfig(): string {
-  return `import { env } from '@tyravel/config';
+  return `import { env } from '@pondoknusa/config';
 
 export default {
   defaultMetric: env('VECTOR_METRIC', 'cosine'),
@@ -78,7 +78,7 @@ export default {
 }
 
 export function embedStub(): string {
-  return `import type { EmbedFn } from '@tyravel/vector';
+  return `import type { EmbedFn } from '@pondoknusa/vector';
 
 /**
  * Replace with your provider SDK (OpenAI, Anthropic, local model, etc.).
@@ -95,14 +95,14 @@ export const embed: EmbedFn = async (text) => {
 }
 
 export function graphqlRoutes(): string {
-  return `import { Route } from '@tyravel/core';
-import { ArrayStore } from '@tyravel/cache';
+  return `import { Route } from '@pondoknusa/core';
+import { ArrayStore } from '@pondoknusa/cache';
 import {
   createGraphQLHandler,
   createOperationRegistry,
   defineSchema,
   defineType,
-} from '@tyravel/graphql';
+} from '@pondoknusa/graphql';
 import { Document } from '../models/Document.js';
 
 const cache = new ArrayStore();
@@ -110,7 +110,7 @@ const cache = new ArrayStore();
 const schema = defineSchema({
   Query: {
     hello: {
-      resolve: () => 'Tyravel RAG',
+      resolve: () => 'Pondoknusa RAG',
     },
     documents: {
       resolve: async () => Document.query().limit(10).get(),
@@ -162,8 +162,8 @@ Route.get('/graphql', createGraphQLHandler({
 
 export function ragRoutes(): string {
   return `import { join } from 'node:path';
-import { Route } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+import { Route } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 import {
   ConversationMemory,
   Rag,
@@ -171,7 +171,7 @@ import {
   ingestFile,
   loadPromptTemplate,
   streamRagResponse,
-} from '@tyravel/rag';
+} from '@pondoknusa/rag';
 import { Document } from '../models/Document.js';
 import { ConversationMessage } from '../models/ConversationMessage.js';
 import { embed } from '../embed.js';
@@ -254,7 +254,7 @@ Route.post('/rag/ask/stream', async (request) => {
 }
 
 export function conversationMessageModel(): string {
-  return `import { Model } from '@tyravel/database';
+  return `import { Model } from '@pondoknusa/database';
 
 export interface ConversationMessageAttributes {
   id: number;
@@ -270,9 +270,9 @@ export class ConversationMessage extends Model<ConversationMessageAttributes> {
 }
 
 export function conversationMessagesMigration(timestamp: string): string {
-  return `import { Migration } from '@tyravel/database';
-import type { DatabaseConnection } from '@tyravel/database';
-import type { SchemaBuilder } from '@tyravel/database';
+  return `import { Migration } from '@pondoknusa/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import type { SchemaBuilder } from '@pondoknusa/database';
 
 export default class CreateConversationMessagesTable extends Migration {
   override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
@@ -304,7 +304,7 @@ export function aiMainEntry(options: NewProjectOptions): string {
   const driverImports: string[] = [];
   const driverProviders: string[] = [];
   const bootstrapLines: string[] = [
-    "import { registerEmbedModel, setEmbedChunksHandler } from '@tyravel/vector';",
+    "import { registerEmbedModel, setEmbedChunksHandler } from '@pondoknusa/vector';",
     "import { Document } from './models/Document.js';",
     "import { embed } from './embed.js';",
     '',
@@ -313,24 +313,24 @@ export function aiMainEntry(options: NewProjectOptions): string {
   ];
 
   if (options.database === 'mysql') {
-    driverImports.push("import { MysqlDatabaseServiceProvider } from '@tyravel/database-mysql';");
+    driverImports.push("import { MysqlDatabaseServiceProvider } from '@pondoknusa/database-mysql';");
     driverProviders.push('app.register(MysqlDatabaseServiceProvider);');
   } else if (options.database === 'postgres') {
-    driverImports.push("import { PgDatabaseServiceProvider } from '@tyravel/database-pg';");
+    driverImports.push("import { PgDatabaseServiceProvider } from '@pondoknusa/database-pg';");
     driverProviders.push('app.register(PgDatabaseServiceProvider);');
-    bootstrapLines.splice(1, 0, "import { registerVectorSearchForConnection } from '@tyravel/vector-pg';");
+    bootstrapLines.splice(1, 0, "import { registerVectorSearchForConnection } from '@pondoknusa/vector-pg';");
     bootstrapLines.push('');
     bootstrapLines.push("// Register pgvector after the database boots in AppServiceProvider if needed.");
   } else {
-    bootstrapLines.splice(1, 0, "import { registerLocalVectorSearchDriver } from '@tyravel/vector';");
+    bootstrapLines.splice(1, 0, "import { registerLocalVectorSearchDriver } from '@pondoknusa/vector';");
     bootstrapLines.push('');
     bootstrapLines.push("registerLocalVectorSearchDriver('sqlite');");
   }
 
   if (options.redis) {
-    driverImports.push("import { NodeRedisServiceProvider } from '@tyravel/redis-node';");
+    driverImports.push("import { NodeRedisServiceProvider } from '@pondoknusa/redis-node';");
     driverProviders.push('app.register(NodeRedisServiceProvider);');
-    driverImports.push("import { WebSocketBroadcastServiceProvider } from '@tyravel/broadcasting-websocket';");
+    driverImports.push("import { WebSocketBroadcastServiceProvider } from '@pondoknusa/broadcasting-websocket';");
     driverProviders.push('new WebSocketBroadcastServiceProvider(app).register();');
   }
 
@@ -365,7 +365,7 @@ export function aiMainEntry(options: NewProjectOptions): string {
   setViewApplication,
   ViewServiceProvider,
   serve,
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 import { AppServiceProvider } from './providers/app-service-provider.js';
 import './routes/channels.js';
 import './routes/web.js';
@@ -417,9 +417,9 @@ await serve(kernel);
 }
 
 export function aiAppServiceProvider(): string {
-  return `import { ServiceProvider } from '@tyravel/core';
-import { JobRegistry } from '@tyravel/queue';
-import { EmbedChunksJob } from '@tyravel/vector';
+  return `import { ServiceProvider } from '@pondoknusa/core';
+import { JobRegistry } from '@pondoknusa/queue';
+import { EmbedChunksJob } from '@pondoknusa/vector';
 
 export class AppServiceProvider extends ServiceProvider {
   override register() {

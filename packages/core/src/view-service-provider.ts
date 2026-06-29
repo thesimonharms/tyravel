@@ -1,10 +1,10 @@
 import { randomBytes } from 'node:crypto';
 import { join } from 'node:path';
-import { resolveEchoClientConfig, type BroadcastingConfig } from '@tyravel/broadcasting';
-import { ConfigRepository } from '@tyravel/config';
-import type { AuthManager, Gate } from '@tyravel/auth';
-import type { TyravelRequest } from '@tyravel/http';
-import { withMiddlewareMeta } from '@tyravel/http';
+import { resolveEchoClientConfig, type BroadcastingConfig } from '@pondoknusa/broadcasting';
+import { ConfigRepository } from '@pondoknusa/config';
+import type { AuthManager, Gate } from '@pondoknusa/auth';
+import type { PondoknusaRequest } from '@pondoknusa/http';
+import { withMiddlewareMeta } from '@pondoknusa/http';
 import {
   createViewWatcher,
   DEFAULT_VIEW_CONFIG,
@@ -12,7 +12,7 @@ import {
   ViewErrorBag,
   type ValidationErrors,
   type ViewConfig,
-} from '@tyravel/views';
+} from '@pondoknusa/views';
 import { ServiceProvider } from './service-provider.js';
 import { setViewApplication, setViewRequest } from './view.js';
 
@@ -25,7 +25,7 @@ function joinAssetUrl(base: string, path: string): string {
 }
 
 function readOldInput(
-  request: TyravelRequest | undefined,
+  request: PondoknusaRequest | undefined,
   key: string,
   defaultValue?: unknown,
 ): unknown {
@@ -36,7 +36,7 @@ function readOldInput(
   return flash[key] ?? defaultValue;
 }
 
-function ensureCsrfToken(request: TyravelRequest | undefined): string {
+function ensureCsrfToken(request: PondoknusaRequest | undefined): string {
   const session = request?.session;
   if (!session) {
     return '';
@@ -50,7 +50,7 @@ function ensureCsrfToken(request: TyravelRequest | undefined): string {
   return token;
 }
 
-function readValidationErrors(request: TyravelRequest | undefined): ViewErrorBag {
+function readValidationErrors(request: PondoknusaRequest | undefined): ViewErrorBag {
   const errors = request?.session?.get<ValidationErrors>('_errors') ?? {};
   return new ViewErrorBag(errors);
 }
@@ -90,7 +90,7 @@ export class ViewServiceProvider extends ServiceProvider {
     const appUrl = String(config.get('app.url', 'http://127.0.0.1:3000') ?? 'http://127.0.0.1:3000');
     engine.setEchoClientConfig(resolveEchoClientConfig(broadcasting, appUrl));
 
-    const applyBindings = (request?: TyravelRequest) => {
+    const applyBindings = (request?: PondoknusaRequest) => {
       engine.setBindings({
         route: (name, params = {}) => {
           const normalized = Object.fromEntries(
@@ -157,7 +157,7 @@ export class ViewServiceProvider extends ServiceProvider {
     viewConfig: ViewConfig,
     environment: string,
   ): void {
-    if (process.env.TYRAVEL_VIEW_WATCH !== '1' || environment === 'production') {
+    if (process.env.PONDOKNUSA_VIEW_WATCH !== '1' || environment === 'production') {
       return;
     }
 

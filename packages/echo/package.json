@@ -1,7 +1,7 @@
 {
-  "name": "@tyravel/echo",
+  "name": "@pondoknusa/echo",
   "version": "1.0.3",
-  "description": "Laravel Echo-style browser client for Tyravel broadcasting",
+  "description": "Laravel Echo-style browser client for Pondoknusa broadcasting",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -21,7 +21,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/echo"
   },
   "publishConfig": {

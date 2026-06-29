@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, writeFile, pathExists } from
 export class VectorInstallCommand extends Command {
   override readonly name = 'vector:install';
   override readonly description = 'Create a migration that enables the pgvector extension';
-  override readonly usage = 'tyravel vector:install';
+  override readonly usage = 'pondoknusa vector:install';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -23,7 +23,7 @@ export class VectorInstallCommand extends Command {
 
     await writeFile(target, pgvectorExtensionMigration());
     console.log(`Migration created: database/migrations/${fileName}`);
-    console.log('Run tyravel migrate on PostgreSQL to enable pgvector.');
+    console.log('Run pondoknusa migrate on PostgreSQL to enable pgvector.');
 
     return 0;
   }

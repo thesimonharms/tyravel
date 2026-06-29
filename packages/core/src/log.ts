@@ -1,4 +1,4 @@
-import type { LogContext, LogRepository } from '@tyravel/log';
+import type { LogContext, LogRepository } from '@pondoknusa/log';
 import type { Application } from './application.js';
 
 let logApplication: Application | undefined;

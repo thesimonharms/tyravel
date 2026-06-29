@@ -3,8 +3,8 @@
 Routes are defined with the `Route` facade:
 
 ```typescript
-import { Route } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+import { Route } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 import { UserController } from '../controllers/user-controller.js';
 
 Route.get('/', (request) =>

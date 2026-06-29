@@ -1,6 +1,6 @@
-import type { ModelStatic } from '@tyravel/database';
-import { finalizeVectorResults, type VectorSearchDriver } from '@tyravel/vector';
-import type { Embedding, VectorSearchOptions } from '@tyravel/vector';
+import type { ModelStatic } from '@pondoknusa/database';
+import { finalizeVectorResults, type VectorSearchDriver } from '@pondoknusa/vector';
+import type { Embedding, VectorSearchOptions } from '@pondoknusa/vector';
 import {
   resolveQdrantCollection,
   searchQdrantCollection,

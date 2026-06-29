@@ -1,8 +1,8 @@
 # Introduction
 
-![Tyravel logo](/logo.svg){width=80}
+![Pondoknusa logo](/logo.svg){width=80}
 
-Tyravel is a TypeScript-native web framework that brings Laravel-style ergonomics to Node.js 26+. It runs on standard Web APIs (`Request`, `Response`, `fetch`) and ships as a set of focused npm packages you can adopt incrementally.
+Pondoknusa is a TypeScript-native web framework that brings Laravel-style ergonomics to Node.js 26+. It runs on standard Web APIs (`Request`, `Response`, `fetch`) and ships as a set of focused npm packages you can adopt incrementally.
 
 ## What you get
 
@@ -10,9 +10,9 @@ Tyravel is a TypeScript-native web framework that brings Laravel-style ergonomic
 - **HTTP layer** — router with groups and named routes, middleware registry, JSON/HTML/XML responses
 - **Database** — Eloquent-style models, query builder, migrations, factories, seeders, and pagination
 - **Auth** — session and token guards, social OAuth (GitHub, Google, X, Apple, …), OAuth2 server, CSRF, API token hardening, policies, password reset
-- **Crypto** — post-quantum KEM/signatures (`@tyravel/crypto`), session encryption at rest, signed OAuth tokens
+- **Crypto** — post-quantum KEM/signatures (`@pondoknusa/crypto`), session encryption at rest, signed OAuth tokens
 - **Async work** — typed jobs, database/redis queue drivers, domain events and listeners (async-native boot and I/O since v0.9.0)
-- **DX** — `tyravel` CLI for scaffolding, migrations, seeding, and a built-in dev server
+- **DX** — `pondoknusa` CLI for scaffolding, migrations, seeding, and a built-in dev server
 
 ## Requirements
 
@@ -23,15 +23,15 @@ Tyravel is a TypeScript-native web framework that brings Laravel-style ergonomic
 
 | Package | Role |
 |---------|------|
-| `@tyravel/core` | Application kernel and facades |
-| `@tyravel/http` | Router, middleware, requests, responses |
-| `@tyravel/database` | ORM, migrations, pagination |
-| `@tyravel/auth` | Guards, sessions, social OAuth, policies |
-| `@tyravel/auth-oauth` | OAuth2 authorization server |
-| `@tyravel/crypto` | Post-quantum encryption and signatures |
-| `@tyravel/cli` | Project scaffolding and generators |
+| `@pondoknusa/core` | Application kernel and facades |
+| `@pondoknusa/http` | Router, middleware, requests, responses |
+| `@pondoknusa/database` | ORM, migrations, pagination |
+| `@pondoknusa/auth` | Guards, sessions, social OAuth, policies |
+| `@pondoknusa/auth-oauth` | OAuth2 authorization server |
+| `@pondoknusa/crypto` | Post-quantum encryption and signatures |
+| `@pondoknusa/cli` | Project scaffolding and generators |
 
-See the [package reference](/reference/generated/packages) for every `@tyravel/*` package, or the [monorepo README](https://github.com/thesimonharms/tyravel#packages) for a quick overview.
+See the [package reference](/reference/generated/packages) for every `@pondoknusa/*` package, or the [monorepo README](https://github.com/pondoknusa/pondoknusa#packages) for a quick overview.
 
 ## Documentation map
 
@@ -44,9 +44,9 @@ See the [package reference](/reference/generated/packages) for every `@tyravel/*
 | [Configuration reference](/guide/configuration-reference) | Every `config/*.ts` key from scaffolds |
 | [Broadcasting](/guide/broadcasting) | WebSocket hub, Echo client, production deploy |
 | [Deployment](/guide/deployment) | Platform matrix, Docker, Fly, Railway, Cloudflare, CI/CD |
-| [Tyravel Cloud](/guide/deployment/tyravel-cloud) | Planned managed hosting (like Laravel Cloud) |
-| [Ecosystem](/guide/ecosystem) | Publishing third-party `@tyravel/*` extensions |
+| [Pondoknusa Cloud](/guide/deployment/pondoknusa-cloud) | Planned managed hosting (like Laravel Cloud) |
+| [Ecosystem](/guide/ecosystem) | Publishing third-party `@pondoknusa/*` extensions |
 
 ## Upgrading
 
-Tyravel **1.0.x** follows strict semver for stable APIs. Read [API stability](/guide/api-stability) before upgrading across minor versions. Apps still on **0.11–0.16** should follow [Upgrading to 1.0](/guide/upgrading-to-1.0) to drop removed sync helpers and adopt async catalog APIs.
+Pondoknusa **1.0.x** follows strict semver for stable APIs. Read [API stability](/guide/api-stability) before upgrading across minor versions. Apps still on **0.11–0.16** should follow [Upgrading to 1.0](/guide/upgrading-to-1.0) to drop removed sync helpers and adopt async catalog APIs.

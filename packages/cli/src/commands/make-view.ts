@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, toKebabCase, writeFile, path
 export class MakeViewCommand extends Command {
   override readonly name = 'make:view';
   override readonly description = 'Create a new Tyr template view';
-  override readonly usage = 'tyravel make:view <name>';
+  override readonly usage = 'pondoknusa make:view <name>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -14,7 +14,7 @@ export class MakeViewCommand extends Command {
 
     if (!rawName) {
       console.error('View name is required.');
-      console.error('Usage: tyravel make:view <name>');
+      console.error('Usage: pondoknusa make:view <name>');
       return 1;
     }
 

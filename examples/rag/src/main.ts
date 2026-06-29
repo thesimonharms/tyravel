@@ -10,9 +10,9 @@ import {
   setQueueApplication,
   setRouteApplication,
   serve,
-} from '@tyravel/core';
-import { ConfigRepository } from '@tyravel/config';
-import { registerEmbedModel, registerLocalVectorSearchDriver, setEmbedChunksHandler } from '@tyravel/vector';
+} from '@pondoknusa/core';
+import { ConfigRepository } from '@pondoknusa/config';
+import { registerEmbedModel, registerLocalVectorSearchDriver, setEmbedChunksHandler } from '@pondoknusa/vector';
 import { AppServiceProvider } from './providers/app-service-provider.js';
 import { Document } from './models/document.js';
 import { embed } from './embed.js';

@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/storage-supabase",
+  "name": "@pondoknusa/storage-supabase",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -11,7 +11,7 @@
     }
   },
   "dependencies": {
-    "@tyravel/storage": "1.0.3"
+    "@pondoknusa/storage": "1.0.3"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -26,11 +26,11 @@
   "devDependencies": {
     "@types/node": "^26.0.1"
   },
-  "description": "Supabase storage driver for Tyravel",
+  "description": "Supabase storage driver for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/storage-supabase"
   },
   "publishConfig": {

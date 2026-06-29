@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { MailManager, ArrayMailTransport } from '@tyravel/mail';
-import { JobRegistry, QueueWorker, SyncQueue } from '@tyravel/queue';
+import { MailManager, ArrayMailTransport } from '@pondoknusa/mail';
+import { JobRegistry, QueueWorker, SyncQueue } from '@pondoknusa/queue';
 import { Notification } from './notification.js';
 import { NotificationManager } from './notification-manager.js';
 import { NotificationRegistry } from './notification-registry.js';

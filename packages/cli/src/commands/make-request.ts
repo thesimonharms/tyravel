@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pat
 export class MakeRequestCommand extends Command {
   override readonly name = 'make:request';
   override readonly description = 'Create a new form request class';
-  override readonly usage = 'tyravel make:request <Name>';
+  override readonly usage = 'pondoknusa make:request <Name>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -14,7 +14,7 @@ export class MakeRequestCommand extends Command {
 
     if (!rawName) {
       console.error('Request name is required.');
-      console.error('Usage: tyravel make:request <Name>');
+      console.error('Usage: pondoknusa make:request <Name>');
       return 1;
     }
 

@@ -1,4 +1,4 @@
-import type { ModelStatic } from '@tyravel/database';
+import type { ModelStatic } from '@pondoknusa/database';
 
 export type ConversationRole = 'user' | 'assistant' | 'system';
 

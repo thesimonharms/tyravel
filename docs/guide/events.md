@@ -10,13 +10,13 @@ export default {
   listen: [
     [UserRegistered, [SendWelcomeEmail]],
   ],
-} satisfies import('@tyravel/events').EventsConfig;
+} satisfies import('@pondoknusa/events').EventsConfig;
 ```
 
 ## Firing events
 
 ```typescript
-import { fire, Events } from '@tyravel/core';
+import { fire, Events } from '@pondoknusa/core';
 
 await fire(new UserRegistered(user));
 await Events.dispatch(new OrderShipped(order));
@@ -27,7 +27,7 @@ await Events.dispatch(new OrderShipped(order));
 Group multiple listener mappings in a subscriber class:
 
 ```bash
-tyravel make:subscriber UserEventSubscriber
+pondoknusa make:subscriber UserEventSubscriber
 ```
 
 Register the subscriber in `config/events.ts` under `subscribe`.

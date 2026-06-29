@@ -102,7 +102,7 @@ export { startDevHotReload } from './dev-hot-reload.js';
 export type { DevHotReloadOptions } from './dev-hot-reload.js';
 export { ServiceProvider } from './service-provider.js';
 export { Bus } from './bus.js';
-export { Event, EventSubscriber, Listener, EventDispatcher, QueuedListener } from '@tyravel/events';
+export { Event, EventSubscriber, Listener, EventDispatcher, QueuedListener } from '@pondoknusa/events';
 export type {
   EventConstructor,
   EventListenerRegistration,
@@ -111,13 +111,13 @@ export type {
   ListenerCallback,
   ListenerConstructor,
   ListenerHandler,
-} from '@tyravel/events';
+} from '@pondoknusa/events';
 export type {
   Authenticatable,
   AuthConfig,
   CreateTokenOptions,
   NewAccessToken,
-} from '@tyravel/auth';
+} from '@pondoknusa/auth';
 export {
   AuthenticationException,
   InvalidCredentialsException,
@@ -129,14 +129,14 @@ export {
   PersonalAccessTokenRepository,
   createTokenAbilityMiddleware,
   Gate as AuthorizationGate,
-} from '@tyravel/auth';
+} from '@pondoknusa/auth';
 export {
   ConfigRepository,
   env,
   envBool,
   envInt,
   loadEnv,
-} from '@tyravel/config';
-export { Mailable, SendMailable } from '@tyravel/mail';
-export { Notification, type Notifiable, NotificationRegistry } from '@tyravel/notifications';
-export { Http, ClientResponse, ClientRequest, ResponseStub, ResponseSequence } from '@tyravel/http';
+} from '@pondoknusa/config';
+export { Mailable, SendMailable } from '@pondoknusa/mail';
+export { Notification, type Notifiable, NotificationRegistry } from '@pondoknusa/notifications';
+export { Http, ClientResponse, ClientRequest, ResponseStub, ResponseSequence } from '@pondoknusa/http';

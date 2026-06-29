@@ -9,7 +9,7 @@ import {
   printRuntimeInfo,
   spawnTypeScriptEntry,
 } from './runtime.js';
-import { spawnTyravelCommand } from './spawn-cli.js';
+import { spawnPondoknusaCommand } from './spawn-cli.js';
 import { optionNumber, optionString, pathExists } from './utils.js';
 
 export interface DevServerOptions {
@@ -43,20 +43,20 @@ export async function startDevServer({
   let scheme = 'http';
   const serverEnv: NodeJS.ProcessEnv = {
     ...process.env,
-    TYRAVEL_PORT: String(port),
-    TYRAVEL_HOST: hostname,
-    TYRAVEL_HOT_RELOAD: '1',
+    PONDOKNUSA_PORT: String(port),
+    PONDOKNUSA_HOST: hostname,
+    PONDOKNUSA_HOT_RELOAD: '1',
   };
 
   if (!headless) {
-    serverEnv.TYRAVEL_VIEW_WATCH = '1';
+    serverEnv.PONDOKNUSA_VIEW_WATCH = '1';
   }
 
   if (withTls) {
     try {
       const { certPath, keyPath } = await ensureLocalTlsCerts(root);
-      serverEnv.TYRAVEL_TLS_CERT = certPath;
-      serverEnv.TYRAVEL_TLS_KEY = keyPath;
+      serverEnv.PONDOKNUSA_TLS_CERT = certPath;
+      serverEnv.PONDOKNUSA_TLS_KEY = keyPath;
       scheme = 'https';
     } catch (error) {
       console.error(error instanceof Error ? error.message : String(error));
@@ -66,7 +66,7 @@ export async function startDevServer({
 
   const displayHost = hostname === '0.0.0.0' ? '127.0.0.1' : hostname;
 
-  console.log('Starting Tyravel development server...');
+  console.log('Starting Pondoknusa development server...');
   printRuntimeInfo(runtime);
   console.log(`URL: ${scheme}://${displayHost}:${port}`);
   if (withTls) {
@@ -77,13 +77,13 @@ export async function startDevServer({
   const spawned: string[] = [];
 
   if (withQueue) {
-    const worker = spawnTyravelCommand(root, ['queue:work']);
+    const worker = spawnPondoknusaCommand(root, ['queue:work']);
     children.push(worker);
     spawned.push('queue worker');
   }
 
   if (withWatch) {
-    const watcher = spawnTyravelCommand(root, ['debug:watch', '--correlations']);
+    const watcher = spawnPondoknusaCommand(root, ['debug:watch', '--correlations']);
     children.push(watcher);
     spawned.push('debug:watch');
   }
@@ -95,10 +95,10 @@ export async function startDevServer({
     console.log('Dev tips:');
     if (headless) {
       console.log('  • Config and routes hot-reload in this process');
-      console.log('  • Run `tyravel debug:install` then `tyravel dev` to tail API debug entries');
+      console.log('  • Run `pondoknusa debug:install` then `pondoknusa dev` to tail API debug entries');
     } else {
       console.log('  • Views, config, and routes hot-reload in this process');
-      console.log('  • Run `tyravel debug:install` then `tyravel dev` to tail debug entries');
+      console.log('  • Run `pondoknusa debug:install` then `pondoknusa dev` to tail debug entries');
     }
     console.log('  • Use `--no-queue` or `--no-watch` to disable background workers');
     console.log('');

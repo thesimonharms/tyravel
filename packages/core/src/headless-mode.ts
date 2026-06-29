@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import type { ConfigRepository } from '@tyravel/config';
+import type { ConfigRepository } from '@pondoknusa/config';
 
 export type HeadlessConfigSource =
   | ConfigRepository
@@ -25,7 +25,7 @@ export async function resolveHeadlessMode(
   }
 
   try {
-    const raw = await readFile(join(basePath, 'tyravel.json'), 'utf8');
+    const raw = await readFile(join(basePath, 'pondoknusa.json'), 'utf8');
     const project = JSON.parse(raw) as { mode?: string };
     return project.mode === 'headless';
   } catch {

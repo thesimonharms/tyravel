@@ -1,17 +1,17 @@
 import { spawn, type ChildProcess } from 'node:child_process';
 import { join } from 'node:path';
 
-export function resolveTyravelBin(root: string): string {
-  const name = process.platform === 'win32' ? 'tyravel.cmd' : 'tyravel';
+export function resolvePondoknusaBin(root: string): string {
+  const name = process.platform === 'win32' ? 'pondoknusa.cmd' : 'pondoknusa';
   return join(root, 'node_modules', '.bin', name);
 }
 
-export function spawnTyravelCommand(
+export function spawnPondoknusaCommand(
   root: string,
   args: string[],
   env?: NodeJS.ProcessEnv,
 ): ChildProcess {
-  const bin = resolveTyravelBin(root);
+  const bin = resolvePondoknusaBin(root);
   return spawn(bin, args, {
     cwd: root,
     stdio: 'inherit',

@@ -1,12 +1,12 @@
 # Deploy with Docker
 
-Containerize a Tyravel app for any orchestrator (Kubernetes, Nomad, a VPS) using the manifests in `examples/hello-world/deploy/`.
+Containerize a Pondoknusa app for any orchestrator (Kubernetes, Nomad, a VPS) using the manifests in `examples/hello-world/deploy/`.
 
 ## Prerequisites
 
 - Docker 24+
-- A Tyravel app scaffolded with **Postgres** for production: `tyravel new my-app --db=postgres`
-- `tyravel new` scaffolds `deploy/` automatically. Older apps can copy from `examples/hello-world/deploy/`.
+- A Pondoknusa app scaffolded with **Postgres** for production: `pondoknusa new my-app --db=postgres`
+- `pondoknusa new` scaffolds `deploy/` automatically. Older apps can copy from `examples/hello-world/deploy/`.
 
 ## Dockerfile
 
@@ -15,17 +15,17 @@ FROM node:26-bookworm-slim
 
 WORKDIR /app
 
-# Install Tyravel CLI for migrate/cache in entrypoint
+# Install Pondoknusa CLI for migrate/cache in entrypoint
 COPY package.json package-lock.json* ./
 RUN if [ -f package-lock.json ]; then npm ci --omit=dev; else npm install --omit=dev; fi
 
 COPY . .
 
 ENV NODE_ENV=production
-ENV TYRAVEL_HOST=0.0.0.0
-ENV TYRAVEL_PORT=3000
+ENV PONDOKNUSA_HOST=0.0.0.0
+ENV PONDOKNUSA_PORT=3000
 
-RUN npx tyravel config:cache && npx tyravel route:cache && npx tyravel view:cache
+RUN npx pondoknusa config:cache && npx pondoknusa route:cache && npx pondoknusa view:cache
 
 EXPOSE 3000
 
@@ -35,7 +35,7 @@ CMD ["./deploy/docker-entrypoint.sh"]
 Build:
 
 ```bash
-docker build -t my-tyravel-app .
+docker build -t my-pondoknusa-app .
 ```
 
 ## Entrypoint
@@ -47,13 +47,13 @@ docker build -t my-tyravel-app .
 set -e
 
 echo "Running migrations..."
-npx tyravel migrate
+npx pondoknusa migrate
 
-echo "Starting Tyravel..."
-exec npx tyravel start
+echo "Starting Pondoknusa..."
+exec npx pondoknusa start
 ```
 
-Migrations run on every container start. For large fleets, run `tyravel migrate` once in a release job instead.
+Migrations run on every container start. For large fleets, run `pondoknusa migrate` once in a release job instead.
 
 ## Docker Compose (app + Postgres + worker)
 
@@ -67,14 +67,14 @@ services:
       NODE_ENV: production
       APP_URL: http://localhost:3000
       APP_DEBUG: "false"
-      TYRAVEL_HOST: 0.0.0.0
-      TYRAVEL_PORT: "3000"
+      PONDOKNUSA_HOST: 0.0.0.0
+      PONDOKNUSA_PORT: "3000"
       DB_CONNECTION: postgres
       DB_HOST: postgres
       DB_PORT: "5432"
-      DB_DATABASE: tyravel
-      DB_USERNAME: tyravel
-      DB_PASSWORD: tyravel
+      DB_DATABASE: pondoknusa
+      DB_USERNAME: pondoknusa
+      DB_PASSWORD: pondoknusa
       QUEUE_CONNECTION: database
     depends_on:
       postgres:
@@ -82,14 +82,14 @@ services:
 
   worker:
     build: .
-    command: npx tyravel queue:work
+    command: npx pondoknusa queue:work
     environment:
       NODE_ENV: production
       DB_CONNECTION: postgres
       DB_HOST: postgres
-      DB_DATABASE: tyravel
-      DB_USERNAME: tyravel
-      DB_PASSWORD: tyravel
+      DB_DATABASE: pondoknusa
+      DB_USERNAME: pondoknusa
+      DB_PASSWORD: pondoknusa
       QUEUE_CONNECTION: database
     depends_on:
       - app
@@ -97,13 +97,13 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: tyravel
-      POSTGRES_USER: tyravel
-      POSTGRES_PASSWORD: tyravel
+      POSTGRES_DB: pondoknusa
+      POSTGRES_USER: pondoknusa
+      POSTGRES_PASSWORD: pondoknusa
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U tyravel"]
+      test: ["CMD-SHELL", "pg_isready -U pondoknusa"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -124,7 +124,7 @@ Add a `redis` service and `--redis` app config when you need WebSocket broadcast
 
 - **Volumes** — persist `storage/` if using file cache or local disk storage
 - **Secrets** — inject via Docker secrets or orchestrator env, not committed `.env`
-- **WebSocket** — reverse-proxy must pass `Upgrade` and `Connection` headers for `/tyravel/ws`
+- **WebSocket** — reverse-proxy must pass `Upgrade` and `Connection` headers for `/pondoknusa/ws`
 - **Scale** — run one `worker` replica per queue throughput; scale `app` horizontally with Redis broadcast
 
 ## Next

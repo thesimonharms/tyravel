@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import { PgDatabaseServiceProvider } from '@tyravel/database-pg';
+import { PgDatabaseServiceProvider } from '@pondoknusa/database-pg';
 import {
   Application,
   AuthServiceProvider,
@@ -32,7 +32,7 @@ import {
   setViewApplication,
   ViewServiceProvider,
   serve,
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 import { AppServiceProvider } from './providers/app-service-provider.js';
 
 const appRoot = join(import.meta.dirname ?? import.meta.dir, '..');

@@ -1,4 +1,4 @@
-import type { TemporaryUrlFilesystem } from '@tyravel/storage';
+import type { TemporaryUrlFilesystem } from '@pondoknusa/storage';
 import type { SupabaseDiskConfig } from './types.js';
 
 export class SupabaseDisk implements TemporaryUrlFilesystem {

@@ -1,10 +1,10 @@
-import { ConfigRepository } from '@tyravel/config';
+import { ConfigRepository } from '@pondoknusa/config';
 import {
   PayloadCipher,
   resolveSessionCipherKey,
   type CryptoConfig,
-} from '@tyravel/crypto';
-import { DatabaseManager } from '@tyravel/database';
+} from '@pondoknusa/crypto';
+import { DatabaseManager } from '@pondoknusa/database';
 import {
   AuthManager,
   SessionGuard,
@@ -22,8 +22,8 @@ import {
   type AuthConfig,
   type EloquentUserProviderConfig,
   type GuardConfig,
-} from '@tyravel/auth';
-import { RedisManager } from '@tyravel/redis';
+} from '@pondoknusa/auth';
+import { RedisManager } from '@pondoknusa/redis';
 import { ServiceProvider } from './service-provider.js';
 
 export class AuthServiceProvider extends ServiceProvider {
@@ -48,7 +48,7 @@ export class AuthServiceProvider extends ServiceProvider {
     }
 
     let sessionGuardName = authConfig.defaults.guard;
-    const guardFactories: Record<string, () => import('@tyravel/auth').Guard> = {};
+    const guardFactories: Record<string, () => import('@pondoknusa/auth').Guard> = {};
 
     const tokenTable = authConfig.tokens?.table ?? 'personal_access_tokens';
     const tokenConnection = database.connection(authConfig.tokens?.connection);

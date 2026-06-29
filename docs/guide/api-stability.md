@@ -1,8 +1,8 @@
 # API stability
 
-Tyravel publishes many `@tyravel/*` packages from a single monorepo. This page summarizes how we version those packages and what you can rely on in production.
+Pondoknusa publishes many `@pondoknusa/*` packages from a single monorepo. This page summarizes how we version those packages and what you can rely on in production.
 
-The canonical policy lives in [STABILITY.md](https://github.com/thesimonharms/tyravel/blob/main/STABILITY.md) on GitHub.
+The canonical policy lives in [STABILITY.md](https://github.com/pondoknusa/pondoknusa/blob/main/STABILITY.md) on GitHub.
 
 ## Version numbers
 
@@ -21,17 +21,17 @@ All first-party packages share one version (for example `1.0.1`) and ship togeth
 Use only documented exports from package entry points:
 
 ```ts
-import { Route, Application } from '@tyravel/core';
-import { env, s } from '@tyravel/config';
+import { Route, Application } from '@pondoknusa/core';
+import { env, s } from '@pondoknusa/config';
 ```
 
-Avoid deep imports (`@tyravel/core/dist/...`, `@tyravel/core/src/...`). Paths not listed in a package's `exports` field are **not supported**.
+Avoid deep imports (`@pondoknusa/core/dist/...`, `@pondoknusa/core/src/...`). Paths not listed in a package's `exports` field are **not supported**.
 
 Public APIs include:
 
 - Facades and kernels documented in the guide (`Route`, `DB`, `Auth`, `Queue`, …)
 - HTTP, database, validation, and config APIs covered in these docs
-- CLI commands listed in the [README](https://github.com/thesimonharms/tyravel#cli)
+- CLI commands listed in the [README](https://github.com/pondoknusa/pondoknusa#cli)
 - `.tyr` template directives through Tier 6 (see [Views](/guide/views))
 
 ## Stable vs experimental
@@ -47,10 +47,10 @@ Build applications against these without expecting silent breakage in patch rele
 - Routing: `route()` URL generation, signed URLs, route caching, `Route.group()`, per-route `throttle()`
 - Session/token auth, policies, queues, events, mail, notifications
 - Config loading, `env()` / `requiredEnv()`, and optional per-file `schema` validation
-- Core view features: layouts, components, stacks, form directives, compiled cache, typed props (`ViewPropsMap`, `tyravel view:types`), `view:lint --strict`, partial reload helpers (`View.partial()`, `Response.partial()`), `View.catalog()` / `View.islandCatalog()`, `tyravel view:catalog`
-- SSR and progressive enhancement: `View.renderStream()`, `View.streamSsr()`, `@stream` / `@endstream`, `@island`, `View.getHydrationManifest()`, `Response.ssr()` / `Response.ssrStream()`, `@tyravel/ssr` hydration runtime
+- Core view features: layouts, components, stacks, form directives, compiled cache, typed props (`ViewPropsMap`, `pondoknusa view:types`), `view:lint --strict`, partial reload helpers (`View.partial()`, `Response.partial()`), `View.catalog()` / `View.islandCatalog()`, `pondoknusa view:catalog`
+- SSR and progressive enhancement: `View.renderStream()`, `View.streamSsr()`, `@stream` / `@endstream`, `@island`, `View.getHydrationManifest()`, `Response.ssr()` / `Response.ssrStream()`, `@pondoknusa/ssr` hydration runtime
 - Programmatic `.tyr.ts` views (`render()` + optional `mount()` island contract)
-- `tyravel shell` / `@tyravel/repl` (`startRepl`, facade loading, `.models` / `.facades` commands)
+- `pondoknusa shell` / `@pondoknusa/repl` (`startRepl`, facade loading, `.models` / `.facades` commands)
 
 ### Experimental (may change in minors)
 
@@ -58,8 +58,8 @@ Useful but evolving — read release notes when upgrading minors:
 
 
 - `Bus` auto-discovery naming conventions (not a facade)
-- `@tyravel/crypto` algorithms, key formats, and envelope serialization
-- `@tyravel/auth-oauth` OAuth2 server grants, signed token layout, and repository APIs
+- `@pondoknusa/crypto` algorithms, key formats, and envelope serialization
+- `@pondoknusa/auth-oauth` OAuth2 server grants, signed token layout, and repository APIs
 - Session encryption at rest and ML-DSA OAuth token signing integration flags
 
 Experimental features can graduate to stable once documented and covered by compatibility tests.
@@ -72,15 +72,15 @@ When we remove a **stable** API:
 2. It remains available for **at least one minor version**.
 3. Release notes describe the replacement.
 
-Upgrade across minors with the [changelog](https://github.com/thesimonharms/tyravel/blob/main/CHANGELOG.md) and [GitHub releases](https://github.com/thesimonharms/tyravel/releases) open.
+Upgrade across minors with the [changelog](https://github.com/pondoknusa/pondoknusa/blob/main/CHANGELOG.md) and [GitHub releases](https://github.com/pondoknusa/pondoknusa/releases) open.
 
 ## Long-term support (1.x)
 
-After **1.0.0**, Tyravel publishes security patches for the latest `1.y` minor for at least **6 months** after the next minor ships. Patch releases preserve stable APIs. See [STABILITY.md](https://github.com/thesimonharms/tyravel/blob/main/STABILITY.md#long-term-support-1x) and [SECURITY.md](https://github.com/thesimonharms/tyravel/blob/main/SECURITY.md).
+After **1.0.0**, Pondoknusa publishes security patches for the latest `1.y` minor for at least **6 months** after the next minor ships. Patch releases preserve stable APIs. See [STABILITY.md](https://github.com/pondoknusa/pondoknusa/blob/main/STABILITY.md#long-term-support-1x) and [SECURITY.md](https://github.com/pondoknusa/pondoknusa/blob/main/SECURITY.md).
 
 ## Security
 
-Report vulnerabilities privately per [SECURITY.md](https://github.com/thesimonharms/tyravel/blob/main/SECURITY.md) — do not file public issues for security flaws.
+Report vulnerabilities privately per [SECURITY.md](https://github.com/pondoknusa/pondoknusa/blob/main/SECURITY.md) — do not file public issues for security flaws.
 
 ### v0.9.0 async-native (Tier 9)
 
@@ -88,19 +88,19 @@ Report vulnerabilities privately per [SECURITY.md](https://github.com/thesimonha
 
 - `await View.exists(name)` — returns `Promise<boolean>`
 - `await View.catalog()` / `await View.islandCatalog()` — catalog discovery is async
-- `await requireProjectRoot()` / `await loadProjectConfig()` when using `@tyravel/cli` project helpers
+- `await requireProjectRoot()` / `await loadProjectConfig()` when using `@pondoknusa/cli` project helpers
 - `config/queue.ts` — use `database` or `redis`; remove `sync` from app config
 
 See [Upgrading to 1.0](/guide/upgrading-to-1.0) for the full removal table and checklist.
 
 ### v0.16.0 core surface polish (Tier 16)
 
-**0.16.0** promotes models, routes, and views APIs listed above to stable and completes the pre-1.0 deprecation sweep. Read the [0.16.0 changelog](https://github.com/thesimonharms/tyravel/blob/main/CHANGELOG.md#0160---2026-06-27) for feature details.
+**0.16.0** promotes models, routes, and views APIs listed above to stable and completes the pre-1.0 deprecation sweep. Read the [0.16.0 changelog](https://github.com/pondoknusa/pondoknusa/blob/main/CHANGELOG.md#0160---2026-06-27) for feature details.
 
 ## Optional drivers
 
-Packages such as `@tyravel/database-mysql`, `@tyravel/database-pg`, `@tyravel/redis-node`, and `@tyravel/storage-aws-s3` version with the monorepo but install only when needed. Their public surface is the driver config types and provider registration — not the full framework API.
+Packages such as `@pondoknusa/database-mysql`, `@pondoknusa/database-pg`, `@pondoknusa/redis-node`, and `@pondoknusa/storage-aws-s3` version with the monorepo but install only when needed. Their public surface is the driver config types and provider registration — not the full framework API.
 
 ## Something broke?
 
-If a **patch** release breaks documented stable behavior, [file an issue](https://github.com/thesimonharms/tyravel/issues) with the package, version, and API involved. We treat that as a regression.
+If a **patch** release breaks documented stable behavior, [file an issue](https://github.com/pondoknusa/pondoknusa/issues) with the package, version, and API involved. We treat that as a regression.

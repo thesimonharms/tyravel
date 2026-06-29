@@ -1,4 +1,4 @@
-import type { TyravelConfig } from './project.js';
+import type { PondoknusaConfig } from './project.js';
 
 export interface PerfBudgetViolation {
   name: string;
@@ -23,7 +23,7 @@ const LOWER_IS_BETTER = new Set(['boot.cold']);
 
 export function evaluatePerfBudgets(
   report: BenchmarkReport,
-  config: TyravelConfig,
+  config: PondoknusaConfig,
 ): PerfBudgetViolation[] {
   const budgets = config.perf?.budgets;
   if (!budgets) {

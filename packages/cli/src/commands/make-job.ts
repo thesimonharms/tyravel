@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pat
 export class MakeJobCommand extends Command {
   override readonly name = 'make:job';
   override readonly description = 'Create a new queue job class';
-  override readonly usage = 'tyravel make:job <Name>';
+  override readonly usage = 'pondoknusa make:job <Name>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -14,7 +14,7 @@ export class MakeJobCommand extends Command {
 
     if (!rawName) {
       console.error('Job name is required.');
-      console.error('Usage: tyravel make:job <Name>');
+      console.error('Usage: pondoknusa make:job <Name>');
       return 1;
     }
 

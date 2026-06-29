@@ -1,4 +1,4 @@
-import type { Dispatcher, Job, QueueContract, QueueManager } from '@tyravel/queue';
+import type { Dispatcher, Job, QueueContract, QueueManager } from '@pondoknusa/queue';
 import type { Application } from './application.js';
 
 let activeApp: Application | undefined;

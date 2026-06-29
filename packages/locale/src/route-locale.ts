@@ -1,4 +1,4 @@
-import type { Middleware, TyravelRequest } from '@tyravel/http';
+import type { Middleware, PondoknusaRequest } from '@pondoknusa/http';
 import type { Translator } from './translator.js';
 
 export interface RouteLocaleMiddlewareOptions {
@@ -32,7 +32,7 @@ export function createRouteLocaleMiddleware(
 }
 
 export function readRouteLocale(
-  request: TyravelRequest,
+  request: PondoknusaRequest,
   parameter = 'locale',
   availableLocales: string[] = [],
 ): string | undefined {

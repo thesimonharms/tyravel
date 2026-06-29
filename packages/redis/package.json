@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/redis",
+  "name": "@pondoknusa/redis",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -23,11 +23,11 @@
   "devDependencies": {
     "@types/node": "^26.0.1"
   },
-  "description": "Redis connection manager for Tyravel",
+  "description": "Redis connection manager for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/redis"
   },
   "publishConfig": {

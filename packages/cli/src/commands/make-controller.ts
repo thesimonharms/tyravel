@@ -12,7 +12,7 @@ export class MakeControllerCommand extends Command {
   override readonly name = 'make:controller';
   override readonly description = 'Create a new HTTP controller class';
   override readonly usage =
-    'tyravel make:controller <Name> [--api] [--invokable]';
+    'pondoknusa make:controller <Name> [--api] [--invokable]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -20,7 +20,7 @@ export class MakeControllerCommand extends Command {
 
     if (!rawName) {
       console.error('Controller name is required.');
-      console.error('Usage: tyravel make:controller <Name> [--api] [--invokable]');
+      console.error('Usage: pondoknusa make:controller <Name> [--api] [--invokable]');
       return 1;
     }
 

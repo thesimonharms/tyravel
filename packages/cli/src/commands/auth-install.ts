@@ -1,4 +1,4 @@
-import { loadConfig } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
 import { Command } from '../command.js';
 import { isHeadlessProject } from '../headless-project.js';
 import type { NewProjectOptions } from '../new-project-options.js';
@@ -28,7 +28,7 @@ export class AuthInstallCommand extends Command {
   override readonly name = 'auth:install';
   override readonly description =
     'Scaffold auth (session + API tokens, policies, password reset, OAuth)';
-  override readonly usage = 'tyravel auth:install';
+  override readonly usage = 'pondoknusa auth:install';
 
   async handle(): Promise<number> {
     const root = await requireProjectRoot();
@@ -79,7 +79,7 @@ export class AuthInstallCommand extends Command {
     console.log('Auth scaffolding installed.');
     console.log('');
     console.log('Next steps:');
-    console.log('  tyravel migrate');
+    console.log('  pondoknusa migrate');
     if (headless) {
       console.log('  POST /api/v1/login  |  POST /api/v1/tokens (session)  |  Authorization: Bearer <token> (api guard)');
     } else {
@@ -88,7 +88,7 @@ export class AuthInstallCommand extends Command {
     console.log('  POST /forgot-password  |  POST /reset-password');
     console.log('  GET /auth/github/redirect  |  GET /auth/github/callback');
     console.log('');
-    console.log('Optional hardening: tyravel crypto:install');
+    console.log('Optional hardening: pondoknusa crypto:install');
 
     return 0;
   }

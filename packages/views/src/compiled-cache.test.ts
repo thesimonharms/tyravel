@@ -10,7 +10,7 @@ import { ViewEngine } from './view-engine.js';
 
 describe('compiled cache', () => {
   it('discovers nested view names', async () => {
-    const basePath = join(tmpdir(), `tyravel-views-discover-${Date.now()}`);
+    const basePath = join(tmpdir(), `pondoknusa-views-discover-${Date.now()}`);
     const viewsPath = join(basePath, 'resources/views');
     mkdirSync(join(viewsPath, 'posts'), { recursive: true });
     writeFileSync(join(viewsPath, 'welcome.tyr'), '<p>Hi</p>');
@@ -20,7 +20,7 @@ describe('compiled cache', () => {
   });
 
   it('warms and clears compiled cache files', async () => {
-    const basePath = join(tmpdir(), `tyravel-views-cache-${Date.now()}`);
+    const basePath = join(tmpdir(), `pondoknusa-views-cache-${Date.now()}`);
     const viewsPath = join(basePath, 'resources/views');
     const cachePath = join(basePath, 'storage/framework/views');
     mkdirSync(viewsPath, { recursive: true });

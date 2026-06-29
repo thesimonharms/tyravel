@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Container } from '@tyravel/container';
+import { Container } from '@pondoknusa/container';
 import { EventDispatcher } from './event-dispatcher.js';
 import { Event, Listener } from './types.js';
 import { EventSubscriber } from './types.js';

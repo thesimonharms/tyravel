@@ -127,6 +127,6 @@ export function validateBootEnv(config: ConfigTree): void {
   }
 
   const error = new ConfigValidationError(failures);
-  error.message = `${error.message}\nSee https://tyravel.dev/guide/configuration-reference for environment variable reference.`;
+  error.message = `${error.message}\nSee https://pondoknusa.dev/guide/configuration-reference for environment variable reference.`;
   throw error;
 }

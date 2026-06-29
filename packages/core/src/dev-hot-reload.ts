@@ -2,7 +2,7 @@ import { watch, type FSWatcher } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { ConfigRepository, loadConfig } from '@tyravel/config';
+import { ConfigRepository, loadConfig } from '@pondoknusa/config';
 import type { Application } from './application.js';
 
 export interface DevHotReloadOptions {
@@ -64,7 +64,7 @@ export function startDevHotReload(
   app: Application,
   options: DevHotReloadOptions = {},
 ): { close: () => void } {
-  if (process.env.TYRAVEL_HOT_RELOAD !== '1' || process.env.NODE_ENV === 'production') {
+  if (process.env.PONDOKNUSA_HOT_RELOAD !== '1' || process.env.NODE_ENV === 'production') {
     return { close: () => {} };
   }
 

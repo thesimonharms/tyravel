@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/mcp",
+  "name": "@pondoknusa/mcp",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -15,7 +15,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/support": "1.0.3"
+    "@pondoknusa/support": "1.0.3"
   },
   "files": [
     "dist"
@@ -26,11 +26,11 @@
   "devDependencies": {
     "@types/node": "^26.0.1"
   },
-  "description": "MCP server and capability manifest for Tyravel agents",
+  "description": "MCP server and capability manifest for Pondoknusa agents",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/mcp"
   },
   "publishConfig": {

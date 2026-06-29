@@ -3,7 +3,7 @@ import type {
   EventConstructor,
   EventDispatcher,
   ListenerHandler,
-} from '@tyravel/events';
+} from '@pondoknusa/events';
 import type { Application } from './application.js';
 
 let activeApp: Application | undefined;

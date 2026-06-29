@@ -1,4 +1,4 @@
-import type { HttpKernel } from '@tyravel/core';
+import type { HttpKernel } from '@pondoknusa/core';
 import { CookieJar } from './cookie-jar.js';
 import { TestResponse } from './test-response.js';
 import { setTestRequestContext } from './test-request-context.js';

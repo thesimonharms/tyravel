@@ -1,5 +1,5 @@
-import { QueuedListener } from '@tyravel/events';
-import { Mail } from '@tyravel/core';
+import { QueuedListener } from '@pondoknusa/events';
+import { Mail } from '@pondoknusa/core';
 import type { UserRegistered } from '../events/user-registered.js';
 import { WelcomeMail } from '../mail/welcome-mail.js';
 

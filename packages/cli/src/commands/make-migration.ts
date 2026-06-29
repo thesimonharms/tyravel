@@ -1,4 +1,4 @@
-import { snakeCase } from '@tyravel/support';
+import { snakeCase } from '@pondoknusa/support';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { migration } from '../stubs.js';
@@ -7,7 +7,7 @@ import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pat
 export class MakeMigrationCommand extends Command {
   override readonly name = 'make:migration';
   override readonly description = 'Create a new database migration';
-  override readonly usage = 'tyravel make:migration <name>';
+  override readonly usage = 'pondoknusa make:migration <name>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -15,7 +15,7 @@ export class MakeMigrationCommand extends Command {
 
     if (!rawName) {
       console.error('Migration name is required.');
-      console.error('Usage: tyravel make:migration <name>');
+      console.error('Usage: pondoknusa make:migration <name>');
       return 1;
     }
 

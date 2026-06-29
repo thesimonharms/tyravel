@@ -1,40 +1,40 @@
 # SaaS starter
 
-Forkable Tyravel app scaffold for auth, dashboard routes, queues, and deploy manifests. The fastest path is to generate a fresh project:
+Forkable Pondoknusa app scaffold for auth, dashboard routes, queues, and deploy manifests. The fastest path is to generate a fresh project:
 
 ```bash
-npm create tyravel@latest my-saas -- --template=saas --auth
+npm create pondoknusa@latest my-saas -- --template=saas --auth
 cd my-saas
-tyravel migrate
-tyravel auth:install
-tyravel dev --queue
+pondoknusa migrate
+pondoknusa auth:install
+pondoknusa dev --queue
 ```
 
 ## What the `saas` template includes
 
 - SSR welcome page with dashboard JSON route stub
-- Auth dependency pre-installed (`tyravel auth:install` scaffolds guards and OAuth routes)
+- Auth dependency pre-installed (`pondoknusa auth:install` scaffolds guards and OAuth routes)
 - Database queue connection and `dev:worker` script
 - `deploy/` directory (Docker, Compose, Fly, Railway)
 - `.github/workflows/view-types.yml` for prop drift checks
-- `tyravel test` and `precommit` (`tyravel view:lint`) scripts
+- `pondoknusa test` and `precommit` (`pondoknusa view:lint`) scripts
 
 ## Reference implementations
 
 | Feature | See |
 |---------|-----|
 | Full auth + OAuth + policies | `examples/hello-world` |
-| Admin UI | `tyravel admin:install` after auth |
+| Admin UI | `pondoknusa admin:install` after auth |
 | RAG / AI stack | `examples/rag` |
 | Production deploy | `deploy/README.md` in any scaffold |
 
 ## Pre-deploy
 
 ```bash
-tyravel doctor
-tyravel deploy:check
-tyravel view:cache
-tyravel route:cache
+pondoknusa doctor
+pondoknusa deploy:check
+pondoknusa view:cache
+pondoknusa route:cache
 ```
 
-Migrate from Laravel? See [Migrating from Laravel](https://tyravel.dev/guide/migrating-from-laravel).
+Migrate from Laravel? See [Migrating from Laravel](https://pondoknusa.dev/guide/migrating-from-laravel).

@@ -1,6 +1,6 @@
 # Tutorials
 
-A zero-to-deploy learning path for Tyravel **1.0.x**. Each tutorial builds on the last and links to deeper guide chapters.
+A zero-to-deploy learning path for Pondoknusa **1.0.x**. Each tutorial builds on the last and links to deeper guide chapters.
 
 ## Track overview
 
@@ -13,13 +13,13 @@ A zero-to-deploy learning path for Tyravel **1.0.x**. Each tutorial builds on th
 
 ## Before you start
 
-- **Node.js 26+** — Tyravel requires native SQLite, WebSocket, and OpenSSL PQC support.
+- **Node.js 26+** — Pondoknusa requires native SQLite, WebSocket, and OpenSSL PQC support.
 - **npm** — workspaces are used in the monorepo; generated apps use a normal `package.json`.
 - **Guide chapters** — tutorials move quickly; keep the [guide](/guide/introduction) open for detail.
 
 ## Example repos
 
-- [`examples/hello-world`](https://github.com/thesimonharms/tyravel/tree/main/examples/hello-world) — default scaffold with auth, queue, and mail wired; [`deploy/`](https://github.com/thesimonharms/tyravel/tree/main/examples/hello-world/deploy) has Docker, Fly, and Railway manifests
-- [`examples/rag`](https://github.com/thesimonharms/tyravel/tree/main/examples/rag) — AI/RAG stack (Tier 14)
+- [`examples/hello-world`](https://github.com/pondoknusa/pondoknusa/tree/main/examples/hello-world) — default scaffold with auth, queue, and mail wired; [`deploy/`](https://github.com/pondoknusa/pondoknusa/tree/main/examples/hello-world/deploy) has Docker, Fly, and Railway manifests
+- [`examples/rag`](https://github.com/pondoknusa/pondoknusa/tree/main/examples/rag) — AI/RAG stack (Tier 14)
 
 When a tutorial step has a matching example file, we link to it directly.

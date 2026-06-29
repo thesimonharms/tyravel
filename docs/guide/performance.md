@@ -1,21 +1,21 @@
 # Performance
 
-Tyravel ships snappy defaults for production: route caches, JSON fast paths, request pooling, compiled view LRU, and pool warm-up. This guide is the boot checklist and tuning reference for Tier 19 speed work.
+Pondoknusa ships snappy defaults for production: route caches, JSON fast paths, request pooling, compiled view LRU, and pool warm-up. This guide is the boot checklist and tuning reference for Tier 19 speed work.
 
 ## Production boot checklist
 
 Run these once per deploy (or in your CI image build):
 
 ```bash
-tyravel config:cache
-tyravel route:cache
-tyravel view:cache
+pondoknusa config:cache
+pondoknusa route:cache
+pondoknusa view:cache
 ```
 
 Then boot with production env:
 
 ```bash
-NODE_ENV=production APP_DEBUG=false tyravel start
+NODE_ENV=production APP_DEBUG=false pondoknusa start
 ```
 
 In your app entrypoint, call `prepareHttpServer()` after `app.boot()` so route and middleware caches are validated before accepting traffic.
@@ -34,12 +34,12 @@ In your app entrypoint, call `prepareHttpServer()` after `app.boot()` so route a
 
 ## Headless API mode
 
-For JSON-only backends, use `tyravel new --headless`. Headless scaffolds skip views, SSR, and Echo — smaller boot profile and faster cold start. See [Headless API](/guide/headless).
+For JSON-only backends, use `pondoknusa new --headless`. Headless scaffolds skip views, SSR, and Echo — smaller boot profile and faster cold start. See [Headless API](/guide/headless).
 
 ## HTTP hot path
 
 - **JSON fast path** — stateless API routes skip session, CSRF, and view middleware. Tag routes with `withMiddlewareMeta(..., { tag: 'session' })` only when you need sessions.
-- **Request pooling** — reuses `TyravelRequest` instances under load. Enable with `requestPooling: true` in `config/http.ts` (default off in debug, on in production scaffolds).
+- **Request pooling** — reuses `PondoknusaRequest` instances under load. Enable with `requestPooling: true` in `config/http.ts` (default off in debug, on in production scaffolds).
 - **Keep-alive** — Node adapter sets `keepAliveTimeout` / `headersTimeout` for reverse-proxy deployments.
 
 ## Views & SSR
@@ -78,7 +78,7 @@ Start with **one pool per worker process**, not one global pool for the whole ma
 
 | Deployment | Suggested `DB_POOL_MAX` per worker | Notes |
 |------------|-----------------------------------|-------|
-| Fly.io (1 shared CPU) | 5–10 | Match `tyravel start` worker count |
+| Fly.io (1 shared CPU) | 5–10 | Match `pondoknusa start` worker count |
 | Railway (512 MB) | 5 | Watch connection limits on hobby Postgres |
 | Single VPS (2 workers) | 10 per worker | Total ≤ provider max connections |
 
@@ -137,12 +137,12 @@ await serve(kernel, {
 });
 ```
 
-Or set `TYRAVEL_HTTP2=1` with `TYRAVEL_TLS_CERT` / `TYRAVEL_TLS_KEY`.
+Or set `PONDOKNUSA_HTTP2=1` with `PONDOKNUSA_TLS_CERT` / `PONDOKNUSA_TLS_KEY`.
 
-**Multiple workers** — `tyravel start --cluster` forks `node:cluster` workers (default: CPU count). Use **Redis or database sessions** so requests are not pinned to a single process:
+**Multiple workers** — `pondoknusa start --cluster` forks `node:cluster` workers (default: CPU count). Use **Redis or database sessions** so requests are not pinned to a single process:
 
 ```bash
-tyravel start --cluster --workers=4
+pondoknusa start --cluster --workers=4
 ```
 
 ## Single-file bundle
@@ -150,9 +150,9 @@ tyravel start --cluster --workers=4
 For edge deploys (Fly Machines, Lambda-style), bundle the entry after caches are warm:
 
 ```bash
-tyravel config:cache && tyravel route:cache && tyravel view:cache
+pondoknusa config:cache && pondoknusa route:cache && pondoknusa view:cache
 npm install -D esbuild
-tyravel build --outfile=bootstrap/app.mjs --minify
+pondoknusa build --outfile=bootstrap/app.mjs --minify
 node bootstrap/app.mjs
 ```
 
@@ -160,7 +160,7 @@ Trade-offs: faster cold start, but native addons and some dynamic imports may ne
 
 ## Perf budgets in CI
 
-Add thresholds to `tyravel.json`:
+Add thresholds to `pondoknusa.json`:
 
 ```json
 {
@@ -173,7 +173,7 @@ Add thresholds to `tyravel.json`:
 }
 ```
 
-Run `tyravel test --perf` to fail when benchmarks regress (requires `scripts/benchmark.mjs` in the monorepo or linked checkout).
+Run `pondoknusa test --perf` to fail when benchmarks regress (requires `scripts/benchmark.mjs` in the monorepo or linked checkout).
 
 ## Measuring
 

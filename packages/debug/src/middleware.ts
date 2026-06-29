@@ -1,6 +1,6 @@
-import { QueryProfiler } from '@tyravel/database';
-import type { LogManager } from '@tyravel/log';
-import type { Middleware } from '@tyravel/http';
+import { QueryProfiler } from '@pondoknusa/database';
+import type { LogManager } from '@pondoknusa/log';
+import type { Middleware } from '@pondoknusa/http';
 import { buildDebugEntry } from './collector.js';
 import { DebugRequestContext, runWithDebugContext } from './context.js';
 import { injectDebugBar } from './debug-bar.js';
@@ -61,7 +61,7 @@ export function createDebugMiddleware(options: DebugMiddlewareOptions): Middlewa
           if (options.log) {
             options.log.channel().warn('OTEL export failed', { message });
           } else {
-            console.warn('[tyravel:debug:otel]', message);
+            console.warn('[pondoknusa:debug:otel]', message);
           }
         });
       }
@@ -74,7 +74,7 @@ export function createDebugMiddleware(options: DebugMiddlewareOptions): Middlewa
         if (options.log) {
           options.log.channel().warn('Debug warnings detected', payload);
         } else {
-          console.warn('[tyravel:debug]', payload);
+          console.warn('[pondoknusa:debug]', payload);
         }
       }
 

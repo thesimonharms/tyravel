@@ -1,7 +1,7 @@
-import type { AuthManager, Gate } from '@tyravel/auth';
-import type { ModelStatic } from '@tyravel/database';
-import type { Middleware } from '@tyravel/http';
-import { AuthorizationException } from '@tyravel/auth';
+import type { AuthManager, Gate } from '@pondoknusa/auth';
+import type { ModelStatic } from '@pondoknusa/database';
+import type { Middleware } from '@pondoknusa/http';
+import { AuthorizationException } from '@pondoknusa/auth';
 import { authorizeAdminAccess } from './authorize.js';
 
 export interface AdminMiddlewareOptions {

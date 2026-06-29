@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
-import type { DatabaseConnection, QueryResult } from '@tyravel/database';
-import { MysqlGrammar, type SqlGrammar } from '@tyravel/database';
+import type { DatabaseConnection, QueryResult } from '@pondoknusa/database';
+import { MysqlGrammar, type SqlGrammar } from '@pondoknusa/database';
 import type { MysqlConnectionConfig } from './types.js';
 
 type RowValue = string | number | bigint | boolean | null | undefined;

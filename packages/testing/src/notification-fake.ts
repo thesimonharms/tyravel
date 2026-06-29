@@ -1,5 +1,5 @@
-import type { Application } from '@tyravel/core';
-import type { Notification, NotificationManager, Notifiable } from '@tyravel/notifications';
+import type { Application } from '@pondoknusa/core';
+import type { Notification, NotificationManager, Notifiable } from '@pondoknusa/notifications';
 
 export interface RecordedNotification {
   notifiable: Notifiable;

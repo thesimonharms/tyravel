@@ -1,4 +1,4 @@
-import type { TyravelRequest } from './request.js';
+import type { PondoknusaRequest } from './request.js';
 
 export type ResourcePayload = Record<string, unknown>;
 
@@ -77,9 +77,9 @@ export abstract class JsonResource<T = unknown> {
     );
   }
 
-  abstract toArray(request?: TyravelRequest): ResourcePayload | Promise<ResourcePayload>;
+  abstract toArray(request?: PondoknusaRequest): ResourcePayload | Promise<ResourcePayload>;
 
-  async resolve(request?: TyravelRequest): Promise<ResourcePayload> {
+  async resolve(request?: PondoknusaRequest): Promise<ResourcePayload> {
     const payload = await this.toArray(request);
     const wrap = (this.constructor as typeof JsonResource).wrap;
 
@@ -99,7 +99,7 @@ export class ResourceCollection<TResource extends JsonResource = JsonResource> {
     private readonly collection: unknown,
   ) {}
 
-  async resolve(request?: TyravelRequest): Promise<ResourcePayload> {
+  async resolve(request?: PondoknusaRequest): Promise<ResourcePayload> {
     if (isPaginatorLike(this.collection)) {
       const page = this.collection.toArray();
       const data = await this.transformItems(page.data, request);
@@ -128,7 +128,7 @@ export class ResourceCollection<TResource extends JsonResource = JsonResource> {
 
   private async transformItems(
     items: unknown[],
-    request?: TyravelRequest,
+    request?: PondoknusaRequest,
   ): Promise<ResourcePayload[]> {
     return Promise.all(
       items.map(async (item) => new this.resourceClass(item).toArray(request)),

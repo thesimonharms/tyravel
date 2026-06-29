@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/core",
+  "name": "@pondoknusa/core",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -15,33 +15,33 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/auth": "1.0.3",
-    "@tyravel/broadcasting": "1.0.3",
-    "@tyravel/cache": "1.0.3",
-    "@tyravel/config": "1.0.3",
-    "@tyravel/crypto": "1.0.3",
-    "@tyravel/database": "1.0.3",
-    "@tyravel/events": "1.0.3",
-    "@tyravel/container": "1.0.3",
-    "@tyravel/http": "1.0.3",
-    "@tyravel/locale": "1.0.3",
-    "@tyravel/log": "1.0.3",
-    "@tyravel/mail": "1.0.3",
-    "@tyravel/notifications": "1.0.3",
-    "@tyravel/queue": "1.0.3",
-    "@tyravel/redis": "1.0.3",
-    "@tyravel/storage": "1.0.3",
-    "@tyravel/validation": "1.0.3",
-    "@tyravel/views": "1.0.3"
+    "@pondoknusa/auth": "1.0.3",
+    "@pondoknusa/broadcasting": "1.0.3",
+    "@pondoknusa/cache": "1.0.3",
+    "@pondoknusa/config": "1.0.3",
+    "@pondoknusa/crypto": "1.0.3",
+    "@pondoknusa/database": "1.0.3",
+    "@pondoknusa/events": "1.0.3",
+    "@pondoknusa/container": "1.0.3",
+    "@pondoknusa/http": "1.0.3",
+    "@pondoknusa/locale": "1.0.3",
+    "@pondoknusa/log": "1.0.3",
+    "@pondoknusa/mail": "1.0.3",
+    "@pondoknusa/notifications": "1.0.3",
+    "@pondoknusa/queue": "1.0.3",
+    "@pondoknusa/redis": "1.0.3",
+    "@pondoknusa/storage": "1.0.3",
+    "@pondoknusa/validation": "1.0.3",
+    "@pondoknusa/views": "1.0.3"
   },
   "files": [
     "dist"
   ],
-  "description": "Tyravel application kernel, providers, and facades",
+  "description": "Pondoknusa application kernel, providers, and facades",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/core"
   },
   "publishConfig": {

@@ -1,4 +1,4 @@
-import type { EventsConfig } from '@tyravel/events';
+import type { EventsConfig } from '@pondoknusa/events';
 
 export default {
   listen: [],

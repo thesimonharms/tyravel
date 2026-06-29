@@ -2,7 +2,7 @@ import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { configCachePath, ConfigRepository } from '@tyravel/config';
+import { configCachePath, ConfigRepository } from '@pondoknusa/config';
 import { Application } from './application.js';
 import { ConfigServiceProvider } from './config-service-provider.js';
 
@@ -17,11 +17,11 @@ describe('ConfigServiceProvider', () => {
   });
 
   it('loads typed config files into the container', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-config-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-config-'));
     mkdirSync(join(tempDir, 'config'), { recursive: true });
     writeFileSync(
       join(tempDir, 'config', 'app.js'),
-      'export default { name: "Tyravel", debug: true };',
+      'export default { name: "Pondoknusa", debug: true };',
     );
 
     const app = new Application(tempDir);
@@ -29,17 +29,17 @@ describe('ConfigServiceProvider', () => {
     await app.boot();
 
     const config = app.make<ConfigRepository>('config');
-    expect(config.get<string>('app.name')).toBe('Tyravel');
+    expect(config.get<string>('app.name')).toBe('Pondoknusa');
     expect(config.get<boolean>('app.debug')).toBe(true);
   });
 
   it('loads .env before importing config modules', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-config-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-config-'));
     mkdirSync(join(tempDir, 'config'), { recursive: true });
     writeFileSync(join(tempDir, '.env'), 'APP_NAME=FromDotEnv\n');
     writeFileSync(
       join(tempDir, 'config', 'app.js'),
-      `import { env } from '@tyravel/config';
+      `import { env } from '@pondoknusa/config';
 export default { name: env('APP_NAME', 'fallback') };`,
     );
 
@@ -52,7 +52,7 @@ export default { name: env('APP_NAME', 'fallback') };`,
   });
 
   it('loads cached config in production when manifest is fresh', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-config-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-config-'));
     mkdirSync(join(tempDir, 'config'), { recursive: true });
     mkdirSync(join(tempDir, 'storage/framework'), { recursive: true });
     writeFileSync(
@@ -64,7 +64,7 @@ export default { name: env('APP_NAME', 'fallback') };`,
     process.env.NODE_ENV = 'production';
 
     try {
-      const { buildConfigCacheManifest } = await import('@tyravel/config');
+      const { buildConfigCacheManifest } = await import('@pondoknusa/config');
       const manifest = await buildConfigCacheManifest(tempDir);
       writeFileSync(configCachePath(tempDir), `${JSON.stringify(manifest, null, 2)}\n`);
 
@@ -74,18 +74,18 @@ export default { name: env('APP_NAME', 'fallback') };`,
 
       const config = app.make<ConfigRepository>('config');
       expect(config.get<string>('app.name')).toBe('CachedApp');
-      expect(app.make<{ loaded: boolean }>('tyravel.configCache').loaded).toBe(true);
+      expect(app.make<{ loaded: boolean }>('pondoknusa.configCache').loaded).toBe(true);
     } finally {
       process.env.NODE_ENV = previousEnv;
     }
   });
 
   it('fails fast at boot when config schema validation fails', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-config-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-config-'));
     mkdirSync(join(tempDir, 'config'), { recursive: true });
     writeFileSync(
       join(tempDir, 'config', 'app.js'),
-      `import { s } from '@tyravel/config';
+      `import { s } from '@pondoknusa/config';
 
 export const schema = s.object({
   name: s.string({ required: true, minLength: 1 }),

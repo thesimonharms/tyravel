@@ -1,5 +1,5 @@
-import { Session } from '@tyravel/auth';
-import type { Middleware } from '@tyravel/http';
+import { Session } from '@pondoknusa/auth';
+import type { Middleware } from '@pondoknusa/http';
 
 export interface TestRequestContext {
   session?: Record<string, unknown>;

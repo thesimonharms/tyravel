@@ -1,8 +1,8 @@
 import type { NewProjectOptions } from './new-project-options.js';
 
 export function logConfig(): string {
-  return `import type { LogConfig } from '@tyravel/log';
-import { env } from '@tyravel/config';
+  return `import type { LogConfig } from '@pondoknusa/log';
+import { env } from '@pondoknusa/config';
 
 export default {
   default: env('LOG_CHANNEL', 'stack'),
@@ -10,7 +10,7 @@ export default {
     stdout: { channel: 'stdout' },
     file: {
       channel: 'file',
-      path: 'storage/logs/tyravel.log',
+      path: 'storage/logs/pondoknusa.log',
     },
     stack: {
       channel: 'stack',
@@ -21,10 +21,10 @@ export default {
 `;
 }
 
-/** Local disk by default. For S3/R2/Supabase, add the matching @tyravel/storage-* driver package and service provider. */
+/** Local disk by default. For S3/R2/Supabase, add the matching @pondoknusa/storage-* driver package and service provider. */
 export function filesystemsConfig(): string {
-  return `import type { StorageConfig } from '@tyravel/storage';
-import { env } from '@tyravel/config';
+  return `import type { StorageConfig } from '@pondoknusa/storage';
+import { env } from '@pondoknusa/config';
 
 export default {
   default: env('FILESYSTEM_DISK', 'local'),
@@ -39,7 +39,7 @@ export default {
 }
 
 export function corsConfig(): string {
-  return `import type { CorsConfig } from '@tyravel/core';
+  return `import type { CorsConfig } from '@pondoknusa/core';
 
 export default {
   enabled: true,
@@ -52,7 +52,7 @@ export default {
 }
 
 export function httpConfig(): string {
-  return `import type { HttpConfig } from '@tyravel/core';
+  return `import type { HttpConfig } from '@pondoknusa/core';
 
 export default {
   trustedProxies: ['127.0.0.1', '::1'],
@@ -69,7 +69,7 @@ export default {
 }
 
 export function healthConfig(): string {
-  return `import type { HealthConfig } from '@tyravel/core';
+  return `import type { HealthConfig } from '@pondoknusa/core';
 
 export default {
   enabled: true,
@@ -89,8 +89,8 @@ export { cacheConfig } from './stubs-project.js';
 export function broadcastingConfig(options: NewProjectOptions): string {
   const defaultConnection = options.redis ? 'websocket' : 'log';
 
-  return `import type { BroadcastingConfig } from '@tyravel/broadcasting';
-import { env, envInt } from '@tyravel/config';
+  return `import type { BroadcastingConfig } from '@pondoknusa/broadcasting';
+import { env, envInt } from '@pondoknusa/config';
 
 export default {
   default: env('BROADCAST_CONNECTION', '${defaultConnection}'),
@@ -100,8 +100,8 @@ export default {
     websocket: {
       driver: 'websocket',
       redisConnection: env('REDIS_CONNECTION', 'default'),
-      channel: env('BROADCAST_REDIS_CHANNEL', 'tyravel:broadcast'),
-      path: '/tyravel/ws',
+      channel: env('BROADCAST_REDIS_CHANNEL', 'pondoknusa:broadcast'),
+      path: '/pondoknusa/ws',
     },
   },
   queueConnection: env('QUEUE_CONNECTION', 'database'),
@@ -111,7 +111,7 @@ export default {
 }
 
 export function broadcastChannels(): string {
-  return `import { Broadcast } from '@tyravel/core';
+  return `import { Broadcast } from '@pondoknusa/core';
 
 /**
  * Register channels with the same private-/presence- prefixes Echo sends.
@@ -146,7 +146,7 @@ Broadcast.channel('presence-App.Room.{roomId}', (user, roomId) => {
 }
 
 export function echoBootstrap(_options: NewProjectOptions): string {
-  return `import { Echo, readEchoConfigFromDocument } from '@tyravel/echo';
+  return `import { Echo, readEchoConfigFromDocument } from '@pondoknusa/echo';
 
 const config = readEchoConfigFromDocument();
 if (!config) {
@@ -162,12 +162,12 @@ if (!config) {
 }
 
 export function redisConfig(): string {
-  return `import type { RedisConfig } from '@tyravel/redis';
-import { env, envInt } from '@tyravel/config';
+  return `import type { RedisConfig } from '@pondoknusa/redis';
+import { env, envInt } from '@pondoknusa/config';
 
 export default {
   default: env('REDIS_CONNECTION', 'default'),
-  prefix: 'tyravel',
+  prefix: 'pondoknusa',
   connections: {
     default: {
       url: env('REDIS_URL', ''),
@@ -182,14 +182,14 @@ export default {
 }
 
 export function mailConfig(): string {
-  return `import type { MailConfig } from '@tyravel/mail';
-import { env, envInt } from '@tyravel/config';
+  return `import type { MailConfig } from '@pondoknusa/mail';
+import { env, envInt } from '@pondoknusa/config';
 
 export default {
   default: env('MAIL_MAILER', 'log'),
   from: {
     address: env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-    name: env('MAIL_FROM_NAME', 'Tyravel'),
+    name: env('MAIL_FROM_NAME', 'Pondoknusa'),
   },
   connections: {
     log: { driver: 'log' },
@@ -210,7 +210,7 @@ export default {
 }
 
 export function notificationsConfig(connection = 'sqlite'): string {
-  return `import type { NotificationsConfig } from '@tyravel/notifications';
+  return `import type { NotificationsConfig } from '@pondoknusa/notifications';
 
 export default {
   table: 'notifications',
@@ -222,9 +222,9 @@ export default {
 }
 
 export function notificationsTableMigration(): string {
-  return `import { Migration } from '@tyravel/database';
-import type { DatabaseConnection } from '@tyravel/database';
-import type { SchemaBuilder } from '@tyravel/database';
+  return `import { Migration } from '@pondoknusa/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import type { SchemaBuilder } from '@pondoknusa/database';
 
 export default class CreateNotificationsTable extends Migration {
   override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {

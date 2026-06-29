@@ -1,5 +1,5 @@
-import type { Middleware } from '@tyravel/http';
-import { AuthenticationException } from '@tyravel/auth';
+import type { Middleware } from '@pondoknusa/http';
+import { AuthenticationException } from '@pondoknusa/auth';
 import type { OAuthServer } from './oauth-server.js';
 
 export function createOAuth2AuthMiddleware(server: OAuthServer): Middleware {

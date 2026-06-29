@@ -27,7 +27,7 @@ describe('resolveEchoClientConfig', () => {
             websocket: {
               driver: 'websocket',
               redisConnection: 'default',
-              path: '/tyravel/ws',
+              path: '/pondoknusa/ws',
             },
           },
         },
@@ -36,7 +36,7 @@ describe('resolveEchoClientConfig', () => {
     ).toEqual({
       broadcaster: 'websocket',
       host: 'http://127.0.0.1:3000',
-      path: '/tyravel/ws',
+      path: '/pondoknusa/ws',
       authEndpoint: '/broadcasting/auth',
     });
   });

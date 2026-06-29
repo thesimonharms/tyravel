@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { MlDsa } from '@tyravel/crypto';
-import { QueryBuilder, SqliteConnection } from '@tyravel/database';
+import { MlDsa } from '@pondoknusa/crypto';
+import { QueryBuilder, SqliteConnection } from '@pondoknusa/database';
 import { OAuthServer } from './oauth-server.js';
 
 async function createServer(): Promise<{

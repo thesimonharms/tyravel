@@ -3,7 +3,7 @@
 Register `QueueServiceProvider` and configure `config/queue.ts`:
 
 ```typescript
-import { env } from '@tyravel/config';
+import { env } from '@pondoknusa/config';
 
 export default {
   default: env('QUEUE_CONNECTION', 'database'),
@@ -27,12 +27,12 @@ export default {
 } as const;
 ```
 
-Set `QUEUE_CONNECTION=database` (or `redis`) in `.env`. The `sync` driver is **not** registered in `QueueManager` for production apps — use `database` or `redis`, and run `tyravel queue:work`. Framework tests may use `SyncQueue` directly when they need inline job execution.
+Set `QUEUE_CONNECTION=database` (or `redis`) in `.env`. The `sync` driver is **not** registered in `QueueManager` for production apps — use `database` or `redis`, and run `pondoknusa queue:work`. Framework tests may use `SyncQueue` directly when they need inline job execution.
 
 ## Jobs
 
 ```typescript
-import { Job } from '@tyravel/queue';
+import { Job } from '@pondoknusa/queue';
 
 export class SendWelcomeEmail extends Job<{ email: string }> {
   override async handle(): Promise<void> {
@@ -50,7 +50,7 @@ this.app.make<JobRegistry>('jobs.registry').register(SendWelcomeEmail);
 ## Dispatching
 
 ```typescript
-import { dispatch, Queue } from '@tyravel/core';
+import { dispatch, Queue } from '@pondoknusa/core';
 
 await dispatch(new SendWelcomeEmail({ email: 'ada@example.com' }));
 await Queue.connection('database').dispatch(new SendWelcomeEmail({ email: 'grace@example.com' }));
@@ -60,18 +60,18 @@ await Queue.later(60, new SendWelcomeEmail({ email: 'later@example.com' }));
 ## Workers
 
 ```bash
-tyravel queue:table
-tyravel migrate
-tyravel queue:work --connection=database --queue=default
+pondoknusa queue:table
+pondoknusa migrate
+pondoknusa queue:work --connection=database --queue=default
 ```
 
 Inspect failed jobs:
 
 ```bash
-tyravel queue:failed-table
-tyravel migrate
-tyravel queue:failed
-tyravel queue:retry 1
+pondoknusa queue:failed-table
+pondoknusa migrate
+pondoknusa queue:failed
+pondoknusa queue:retry 1
 ```
 
 ## Queued listeners in tests

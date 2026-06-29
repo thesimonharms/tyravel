@@ -1,4 +1,4 @@
-import { docsLink } from '@tyravel/support';
+import { docsLink } from '@pondoknusa/support';
 
 export class CompiledViewCacheMissError extends Error {
   constructor(
@@ -6,7 +6,7 @@ export class CompiledViewCacheMissError extends Error {
     readonly cacheDirectory: string,
   ) {
     super(
-      `Compiled view cache is cold for [${viewName}]. Run \`tyravel view:cache\` to warm ${cacheDirectory} before serving in production. See ${docsLink('/guide/deployment')}.`,
+      `Compiled view cache is cold for [${viewName}]. Run \`pondoknusa view:cache\` to warm ${cacheDirectory} before serving in production. See ${docsLink('/guide/deployment')}.`,
     );
     this.name = 'CompiledViewCacheMissError';
   }

@@ -21,8 +21,8 @@ export interface NewProjectOptions {
 
 const DATABASE_CHOICES: { value: DatabaseDriver; label: string }[] = [
   { value: 'sqlite', label: 'SQLite (no extra dependencies)' },
-  { value: 'mysql', label: 'MySQL (+ @tyravel/database-mysql)' },
-  { value: 'postgres', label: 'PostgreSQL (+ @tyravel/database-pg)' },
+  { value: 'mysql', label: 'MySQL (+ @pondoknusa/database-mysql)' },
+  { value: 'postgres', label: 'PostgreSQL (+ @pondoknusa/database-pg)' },
 ];
 
 const QUEUE_CHOICES: { value: QueueDriver; label: string }[] = [

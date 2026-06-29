@@ -2,7 +2,7 @@ import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { Response } from '@tyravel/http';
+import { Response } from '@pondoknusa/http';
 import { Application } from './application.js';
 import { bootstrapRouteCache } from './route-cache-bootstrap.js';
 import { Route, setRouteApplication } from './route.js';
@@ -23,7 +23,7 @@ describe('bootstrapRouteCache', () => {
     previousNodeEnv = process.env.NODE_ENV;
     process.env.NODE_ENV = 'production';
 
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-route-cache-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-route-cache-'));
     mkdirSync(join(tempDir, 'storage/framework'), { recursive: true });
 
     const app = new Application(tempDir);
@@ -47,7 +47,7 @@ describe('bootstrapRouteCache', () => {
     previousNodeEnv = process.env.NODE_ENV;
     process.env.NODE_ENV = 'development';
 
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-route-cache-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-route-cache-'));
     const app = new Application(tempDir);
     setRouteApplication(app);
     Route.get('/health', () => Response.json({ ok: true }));

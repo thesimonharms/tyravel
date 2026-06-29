@@ -16,7 +16,7 @@ describe('SqliteConnection', () => {
   });
 
   it('creates parent directories asynchronously for file-backed databases', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-sqlite-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-sqlite-'));
     const databasePath = join(tempDir, 'nested', 'app.sqlite');
 
     const connection = await SqliteConnection.connect(databasePath, tempDir);
@@ -35,7 +35,7 @@ describe('SqliteConnection', () => {
   });
 
   it('enables WAL journal mode for file-backed databases by default', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-sqlite-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-sqlite-'));
     const databasePath = join(tempDir, 'app.sqlite');
 
     const connection = await SqliteConnection.connect(databasePath, tempDir);

@@ -1,5 +1,5 @@
 import type { Application } from './application.js';
-import type { PasswordResetBroker } from '@tyravel/auth';
+import type { PasswordResetBroker } from '@pondoknusa/auth';
 
 let passwordApplication: Application | undefined;
 

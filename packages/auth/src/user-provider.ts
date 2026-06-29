@@ -1,4 +1,4 @@
-import type { Model } from '@tyravel/database';
+import type { Model } from '@pondoknusa/database';
 import { Hasher } from './hasher.js';
 import { InvalidCredentialsException } from './exceptions.js';
 import type { Authenticatable, UserModelConstructor } from './types.js';

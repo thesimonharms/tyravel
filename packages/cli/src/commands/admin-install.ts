@@ -14,14 +14,14 @@ import { projectPath, writeFile, pathExists } from '../utils.js';
 export class AdminInstallCommand extends Command {
   override readonly name = 'admin:install';
   override readonly description = 'Scaffold optional admin panel routes, config, and policies';
-  override readonly usage = 'tyravel admin:install';
+  override readonly usage = 'pondoknusa admin:install';
 
   async handle(): Promise<number> {
     const root = await requireProjectRoot();
 
     const authConfigPath = projectPath(root, 'config/auth.ts');
     if (!(await pathExists(authConfigPath))) {
-      console.error('config/auth.ts not found. Run tyravel auth:install first.');
+      console.error('config/auth.ts not found. Run pondoknusa auth:install first.');
       return 1;
     }
 
@@ -47,7 +47,7 @@ export class AdminInstallCommand extends Command {
     console.log('Admin panel scaffolding installed.');
     console.log('');
     console.log('Next steps:');
-    console.log('  npm install @tyravel/admin');
+    console.log('  npm install @pondoknusa/admin');
     console.log('  Register resources in src/admin/resources.ts');
     console.log('  Visit /admin after signing in');
 
@@ -60,8 +60,8 @@ export class AdminInstallCommand extends Command {
 
     if (!auth.includes('UserPolicy')) {
       auth = auth.replace(
-        "import type { AuthConfig } from '@tyravel/auth';",
-        "import type { AuthConfig } from '@tyravel/auth';\nimport { UserPolicy } from '../src/policies/UserPolicy.js';",
+        "import type { AuthConfig } from '@pondoknusa/auth';",
+        "import type { AuthConfig } from '@pondoknusa/auth';\nimport { UserPolicy } from '../src/policies/UserPolicy.js';",
       );
       auth = auth.replace('policies: {},', 'policies: {\n    User: UserPolicy,\n  },');
     }
@@ -110,8 +110,8 @@ export class AdminInstallCommand extends Command {
 
     if (!provider.includes('registerAdminResources')) {
       provider = provider.replace(
-        "import { ServiceProvider } from '@tyravel/core';",
-        "import { ServiceProvider } from '@tyravel/core';\nimport { AdminRegistry } from '@tyravel/admin';\nimport { registerAdminResources } from '../admin/resources.js';",
+        "import { ServiceProvider } from '@pondoknusa/core';",
+        "import { ServiceProvider } from '@pondoknusa/core';\nimport { AdminRegistry } from '@pondoknusa/admin';\nimport { registerAdminResources } from '../admin/resources.js';",
       );
 
       if (provider.includes('override boot()')) {

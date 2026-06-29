@@ -1,4 +1,4 @@
-import { HttpException } from '@tyravel/http';
+import { HttpException } from '@pondoknusa/http';
 
 export class OAuthServerException extends HttpException {
   readonly error: string;

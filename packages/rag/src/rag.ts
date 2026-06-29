@@ -1,5 +1,5 @@
-import type { ModelStatic } from '@tyravel/database';
-import { similarTo, type EmbedFn } from '@tyravel/vector';
+import type { ModelStatic } from '@pondoknusa/database';
+import { similarTo, type EmbedFn } from '@pondoknusa/vector';
 import { buildGroundedPrompt } from './prompt.js';
 import { applyRerank } from './rerank.js';
 import type { RagChunk, RagRetrieveOptions } from './types.js';

@@ -1,4 +1,4 @@
-import { generateViewPropsDeclarationFile } from '@tyravel/views';
+import { generateViewPropsDeclarationFile } from '@pondoknusa/views';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { parseOptions, positionalArgs, writeFile } from '../utils.js';
@@ -11,7 +11,7 @@ const DEFAULT_OUTPUT = 'types/view-props.generated.d.ts';
 export class ViewTypesCommand extends Command {
   override readonly name = 'view:types';
   override readonly description = 'Generate ViewPropsMap types from @props directives';
-  override readonly usage = 'tyravel view:types [--output=types/view-props.generated.d.ts] [--check]';
+  override readonly usage = 'pondoknusa view:types [--output=types/view-props.generated.d.ts] [--check]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -40,12 +40,12 @@ export class ViewTypesCommand extends Command {
       try {
         existing = await readFile(outputPath, 'utf8');
       } catch {
-        console.error(`Missing ${outputPath}. Run tyravel view:types to generate it.`);
+        console.error(`Missing ${outputPath}. Run pondoknusa view:types to generate it.`);
         return 1;
       }
 
       if (existing !== contents) {
-        console.error('View prop types are out of date. Run tyravel view:types and commit the changes.');
+        console.error('View prop types are out of date. Run pondoknusa view:types and commit the changes.');
         return 1;
       }
 

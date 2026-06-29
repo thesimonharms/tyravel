@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ArrayStore } from '@tyravel/cache';
+import { ArrayStore } from '@pondoknusa/cache';
 import { createCachedEmbedFn } from './embedding-cache.js';
 
 describe('createCachedEmbedFn', () => {

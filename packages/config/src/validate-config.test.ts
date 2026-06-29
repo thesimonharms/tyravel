@@ -15,7 +15,7 @@ describe('validateConfig', () => {
       validateConfig(
         {
           app: {
-            name: 'Tyravel',
+            name: 'Pondoknusa',
             debug: true,
             url: 'http://127.0.0.1:3000',
           },

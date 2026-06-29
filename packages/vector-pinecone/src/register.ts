@@ -1,4 +1,4 @@
-import { registerVectorSearchDriver } from '@tyravel/vector';
+import { registerVectorSearchDriver } from '@pondoknusa/vector';
 import { PineconeVectorSearchDriver } from './pinecone-search-driver.js';
 import type { PineconeVectorConfig } from './pinecone-client.js';
 

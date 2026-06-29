@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { Application, HttpKernel, Route, setRouteApplication } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+import { Application, HttpKernel, Route, setRouteApplication } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 import { createTestingMiddleware } from './test-request-context.js';
 import { HttpTestClient } from './http-test-client.js';
 

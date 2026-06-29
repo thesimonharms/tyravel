@@ -14,11 +14,11 @@ afterEach(async () => {
 
 describe('LangPublishCommand', () => {
   it('creates lang/en.json in a project', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'tyravel-lang-'));
+    const root = await mkdtemp(join(tmpdir(), 'pondoknusa-lang-'));
     tempDirs.push(root);
     process.chdir(root);
 
-    await writeFile(join(root, 'tyravel.json'), JSON.stringify({
+    await writeFile(join(root, 'pondoknusa.json'), JSON.stringify({
       name: 'demo',
       entry: 'src/main.ts',
       serve: { port: 3000, hostname: '127.0.0.1' },
@@ -30,6 +30,6 @@ describe('LangPublishCommand', () => {
 
     expect(code).toBe(0);
     const locale = await readFile(join(root, 'lang/en.json'), 'utf8');
-    expect(locale).toContain('Welcome to Tyravel');
+    expect(locale).toContain('Welcome to Pondoknusa');
   });
 });

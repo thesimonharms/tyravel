@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TyravelRequest } from './request.js';
+import { PondoknusaRequest } from './request.js';
 import { Response } from './response.js';
 import { createRoutePipelineRunner } from './route-pipeline.js';
 
@@ -24,7 +24,7 @@ describe('RoutePipelineRunner', () => {
     );
 
     const response = await runner.run(
-      new TyravelRequest(new Request('http://localhost/')),
+      new PondoknusaRequest(new Request('http://localhost/')),
     );
 
     expect(order).toEqual(['mw-1', 'mw-2', 'handler']);
@@ -38,7 +38,7 @@ describe('RoutePipelineRunner', () => {
     );
 
     const response = await runner.run(
-      new TyravelRequest(new Request('http://localhost/api')),
+      new PondoknusaRequest(new Request('http://localhost/api')),
     );
 
     expect(await response.json()).toEqual({ ok: true });

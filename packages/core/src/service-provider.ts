@@ -3,7 +3,7 @@ import { pathToFileURL } from 'node:url';
 import type { Application } from './application.js';
 
 /**
- * Base class for Tyravel service providers.
+ * Base class for Pondoknusa service providers.
  *
  * Override {@link register} to bind services into the container and
  * {@link boot} for work that depends on other providers having registered.

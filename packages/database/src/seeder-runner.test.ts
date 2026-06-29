@@ -8,7 +8,7 @@ import { SeederRunner } from './seeder-runner.js';
 const tempDirs: string[] = [];
 
 function createSeedersDir(seeders: Record<string, string>): string {
-  const dir = join(tmpdir(), `tyravel-seeders-${Date.now()}-${Math.random()}`);
+  const dir = join(tmpdir(), `pondoknusa-seeders-${Date.now()}-${Math.random()}`);
   mkdirSync(dir, { recursive: true });
 
   for (const [fileName, contents] of Object.entries(seeders)) {

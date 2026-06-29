@@ -1,13 +1,13 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { loadConfig } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
   Schedule,
   ScheduleServiceProvider,
   ServiceProvider,
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 import { Command } from '../command.js';
 import { createKernel } from '../kernel.js';
 import { requireProjectRoot } from '../project.js';
@@ -16,7 +16,7 @@ import { parseOptions, positionalArgs } from '../utils.js';
 export class ScheduleRunCommand extends Command {
   override readonly name = 'schedule:run';
   override readonly description = 'Run scheduled tasks that are due';
-  override readonly usage = 'tyravel schedule:run';
+  override readonly usage = 'pondoknusa schedule:run';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);

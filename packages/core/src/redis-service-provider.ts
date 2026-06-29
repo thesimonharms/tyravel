@@ -1,5 +1,5 @@
-import { ConfigRepository } from '@tyravel/config';
-import { RedisManager, type RedisConfig } from '@tyravel/redis';
+import { ConfigRepository } from '@pondoknusa/config';
+import { RedisManager, type RedisConfig } from '@pondoknusa/redis';
 import { ServiceProvider } from './service-provider.js';
 
 export class RedisServiceProvider extends ServiceProvider {

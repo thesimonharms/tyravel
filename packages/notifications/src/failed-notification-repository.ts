@@ -1,5 +1,5 @@
-import { decodePayload } from '@tyravel/queue';
-import type { FailedJobRecord, FailedJobRepository } from '@tyravel/queue';
+import { decodePayload } from '@pondoknusa/queue';
+import type { FailedJobRecord, FailedJobRepository } from '@pondoknusa/queue';
 
 const SEND_QUEUED_NOTIFICATION = 'SendQueuedNotification';
 

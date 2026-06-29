@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { TyravelRequest } from '@tyravel/http';
+import { PondoknusaRequest } from '@pondoknusa/http';
 import { validateRequest, ValidationException, Validator } from './validator.js';
 
 describe('Validator', () => {
   it('validates required and email rules', () => {
     const result = new Validator(
-      { email: 'user@example.com', name: 'Tyravel' },
+      { email: 'user@example.com', name: 'Pondoknusa' },
       { email: 'required|email', name: 'required|max_length:50' },
     ).validate();
 
@@ -19,7 +19,7 @@ describe('Validator', () => {
   });
 
   it('validates json request bodies', async () => {
-    const request = new TyravelRequest(
+    const request = new PondoknusaRequest(
       new Request('http://localhost/register', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
@@ -65,7 +65,7 @@ describe('Validator', () => {
   });
 
   it('supports partial JSON updates through validateRequest', async () => {
-    const request = new TyravelRequest(
+    const request = new PondoknusaRequest(
       new Request('http://localhost/posts/1', {
         method: 'PUT',
         headers: { 'content-type': 'application/json' },

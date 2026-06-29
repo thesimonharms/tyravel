@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { ArrayStore } from '@tyravel/cache';
+import { ArrayStore } from '@pondoknusa/cache';
 import { executeGraphQL, executeNamedOperation } from './execute.js';
 import { createOperationRegistry } from './operations.js';
 import { defineSchema, defineType } from './schema.js';
@@ -56,10 +56,10 @@ describe('executeGraphQL', () => {
     const result = await executeGraphQL({
       schema,
       document: 'query ($name: String) { hello(name: $name) documents { id source } }',
-      variables: { name: 'Tyravel' },
+      variables: { name: 'Pondoknusa' },
     });
 
-    expect(result.data?.hello).toBe('Hello, Tyravel!');
+    expect(result.data?.hello).toBe('Hello, Pondoknusa!');
     expect(result.data?.documents).toEqual([
       { id: 1, source: 'readme.md' },
       { id: 2, source: 'guide.md' },

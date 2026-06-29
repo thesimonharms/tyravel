@@ -1,4 +1,4 @@
-import { env, s } from '@tyravel/config';
+import { env, s } from '@pondoknusa/config';
 
 export const schema = s.object({
   name: s.string({ required: true, minLength: 1 }),
@@ -7,7 +7,7 @@ export const schema = s.object({
 });
 
 export default {
-  name: env('APP_NAME', 'tyravel-rag-example'),
+  name: env('APP_NAME', 'pondoknusa-rag-example'),
   debug: env('APP_DEBUG', true),
   url: env('APP_URL', 'http://127.0.0.1:3000'),
 } as const;

@@ -1,4 +1,4 @@
-import type { HealthConfig } from '@tyravel/core';
+import type { HealthConfig } from '@pondoknusa/core';
 
 export default {
   enabled: true,

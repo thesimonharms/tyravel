@@ -2,7 +2,7 @@ import { resolveClientIp, resolveSecure } from './trusted-proxies.js';
 import type { RouteParamValue, RouteParams } from './types.js';
 import type { SessionContract } from './session-contract.js';
 
-export class TyravelRequest {
+export class PondoknusaRequest {
   private _raw: Request;
   private _params: RouteParams;
   private _routeName?: string;

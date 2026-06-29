@@ -1,4 +1,4 @@
-import type { Application } from '@tyravel/core';
+import type { Application } from '@pondoknusa/core';
 import {
   HttpKernel,
   setAuthApplication,
@@ -12,10 +12,10 @@ import {
   setQueueApplication,
   setRouteApplication,
   setViewApplication,
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 
 /**
- * Wire Tyravel facades to the application under test (call after boot).
+ * Wire Pondoknusa facades to the application under test (call after boot).
  */
 export function wireFacades(app: Application): void {
   setRouteApplication(app);

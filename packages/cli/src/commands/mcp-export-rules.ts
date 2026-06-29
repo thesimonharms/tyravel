@@ -1,13 +1,13 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
-import { loadConfig } from '@tyravel/config';
-import { ConfigRepository } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
+import { ConfigRepository } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
   setRouteApplication,
   ServiceProvider,
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 import {
   buildCapabilityManifest,
   defaultRulesOutputPath,
@@ -17,7 +17,7 @@ import {
   renderAgentRules,
   type AgentRulesFormat,
   type AppMcpContext,
-} from '@tyravel/mcp';
+} from '@pondoknusa/mcp';
 import { createKernel } from '../kernel.js';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
@@ -27,9 +27,9 @@ import { importRoutes } from './mcp-serve-shared.js';
 
 export class McpExportRulesCommand extends Command {
   override readonly name = 'mcp:export-rules';
-  override readonly description = 'Export Cursor/Claude agent rules from the Tyravel capability manifest';
+  override readonly description = 'Export Cursor/Claude agent rules from the Pondoknusa capability manifest';
   override readonly usage =
-    'tyravel mcp:export-rules [--format=cursor|claude|agents] [--output=<path>]';
+    'pondoknusa mcp:export-rules [--format=cursor|claude|agents] [--output=<path>]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -69,7 +69,7 @@ export class McpExportRulesCommand extends Command {
       routes: app.router().listRoutes(),
       models: await discoverModels(root),
       configKeys: flattenConfigKeys(config.all()),
-      commands: createKernel().list().map((command) => `tyravel ${command.name}`),
+      commands: createKernel().list().map((command) => `pondoknusa ${command.name}`),
       docs: await discoverDocs(root),
     };
 

@@ -19,7 +19,7 @@ export class StartCommand extends Command {
   override readonly name = 'start';
   override readonly description = 'Start the production server';
   override readonly usage =
-    'tyravel start [--port=<port>] [--host=<hostname>] [--cluster] [--workers=<n>]';
+    'pondoknusa start [--port=<port>] [--host=<hostname>] [--cluster] [--workers=<n>]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -45,7 +45,7 @@ export class StartCommand extends Command {
       return 1;
     }
 
-    console.log(`Starting Tyravel production server using ${runtime.name}...`);
+    console.log(`Starting Pondoknusa production server using ${runtime.name}...`);
 
     const child = spawnTypeScriptEntry({
       entry: cluster ? CLUSTER_LAUNCHER : entry,
@@ -53,12 +53,12 @@ export class StartCommand extends Command {
       env: {
         ...process.env,
         NODE_ENV: process.env.NODE_ENV ?? 'production',
-        TYRAVEL_PORT: String(port),
-        TYRAVEL_HOST: hostname,
+        PONDOKNUSA_PORT: String(port),
+        PONDOKNUSA_HOST: hostname,
         ...(cluster
           ? {
-              TYRAVEL_CLUSTER_ENTRY: entry,
-              ...(workers ? { TYRAVEL_WORKERS: String(workers) } : {}),
+              PONDOKNUSA_CLUSTER_ENTRY: entry,
+              ...(workers ? { PONDOKNUSA_WORKERS: String(workers) } : {}),
             }
           : {}),
       },

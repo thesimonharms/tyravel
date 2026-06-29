@@ -12,7 +12,7 @@ import { projectPath, writeFile, pathExists } from '../utils.js';
 export class OAuthInstallCommand extends Command {
   override readonly name = 'oauth:install';
   override readonly description = 'Scaffold OAuth2 authorization server routes and migrations';
-  override readonly usage = 'tyravel oauth:install';
+  override readonly usage = 'pondoknusa oauth:install';
 
   async handle(): Promise<number> {
     const root = await requireProjectRoot();
@@ -40,13 +40,13 @@ export class OAuthInstallCommand extends Command {
     console.log('OAuth2 authorization server scaffolding installed.');
     console.log('');
     console.log('Next steps:');
-    console.log('  npm install @tyravel/auth-oauth');
-    console.log('  tyravel migrate');
-    console.log('  tyravel oauth:client:create "My App" --redirect=http://127.0.0.1:3000/callback');
+    console.log('  npm install @pondoknusa/auth-oauth');
+    console.log('  pondoknusa migrate');
+    console.log('  pondoknusa oauth:client:create "My App" --redirect=http://127.0.0.1:3000/callback');
     console.log('');
     console.log('Optional hardening:');
-    console.log('  tyravel crypto:install');
-    console.log('  tyravel crypto:generate-keys --algorithm=ml-dsa-65');
+    console.log('  pondoknusa crypto:install');
+    console.log('  pondoknusa crypto:generate-keys --algorithm=ml-dsa-65');
     console.log('  Set OAUTH_SIGN_TOKENS=true and token key env vars in .env');
     console.log('');
     console.log('Endpoints:');
@@ -63,8 +63,8 @@ export class OAuthInstallCommand extends Command {
     const mainPath = projectPath(root, 'src/main.ts');
     let main = await readFile(mainPath, 'utf8');
 
-    if (!main.includes('@tyravel/auth-oauth')) {
-      main = `import { OAuthServerServiceProvider } from '@tyravel/auth-oauth';\n${main}`;
+    if (!main.includes('@pondoknusa/auth-oauth')) {
+      main = `import { OAuthServerServiceProvider } from '@pondoknusa/auth-oauth';\n${main}`;
     }
 
     if (!main.includes('OAuthServerServiceProvider')) {
@@ -100,8 +100,8 @@ export class OAuthInstallCommand extends Command {
 
     if (!provider.includes('OAuthServerController')) {
       provider = provider.replace(
-        "import { ServiceProvider } from '@tyravel/core';",
-        "import { ServiceProvider } from '@tyravel/core';\nimport { OAuthServerController } from '../controllers/OAuthServerController.js';",
+        "import { ServiceProvider } from '@pondoknusa/core';",
+        "import { ServiceProvider } from '@pondoknusa/core';\nimport { OAuthServerController } from '../controllers/OAuthServerController.js';",
       );
       provider = provider.replace(
         'this.app.bind(AuthController',

@@ -1,4 +1,4 @@
-import type { SseEvent } from '@tyravel/http';
+import type { SseEvent } from '@pondoknusa/http';
 import type { Rag } from './rag.js';
 import { renderGroundedPrompt } from './prompt-template.js';
 import type { RagChunk, RagRetrieveOptions } from './types.js';

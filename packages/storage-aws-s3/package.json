@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/storage-aws-s3",
+  "name": "@pondoknusa/storage-aws-s3",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -13,7 +13,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.840.0",
     "@aws-sdk/s3-request-presigner": "^3.840.0",
-    "@tyravel/storage": "1.0.3"
+    "@pondoknusa/storage": "1.0.3"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -28,11 +28,11 @@
   "devDependencies": {
     "@types/node": "^26.0.1"
   },
-  "description": "AWS S3 storage driver for Tyravel",
+  "description": "AWS S3 storage driver for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/storage-aws-s3"
   },
   "publishConfig": {

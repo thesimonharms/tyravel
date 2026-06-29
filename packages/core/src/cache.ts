@@ -1,4 +1,4 @@
-import type { CacheRepository, TaggedCache } from '@tyravel/cache';
+import type { CacheRepository, TaggedCache } from '@pondoknusa/cache';
 import type { Application } from './application.js';
 
 let cacheApplication: Application | undefined;

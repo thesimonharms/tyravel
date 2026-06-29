@@ -4,7 +4,7 @@ import { join, resolve } from 'node:path';
 import { start as startReplServer, type REPLServer } from 'node:repl';
 import { homedir } from 'node:os';
 import { listProjectRoutes } from './list-routes.js';
-import type { Application } from '@tyravel/core';
+import type { Application } from '@pondoknusa/core';
 
 const CYAN = '\x1b[36m';
 const GREEN = '\x1b[32m';
@@ -16,13 +16,13 @@ interface ReplContext {
 }
 
 /**
- * Start the Tyravel interactive shell.
+ * Start the Pondoknusa interactive shell.
  * Boots the application and provides a REPL with all facades and models available.
  */
 export async function startRepl(projectRoot: string): Promise<number> {
   const context: ReplContext = {};
 
-  // ── Boot the Tyravel application ──────────────────────────────────────
+  // ── Boot the Pondoknusa application ──────────────────────────────────────
   const bootstrapPath = join(projectRoot, 'bootstrap', 'app.ts');
   const entryPath = join(projectRoot, 'src', 'main.ts');
 
@@ -46,19 +46,19 @@ export async function startRepl(projectRoot: string): Promise<number> {
 
   // ── Populate facades ─────────────────────────────────────────────────
   const facades: [string, string][] = [
-    ['Route', '@tyravel/core'],
-    ['DB', '@tyravel/core'],
-    ['Auth', '@tyravel/core'],
-    ['Cache', '@tyravel/core'],
-    ['Queue', '@tyravel/core'],
-    ['Events', '@tyravel/core'],
-    ['Log', '@tyravel/core'],
-    ['Mail', '@tyravel/core'],
-    ['Notifications', '@tyravel/core'],
-    ['Schedule', '@tyravel/core'],
-    ['Storage', '@tyravel/core'],
-    ['Config', '@tyravel/config'],
-    ['collect', '@tyravel/support'],
+    ['Route', '@pondoknusa/core'],
+    ['DB', '@pondoknusa/core'],
+    ['Auth', '@pondoknusa/core'],
+    ['Cache', '@pondoknusa/core'],
+    ['Queue', '@pondoknusa/core'],
+    ['Events', '@pondoknusa/core'],
+    ['Log', '@pondoknusa/core'],
+    ['Mail', '@pondoknusa/core'],
+    ['Notifications', '@pondoknusa/core'],
+    ['Schedule', '@pondoknusa/core'],
+    ['Storage', '@pondoknusa/core'],
+    ['Config', '@pondoknusa/config'],
+    ['collect', '@pondoknusa/support'],
   ];
 
   const req = createRequire(import.meta.url);
@@ -107,12 +107,12 @@ export async function startRepl(projectRoot: string): Promise<number> {
     }
   }
 
-  const historyFile = join(homedir(), '.tyravel_shell_history');
+  const historyFile = join(homedir(), '.pondoknusa_shell_history');
   const bootedApp = context.app as Application | undefined;
 
   // ── Colorized greeting ───────────────────────────────────────────────
   console.log('');
-  console.log(`  ${CYAN}⚡ Tyravel Shell${RESET}`);
+  console.log(`  ${CYAN}⚡ Pondoknusa Shell${RESET}`);
   console.log(`  ${GREEN}Available:${RESET} Route, DB, Auth, Cache, Queue, Events, Log, Mail, Notifications, Schedule, Storage, collect`);
   if (Object.keys(context).length > 11) {
     const modelCount = Object.keys(context).length - 11 - (context.app ? 1 : 0);
@@ -126,7 +126,7 @@ export async function startRepl(projectRoot: string): Promise<number> {
 
   // ── Start REPL server ────────────────────────────────────────────────
   const server: REPLServer = startReplServer({
-    prompt: `${CYAN}tyravel>${RESET} `,
+    prompt: `${CYAN}pondoknusa>${RESET} `,
     eval: evaluateInContext(context),
     preview: true,
     useColors: false,

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { MailManager } from '@tyravel/mail';
-import { ArrayMailTransport } from '@tyravel/mail';
+import { MailManager } from '@pondoknusa/mail';
+import { ArrayMailTransport } from '@pondoknusa/mail';
 import { Notification } from './notification.js';
 import { NotificationManager } from './notification-manager.js';
 import type { Notifiable } from './types.js';

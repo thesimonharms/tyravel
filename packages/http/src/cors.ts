@@ -1,4 +1,4 @@
-import type { TyravelRequest } from './request.js';
+import type { PondoknusaRequest } from './request.js';
 import type { Middleware } from './types.js';
 
 const WebResponse = globalThis.Response;

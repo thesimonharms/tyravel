@@ -1,4 +1,4 @@
-import { Job } from '@tyravel/queue';
+import { Job } from '@pondoknusa/queue';
 import type { MailMessage } from './types.js';
 import { getQueuedMailContext } from './queued-mail-context.js';
 

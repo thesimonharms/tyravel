@@ -1,4 +1,4 @@
-import type { ModelStatic } from '@tyravel/database';
+import type { ModelStatic } from '@pondoknusa/database';
 import { ingestDocument } from './ingest.js';
 import { loadDocument } from './load-document.js';
 import type { IngestDocumentOptions } from './types.js';

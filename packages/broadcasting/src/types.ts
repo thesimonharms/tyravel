@@ -1,4 +1,4 @@
-import type { Event } from '@tyravel/events';
+import type { Event } from '@pondoknusa/events';
 
 export type BroadcastDriver = 'null' | 'log' | 'fake' | 'websocket';
 

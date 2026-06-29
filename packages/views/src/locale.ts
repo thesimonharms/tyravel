@@ -4,8 +4,8 @@ export {
   flattenTranslations,
   resolveLocalePath,
   type TranslationTree,
-} from '@tyravel/locale';
-import type { TranslationTree } from '@tyravel/locale';
+} from '@pondoknusa/locale';
+import type { TranslationTree } from '@pondoknusa/locale';
 
 /** Synchronous loader for the view compiler hot path. */
 export function loadLocaleFile(path: string): TranslationTree {
@@ -17,7 +17,7 @@ export function loadLocaleFile(path: string): TranslationTree {
   return parsed as TranslationTree;
 }
 
-import type { Translator } from '@tyravel/locale';
+import type { Translator } from '@pondoknusa/locale';
 
 export function translate(
   key: string,

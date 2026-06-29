@@ -35,7 +35,7 @@ export class GithubOAuthDriver implements SocialOAuthDriver {
       headers: {
         authorization: `Bearer ${accessToken}`,
         accept: 'application/json',
-        'user-agent': 'tyravel-auth',
+        'user-agent': 'pondoknusa-auth',
       },
     });
 

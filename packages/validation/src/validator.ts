@@ -1,4 +1,4 @@
-import type { TyravelRequest } from '@tyravel/http';
+import type { PondoknusaRequest } from '@pondoknusa/http';
 import { parseRuleSet, type ValidationRules } from './rules.js';
 
 export interface ValidationErrors {
@@ -61,7 +61,7 @@ export class Validator<T extends Record<string, unknown>> {
 }
 
 export async function validateRequest<T extends Record<string, unknown>>(
-  request: TyravelRequest,
+  request: PondoknusaRequest,
   rules: ValidationRules<T>,
 ): Promise<T> {
   const contentType = request.headers.get('content-type') ?? '';

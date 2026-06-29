@@ -11,7 +11,7 @@ export async function exportDebugSpan(
   entry: DebugRequestEntry,
   config: OtelExportConfig,
 ): Promise<void> {
-  const payload = buildOtlpPayload(entry, config.serviceName ?? 'tyravel');
+  const payload = buildOtlpPayload(entry, config.serviceName ?? 'pondoknusa');
   const response = await fetch(config.endpoint, {
     method: 'POST',
     headers: {
@@ -40,7 +40,7 @@ function buildOtlpPayload(entry: DebugRequestEntry, serviceName: string): Record
         },
         scopeSpans: [
           {
-            scope: { name: '@tyravel/debug' },
+            scope: { name: '@pondoknusa/debug' },
             spans: [
               {
                 traceId: randomId(16),

@@ -3,183 +3,183 @@
 
 # CLI reference
 
-Auto-generated from `tyravel list` via `@tyravel/cli`.
+Auto-generated from `pondoknusa list` via `@pondoknusa/cli`.
 
 Monorepo version: **1.0.3**.
 
 ## Usage
 
 ```bash
-tyravel <command> [options] [arguments]
-tyravel help <command>
+pondoknusa <command> [options] [arguments]
+pondoknusa help <command>
 ```
 
 ## Project
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `build` | Bundle the app entry into a single production file (esbuild) | `tyravel build [--outfile=<path>] [--minify]` |
-| `dev` | Start the local development server with hot reload | `tyravel dev [--port=<port>] [--host=<hostname>] [--tls] [--no-queue] [--no-watch]` |
-| `doctor` | Run environment and project health checks | `tyravel doctor [--perf]` |
-| `migrate` | Run database migrations | `tyravel migrate` |
-| `new` | Create a new Tyravel application | `tyravel new <name> [--path=<directory>] [--headless] [--template=default\|api\|ssr\|saas\|headless] [--db=sqlite\|mysql\|postgres] [--redis\|--no-redis] [--auth\|--no-auth] [--queue=database\|redis] [--mail=log\|smtp\|array] [--ai\|--no-ai]` |
-| `serve` | Start the development server | `tyravel serve [--port=<port>] [--host=<hostname>] [--tls]` |
-| `shell` | Start an interactive Tyravel shell (REPL) | — |
-| `start` | Start the production server | `tyravel start [--port=<port>] [--host=<hostname>] [--cluster] [--workers=<n>]` |
-| `test` | Run the project test suite via Vitest | `tyravel test [--perf] [-- <vitest args>]` |
-| `version` | Show the Tyravel CLI version | — |
+| `build` | Bundle the app entry into a single production file (esbuild) | `pondoknusa build [--outfile=<path>] [--minify]` |
+| `dev` | Start the local development server with hot reload | `pondoknusa dev [--port=<port>] [--host=<hostname>] [--tls] [--no-queue] [--no-watch]` |
+| `doctor` | Run environment and project health checks | `pondoknusa doctor [--perf]` |
+| `migrate` | Run database migrations | `pondoknusa migrate` |
+| `new` | Create a new Pondoknusa application | `pondoknusa new <name> [--path=<directory>] [--headless] [--template=default\|api\|ssr\|saas\|headless] [--db=sqlite\|mysql\|postgres] [--redis\|--no-redis] [--auth\|--no-auth] [--queue=database\|redis] [--mail=log\|smtp\|array] [--ai\|--no-ai]` |
+| `serve` | Start the development server | `pondoknusa serve [--port=<port>] [--host=<hostname>] [--tls]` |
+| `shell` | Start an interactive Pondoknusa shell (REPL) | — |
+| `start` | Start the production server | `pondoknusa start [--port=<port>] [--host=<hostname>] [--cluster] [--workers=<n>]` |
+| `test` | Run the project test suite via Vitest | `pondoknusa test [--perf] [-- <vitest args>]` |
+| `version` | Show the Pondoknusa CLI version | — |
 
 ## Database
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `db:seed` | Seed the database with records | `tyravel db:seed [--class=DatabaseSeeder]` |
+| `db:seed` | Seed the database with records | `pondoknusa db:seed [--class=DatabaseSeeder]` |
 
 ## Generators
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `make:command` | Create a new console command class | `tyravel make:command <Name>` |
-| `make:component` | Create a new anonymous Tyr component template | `tyravel make:component <name> [--class]` |
-| `make:controller` | Create a new HTTP controller class | `tyravel make:controller <Name> [--api] [--invokable]` |
-| `make:event` | Create a new domain event class | `tyravel make:event <Name>` |
-| `make:factory` | Create a new model factory class | `tyravel make:factory <Model>` |
-| `make:island` | Scaffold a paired island view partial and client mount | `tyravel make:island <name> [--programmatic]` |
-| `make:job` | Create a new queue job class | `tyravel make:job <Name>` |
-| `make:listener` | Create a new event listener class | `tyravel make:listener <Name>` |
-| `make:middleware` | Create a new HTTP middleware class | `tyravel make:middleware <Name>` |
-| `make:migration` | Create a new database migration | `tyravel make:migration <name>` |
-| `make:model` | Create a new Eloquent model class | `tyravel make:model <Name> [--uuid] [--ulid] [--migration]` |
-| `make:openapi` | Export registered routes as an OpenAPI 3.0 stub | `tyravel make:openapi [--stdout] [--output=<path>] [--server=<url>]` |
-| `make:provider` | Create a new service provider class | `tyravel make:provider <Name>` |
-| `make:rag-resource` | Scaffold a RAG model, migration, and ingest job | `tyravel make:rag-resource <Name>` |
-| `make:request` | Create a new form request class | `tyravel make:request <Name>` |
-| `make:resource` | Create a new API resource class | `tyravel make:resource <Name>` |
-| `make:seeder` | Create a new database seeder class | `tyravel make:seeder <Name>` |
-| `make:social-driver` | Scaffold a custom social OAuth driver | `tyravel make:social-driver <provider>` |
-| `make:subscriber` | Create an event subscriber class | `tyravel make:subscriber <Name>` |
-| `make:test` | Create a feature test class | `tyravel make:test <Name> [--feature]` |
-| `make:tool` | Scaffold an MCP tool handler for @tyravel/mcp | `tyravel make:tool <Name>` |
-| `make:view` | Create a new Tyr template view | `tyravel make:view <name>` |
+| `make:command` | Create a new console command class | `pondoknusa make:command <Name>` |
+| `make:component` | Create a new anonymous Tyr component template | `pondoknusa make:component <name> [--class]` |
+| `make:controller` | Create a new HTTP controller class | `pondoknusa make:controller <Name> [--api] [--invokable]` |
+| `make:event` | Create a new domain event class | `pondoknusa make:event <Name>` |
+| `make:factory` | Create a new model factory class | `pondoknusa make:factory <Model>` |
+| `make:island` | Scaffold a paired island view partial and client mount | `pondoknusa make:island <name> [--programmatic]` |
+| `make:job` | Create a new queue job class | `pondoknusa make:job <Name>` |
+| `make:listener` | Create a new event listener class | `pondoknusa make:listener <Name>` |
+| `make:middleware` | Create a new HTTP middleware class | `pondoknusa make:middleware <Name>` |
+| `make:migration` | Create a new database migration | `pondoknusa make:migration <name>` |
+| `make:model` | Create a new Eloquent model class | `pondoknusa make:model <Name> [--uuid] [--ulid] [--migration]` |
+| `make:openapi` | Export registered routes as an OpenAPI 3.0 stub | `pondoknusa make:openapi [--stdout] [--output=<path>] [--server=<url>]` |
+| `make:provider` | Create a new service provider class | `pondoknusa make:provider <Name>` |
+| `make:rag-resource` | Scaffold a RAG model, migration, and ingest job | `pondoknusa make:rag-resource <Name>` |
+| `make:request` | Create a new form request class | `pondoknusa make:request <Name>` |
+| `make:resource` | Create a new API resource class | `pondoknusa make:resource <Name>` |
+| `make:seeder` | Create a new database seeder class | `pondoknusa make:seeder <Name>` |
+| `make:social-driver` | Scaffold a custom social OAuth driver | `pondoknusa make:social-driver <provider>` |
+| `make:subscriber` | Create an event subscriber class | `pondoknusa make:subscriber <Name>` |
+| `make:test` | Create a feature test class | `pondoknusa make:test <Name> [--feature]` |
+| `make:tool` | Scaffold an MCP tool handler for @pondoknusa/mcp | `pondoknusa make:tool <Name>` |
+| `make:view` | Create a new Tyr template view | `pondoknusa make:view <name>` |
 
 ## Queue
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `queue:failed` | List failed queue jobs | `tyravel queue:failed` |
-| `queue:failed-table` | Create a migration for the failed_jobs table | `tyravel queue:failed-table` |
-| `queue:retry` | Retry a failed queue job by id | `tyravel queue:retry <id>` |
-| `queue:table` | Create a migration for the queue jobs table | `tyravel queue:table` |
-| `queue:work` | Process jobs from the queue | `tyravel queue:work [--queue=default] [--connection=database] [--sleep=1]` |
+| `queue:failed` | List failed queue jobs | `pondoknusa queue:failed` |
+| `queue:failed-table` | Create a migration for the failed_jobs table | `pondoknusa queue:failed-table` |
+| `queue:retry` | Retry a failed queue job by id | `pondoknusa queue:retry <id>` |
+| `queue:table` | Create a migration for the queue jobs table | `pondoknusa queue:table` |
+| `queue:work` | Process jobs from the queue | `pondoknusa queue:work [--queue=default] [--connection=database] [--sleep=1]` |
 
 ## Routing
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `route:cache` | Compile and cache the route manifest for production boot | `tyravel route:cache` |
-| `route:clear` | Remove the cached route manifest | `tyravel route:clear` |
-| `route:list` | List all registered routes | `tyravel route:list [--json] [--middleware=name] [--name=route.name] [--action=Controller]` |
+| `route:cache` | Compile and cache the route manifest for production boot | `pondoknusa route:cache` |
+| `route:clear` | Remove the cached route manifest | `pondoknusa route:clear` |
+| `route:list` | List all registered routes | `pondoknusa route:list [--json] [--middleware=name] [--name=route.name] [--action=Controller]` |
 
 ## Views
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `view:cache` | Compile all Tyr templates for production | `tyravel view:cache [--workers=<n>] [--serial]` |
-| `view:catalog` | Export component and island catalog metadata | `tyravel view:catalog [--json] [--ide=vscode]` |
-| `view:clear` | Clear compiled Tyr template cache | `tyravel view:clear` |
-| `view:lint` | Lint Tyr templates for common issues | `tyravel view:lint [--strict]` |
-| `view:types` | Generate ViewPropsMap types from @props directives | `tyravel view:types [--output=types/view-props.generated.d.ts] [--check]` |
-| `view:watch` | Watch Tyr templates and recompile on change | `tyravel view:watch` |
+| `view:cache` | Compile all Tyr templates for production | `pondoknusa view:cache [--workers=<n>] [--serial]` |
+| `view:catalog` | Export component and island catalog metadata | `pondoknusa view:catalog [--json] [--ide=vscode]` |
+| `view:clear` | Clear compiled Tyr template cache | `pondoknusa view:clear` |
+| `view:lint` | Lint Tyr templates for common issues | `pondoknusa view:lint [--strict]` |
+| `view:types` | Generate ViewPropsMap types from @props directives | `pondoknusa view:types [--output=types/view-props.generated.d.ts] [--check]` |
+| `view:watch` | Watch Tyr templates and recompile on change | `pondoknusa view:watch` |
 
 ## Models
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `model:prune` | Prune models that define a prunable() query | `tyravel model:prune` |
+| `model:prune` | Prune models that define a prunable() query | `pondoknusa model:prune` |
 
 ## Auth
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `auth:install` | Scaffold auth (session + API tokens, policies, password reset, OAuth) | `tyravel auth:install` |
+| `auth:install` | Scaffold auth (session + API tokens, policies, password reset, OAuth) | `pondoknusa auth:install` |
 
 ## Auth
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `oauth:client:create` | Register a new OAuth2 client | `tyravel oauth:client:create <name> [--redirect=uri] [--public] [--grants=authorization_code,refresh_token]` |
-| `oauth:install` | Scaffold OAuth2 authorization server routes and migrations | `tyravel oauth:install` |
+| `oauth:client:create` | Register a new OAuth2 client | `pondoknusa oauth:client:create <name> [--redirect=uri] [--public] [--grants=authorization_code,refresh_token]` |
+| `oauth:install` | Scaffold OAuth2 authorization server routes and migrations | `pondoknusa oauth:install` |
 
 ## Crypto
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `crypto:generate-keys` | Generate post-quantum key material | `tyravel crypto:generate-keys [--algorithm=hybrid-x25519-ml-kem-768] [--format=json\|env]` |
-| `crypto:install` | Scaffold post-quantum crypto configuration | `tyravel crypto:install` |
+| `crypto:generate-keys` | Generate post-quantum key material | `pondoknusa crypto:generate-keys [--algorithm=hybrid-x25519-ml-kem-768] [--format=json\|env]` |
+| `crypto:install` | Scaffold post-quantum crypto configuration | `pondoknusa crypto:install` |
 
 ## AI / vector
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `vector:embed` | Queue embedding jobs for vector records missing embeddings | `tyravel vector:embed --model=<Name> [--batch=32] [--queue=default] [--connection=database]` |
-| `vector:install` | Create a migration that enables the pgvector extension | `tyravel vector:install` |
+| `vector:embed` | Queue embedding jobs for vector records missing embeddings | `pondoknusa vector:embed --model=<Name> [--batch=32] [--queue=default] [--connection=database]` |
+| `vector:install` | Create a migration that enables the pgvector extension | `pondoknusa vector:install` |
 
 ## MCP
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `mcp:export-rules` | Export Cursor/Claude agent rules from the Tyravel capability manifest | `tyravel mcp:export-rules [--format=cursor\|claude\|agents] [--output=<path>]` |
-| `mcp:serve` | Run the Tyravel MCP server over stdio for agents | `tyravel mcp:serve` |
+| `mcp:export-rules` | Export Cursor/Claude agent rules from the Pondoknusa capability manifest | `pondoknusa mcp:export-rules [--format=cursor\|claude\|agents] [--output=<path>]` |
+| `mcp:serve` | Run the Pondoknusa MCP server over stdio for agents | `pondoknusa mcp:serve` |
 
 ## Notifications
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `notification:failed` | List failed notification jobs | `tyravel notification:failed` |
-| `notification:retry` | Retry a failed notification job by id | `tyravel notification:retry <id>` |
+| `notification:failed` | List failed notification jobs | `pondoknusa notification:failed` |
+| `notification:retry` | Retry a failed notification job by id | `pondoknusa notification:retry <id>` |
 
 ## Localization
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `lang:missing` | Report missing translation keys | `tyravel lang:missing [--strict]` |
-| `lang:publish` | Publish application locale files | `tyravel lang:publish [--locale=en] [--framework]` |
+| `lang:missing` | Report missing translation keys | `pondoknusa lang:missing [--strict]` |
+| `lang:publish` | Publish application locale files | `pondoknusa lang:publish [--locale=en] [--framework]` |
 
 ## Debug
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `debug:clear` | Clear persisted Tyravel debug entries | `tyravel debug:clear` |
-| `debug:install` | Scaffold debug bar, timeline routes, and config | `tyravel debug:install` |
-| `debug:watch` | Tail persisted debug entries while tyravel serve is running | `tyravel debug:watch [--correlations]` |
+| `debug:clear` | Clear persisted Pondoknusa debug entries | `pondoknusa debug:clear` |
+| `debug:install` | Scaffold debug bar, timeline routes, and config | `pondoknusa debug:install` |
+| `debug:watch` | Tail persisted debug entries while pondoknusa serve is running | `pondoknusa debug:watch [--correlations]` |
 
 ## Admin
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `admin:install` | Scaffold optional admin panel routes, config, and policies | `tyravel admin:install` |
+| `admin:install` | Scaffold optional admin panel routes, config, and policies | `pondoknusa admin:install` |
 
 ## Scheduler
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `schedule:run` | Run scheduled tasks that are due | `tyravel schedule:run` |
+| `schedule:run` | Run scheduled tasks that are due | `pondoknusa schedule:run` |
 
 ## Sessions
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `session:prune` | Prune expired database sessions | `tyravel session:prune` |
+| `session:prune` | Prune expired database sessions | `pondoknusa session:prune` |
 
 ## config
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `config:cache` | Serialize merged config for production boot | `tyravel config:cache` |
-| `config:clear` | Remove the cached config manifest | `tyravel config:clear` |
+| `config:cache` | Serialize merged config for production boot | `pondoknusa config:cache` |
+| `config:clear` | Remove the cached config manifest | `pondoknusa config:clear` |
 
 ## deploy
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `deploy:check` | Run pre-deploy checks (doctor, routes, views) | `tyravel deploy:check` |
+| `deploy:check` | Run pre-deploy checks (doctor, routes, views) | `pondoknusa deploy:check` |

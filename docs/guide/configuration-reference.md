@@ -1,10 +1,10 @@
 # Configuration reference
 
-Tyravel apps load typed config from `config/*.ts`. Each file exports a `default` object and may export a `schema` for boot-time validation.
+Pondoknusa apps load typed config from `config/*.ts`. Each file exports a `default` object and may export a `schema` for boot-time validation.
 
-Scaffold sources live in `packages/cli/src/stubs*.ts`. Optional configs are added by `tyravel auth:install`, `crypto:install`, etc.
+Scaffold sources live in `packages/cli/src/stubs*.ts`. Optional configs are added by `pondoknusa auth:install`, `crypto:install`, etc.
 
-## Default scaffold (`tyravel new`)
+## Default scaffold (`pondoknusa new`)
 
 ### `config/app.ts`
 
@@ -25,8 +25,8 @@ Scaffold sources live in `packages/cli/src/stubs*.ts`. Optional configs are adde
 |-----|---------|-------|
 | `default` | `DB_CONNECTION` | `sqlite`, `mysql`, or `postgres` |
 | `connections.sqlite.database` | `DB_DATABASE` | Path to SQLite file |
-| `connections.mysql.*` | `DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, `DB_DATABASE` | Requires `@tyravel/database-mysql` |
-| `connections.postgres.*` | same pattern | Requires `@tyravel/database-pg` |
+| `connections.mysql.*` | `DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, `DB_DATABASE` | Requires `@pondoknusa/database-mysql` |
+| `connections.postgres.*` | same pattern | Requires `@pondoknusa/database-pg` |
 
 ### `config/queue.ts`
 
@@ -34,7 +34,7 @@ Scaffold sources live in `packages/cli/src/stubs*.ts`. Optional configs are adde
 |-----|---------|-------|
 | `default` | `QUEUE_CONNECTION` | `database` (default) or `redis` |
 | `connections.database` | — | Uses default DB connection |
-| `connections.redis` | — | Requires `@tyravel/redis-node` |
+| `connections.redis` | — | Requires `@pondoknusa/redis-node` |
 | `failed.table` | — | `failed_jobs` |
 
 ### `config/cache.ts`
@@ -67,7 +67,7 @@ Scaffold sources live in `packages/cli/src/stubs*.ts`. Optional configs are adde
 | Key | Env var | Notes |
 |-----|---------|-------|
 | `default` | `BROADCAST_CONNECTION` | `log`, `null`, or `websocket` |
-| `connections.websocket.path` | — | `/tyravel/ws` |
+| `connections.websocket.path` | — | `/pondoknusa/ws` |
 | `connections.websocket.redisConnection` | `REDIS_CONNECTION` | Fan-out across processes |
 
 ### `config/http.ts`
@@ -94,15 +94,15 @@ Scaffold sources live in `packages/cli/src/stubs*.ts`. Optional configs are adde
 
 | Command | File | Purpose |
 |---------|------|---------|
-| `tyravel auth:install` | `config/auth.ts` | Guards, providers, session, tokens, OAuth, policies |
-| `tyravel oauth:install` | `config/oauthServer.ts` | OAuth2 server token TTLs |
-| `tyravel admin:install` | `config/admin.ts` | Admin panel prefix, audit log |
-| `tyravel debug:install` | `config/debug.ts` | Debug bar, slow query thresholds |
-| `tyravel crypto:install` | `config/crypto.ts` | PQC algorithms, session/OAuth signing |
-| `tyravel new --ai` | `config/vector.ts` | Embedding metric, batch size |
+| `pondoknusa auth:install` | `config/auth.ts` | Guards, providers, session, tokens, OAuth, policies |
+| `pondoknusa oauth:install` | `config/oauthServer.ts` | OAuth2 server token TTLs |
+| `pondoknusa admin:install` | `config/admin.ts` | Admin panel prefix, audit log |
+| `pondoknusa debug:install` | `config/debug.ts` | Debug bar, slow query thresholds |
+| `pondoknusa crypto:install` | `config/crypto.ts` | PQC algorithms, session/OAuth signing |
+| `pondoknusa new --ai` | `config/vector.ts` | Embedding metric, batch size |
 
 ## Validation
 
-Add a `schema` export using `s` from `@tyravel/config` (see `config/app.ts` stub). Boot fails fast when required env vars are missing or invalid.
+Add a `schema` export using `s` from `@pondoknusa/config` (see `config/app.ts` stub). Boot fails fast when required env vars are missing or invalid.
 
 See [Configuration](/guide/configuration) for loading, merging, and `env()` helpers.

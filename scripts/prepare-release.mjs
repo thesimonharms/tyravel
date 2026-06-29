@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Prepare a Tyravel release.
+ * Prepare a Pondoknusa release.
  *
  * Usage:
  *   npm run release:prepare              # prompts for version
@@ -112,17 +112,17 @@ for (const dir of pkgDirs) {
 
   let changed = false;
 
-  if (pkg.version && pkg.name?.startsWith('@tyravel/')) {
+  if (pkg.version && pkg.name?.startsWith('@pondoknusa/')) {
     pkg.version = newVersion;
     changed = true;
   }
 
-  // Bump @tyravel/* deps
+  // Bump @pondoknusa/* deps
   for (const depType of ['dependencies', 'devDependencies', 'peerDependencies']) {
     if (!pkg[depType]) continue;
     for (const [name, version] of Object.entries(pkg[depType])) {
       const match = String(version).match(/^(\^|~)?(\d+\.\d+\.\d+)/);
-      if (name.startsWith('@tyravel/') && match) {
+      if (name.startsWith('@pondoknusa/') && match) {
         // Preserve range prefix for scaffolded app stubs
         pkg[depType][name] = `${match[1] ?? ''}${newVersion}`;
         changed = true;
@@ -172,9 +172,9 @@ const today = new Date().toISOString().slice(0, 10);
 const changelogPath = join(ROOT, 'CHANGELOG.md');
 const changelog = readFileSync(changelogPath, 'utf8');
 
-const newSection = `## [${newVersion}] - ${today}\n\nSee [v${newVersion} release notes](https://github.com/thesimonharms/tyravel/releases/tag/v${newVersion}).\n`;
+const newSection = `## [${newVersion}] - ${today}\n\nSee [v${newVersion} release notes](https://github.com/pondoknusa/pondoknusa/releases/tag/v${newVersion}).\n`;
 
-const tagLink = `[${newVersion}]: https://github.com/thesimonharms/tyravel/releases/tag/v${newVersion}`;
+const tagLink = `[${newVersion}]: https://github.com/pondoknusa/pondoknusa/releases/tag/v${newVersion}`;
 let updated;
 if (changelog.includes(`## [${newVersion}]`)) {
   // Section already exists (e.g. running twice) — skip
@@ -227,4 +227,4 @@ run('git push origin main --tags');
 
 console.log(`\n✅ Released v${newVersion}`);
 console.log('   GitHub Actions will publish to npm automatically.');
-console.log('   https://github.com/thesimonharms/tyravel/actions');
+console.log('   https://github.com/pondoknusa/pondoknusa/actions');

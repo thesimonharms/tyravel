@@ -1,4 +1,4 @@
-import { Job } from '@tyravel/queue';
+import { Job } from '@pondoknusa/queue';
 import type { BroadcastPayload } from './types.js';
 
 export interface BroadcastEventData extends Record<string, unknown> {

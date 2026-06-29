@@ -8,10 +8,10 @@ RUN if [ -f package-lock.json ]; then npm ci --omit=dev; else npm install --omit
 COPY . .
 
 ENV NODE_ENV=production
-ENV TYRAVEL_HOST=0.0.0.0
-ENV TYRAVEL_PORT=3000
+ENV PONDOKNUSA_HOST=0.0.0.0
+ENV PONDOKNUSA_PORT=3000
 
-RUN npx tyravel config:cache && npx tyravel route:cache && npx tyravel view:cache
+RUN npx pondoknusa config:cache && npx pondoknusa route:cache && npx pondoknusa view:cache
 
 EXPOSE 3000
 

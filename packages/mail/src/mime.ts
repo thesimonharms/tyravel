@@ -26,7 +26,7 @@ export function buildMimeMessage(message: MailMessage): string {
   lines.push('MIME-Version: 1.0');
 
   if (message.html && message.text) {
-    const boundary = `----=_Tyravel_${Date.now()}`;
+    const boundary = `----=_Pondoknusa_${Date.now()}`;
     lines.push(`Content-Type: multipart/alternative; boundary="${boundary}"`);
     lines.push('');
     lines.push(`--${boundary}`);

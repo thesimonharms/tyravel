@@ -4,45 +4,45 @@ const CORE_VERSION = '^1.0.3';
 
 export function projectPackageJson(name: string, options: NewProjectOptions): string {
   const dependencies: Record<string, string> = {
-    '@tyravel/cache': CORE_VERSION,
-    '@tyravel/collection': CORE_VERSION,
-    '@tyravel/config': CORE_VERSION,
-    '@tyravel/core': CORE_VERSION,
-    '@tyravel/database': CORE_VERSION,
-    '@tyravel/events': CORE_VERSION,
-    '@tyravel/http': CORE_VERSION,
-    '@tyravel/log': CORE_VERSION,
-    '@tyravel/mail': CORE_VERSION,
-    '@tyravel/notifications': CORE_VERSION,
-    '@tyravel/queue': CORE_VERSION,
-    '@tyravel/support': CORE_VERSION,
-    '@tyravel/validation': CORE_VERSION,
-    '@tyravel/views': CORE_VERSION,
-    '@tyravel/echo': CORE_VERSION,
-    '@tyravel/ssr': CORE_VERSION,
+    '@pondoknusa/cache': CORE_VERSION,
+    '@pondoknusa/collection': CORE_VERSION,
+    '@pondoknusa/config': CORE_VERSION,
+    '@pondoknusa/core': CORE_VERSION,
+    '@pondoknusa/database': CORE_VERSION,
+    '@pondoknusa/events': CORE_VERSION,
+    '@pondoknusa/http': CORE_VERSION,
+    '@pondoknusa/log': CORE_VERSION,
+    '@pondoknusa/mail': CORE_VERSION,
+    '@pondoknusa/notifications': CORE_VERSION,
+    '@pondoknusa/queue': CORE_VERSION,
+    '@pondoknusa/support': CORE_VERSION,
+    '@pondoknusa/validation': CORE_VERSION,
+    '@pondoknusa/views': CORE_VERSION,
+    '@pondoknusa/echo': CORE_VERSION,
+    '@pondoknusa/ssr': CORE_VERSION,
   };
 
   if (options.auth !== false) {
-    dependencies['@tyravel/auth'] = CORE_VERSION;
+    dependencies['@pondoknusa/auth'] = CORE_VERSION;
   }
 
   if (options.database === 'mysql') {
-    dependencies['@tyravel/database-mysql'] = CORE_VERSION;
+    dependencies['@pondoknusa/database-mysql'] = CORE_VERSION;
   }
   if (options.database === 'postgres') {
-    dependencies['@tyravel/database-pg'] = CORE_VERSION;
+    dependencies['@pondoknusa/database-pg'] = CORE_VERSION;
   }
   if (options.redis) {
-    dependencies['@tyravel/redis-node'] = CORE_VERSION;
-    dependencies['@tyravel/broadcasting-websocket'] = CORE_VERSION;
+    dependencies['@pondoknusa/redis-node'] = CORE_VERSION;
+    dependencies['@pondoknusa/broadcasting-websocket'] = CORE_VERSION;
   }
 
   if (options.ai) {
-    dependencies['@tyravel/graphql'] = CORE_VERSION;
-    dependencies['@tyravel/rag'] = CORE_VERSION;
-    dependencies['@tyravel/vector'] = CORE_VERSION;
+    dependencies['@pondoknusa/graphql'] = CORE_VERSION;
+    dependencies['@pondoknusa/rag'] = CORE_VERSION;
+    dependencies['@pondoknusa/vector'] = CORE_VERSION;
     if (options.database === 'postgres') {
-      dependencies['@tyravel/vector-pg'] = CORE_VERSION;
+      dependencies['@pondoknusa/vector-pg'] = CORE_VERSION;
     }
   }
 
@@ -52,18 +52,18 @@ export function projectPackageJson(name: string, options: NewProjectOptions): st
       private: true,
       type: 'module',
       scripts: {
-        dev: 'tyravel dev',
-        start: 'tyravel start',
-        'dev:worker': 'tyravel queue:work',
-        test: 'tyravel test',
-        precommit: 'tyravel view:lint',
+        dev: 'pondoknusa dev',
+        start: 'pondoknusa start',
+        'dev:worker': 'pondoknusa queue:work',
+        test: 'pondoknusa test',
+        precommit: 'pondoknusa view:lint',
       },
       dependencies: {
         ...dependencies,
-        '@tyravel/cli': CORE_VERSION,
+        '@pondoknusa/cli': CORE_VERSION,
       },
       devDependencies: {
-        '@tyravel/testing': CORE_VERSION,
+        '@pondoknusa/testing': CORE_VERSION,
         vitest: '^3.2.4',
       },
     },
@@ -78,21 +78,21 @@ export function mainEntry(options: NewProjectOptions): string {
 
   if (options.database === 'mysql') {
     driverImports.push(
-      "import { MysqlDatabaseServiceProvider } from '@tyravel/database-mysql';",
+      "import { MysqlDatabaseServiceProvider } from '@pondoknusa/database-mysql';",
     );
     driverProviders.push('app.register(MysqlDatabaseServiceProvider);');
   } else if (options.database === 'postgres') {
     driverImports.push(
-      "import { PgDatabaseServiceProvider } from '@tyravel/database-pg';",
+      "import { PgDatabaseServiceProvider } from '@pondoknusa/database-pg';",
     );
     driverProviders.push('app.register(PgDatabaseServiceProvider);');
   }
 
   if (options.redis) {
-    driverImports.push("import { NodeRedisServiceProvider } from '@tyravel/redis-node';");
+    driverImports.push("import { NodeRedisServiceProvider } from '@pondoknusa/redis-node';");
     driverProviders.push('app.register(NodeRedisServiceProvider);');
     driverImports.push(
-      "import { WebSocketBroadcastServiceProvider } from '@tyravel/broadcasting-websocket';",
+      "import { WebSocketBroadcastServiceProvider } from '@pondoknusa/broadcasting-websocket';",
     );
     driverProviders.push('new WebSocketBroadcastServiceProvider(app).register();');
   }
@@ -150,7 +150,7 @@ export function mainEntry(options: NewProjectOptions): string {
 
   return `${driverImports.length > 0 ? `${driverImports.join('\n')}\n` : ''}import {
   ${coreImports.join(',\n  ')},
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 import { AppServiceProvider } from './providers/app-service-provider.js';
 import './routes/channels.js';
 import './routes/web.js';
@@ -182,8 +182,8 @@ await serve(kernel);
 
 export function databaseConfig(options: NewProjectOptions): string {
   if (options.database === 'mysql') {
-    return `import type { MysqlConnectionConfig } from '@tyravel/database-mysql';
-import { env, envBool, envInt, s } from '@tyravel/config';
+    return `import type { MysqlConnectionConfig } from '@pondoknusa/database-mysql';
+import { env, envBool, envInt, s } from '@pondoknusa/config';
 
 export const schema = s.object({
   default: s.string({ required: true, minLength: 1 }),
@@ -204,7 +204,7 @@ export default {
       driver: 'mysql',
       host: env('DB_HOST', '127.0.0.1'),
       port: envInt('DB_PORT', 3306),
-      database: env('DB_DATABASE', 'tyravel'),
+      database: env('DB_DATABASE', 'pondoknusa'),
       username: env('DB_USERNAME', 'root'),
       password: env('DB_PASSWORD', ''),
     } satisfies MysqlConnectionConfig,
@@ -214,8 +214,8 @@ export default {
   }
 
   if (options.database === 'postgres') {
-    return `import type { PgConnectionConfig } from '@tyravel/database-pg';
-import { env, envBool, envInt, s } from '@tyravel/config';
+    return `import type { PgConnectionConfig } from '@pondoknusa/database-pg';
+import { env, envBool, envInt, s } from '@pondoknusa/config';
 
 export const schema = s.object({
   default: s.string({ required: true, minLength: 1 }),
@@ -236,7 +236,7 @@ export default {
       driver: 'postgres',
       host: env('DB_HOST', '127.0.0.1'),
       port: envInt('DB_PORT', 5432),
-      database: env('DB_DATABASE', 'tyravel'),
+      database: env('DB_DATABASE', 'pondoknusa'),
       username: env('DB_USERNAME', 'postgres'),
       password: env('DB_PASSWORD', ''),
     } satisfies PgConnectionConfig,
@@ -245,7 +245,7 @@ export default {
 `;
   }
 
-  return `import { env, envBool, s } from '@tyravel/config';
+  return `import { env, envBool, s } from '@pondoknusa/config';
 
 export const schema = s.object({
   default: s.string({ required: true, minLength: 1 }),
@@ -285,7 +285,7 @@ export function queueConfig(options: NewProjectOptions): string {
     },`
     : '';
 
-  return `import { env, s } from '@tyravel/config';
+  return `import { env, s } from '@pondoknusa/config';
 
 export const schema = s.object({
   default: s.string({ required: true, minLength: 1 }),
@@ -317,8 +317,8 @@ export function cacheConfig(options: NewProjectOptions): string {
     },`
     : '';
 
-  return `import type { CacheConfig } from '@tyravel/cache';
-import { env } from '@tyravel/config';
+  return `import type { CacheConfig } from '@pondoknusa/cache';
+import { env } from '@pondoknusa/config';
 
 /**
  * Production tip: set CACHE_STORE=redis when REDIS_URL is available.
@@ -326,7 +326,7 @@ import { env } from '@tyravel/config';
  */
 export default {
   default: env('CACHE_STORE', 'file'),
-  prefix: 'tyravel',
+  prefix: 'pondoknusa',
   connections: {
     file: {
       driver: 'file',
@@ -346,7 +346,7 @@ DB_DATABASE=database/database.sqlite`
       : `DB_CONNECTION=${options.database}
 DB_HOST=127.0.0.1
 DB_PORT=${options.database === 'postgres' ? '5432' : '3306'}
-DB_DATABASE=tyravel
+DB_DATABASE=pondoknusa
 DB_USERNAME=${options.database === 'postgres' ? 'postgres' : 'root'}
 DB_PASSWORD=`;
 
@@ -377,7 +377,7 @@ QUEUE_CONNECTION=${options.queue}${redisLines}
 
 MAIL_MAILER=log
 MAIL_FROM_ADDRESS=hello@example.com
-MAIL_FROM_NAME=Tyravel
+MAIL_FROM_NAME=Pondoknusa
 # MAIL_HOST=127.0.0.1
 # MAIL_PORT=587
 # MAIL_USERNAME=
@@ -385,7 +385,7 @@ MAIL_FROM_NAME=Tyravel
 # MAIL_ENCRYPTION=tls
 
 BROADCAST_CONNECTION=${options.redis ? 'websocket' : 'log'}
-# BROADCAST_REDIS_CHANNEL=tyravel:broadcast
+# BROADCAST_REDIS_CHANNEL=pondoknusa:broadcast
 
 # GITHUB_CLIENT_ID=
 # GITHUB_CLIENT_SECRET=

@@ -6,8 +6,8 @@ primary_region = "iad"
 [env]
   NODE_ENV = "production"
   APP_DEBUG = "false"
-  TYRAVEL_HOST = "0.0.0.0"
-  TYRAVEL_PORT = "8080"
+  PONDOKNUSA_HOST = "0.0.0.0"
+  PONDOKNUSA_PORT = "8080"
   DB_CONNECTION = "postgres"
   QUEUE_CONNECTION = "database"
   BROADCAST_CONNECTION = "log"
@@ -33,7 +33,7 @@ primary_region = "iad"
     timeout = "5s"
 
 [deploy]
-  release_command = "npx tyravel migrate"
+  release_command = "npx pondoknusa migrate"
 
 [[vm]]
   memory = "512mb"
@@ -42,4 +42,4 @@ primary_region = "iad"
 
 [processes]
   app = "./deploy/docker-entrypoint.sh"
-  worker = "npx tyravel queue:work"
+  worker = "npx pondoknusa queue:work"

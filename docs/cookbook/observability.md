@@ -1,6 +1,6 @@
 # Production observability
 
-Health probes, structured logs, and queue failure signals for deployed Tyravel apps.
+Health probes, structured logs, and queue failure signals for deployed Pondoknusa apps.
 
 ## Health endpoint
 
@@ -43,7 +43,7 @@ export default {
   default: env('LOG_CHANNEL', 'stdout'),
   channels: {
     stdout: { channel: 'stdout' },
-    file: { channel: 'file', path: 'storage/logs/tyravel.log' },
+    file: { channel: 'file', path: 'storage/logs/pondoknusa.log' },
     stack: { channel: 'stack', channels: ['stdout'] },
   },
 } satisfies LogConfig;
@@ -52,7 +52,7 @@ export default {
 Emit request-scoped context from controllers or middleware:
 
 ```typescript
-import { Log } from '@tyravel/core';
+import { Log } from '@pondoknusa/core';
 
 Log.info('order.placed', { orderId: order.id, userId: user.id });
 ```
@@ -67,19 +67,19 @@ When using `QUEUE_CONNECTION=database`, monitor:
 |--------|-------|
 | Pending jobs | `jobs` table row count |
 | Failed jobs | `failed_jobs` table |
-| Worker alive | Separate `tyravel queue:work` process or container |
+| Worker alive | Separate `pondoknusa queue:work` process or container |
 
 Retry failed jobs after fixing the root cause:
 
 ```bash
-tyravel queue:retry all
+pondoknusa queue:retry all
 ```
 
 Run at least one worker process in production — HTTP requests only enqueue work; they do not process it.
 
 ## Graceful shutdown
 
-`serve()` in `@tyravel/core` handles `SIGTERM`: in-flight requests drain before the process exits. Orchestrators (Fly, Railway, Kubernetes) send `SIGTERM` on scale-in — allow a 30s grace period in your platform config.
+`serve()` in `@pondoknusa/core` handles `SIGTERM`: in-flight requests drain before the process exits. Orchestrators (Fly, Railway, Kubernetes) send `SIGTERM` on scale-in — allow a 30s grace period in your platform config.
 
 ## Related
 

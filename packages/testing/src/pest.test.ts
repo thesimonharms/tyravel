@@ -1,12 +1,12 @@
 import { describe, expect, it, test } from 'vitest';
-import { Application, Route, setRouteApplication } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+import { Application, Route, setRouteApplication } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 import { TestCase } from './test-case.js';
 import { dataset, uses } from './pest.js';
 
 class HomeTest extends TestCase {
   protected createApplication(): Application {
-    return new Application('/tmp/tyravel-pest');
+    return new Application('/tmp/pondoknusa-pest');
   }
 
   protected override async configureApplication(app: Application): Promise<void> {
@@ -18,7 +18,7 @@ class HomeTest extends TestCase {
 describe('pest helpers', () => {
   const t = uses(HomeTest);
 
-  test('uses() boots a TestCase like withTyravelTest', async () => {
+  test('uses() boots a TestCase like withPondoknusaTest', async () => {
     const response = await t.http.get('http://localhost/hello');
     await response.assertJson({ hello: 'world' });
   });

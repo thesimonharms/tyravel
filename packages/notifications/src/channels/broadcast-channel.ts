@@ -1,4 +1,4 @@
-import type { BroadcastManager } from '@tyravel/broadcasting';
+import type { BroadcastManager } from '@pondoknusa/broadcasting';
 import type { Notification } from '../notification.js';
 import type { Notifiable } from '../types.js';
 

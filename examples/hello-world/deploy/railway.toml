@@ -3,7 +3,7 @@ builder = "DOCKERFILE"
 dockerfilePath = "deploy/Dockerfile"
 
 [deploy]
-preDeployCommand = "npx tyravel migrate"
+preDeployCommand = "npx pondoknusa migrate"
 startCommand = "./deploy/docker-entrypoint.sh"
 healthcheckPath = "/health/ready"
 healthcheckTimeout = 30

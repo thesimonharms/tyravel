@@ -1,4 +1,4 @@
-import { ConfigRepository, loadEnv, resolveConfigForBoot } from '@tyravel/config';
+import { ConfigRepository, loadEnv, resolveConfigForBoot } from '@pondoknusa/config';
 import { ServiceProvider } from './service-provider.js';
 
 export class ConfigServiceProvider extends ServiceProvider {
@@ -9,7 +9,7 @@ export class ConfigServiceProvider extends ServiceProvider {
 
     this.app.instance('config', repository);
     this.app.singleton(ConfigRepository, () => repository);
-    this.app.instance('tyravel.configCache', {
+    this.app.instance('pondoknusa.configCache', {
       loaded: boot.loaded,
       message: boot.message,
     });

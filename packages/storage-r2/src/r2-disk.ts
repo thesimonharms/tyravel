@@ -1,4 +1,4 @@
-import { S3Disk } from '@tyravel/storage-aws-s3';
+import { S3Disk } from '@pondoknusa/storage-aws-s3';
 import type { R2DiskConfig } from './types.js';
 
 export class R2Disk extends S3Disk {

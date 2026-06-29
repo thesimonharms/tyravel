@@ -120,7 +120,7 @@ async function* streamFragmentDocumentEarly(
   options: SsrStreamOptions,
 ): AsyncGenerator<string> {
   const headSnippet = options.head?.trim() ?? '';
-  const title = escapeHtml(options.title ?? 'Tyravel');
+  const title = escapeHtml(options.title ?? 'Pondoknusa');
   const lang = escapeHtml(options.lang ?? 'en');
   const head = headSnippet ? `\n  ${headSnippet}` : '';
 
@@ -152,7 +152,7 @@ async function* streamFragmentDocument(
   options: SsrStreamOptions,
 ): AsyncGenerator<string> {
   const headSnippet = options.head?.trim() ?? '';
-  const title = escapeHtml(options.title ?? 'Tyravel');
+  const title = escapeHtml(options.title ?? 'Pondoknusa');
   const lang = escapeHtml(options.lang ?? 'en');
   const head = headSnippet ? `\n  ${headSnippet}` : '';
 
@@ -263,7 +263,7 @@ function wrapFragment(
   options: SsrDocumentOptions,
   injections: { head: string; body: string },
 ): string {
-  const title = escapeHtml(options.title ?? 'Tyravel');
+  const title = escapeHtml(options.title ?? 'Pondoknusa');
   const lang = escapeHtml(options.lang ?? 'en');
   const head = injections.head ? `\n  ${injections.head}` : '';
   const hydration = injections.body ? `\n  ${injections.body}` : '';

@@ -1,4 +1,4 @@
-import type { Container } from '@tyravel/container';
+import type { Container } from '@pondoknusa/container';
 
 /**
  * A command handler: either a class with `handle(command)` or a function.

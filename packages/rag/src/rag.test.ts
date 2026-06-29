@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { Model, SqliteConnection } from '@tyravel/database';
-import { MemoryVectorSearchDriver, registerVectorSearchDriver } from '@tyravel/vector';
+import { Model, SqliteConnection } from '@pondoknusa/database';
+import { MemoryVectorSearchDriver, registerVectorSearchDriver } from '@pondoknusa/vector';
 import { Rag } from './rag.js';
 import { buildGroundedPrompt } from './prompt.js';
 
@@ -25,7 +25,7 @@ describe('Rag', () => {
     `);
 
     await Document.query().insert({
-      content: 'Tyravel uses native WebSockets for broadcasting.',
+      content: 'Pondoknusa uses native WebSockets for broadcasting.',
       source: 'readme',
       metadata: '{}',
       embedding: JSON.stringify([1, 0, 0]),

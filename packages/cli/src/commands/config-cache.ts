@@ -1,6 +1,6 @@
 import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { buildConfigCacheManifest, configCachePath, loadEnv } from '@tyravel/config';
+import { buildConfigCacheManifest, configCachePath, loadEnv } from '@pondoknusa/config';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { parseOptions, positionalArgs } from '../utils.js';
@@ -8,7 +8,7 @@ import { parseOptions, positionalArgs } from '../utils.js';
 export class ConfigCacheCommand extends Command {
   override readonly name = 'config:cache';
   override readonly description = 'Serialize merged config for production boot';
-  override readonly usage = 'tyravel config:cache';
+  override readonly usage = 'pondoknusa config:cache';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -36,7 +36,7 @@ export class ConfigCacheCommand extends Command {
 export class ConfigClearCommand extends Command {
   override readonly name = 'config:clear';
   override readonly description = 'Remove the cached config manifest';
-  override readonly usage = 'tyravel config:clear';
+  override readonly usage = 'pondoknusa config:clear';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);

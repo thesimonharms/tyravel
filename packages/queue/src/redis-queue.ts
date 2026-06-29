@@ -1,4 +1,4 @@
-import type { RedisClient, RedisManager } from '@tyravel/redis';
+import type { RedisClient, RedisManager } from '@pondoknusa/redis';
 import type { Job } from './job.js';
 import { decodePayload, encodePayload, serializeJob } from './payload.js';
 import type { QueueContract } from './queue-contract.js';
@@ -30,7 +30,7 @@ export class RedisQueue implements QueueContract, WorkerQueue {
     config: RedisQueueConnectionConfig = { driver: 'redis' },
   ) {
     this.redisConnection = config.connection ?? 'default';
-    this.prefix = config.prefix ?? 'tyravel:';
+    this.prefix = config.prefix ?? 'pondoknusa:';
     this.retryAfter = config.retryAfter ?? 90;
     this.blockTimeout = config.blockTimeout ?? 1;
   }

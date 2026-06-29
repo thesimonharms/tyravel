@@ -1,4 +1,4 @@
-import { StorageManager, type DiskConfig } from '@tyravel/storage';
+import { StorageManager, type DiskConfig } from '@pondoknusa/storage';
 import { R2Disk } from './r2-disk.js';
 import type { R2DiskConfig } from './types.js';
 

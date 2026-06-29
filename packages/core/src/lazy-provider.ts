@@ -1,4 +1,4 @@
-import type { Abstract } from '@tyravel/container';
+import type { Abstract } from '@pondoknusa/container';
 import type { Application } from './application.js';
 import type { ServiceProvider } from './service-provider.js';
 

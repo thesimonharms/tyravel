@@ -1,7 +1,7 @@
 import { createServer, type Server } from 'node:http';
 import { describe, expect, it } from 'vitest';
-import { MemoryRedis, type RedisManager } from '@tyravel/redis';
-import { TYRAVEL_BROADCAST_REDIS_CHANNEL } from '@tyravel/broadcasting';
+import { MemoryRedis, type RedisManager } from '@pondoknusa/redis';
+import { PONDOKNUSA_BROADCAST_REDIS_CHANNEL } from '@pondoknusa/broadcasting';
 import { WebSocketHub } from './websocket-hub.js';
 import {
   getWebSocketHub,
@@ -52,7 +52,7 @@ describe.sequential('WebSocketHub', () => {
     const address = server.address();
     const port = typeof address === 'object' && address ? address.port : 0;
 
-    const client = new WebSocket(`ws://127.0.0.1:${port}/tyravel/ws`);
+    const client = new WebSocket(`ws://127.0.0.1:${port}/pondoknusa/ws`);
     const messages: string[] = [];
     client.addEventListener('message', (event) => {
       messages.push(String((event as MessageEvent).data));
@@ -101,7 +101,7 @@ describe.sequential('WebSocketHub', () => {
     setWebSocketRedisManager(asRedisManager(redis));
     registerWebSocketBroadcastDriver();
 
-    const { BroadcastManager } = await import('@tyravel/broadcasting');
+    const { BroadcastManager } = await import('@pondoknusa/broadcasting');
     const manager = new BroadcastManager({
       default: 'websocket',
       connections: {
@@ -121,7 +121,7 @@ describe.sequential('WebSocketHub', () => {
     });
 
     expect(redis.published[0]?.channel).toBe('custom:broadcast');
-    expect(redis.published[0]?.channel).not.toBe(TYRAVEL_BROADCAST_REDIS_CHANNEL);
+    expect(redis.published[0]?.channel).not.toBe(PONDOKNUSA_BROADCAST_REDIS_CHANNEL);
     resetWebSocketBroadcastDriverState();
   });
 
@@ -131,7 +131,7 @@ describe.sequential('WebSocketHub', () => {
     setWebSocketRedisManager(asRedisManager(redis));
     registerWebSocketBroadcastDriver();
 
-    const { BroadcastManager } = await import('@tyravel/broadcasting');
+    const { BroadcastManager } = await import('@pondoknusa/broadcasting');
     const manager = new BroadcastManager({
       default: 'websocket',
       connections: {

@@ -1,5 +1,5 @@
 import type { TestCase } from './test-case.js';
-import { withTyravelTest } from './vitest.js';
+import { withPondoknusaTest } from './vitest.js';
 
 export {
   afterAll,
@@ -14,7 +14,7 @@ export {
 } from 'vitest';
 
 /**
- * Pest-style alias for binding a Tyravel TestCase to Vitest lifecycle hooks.
+ * Pest-style alias for binding a Pondoknusa TestCase to Vitest lifecycle hooks.
  *
  * ```ts
  * class FeatureTest extends TestCase { ... }
@@ -26,7 +26,7 @@ export {
  * ```
  */
 export function uses<T extends TestCase>(CaseClass: new () => T): T {
-  return withTyravelTest(CaseClass);
+  return withPondoknusaTest(CaseClass);
 }
 
 export type DatasetRow = Record<string, unknown>;

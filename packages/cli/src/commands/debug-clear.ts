@@ -6,16 +6,16 @@ import { pathExists, projectPath } from '../utils.js';
 
 export class DebugClearCommand extends Command {
   override readonly name = 'debug:clear';
-  override readonly description = 'Clear persisted Tyravel debug entries';
-  override readonly usage = 'tyravel debug:clear';
+  override readonly description = 'Clear persisted Pondoknusa debug entries';
+  override readonly usage = 'pondoknusa debug:clear';
 
   async handle(): Promise<number> {
     const root = await requireProjectRoot();
     let cleared = 0;
     const targets = [
-      projectPath(root, '.tyravel/debug-entries.json'),
+      projectPath(root, '.pondoknusa/debug-entries.json'),
       join(root, 'debug-entries.json'),
-      projectPath(root, '.tyravel/debug-correlations.json'),
+      projectPath(root, '.pondoknusa/debug-correlations.json'),
       join(root, 'debug-correlations.json'),
     ];
 

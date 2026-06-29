@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
-import type { DatabaseConnection } from '@tyravel/database';
-import { QueryBuilder } from '@tyravel/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import { QueryBuilder } from '@pondoknusa/database';
 import { Hasher } from './hasher.js';
 import { BUILTIN_SOCIAL_OAUTH_DRIVERS } from './social/builtin-drivers.js';
 import { createPkcePair } from './social/pkce.js';
@@ -129,7 +129,7 @@ export class OAuthManager {
       .first();
 
     if (existing) {
-      const user = await (this.userModel as unknown as typeof import('@tyravel/database').Model).find(
+      const user = await (this.userModel as unknown as typeof import('@pondoknusa/database').Model).find(
         existing.user_id,
       );
       if (user) {
@@ -137,7 +137,7 @@ export class OAuthManager {
       }
     }
 
-    const ModelClass = this.userModel as unknown as typeof import('@tyravel/database').Model;
+    const ModelClass = this.userModel as unknown as typeof import('@pondoknusa/database').Model;
     let user: Authenticatable | null = null;
 
     if (profile.email) {

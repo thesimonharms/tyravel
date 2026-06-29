@@ -1,13 +1,13 @@
 # Testing
 
-Run the project suite with the Tyravel CLI wrapper (sets `APP_ENV=testing` consistently):
+Run the project suite with the Pondoknusa CLI wrapper (sets `APP_ENV=testing` consistently):
 
 ```bash
-tyravel test
-tyravel test -- --watch
+pondoknusa test
+pondoknusa test -- --watch
 ```
 
-Scaffolded apps use `tyravel test` in `package.json` instead of calling Vitest directly.
+Scaffolded apps use `pondoknusa test` in `package.json` instead of calling Vitest directly.
 
 ## In-memory SQLite (recommended default)
 
@@ -25,11 +25,11 @@ In `vitest.config.ts`, load `.env.testing` or set `env` in the test config. When
 
 Use `usesDatabaseTransactions` on `TestCase` when tests share a file-backed SQLite file.
 
-Use `@tyravel/testing` with Vitest:
+Use `@pondoknusa/testing` with Vitest:
 
 ```typescript
 import { describe, it } from 'vitest';
-import { TestCase } from '@tyravel/testing';
+import { TestCase } from '@pondoknusa/testing';
 
 class FeatureTest extends TestCase {
   protected override async setUp() {
@@ -80,7 +80,7 @@ response.assertJsonPath('data.0.id', 1);
 ## Container fakes
 
 ```typescript
-import { fake, mockInstance } from '@tyravel/testing';
+import { fake, mockInstance } from '@pondoknusa/testing';
 
 fake('mail', { send: async () => {} });
 ```
@@ -104,7 +104,7 @@ await t.http.get('http://localhost/auth/github/callback?code=test&state=...');
 Fake the OAuth manager in unit tests:
 
 ```typescript
-import { fake } from '@tyravel/testing';
+import { fake } from '@pondoknusa/testing';
 
 fake('oauth', {
   redirectUrl: () => 'https://provider.test/authorize',
@@ -136,7 +136,7 @@ Turbo/HTMX-style partial responses expose fragment HTML:
 
 ```typescript
 const response = await t.http
-  .withHeader('X-Tyravel-Partial', 'comments')
+  .withHeader('X-Pondoknusa-Partial', 'comments')
   .get('http://localhost/posts/1');
 response.assertStatus(200);
 response.assertSee('class="comment"');
@@ -180,10 +180,10 @@ response.assertSee('id="tyr-hydration"');
 
 ## Pest-style ergonomics
 
-Import Vitest helpers and Tyravel lifecycle sugar from one module:
+Import Vitest helpers and Pondoknusa lifecycle sugar from one module:
 
 ```typescript
-import { describe, expect, test, uses } from '@tyravel/testing/pest';
+import { describe, expect, test, uses } from '@pondoknusa/testing/pest';
 
 class FeatureTest extends TestCase {
   protected createApplication() {
@@ -200,10 +200,10 @@ describe('posts', () => {
 });
 ```
 
-`uses()` is an alias for `withTyravelTest()`. `dataset()` formats rows for `test.each()`:
+`uses()` is an alias for `withPondoknusaTest()`. `dataset()` formats rows for `test.each()`:
 
 ```typescript
-import { dataset, test } from '@tyravel/testing/pest';
+import { dataset, test } from '@pondoknusa/testing/pest';
 
 test.each(dataset([
   { slug: 'draft', status: 201 },
@@ -215,7 +215,7 @@ test.each(dataset([
 
 ## Parallel test runner (Vitest workspaces)
 
-Large Tyravel apps benefit from Vitest workspaces so unit, feature, and package suites run in parallel without sharing one giant config.
+Large Pondoknusa apps benefit from Vitest workspaces so unit, feature, and package suites run in parallel without sharing one giant config.
 
 **Monorepo root** — keep package tests isolated per project:
 
@@ -269,9 +269,9 @@ export default defineWorkspace([
 ]);
 ```
 
-Guidelines for Tyravel feature tests:
+Guidelines for Pondoknusa feature tests:
 
-- Prefer `uses(FeatureTest)` / `withTyravelTest()` so each example gets a fresh `Application`.
+- Prefer `uses(FeatureTest)` / `withPondoknusaTest()` so each example gets a fresh `Application`.
 - Enable `usesDatabaseTransactions` on `TestCase` when tests touch SQLite/Postgres — avoids cross-test pollution when files run in parallel.
 - Keep `MAIL_MAILER=array`, `QUEUE_CONNECTION=sync` (or fakes) in the test `.env` so parallel workers do not contend on shared mail/queue state.
 - Run `npm test -- --project feature` to execute only the feature project in CI.

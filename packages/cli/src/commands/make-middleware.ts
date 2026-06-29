@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pat
 export class MakeMiddlewareCommand extends Command {
   override readonly name = 'make:middleware';
   override readonly description = 'Create a new HTTP middleware class';
-  override readonly usage = 'tyravel make:middleware <Name>';
+  override readonly usage = 'pondoknusa make:middleware <Name>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -14,7 +14,7 @@ export class MakeMiddlewareCommand extends Command {
 
     if (!rawName) {
       console.error('Middleware name is required.');
-      console.error('Usage: tyravel make:middleware <Name>');
+      console.error('Usage: pondoknusa make:middleware <Name>');
       return 1;
     }
 

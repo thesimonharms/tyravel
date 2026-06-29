@@ -1,4 +1,4 @@
-import type { Groupable, RouteHandler } from '@tyravel/http';
+import type { Groupable, RouteHandler } from '@pondoknusa/http';
 
 export interface RegisterAdminRoutesOptions {
   prefix?: string;

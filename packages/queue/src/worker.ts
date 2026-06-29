@@ -1,4 +1,4 @@
-import type { Container } from '@tyravel/container';
+import type { Container } from '@pondoknusa/container';
 import type { BatchRepository } from './batch.js';
 import type { JobRegistry } from './registry.js';
 import type { SerializedJobPayload } from './types.js';

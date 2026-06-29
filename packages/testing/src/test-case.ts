@@ -1,6 +1,6 @@
-import type { Application } from '@tyravel/core';
-import type { ServiceProvider } from '@tyravel/core';
-import type { DatabaseConnection } from '@tyravel/database';
+import type { Application } from '@pondoknusa/core';
+import type { ServiceProvider } from '@pondoknusa/core';
+import type { DatabaseConnection } from '@pondoknusa/database';
 import { createHttpKernel, wireFacades } from './application-helpers.js';
 import { beginDatabaseTransaction, rollbackDatabaseTransaction } from './database-transactions.js';
 import { HttpTestClient } from './http-test-client.js';
@@ -10,7 +10,7 @@ type ProviderConstructor = new (app: Application) => ServiceProvider;
 
 export abstract class TestCase {
   public app!: Application;
-  public kernel!: import('@tyravel/core').HttpKernel;
+  public kernel!: import('@pondoknusa/core').HttpKernel;
   public http!: HttpTestClient;
 
   /** Roll back database changes after each test when enabled. */

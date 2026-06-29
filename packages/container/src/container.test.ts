@@ -30,7 +30,7 @@ describe('Container', () => {
 
   it('registers a pre-built instance', () => {
     const container = new Container();
-    const config = { appName: 'Tyravel' };
+    const config = { appName: 'Pondoknusa' };
 
     container.instance('config', config);
 
@@ -85,12 +85,12 @@ describe('Container', () => {
 
   it('injects named parameters into callables', () => {
     const container = new Container();
-    container.instance('name', 'Tyravel');
+    container.instance('name', 'Pondoknusa');
 
     const greeting = container.call((name: string) => `Hello, ${name}!`, {
       name: container.make<string>('name'),
     });
 
-    expect(greeting).toBe('Hello, Tyravel!');
+    expect(greeting).toBe('Hello, Pondoknusa!');
   });
 });

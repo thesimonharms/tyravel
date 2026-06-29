@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/auth",
+  "name": "@pondoknusa/auth",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -15,11 +15,11 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/crypto": "1.0.3",
-    "@tyravel/container": "1.0.3",
-    "@tyravel/database": "1.0.3",
-    "@tyravel/http": "1.0.3",
-    "@tyravel/redis": "1.0.3"
+    "@pondoknusa/crypto": "1.0.3",
+    "@pondoknusa/container": "1.0.3",
+    "@pondoknusa/database": "1.0.3",
+    "@pondoknusa/http": "1.0.3",
+    "@pondoknusa/redis": "1.0.3"
   },
   "files": [
     "dist"
@@ -30,11 +30,11 @@
   "devDependencies": {
     "@types/node": "^26.0.1"
   },
-  "description": "Authentication and authorization for Tyravel",
+  "description": "Authentication and authorization for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/auth"
   },
   "publishConfig": {

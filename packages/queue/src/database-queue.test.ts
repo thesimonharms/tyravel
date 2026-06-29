@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { SchemaBuilder } from '@tyravel/database';
-import { SqliteConnection } from '@tyravel/database';
-import type { DatabaseManager } from '@tyravel/database';
+import { SchemaBuilder } from '@pondoknusa/database';
+import { SqliteConnection } from '@pondoknusa/database';
+import type { DatabaseManager } from '@pondoknusa/database';
 import { Job } from './job.js';
 import { JobRegistry } from './registry.js';
 import { DatabaseQueue } from './database-queue.js';

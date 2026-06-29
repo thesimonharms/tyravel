@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { loadConfig } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
@@ -9,11 +9,11 @@ import {
   ServiceProvider,
   dispatch,
   setQueueApplication,
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 import {
   EmbedChunksJob,
   resolveEmbedModel,
-} from '@tyravel/vector';
+} from '@pondoknusa/vector';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { optionNumber, optionString, parseOptions, positionalArgs } from '../utils.js';
@@ -24,7 +24,7 @@ export class VectorEmbedCommand extends Command {
   override readonly name = 'vector:embed';
   override readonly description = 'Queue embedding jobs for vector records missing embeddings';
   override readonly usage =
-    'tyravel vector:embed --model=<Name> [--batch=32] [--queue=default] [--connection=database]';
+    'pondoknusa vector:embed --model=<Name> [--batch=32] [--queue=default] [--connection=database]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -33,7 +33,7 @@ export class VectorEmbedCommand extends Command {
     const modelName = optionString(options, 'model');
     if (!modelName) {
       console.error('The --model option is required.');
-      console.error('Usage: tyravel vector:embed --model=<Name>');
+      console.error('Usage: pondoknusa vector:embed --model=<Name>');
       return 1;
     }
 
@@ -100,7 +100,7 @@ export class VectorEmbedCommand extends Command {
     console.log(
       `Queued ${dispatched} record(s) for embedding on model [${modelName}] (queue=${queue}).`,
     );
-    console.log('Run tyravel queue:work to process EmbedChunksJob payloads.');
+    console.log('Run pondoknusa queue:work to process EmbedChunksJob payloads.');
 
     return 0;
   }

@@ -60,7 +60,7 @@ export class RedisManager {
   private async createClient(config: RedisConnectionConfig): Promise<RedisClient> {
     if (!RedisManager.clientFactory) {
       throw new Error(
-        'No Redis client factory registered. Install @tyravel/redis-node and register NodeRedisServiceProvider, or call RedisManager.useClientFactory().',
+        'No Redis client factory registered. Install @pondoknusa/redis-node and register NodeRedisServiceProvider, or call RedisManager.useClientFactory().',
       );
     }
 

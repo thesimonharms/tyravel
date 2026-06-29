@@ -1,5 +1,5 @@
-import { loadConfig } from '@tyravel/config';
-import { resolveHeadlessMode } from '@tyravel/core';
+import { loadConfig } from '@pondoknusa/config';
+import { resolveHeadlessMode } from '@pondoknusa/core';
 
 export async function isHeadlessProject(root: string): Promise<boolean> {
   try {

@@ -1,4 +1,4 @@
-import { snakeCase } from '@tyravel/support';
+import { snakeCase } from '@pondoknusa/support';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { model, ulidModelMigration, uuidModelMigration } from '../stubs.js';
@@ -14,7 +14,7 @@ import {
 export class MakeModelCommand extends Command {
   override readonly name = 'make:model';
   override readonly description = 'Create a new Eloquent model class';
-  override readonly usage = 'tyravel make:model <Name> [--uuid] [--ulid] [--migration]';
+  override readonly usage = 'pondoknusa make:model <Name> [--uuid] [--ulid] [--migration]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -22,7 +22,7 @@ export class MakeModelCommand extends Command {
 
     if (!rawName) {
       console.error('Model name is required.');
-      console.error('Usage: tyravel make:model <Name> [--uuid] [--ulid] [--migration]');
+      console.error('Usage: pondoknusa make:model <Name> [--uuid] [--ulid] [--migration]');
       return 1;
     }
 

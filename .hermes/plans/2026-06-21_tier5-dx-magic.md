@@ -4,7 +4,7 @@
 >
 > **Constraint:** No docs site work yet — too much is still shifting. Everything here is in-code DX.
 >
-> **Architecture:** Split into two concentric rings: `@tyravel/support` (zero-dependency, framework-agnostic: Collection, Stringable, Pipeline, helpers) and framework integration (Macroable applied to core classes, `tinker` booting the app, auto-discovery via the Application/Container).
+> **Architecture:** Split into two concentric rings: `@pondoknusa/support` (zero-dependency, framework-agnostic: Collection, Stringable, Pipeline, helpers) and framework integration (Macroable applied to core classes, `tinker` booting the app, auto-discovery via the Application/Container).
 
 ---
 
@@ -14,15 +14,15 @@
 
 | Icon | Meaning |
 |------|---------|
-| 🪄 | Zero-dep package — `@tyravel/support` or new package |
+| 🪄 | Zero-dep package — `@pondoknusa/support` or new package |
 | ⚡ | Framework integration — ties into Application, CLI, etc. |
-| 🌱 | New package (`@tyravel/collection`) |
+| 🌱 | New package (`@pondoknusa/collection`) |
 
 ---
 
 ### P0 — Ship in v0.5.0 no matter what
 
-#### ✅ Task 1: Collection (`@tyravel/collection`) [P0 — 🌱]
+#### ✅ Task 1: Collection (`@pondoknusa/collection`) [P0 — 🌱]
 
 A fluent, chainable, type-safe `Collection<T>` class with lazy evaluation.
 
@@ -99,19 +99,19 @@ collect([1, 2, 3])
 - `packages/collection/src/higher-order-message.ts` (for `->each->doSomething` style)
 - `packages/collection/test/collection.test.ts`
 
-**The `collect()` helper** lives in `@tyravel/support` and re-exports from `@tyravel/collection`.
+**The `collect()` helper** lives in `@pondoknusa/support` and re-exports from `@pondoknusa/collection`.
 
 **Higher‑order messaging bonus:** `$items->each->methodName(args)` — requires Proxy‑based lazy method binding. Nice‑to‑have for P0, defer if complex.
 
 ---
 
-#### ✅ Task 2: `tyravel shell` (REPL) [P0 — ⚡]
+#### ✅ Task 2: `pondoknusa shell` (REPL) [P0 — ⚡]
 
-An interactive TypeScript REPL that boots the Tyravel application and drops you into a prompt.
+An interactive TypeScript REPL that boots the Pondoknusa application and drops you into a prompt.
 
 **Implementation path:**
 
-1. **`@tyravel/repl` package** (or live in `cli`):
+1. **`@pondoknusa/repl` package** (or live in `cli`):
    - Uses Node.js built-in `node:repl` module
    - Boots the app (imports `bootstrap/app.ts` or the app kernel)
    - Provides a `context` object with all facades pre-imported: `Route`, `DB`, `Auth`, `Cache`, `Queue`, `Events`, `Log`, `Mail`, `Notifications`, `Schedule`, `Storage`
@@ -120,9 +120,9 @@ An interactive TypeScript REPL that boots the Tyravel application and drops you 
    - Colorized prompt
    - `.exit`, `.help`, `.clear` commands
 
-2. **`tyravel shell` CLI command** in `packages/cli/src/commands/shell.ts`
+2. **`pondoknusa shell` CLI command** in `packages/cli/src/commands/shell.ts`
    - Called via the standard CLI kernel
-   - Requires `@tyravel/repl`
+   - Requires `@pondoknusa/repl`
 
 **Key files:**
 - Create: `packages/repl/package.json`
@@ -133,19 +133,19 @@ An interactive TypeScript REPL that boots the Tyravel application and drops you 
 **Example session:**
 
 ```
-$ tyravel shell
-Tyravel > User.query().find(1)
+$ pondoknusa shell
+Pondoknusa > User.query().find(1)
 → { id: 1, name: 'Ada', email: 'ada@example.com', created_at: 2026-06-21 }
 
-Tyravel > collect([1,2,3]).map(x => x * 2).toArray()
+Pondoknusa > collect([1,2,3]).map(x => x * 2).toArray()
 → [2, 4, 6]
 ```
 
 ---
 
-#### ✅ Task 3: Global Helpers (`@tyravel/support`) [P0 — 🪄]
+#### ✅ Task 3: Global Helpers (`@pondoknusa/support`) [P0 — 🪄]
 
-Add Laravel-inspired global helpers to `@tyravel/support`. These are exported functions that users `import` at the top of their files — no `globalThis` pollution.
+Add Laravel-inspired global helpers to `@pondoknusa/support`. These are exported functions that users `import` at the top of their files — no `globalThis` pollution.
 
 **Files to modify:** `packages/support/src/`
 - Create: `packages/support/src/helpers.ts`
@@ -157,7 +157,7 @@ Add Laravel-inspired global helpers to `@tyravel/support`. These are exported fu
 |--------|-------------|
 | `now()` | `new Date()` |
 | `today()` | `new Date().toISOString().slice(0,10)` |
-| `collect(arr)` | `new Collection(arr)` (from `@tyravel/collection`) |
+| `collect(arr)` | `new Collection(arr)` (from `@pondoknusa/collection`) |
 | `report(err)` | Log error through the app's Log facade (or `console.error` if no app) |
 | `rescue(fn, fallback?)` | Try `fn()`, return fallback or re-throw |
 | `retry(times, fn, delay?)` | Retry `fn` up to `times` with delay |
@@ -258,7 +258,7 @@ class Stringable {
 
 A general-purpose Pipeline that sends data through a series of pipes. Based on Laravel's `Illuminate\Pipeline\Pipeline`.
 
-**Package:** `@tyravel/support` (or standalone `@tyravel/pipeline` if it makes sense)
+**Package:** `@pondoknusa/support` (or standalone `@pondoknusa/pipeline` if it makes sense)
 
 **API:**
 
@@ -302,7 +302,7 @@ Also useful for form request validation, data transformation pipelines, and midd
 
 A mixin that lets users add methods to core framework classes at runtime.
 
-**Package:** `@tyravel/support`
+**Package:** `@pondoknusa/support`
 
 **Implementation:**
 
@@ -355,7 +355,7 @@ function applyMacroable(target: Function): void {
 
 A reusable `when()` / `unless()` mixin that can be applied to any class.
 
-**Package:** `@tyravel/support`
+**Package:** `@pondoknusa/support`
 
 ```typescript
 class Conditionable {
@@ -391,7 +391,7 @@ Convention-based registration of service providers and commands.
 **Implementation in `packages/core/src/application.ts`:**
 - Add `discoverProviders()` and `discoverCommands()` methods
 - Glob scan in the project root directory
-- Cache the discovered list (read `.tyravel-discovery.json`)
+- Cache the discovered list (read `.pondoknusa-discovery.json`)
 
 **Key considerations:**
 - Needs to know the project root — use `find-up` or check for `bootstrap/app.ts`
@@ -402,7 +402,7 @@ Convention-based registration of service providers and commands.
 
 #### ✅ Task 9: Interactive CLI prompts [P2 — ⚡]
 
-Make `tyravel new` interactive with prompts for meaningful choices.
+Make `pondoknusa new` interactive with prompts for meaningful choices.
 
 **Changes to `packages/cli/src/commands/new.ts`:**
 - Prompt for database driver (SQLite / MySQL / PostgreSQL)
@@ -416,7 +416,7 @@ Make `tyravel new` interactive with prompts for meaningful choices.
 **Implementation:**
 - Use Node.js built-in `readline` or `@inquirer/prompts` (lightweight)
 - Each choice generates the correct config stubs
-- Store selections in meta-comment at top of `package.json` or `.tyravel.json`
+- Store selections in meta-comment at top of `package.json` or `.pondoknusa.json`
 
 ---
 
@@ -462,16 +462,16 @@ await Bus.dispatch(new PingServer());
 
 | # | Feature | Package | Type | Effort | Why it's magical |
 |---|---------|---------|------|--------|-----------------|
-| 1 | Collection | `@tyravel/collection` | 🌱 | Medium | `collect()` is the #1 Laravel DX moment |
-| 2 | `tyravel shell` | `@tyravel/repl` | ⚡ | Medium | Interactive repl with full app context |
-| 3 | Global helpers | `@tyravel/support` | 🪄 | Small | `now()`, `throw_if()`, `collect()` — reads like Laravel |
-| 4 | Stringable | `@tyravel/support` | 🪄 | Small | `Str::of($s)->slug()->title()` |
-| 5 | Pipeline | `@tyravel/support` | 🪄 | Small | Clean data-through-pipes pattern |
-| 6 | Macroable | `@tyravel/support` | 🪄 | Medium | Extend core classes at runtime |
-| 7 | Conditionable | `@tyravel/support` | 🪄 | Small | `query.when(...)` reads naturally |
-| 8 | Auto-discovery | `@tyravel/core` | ⚡ | Medium | Convention over configuration |
-| 9 | Interactive CLI | `@tyravel/cli` | ⚡ | Medium | `tyravel new` with smart prompts |
-| 10 | Command Bus | `@tyravel/bus` or core | ⚡ | Medium | `Bus.dispatch(new Thing())` |
+| 1 | Collection | `@pondoknusa/collection` | 🌱 | Medium | `collect()` is the #1 Laravel DX moment |
+| 2 | `pondoknusa shell` | `@pondoknusa/repl` | ⚡ | Medium | Interactive repl with full app context |
+| 3 | Global helpers | `@pondoknusa/support` | 🪄 | Small | `now()`, `throw_if()`, `collect()` — reads like Laravel |
+| 4 | Stringable | `@pondoknusa/support` | 🪄 | Small | `Str::of($s)->slug()->title()` |
+| 5 | Pipeline | `@pondoknusa/support` | 🪄 | Small | Clean data-through-pipes pattern |
+| 6 | Macroable | `@pondoknusa/support` | 🪄 | Medium | Extend core classes at runtime |
+| 7 | Conditionable | `@pondoknusa/support` | 🪄 | Small | `query.when(...)` reads naturally |
+| 8 | Auto-discovery | `@pondoknusa/core` | ⚡ | Medium | Convention over configuration |
+| 9 | Interactive CLI | `@pondoknusa/cli` | ⚡ | Medium | `pondoknusa new` with smart prompts |
+| 10 | Command Bus | `@pondoknusa/bus` or core | ⚡ | Medium | `Bus.dispatch(new Thing())` |
 
 ---
 
@@ -483,7 +483,7 @@ await Bus.dispatch(new PingServer());
 
 ### Modified packages
 - `packages/support/src/` (helpers, Str → Stringable, Conditionable, Macroable, Pipeline)
-- `packages/support/package.json` (add `@tyravel/collection` dependency)
+- `packages/support/package.json` (add `@pondoknusa/collection` dependency)
 - `packages/core/src/index.ts` (re-export new support items)
 - `packages/cli/src/commands/new.ts` (interactive prompts)
 - `packages/cli/src/kernel.ts` (register tinker command)
@@ -521,4 +521,4 @@ await Bus.dispatch(new PingServer());
 3. **Auto-discovery performance** — Glob scan on every boot vs cache invalidation strategy. Use mtime-based cache.
 4. **`dd()` in production** — Should be a no-op. Needs config gate.
 5. **Collection bundle size** — With 50+ methods, tree-shaking may not help if importing `collect()`. Consider ESM-only or subpath exports.
-6. **`tyravel new` dependency on `@inquirer/prompts`** — Adds a dependency. Alternative: use raw `readline` for zero deps.
+6. **`pondoknusa new` dependency on `@inquirer/prompts`** — Adds a dependency. Alternative: use raw `readline` for zero deps.

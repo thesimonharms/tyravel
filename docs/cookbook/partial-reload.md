@@ -1,13 +1,13 @@
 # Partial reload cookbook
 
-Use partial HTML responses for sub-100ms UI updates without a full page reload. Tyravel supports Turbo Drive streams and HTMX-style fragment swaps via `View.partial()` and `Response.partial()`.
+Use partial HTML responses for sub-100ms UI updates without a full page reload. Pondoknusa supports Turbo Drive streams and HTMX-style fragment swaps via `View.partial()` and `Response.partial()`.
 
 ## Basic fragment
 
 Return only the updated markup:
 
 ```typescript
-import { Route, View } from '@tyravel/core';
+import { Route, View } from '@pondoknusa/core';
 
 Route.get('/posts/:id/comments', async ({ params }) => {
   const post = await Post.find(params.id);

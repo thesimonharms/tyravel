@@ -6,11 +6,11 @@ import { registerIslandInClientBundle } from './island-client-registry.js';
 
 describe('registerIslandInClientBundle', () => {
   it('prepends an island import to resources/client/app.ts', async () => {
-    const root = join(tmpdir(), `tyravel-island-registry-${Date.now()}`);
+    const root = join(tmpdir(), `pondoknusa-island-registry-${Date.now()}`);
     mkdirSync(join(root, 'resources/client'), { recursive: true });
     writeFileSync(
       join(root, 'resources/client/app.ts'),
-      "import { hydrate } from '@tyravel/ssr';\n\nhydrate();\n",
+      "import { hydrate } from '@pondoknusa/ssr';\n\nhydrate();\n",
     );
 
     const registered = await registerIslandInClientBundle(root, 'counter');

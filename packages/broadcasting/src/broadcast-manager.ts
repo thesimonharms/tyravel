@@ -52,7 +52,7 @@ export class BroadcastManager {
         const factory = BroadcastManager.drivers.get(config.driver);
         if (!factory) {
           throw new Error(
-            `Broadcast driver [${config.driver}] is not registered. Install the matching @tyravel/broadcasting-* package.`,
+            `Broadcast driver [${config.driver}] is not registered. Install the matching @pondoknusa/broadcasting-* package.`,
           );
         }
         return factory(config);

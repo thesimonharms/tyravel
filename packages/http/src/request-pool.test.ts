@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { TyravelRequestPool } from './request-pool.js';
+import { PondoknusaRequestPool } from './request-pool.js';
 
-describe('TyravelRequestPool', () => {
+describe('PondoknusaRequestPool', () => {
   it('reuses request instances and resets mutable state', async () => {
-    const pool = new TyravelRequestPool(4);
+    const pool = new PondoknusaRequestPool(4);
     const first = pool.acquire(new Request('http://localhost/a'), { id: '1' }, 'a.show');
     first.user = { id: 1 };
     first.locale = 'en';
@@ -20,7 +20,7 @@ describe('TyravelRequestPool', () => {
   });
 
   it('creates new instances when the pool is empty', () => {
-    const pool = new TyravelRequestPool();
+    const pool = new PondoknusaRequestPool();
     const request = pool.acquire(new Request('http://localhost/'), {});
     expect(request.path).toBe('/');
     expect(pool.size).toBe(0);

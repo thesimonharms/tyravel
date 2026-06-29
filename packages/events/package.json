@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/events",
+  "name": "@pondoknusa/events",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -15,8 +15,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/container": "1.0.3",
-    "@tyravel/queue": "1.0.3"
+    "@pondoknusa/container": "1.0.3",
+    "@pondoknusa/queue": "1.0.3"
   },
   "files": [
     "dist"
@@ -27,11 +27,11 @@
   "devDependencies": {
     "@types/node": "^26.0.1"
   },
-  "description": "Domain events and listeners for Tyravel",
+  "description": "Domain events and listeners for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/events"
   },
   "publishConfig": {

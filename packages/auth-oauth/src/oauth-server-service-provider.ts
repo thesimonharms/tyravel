@@ -1,8 +1,8 @@
-import { ConfigRepository } from '@tyravel/config';
-import type { CryptoConfig } from '@tyravel/crypto';
-import { DatabaseManager } from '@tyravel/database';
-import { EloquentUserProvider, type AuthConfig } from '@tyravel/auth';
-import { ServiceProvider } from '@tyravel/core';
+import { ConfigRepository } from '@pondoknusa/config';
+import type { CryptoConfig } from '@pondoknusa/crypto';
+import { DatabaseManager } from '@pondoknusa/database';
+import { EloquentUserProvider, type AuthConfig } from '@pondoknusa/auth';
+import { ServiceProvider } from '@pondoknusa/core';
 import { createOAuth2AuthMiddleware } from './middleware.js';
 import { OAuthServer } from './oauth-server.js';
 import type { OAuthServerConfig } from './types.js';

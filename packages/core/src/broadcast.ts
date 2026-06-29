@@ -3,8 +3,8 @@ import type {
   BroadcastManager,
   ChannelAuthorizer,
   ChannelRegistry,
-} from '@tyravel/broadcasting';
-import type { Event } from '@tyravel/events';
+} from '@pondoknusa/broadcasting';
+import type { Event } from '@pondoknusa/events';
 import type { Application } from './application.js';
 
 let broadcastApplication: Application | undefined;

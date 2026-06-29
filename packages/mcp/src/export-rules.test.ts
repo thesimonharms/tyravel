@@ -9,7 +9,7 @@ describe('renderAgentRules', () => {
       routes: [{ method: 'GET', uri: '/rag/ask', middleware: [], action: 'Closure' }],
       models: [{ name: 'Document', file: 'src/models/Document.ts', table: 'documents' }],
       configKeys: ['app.name'],
-      commands: ['tyravel serve', 'tyravel mcp:serve'],
+      commands: ['pondoknusa serve', 'pondoknusa mcp:serve'],
       docs: [{ path: 'guide/intro.md', title: 'Introduction' }],
     };
 
@@ -21,6 +21,6 @@ describe('renderAgentRules', () => {
     expect(cursor).toContain('GET /rag/ask');
     expect(agents).toContain('AGENTS.md');
     expect(agents).toContain('demo-app');
-    expect(defaultRulesOutputPath('cursor')).toBe('.cursor/rules/tyravel.mdc');
+    expect(defaultRulesOutputPath('cursor')).toBe('.cursor/rules/pondoknusa.mdc');
   });
 });

@@ -1,5 +1,5 @@
-import type { DatabaseConnection } from '@tyravel/database';
-import type { UserProvider } from '@tyravel/auth';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import type { UserProvider } from '@pondoknusa/auth';
 import { invalidClient, invalidGrant, invalidRequest, unauthorizedClient, unsupportedGrant } from './exceptions.js';
 import { createOAuthRepositories } from './repositories.js';
 import { parseJsonArray } from './token-utils.js';

@@ -1,5 +1,5 @@
-import type { Application } from '@tyravel/core';
-import { ViewEngine, type ViewContext } from '@tyravel/views';
+import type { Application } from '@pondoknusa/core';
+import { ViewEngine, type ViewContext } from '@pondoknusa/views';
 import { RenderedView } from './view-assertions.js';
 
 export async function renderView(

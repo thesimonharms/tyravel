@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pat
 export class MakeListenerCommand extends Command {
   override readonly name = 'make:listener';
   override readonly description = 'Create a new event listener class';
-  override readonly usage = 'tyravel make:listener <Name>';
+  override readonly usage = 'pondoknusa make:listener <Name>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -14,7 +14,7 @@ export class MakeListenerCommand extends Command {
 
     if (!rawName) {
       console.error('Listener name is required.');
-      console.error('Usage: tyravel make:listener <Name>');
+      console.error('Usage: pondoknusa make:listener <Name>');
       return 1;
     }
 

@@ -1,4 +1,4 @@
-import type { CacheStore } from '@tyravel/cache';
+import type { CacheStore } from '@pondoknusa/cache';
 import type { GraphQLSchema } from './schema.js';
 
 export type GraphQLOperationType = 'query' | 'mutation';

@@ -1,4 +1,4 @@
-import type { ModelStatic } from '@tyravel/database';
+import type { ModelStatic } from '@pondoknusa/database';
 import type {
   AdminAbilities,
   AdminField,

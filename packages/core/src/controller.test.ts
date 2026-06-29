@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { JsonResource, Response } from '@tyravel/http';
-import type { TyravelRequest } from '@tyravel/http';
+import { JsonResource, Response } from '@pondoknusa/http';
+import type { PondoknusaRequest } from '@pondoknusa/http';
 import { Application } from './application.js';
 import { createControllerHandler } from './controller.js';
 import { FormRequest } from './form-request.js';
@@ -28,7 +28,7 @@ class UserController {
     return Response.json({ users: [] });
   }
 
-  show(request: TyravelRequest) {
+  show(request: PondoknusaRequest) {
     return Response.json({ id: request.param('id') });
   }
 
@@ -36,14 +36,14 @@ class UserController {
     return Response.json({ email: form.input('email') });
   }
 
-  update(request: TyravelRequest, form: CreateUserRequest) {
+  update(request: PondoknusaRequest, form: CreateUserRequest) {
     return Response.json({
       id: request.param('id'),
       email: form.input('email'),
     });
   }
 
-  resource(request: TyravelRequest) {
+  resource(request: PondoknusaRequest) {
     return UserApiResource.make({ id: request.param('id')! });
   }
 }

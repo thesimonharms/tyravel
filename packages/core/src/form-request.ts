@@ -1,16 +1,16 @@
-import type { Authenticatable } from '@tyravel/auth';
-import { AuthorizationException } from '@tyravel/auth';
-import type { Constructor } from '@tyravel/container';
-import type { TyravelRequest } from '@tyravel/http';
+import type { Authenticatable } from '@pondoknusa/auth';
+import { AuthorizationException } from '@pondoknusa/auth';
+import type { Constructor } from '@pondoknusa/container';
+import type { PondoknusaRequest } from '@pondoknusa/http';
 import {
   validateRequest,
   type ValidationRules,
-} from '@tyravel/validation';
+} from '@pondoknusa/validation';
 import type { Application } from './application.js';
 import { Gate } from './gate.js';
 
 export abstract class FormRequest<T extends Record<string, unknown> = Record<string, unknown>> {
-  protected request!: TyravelRequest;
+  protected request!: PondoknusaRequest;
   private validatedData?: T;
 
   abstract rules(): ValidationRules<T>;
@@ -19,7 +19,7 @@ export abstract class FormRequest<T extends Record<string, unknown> = Record<str
     return true;
   }
 
-  async prepare(request: TyravelRequest, _app: Application): Promise<this> {
+  async prepare(request: PondoknusaRequest, _app: Application): Promise<this> {
     this.request = request;
 
     const authorized = await this.authorize();

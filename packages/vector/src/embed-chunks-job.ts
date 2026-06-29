@@ -1,4 +1,4 @@
-import { Job } from '@tyravel/queue';
+import { Job } from '@pondoknusa/queue';
 import { formatEmbeddingForStorage } from './embedding-format.js';
 import { resolveEmbedModel } from './embed-model-registry.js';
 import type { EmbedFn } from './types.js';

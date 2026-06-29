@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MemoryRedis } from '@tyravel/redis';
+import { MemoryRedis } from '@pondoknusa/redis';
 import { CacheManager, CacheRepository } from './index.js';
 import { LockAcquisitionError } from './cache-lock.js';
 import { RedisStore } from './redis-store.js';

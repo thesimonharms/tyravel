@@ -1,4 +1,4 @@
-import type { Embedding } from '@tyravel/vector';
+import type { Embedding } from '@pondoknusa/vector';
 
 export interface QdrantVectorConfig {
   url: string;

@@ -22,7 +22,7 @@ type JsonRpcResponse = {
   error?: { code: number; message: string };
 };
 
-export class TyravelMcpServer {
+export class PondoknusaMcpServer {
   private readonly frameworkTools: McpTool[];
 
   constructor(
@@ -33,8 +33,8 @@ export class TyravelMcpServer {
     this.frameworkTools = context ? createFrameworkTools(context) : [];
   }
 
-  static fromApp(context: AppMcpContext, tools: McpTool[] = []): TyravelMcpServer {
-    return new TyravelMcpServer(buildAppManifest(context), tools, context);
+  static fromApp(context: AppMcpContext, tools: McpTool[] = []): PondoknusaMcpServer {
+    return new PondoknusaMcpServer(buildAppManifest(context), tools, context);
   }
 
   async runStdio(): Promise<void> {
@@ -73,7 +73,7 @@ export class TyravelMcpServer {
         id: request.id,
         result: {
           protocolVersion: '2024-11-05',
-          serverInfo: { name: 'tyravel-mcp', version: this.manifest.version },
+          serverInfo: { name: 'pondoknusa-mcp', version: this.manifest.version },
           capabilities: { tools: {} },
         },
       };

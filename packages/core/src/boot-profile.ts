@@ -1,11 +1,11 @@
-import type { ConfigRepository } from '@tyravel/config';
+import type { ConfigRepository } from '@pondoknusa/config';
 import type { Application } from './application.js';
 import { BroadcastServiceProvider } from './broadcast-service-provider.js';
 import { isHeadlessMode, resolveHeadlessMode } from './headless-mode.js';
 import { LocaleServiceProvider } from './locale-service-provider.js';
 import { ViewServiceProvider } from './view-service-provider.js';
 
-export const HEADLESS_BINDING = 'tyravel.headless';
+export const HEADLESS_BINDING = 'pondoknusa.headless';
 
 export async function applyBootProfile(
   app: Application,

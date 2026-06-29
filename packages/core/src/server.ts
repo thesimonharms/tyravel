@@ -30,16 +30,16 @@ export async function serve(
   kernel: HttpKernel,
   options: ServeOptions = {},
 ): Promise<{ hostname: string; port: number; close: () => Promise<void> }> {
-  const port = options.port ?? (Number(process.env.TYRAVEL_PORT) || 3000);
-  const hostname = options.hostname ?? (process.env.TYRAVEL_HOST || '127.0.0.1');
+  const port = options.port ?? (Number(process.env.PONDOKNUSA_PORT) || 3000);
+  const hostname = options.hostname ?? (process.env.PONDOKNUSA_HOST || '127.0.0.1');
   const quiet = options.quiet === true;
   const tls = options.tls ?? (
-    process.env.TYRAVEL_TLS_CERT && process.env.TYRAVEL_TLS_KEY
-      ? { certPath: process.env.TYRAVEL_TLS_CERT, keyPath: process.env.TYRAVEL_TLS_KEY }
+    process.env.PONDOKNUSA_TLS_CERT && process.env.PONDOKNUSA_TLS_KEY
+      ? { certPath: process.env.PONDOKNUSA_TLS_CERT, keyPath: process.env.PONDOKNUSA_TLS_KEY }
       : undefined
   );
   const http2 = options.http2 === true
-    || (options.http2 !== false && process.env.TYRAVEL_HTTP2 === '1' && Boolean(tls));
+    || (options.http2 !== false && process.env.PONDOKNUSA_HTTP2 === '1' && Boolean(tls));
   const scheme = tls ? 'https' : 'http';
   const bun = (globalThis as { Bun?: BunServe }).Bun;
 
@@ -54,12 +54,12 @@ export async function serve(
       if (tls) {
         console.warn('TLS is not supported on Bun yet — serving over HTTP.');
       }
-      console.log(`Tyravel server running at ${scheme}://${server.hostname}:${server.port}`);
+      console.log(`Pondoknusa server running at ${scheme}://${server.hostname}:${server.port}`);
     }
 
     const shutdown = () => {
       if (!quiet) {
-        console.log('Shutting down Tyravel server gracefully...');
+        console.log('Shutting down Pondoknusa server gracefully...');
       }
       server.stop();
       if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'test') {
@@ -88,12 +88,12 @@ export async function serve(
   const server = await serveWithNode(kernel, hostname, port, { tls, http2: http2 && Boolean(tls) });
   if (!quiet) {
     const protocol = http2 && tls ? 'https (HTTP/2)' : scheme;
-    console.log(`Tyravel server running at ${protocol}://${server.hostname}:${server.port}`);
+    console.log(`Pondoknusa server running at ${protocol}://${server.hostname}:${server.port}`);
   }
 
   const shutdown = async () => {
     if (!quiet) {
-      console.log('Shutting down Tyravel server gracefully...');
+      console.log('Shutting down Pondoknusa server gracefully...');
     }
     try {
       await server.close();

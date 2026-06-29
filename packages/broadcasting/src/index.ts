@@ -9,8 +9,8 @@ export { buildBroadcastPayload, eventShouldBroadcast, normalizeChannels } from '
 export { channel, registerBroadcastChannels, type ChannelCallback } from './register-channels.js';
 export { resolveEchoClientConfig, type EchoClientConfig } from './echo-client-config.js';
 export {
-  TYRAVEL_WS_PATH,
-  TYRAVEL_BROADCAST_REDIS_CHANNEL,
+  PONDOKNUSA_WS_PATH,
+  PONDOKNUSA_BROADCAST_REDIS_CHANNEL,
   buildChannelAuthToken,
   parseRedisBroadcastMessage,
   parseWsClientMessage,

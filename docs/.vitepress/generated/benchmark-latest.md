@@ -16,4 +16,4 @@ Node **26.3.1** on **linux/x64** — updated 2026-06-28.
 | Compile welcome.tyr template | `view.compile` | 27,507 | ops/s |
 | Render welcome.tyr template | `view.render` | 669 | ops/s |
 
-[View workflow runs](https://github.com/thesimonharms/tyravel/actions/workflows/benchmarks.yml) for historical artifacts.
+[View workflow runs](https://github.com/pondoknusa/pondoknusa/actions/workflows/benchmarks.yml) for historical artifacts.

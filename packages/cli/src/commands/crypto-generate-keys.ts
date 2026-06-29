@@ -1,5 +1,5 @@
-import { CryptoManager, serializeKeyMaterial } from '@tyravel/crypto';
-import type { CryptoAlgorithm } from '@tyravel/crypto';
+import { CryptoManager, serializeKeyMaterial } from '@pondoknusa/crypto';
+import type { CryptoAlgorithm } from '@pondoknusa/crypto';
 import { Command } from '../command.js';
 import { optionString, parseOptions } from '../utils.js';
 
@@ -23,7 +23,7 @@ export class CryptoGenerateKeysCommand extends Command {
   override readonly name = 'crypto:generate-keys';
   override readonly description = 'Generate post-quantum key material';
   override readonly usage =
-    'tyravel crypto:generate-keys [--algorithm=hybrid-x25519-ml-kem-768] [--format=json|env]';
+    'pondoknusa crypto:generate-keys [--algorithm=hybrid-x25519-ml-kem-768] [--format=json|env]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);

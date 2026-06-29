@@ -51,17 +51,17 @@ function renderRulesBody(context: AppMcpContext, projectName?: string): string {
   const packages = manifest.packages.map((pkg) => `- ${pkg}`).join('\n');
   const facades = manifest.facades.map((facade) => `- ${facade}`).join('\n');
 
-  return `# ${name} — Tyravel agent rules
+  return `# ${name} — Pondoknusa agent rules
 
-This file is generated from the Tyravel capability manifest. Prefer framework primitives over reinventing infrastructure.
+This file is generated from the Pondoknusa capability manifest. Prefer framework primitives over reinventing infrastructure.
 
 ## Project stack
 
 - Runtime: Node.js 26+
-- Framework: Tyravel (TypeScript-native, Laravel-shaped ergonomics)
-- LLM integration: use native SDKs in the app layer — Tyravel does not ship a unified LLM provider interface
+- Framework: Pondoknusa (TypeScript-native, Laravel-shaped ergonomics)
+- LLM integration: use native SDKs in the app layer — Pondoknusa does not ship a unified LLM provider interface
 
-## Installed Tyravel packages
+## Installed Pondoknusa packages
 
 ${packages || '- (none discovered)'}
 
@@ -71,7 +71,7 @@ ${facades || '- (none)'}
 
 ## CLI commands
 
-${commands || '- tyravel list'}
+${commands || '- pondoknusa list'}
 
 ## Models
 
@@ -87,11 +87,11 @@ ${docs || '- (no docs/ markdown found)'}
 
 ## Vector / RAG guidance
 
-- Chunk + ingest with \`@tyravel/rag\`; embed with app-level SDKs wrapped by \`createCachedEmbedFn()\`
+- Chunk + ingest with \`@pondoknusa/rag\`; embed with app-level SDKs wrapped by \`createCachedEmbedFn()\`
 - Local dev: \`registerLocalVectorSearchDriver()\`; Postgres: \`registerPgVectorSearchDriver()\`
-- External stores: \`@tyravel/vector-qdrant\`, \`@tyravel/vector-pinecone\`
-- Queue embeddings via \`tyravel vector:embed --model=<Name>\` and \`tyravel queue:work\`
-- Agent tooling: \`tyravel mcp:serve\`
+- External stores: \`@pondoknusa/vector-qdrant\`, \`@pondoknusa/vector-pinecone\`
+- Queue embeddings via \`pondoknusa vector:embed --model=<Name>\` and \`pondoknusa queue:work\`
+- Agent tooling: \`pondoknusa mcp:serve\`
 
 ## Safety
 
@@ -102,7 +102,7 @@ ${docs || '- (no docs/ markdown found)'}
 
 function renderCursorRules(body: string, projectName: string): string {
   return `---
-description: Tyravel project context for ${projectName}
+description: Pondoknusa project context for ${projectName}
 alwaysApply: true
 ---
 
@@ -124,7 +124,7 @@ ${body}`;
 export function defaultRulesOutputPath(format: AgentRulesFormat): string {
   switch (format) {
     case 'cursor':
-      return '.cursor/rules/tyravel.mdc';
+      return '.cursor/rules/pondoknusa.mdc';
     case 'claude':
       return 'CLAUDE.md';
     default:

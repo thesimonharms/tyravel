@@ -1,10 +1,10 @@
 import {
   BroadcastManager,
   setBroadcastWebSocketUpgrade,
-  TYRAVEL_BROADCAST_REDIS_CHANNEL,
-} from '@tyravel/broadcasting';
-import type { RedisManager } from '@tyravel/redis';
-import type { WebSocketBroadcastConnectionConfig } from '@tyravel/broadcasting';
+  PONDOKNUSA_BROADCAST_REDIS_CHANNEL,
+} from '@pondoknusa/broadcasting';
+import type { RedisManager } from '@pondoknusa/redis';
+import type { WebSocketBroadcastConnectionConfig } from '@pondoknusa/broadcasting';
 import { WebSocketBroadcaster } from './websocket-broadcaster.js';
 import { WebSocketHub } from './websocket-hub.js';
 
@@ -61,7 +61,7 @@ async function startRedisSubscriber(config: WebSocketBroadcastConnectionConfig):
   redisSubscriberStarted = true;
   redisSubscriberPromise = (async () => {
     const client = await redisManager!.connection(config.redisConnection ?? 'default');
-    await client.subscribe(config.channel ?? TYRAVEL_BROADCAST_REDIS_CHANNEL, (message) => {
+    await client.subscribe(config.channel ?? PONDOKNUSA_BROADCAST_REDIS_CHANNEL, (message) => {
       hub?.handleRedisMessage(message);
     });
   })();

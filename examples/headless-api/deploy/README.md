@@ -1,6 +1,6 @@
 # Deploy manifests
 
-Production Docker, Fly.io, and Railway files for this Tyravel app.
+Production Docker, Fly.io, and Railway files for this Pondoknusa app.
 
 ## Quick start (Docker Compose)
 
@@ -14,10 +14,10 @@ docker compose -f deploy/docker-compose.yml up --build
 
 | Process | Command |
 |---------|---------|
-| Web | `npx tyravel start` |
-| Worker | `npx tyravel queue:work` |
-| Migrations | `npx tyravel migrate` |
-| Warm caches | `npx tyravel config:cache && npx tyravel route:cache && npx tyravel view:cache` |
+| Web | `npx pondoknusa start` |
+| Worker | `npx pondoknusa queue:work` |
+| Migrations | `npx pondoknusa migrate` |
+| Warm caches | `npx pondoknusa config:cache && npx pondoknusa route:cache && npx pondoknusa view:cache` |
 
 ## Health probes
 
@@ -27,7 +27,7 @@ docker compose -f deploy/docker-compose.yml up --build
 | `/health/ready` | Readiness — database and optional Redis checks |
 | `/health` | Alias for readiness |
 
-See the [deployment guide](https://tyravel.dev/guide/deployment) for platform walkthroughs.
+See the [deployment guide](https://pondoknusa.dev/guide/deployment) for platform walkthroughs.
 
 ## Cloudflare (optional)
 

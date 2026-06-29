@@ -1,5 +1,5 @@
-import { Policy } from '@tyravel/auth';
-import type { Authenticatable } from '@tyravel/auth';
+import { Policy } from '@pondoknusa/auth';
+import type { Authenticatable } from '@pondoknusa/auth';
 
 export class PostPolicy extends Policy {
   update(user: Authenticatable, _post: unknown): boolean {

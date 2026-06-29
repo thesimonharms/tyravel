@@ -16,11 +16,11 @@ describe('loadConfig schema validation', () => {
   });
 
   it('loads schema exports and validates on boot', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-config-schema-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-config-schema-'));
     mkdirSync(join(tempDir, 'config'), { recursive: true });
     writeFileSync(
       join(tempDir, 'config', 'app.js'),
-      `import { s } from '@tyravel/config';
+      `import { s } from '@pondoknusa/config';
 
 export const schema = s.object({
   name: s.string({ required: true, minLength: 1 }),
@@ -28,24 +28,24 @@ export const schema = s.object({
 });
 
 export default {
-  name: 'Tyravel',
+  name: 'Pondoknusa',
   debug: true,
 };`,
     );
 
     const config = await loadConfig(tempDir);
-    expect(config.app).toEqual({ name: 'Tyravel', debug: true });
+    expect(config.app).toEqual({ name: 'Pondoknusa', debug: true });
 
     const loaded = await loadConfigWithSchemas(tempDir);
     expect(loaded.schemas.app).toBeDefined();
   });
 
   it('fails fast when schema validation fails', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-config-schema-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-config-schema-'));
     mkdirSync(join(tempDir, 'config'), { recursive: true });
     writeFileSync(
       join(tempDir, 'config', 'app.js'),
-      `import { s } from '@tyravel/config';
+      `import { s } from '@pondoknusa/config';
 
 export const schema = s.object({
   name: s.string({ required: true, minLength: 1 }),
@@ -60,11 +60,11 @@ export default {
   });
 
   it('skips validation when disabled', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-config-schema-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-config-schema-'));
     mkdirSync(join(tempDir, 'config'), { recursive: true });
     writeFileSync(
       join(tempDir, 'config', 'app.js'),
-      `import { s } from '@tyravel/config';
+      `import { s } from '@pondoknusa/config';
 
 export const schema = s.object({
   name: s.string({ required: true, minLength: 1 }),

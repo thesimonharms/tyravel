@@ -5,7 +5,7 @@ import { concatBytes, fromBase64, toBase64, toUtf8Bytes } from './encoding.js';
 const AT_REST_PREFIX = 'pqc1:';
 
 export function deriveAtRestKey(source: string, length = 32): Uint8Array {
-  return new Uint8Array(scryptSync(source, 'tyravel-at-rest', length));
+  return new Uint8Array(scryptSync(source, 'pondoknusa-at-rest', length));
 }
 
 export function encryptAtRest(plaintext: Uint8Array, key: Uint8Array): Uint8Array {

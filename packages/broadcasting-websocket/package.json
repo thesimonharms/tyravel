@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/broadcasting-websocket",
+  "name": "@pondoknusa/broadcasting-websocket",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -15,8 +15,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/broadcasting": "1.0.3",
-    "@tyravel/redis": "1.0.3"
+    "@pondoknusa/broadcasting": "1.0.3",
+    "@pondoknusa/redis": "1.0.3"
   },
   "files": [
     "dist"
@@ -27,11 +27,11 @@
   "devDependencies": {
     "@types/node": "^26.0.1"
   },
-  "description": "Native WebSocket broadcast driver and hub for Tyravel",
+  "description": "Native WebSocket broadcast driver and hub for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/broadcasting-websocket"
   },
   "publishConfig": {

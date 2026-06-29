@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/cache-upstash",
+  "name": "@pondoknusa/cache-upstash",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -15,7 +15,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/cache": "1.0.3"
+    "@pondoknusa/cache": "1.0.3"
   },
   "files": [
     "dist"
@@ -26,11 +26,11 @@
   "devDependencies": {
     "@types/node": "^26.0.1"
   },
-  "description": "Upstash Redis REST cache driver for Tyravel",
+  "description": "Upstash Redis REST cache driver for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/cache-upstash"
   },
   "publishConfig": {

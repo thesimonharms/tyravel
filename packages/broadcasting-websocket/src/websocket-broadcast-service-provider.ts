@@ -1,4 +1,4 @@
-import type { RedisManager } from '@tyravel/redis';
+import type { RedisManager } from '@pondoknusa/redis';
 import { registerWebSocketBroadcastDriver, setWebSocketRedisManager } from './register.js';
 
 export class WebSocketBroadcastServiceProvider {

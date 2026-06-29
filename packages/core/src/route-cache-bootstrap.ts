@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import type { RouteCacheManifest } from '@tyravel/http';
+import type { RouteCacheManifest } from '@pondoknusa/http';
 import type { Application } from './application.js';
 
 export interface RouteCacheBootstrapResult {
@@ -56,7 +56,7 @@ export async function bootstrapRouteCache(
       return {
         loaded: false,
         routeCount: 0,
-        message: 'Route cache is stale — run `tyravel route:cache`',
+        message: 'Route cache is stale — run `pondoknusa route:cache`',
       };
     }
 

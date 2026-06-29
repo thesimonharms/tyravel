@@ -1,4 +1,4 @@
-import { Model } from '@tyravel/database';
+import { Model } from '@pondoknusa/database';
 
 export interface PostAttributes {
   id: number;

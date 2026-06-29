@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/auth-oauth",
+  "name": "@pondoknusa/auth-oauth",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -15,13 +15,13 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/auth": "1.0.3",
-    "@tyravel/crypto": "1.0.3",
-    "@tyravel/config": "1.0.3",
-    "@tyravel/container": "1.0.3",
-    "@tyravel/core": "1.0.3",
-    "@tyravel/database": "1.0.3",
-    "@tyravel/http": "1.0.3"
+    "@pondoknusa/auth": "1.0.3",
+    "@pondoknusa/crypto": "1.0.3",
+    "@pondoknusa/config": "1.0.3",
+    "@pondoknusa/container": "1.0.3",
+    "@pondoknusa/core": "1.0.3",
+    "@pondoknusa/database": "1.0.3",
+    "@pondoknusa/http": "1.0.3"
   },
   "files": [
     "dist"
@@ -32,11 +32,11 @@
   "devDependencies": {
     "@types/node": "^26.0.1"
   },
-  "description": "OAuth2 authorization server for Tyravel",
+  "description": "OAuth2 authorization server for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/auth-oauth"
   },
   "publishConfig": {

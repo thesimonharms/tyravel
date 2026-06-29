@@ -6,7 +6,7 @@ import { ViewEngine } from './view-engine.js';
 import { ViewErrorBag } from './view-errors.js';
 
 function createFixture(): { basePath: string; engine: ViewEngine } {
-  const basePath = join(tmpdir(), `tyravel-views-${Date.now()}-${Math.random()}`);
+  const basePath = join(tmpdir(), `pondoknusa-views-${Date.now()}-${Math.random()}`);
   const viewsPath = join(basePath, 'resources/views');
   mkdirSync(join(viewsPath, 'layouts'), { recursive: true });
   mkdirSync(join(viewsPath, 'components'), { recursive: true });
@@ -15,7 +15,7 @@ function createFixture(): { basePath: string; engine: ViewEngine } {
     join(viewsPath, 'layouts/app.tyr'),
     `<!DOCTYPE html>
 <html>
-<head><title>@yield('title', 'Tyravel')</title></head>
+<head><title>@yield('title', 'Pondoknusa')</title></head>
 <body>
   @yield('content')
 </body>
@@ -231,11 +231,11 @@ describe('ViewEngine', () => {
     });
 
     engine.composer('posts.*', () => ({ section: 'News' }));
-    engine.share({ appName: 'Tyravel' });
+    engine.share({ appName: 'Pondoknusa' });
     engine.setBindings({
       route: (name) => `/${name}`,
       asset: (path) => `/assets${path}`,
-      config: (key) => (key === 'app.name' ? 'Tyravel' : ''),
+      config: (key) => (key === 'app.name' ? 'Pondoknusa' : ''),
       old: (key, defaultValue) => (key === 'email' ? 'ada@example.com' : defaultValue),
     });
 
@@ -253,8 +253,8 @@ describe('ViewEngine', () => {
 
     const html = await engine.render('posts.show', { status: 'live' });
 
-    expect(html).toContain('<h1>News / Tyravel</h1>');
-    expect(html).toContain('<p>Tyravel</p>');
+    expect(html).toContain('<h1>News / Pondoknusa</h1>');
+    expect(html).toContain('<p>Pondoknusa</p>');
     expect(html).toContain('href="/home"');
     expect(html).toContain('src="/assets/logo.png"');
     expect(html).toContain('value="ada@example.com"');

@@ -3,7 +3,7 @@
 Transform models and paginated results into consistent JSON responses:
 
 ```typescript
-import { JsonResource } from '@tyravel/http';
+import { JsonResource } from '@pondoknusa/http';
 
 export class UserResource extends JsonResource<User> {
   toArray() {
@@ -39,4 +39,4 @@ export class UserResource extends JsonResource<User> {
 }
 ```
 
-Generate a scaffold with `tyravel make:resource User`.
+Generate a scaffold with `pondoknusa make:resource User`.

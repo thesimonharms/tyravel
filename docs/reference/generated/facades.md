@@ -5,24 +5,24 @@
 
 Facades provide a static entry point to services resolved from the application container.
 
-Documented for Tyravel **1.0.3**. See [API stability](/guide/api-stability) for stability tiers.
+Documented for Pondoknusa **1.0.3**. See [API stability](/guide/api-stability) for stability tiers.
 
 | Facade | Package | Guide |
 |--------|---------|-------|
-| `Route` | `@tyravel/core` | [/guide/routing](/guide/routing) |
-| `DB` | `@tyravel/core` | [/guide/database](/guide/database) |
-| `Auth` | `@tyravel/core` | [/guide/auth](/guide/auth) |
-| `Cache` | `@tyravel/core` | [/guide/cache](/guide/cache) |
-| `Queue` | `@tyravel/core` | [/guide/queues](/guide/queues) |
-| `Events` | `@tyravel/core` | [/guide/events](/guide/events) |
-| `Log` | `@tyravel/core` | [/guide/configuration](/guide/configuration) |
-| `Mail` | `@tyravel/core` | [/guide/mail](/guide/mail) |
-| `Notifications` | `@tyravel/core` | [/guide/notifications](/guide/notifications) |
-| `Schedule` | `@tyravel/core` | [/guide/queues](/guide/queues) |
-| `Storage` | `@tyravel/core` | [/guide/storage](/guide/storage) |
-| `View` | `@tyravel/core` | [/guide/views](/guide/views) |
-| `Config` | `@tyravel/config` | [/guide/configuration](/guide/configuration) |
-| `Broadcast` | `@tyravel/core` | [/guide/broadcasting](/guide/broadcasting) |
+| `Route` | `@pondoknusa/core` | [/guide/routing](/guide/routing) |
+| `DB` | `@pondoknusa/core` | [/guide/database](/guide/database) |
+| `Auth` | `@pondoknusa/core` | [/guide/auth](/guide/auth) |
+| `Cache` | `@pondoknusa/core` | [/guide/cache](/guide/cache) |
+| `Queue` | `@pondoknusa/core` | [/guide/queues](/guide/queues) |
+| `Events` | `@pondoknusa/core` | [/guide/events](/guide/events) |
+| `Log` | `@pondoknusa/core` | [/guide/configuration](/guide/configuration) |
+| `Mail` | `@pondoknusa/core` | [/guide/mail](/guide/mail) |
+| `Notifications` | `@pondoknusa/core` | [/guide/notifications](/guide/notifications) |
+| `Schedule` | `@pondoknusa/core` | [/guide/queues](/guide/queues) |
+| `Storage` | `@pondoknusa/core` | [/guide/storage](/guide/storage) |
+| `View` | `@pondoknusa/core` | [/guide/views](/guide/views) |
+| `Config` | `@pondoknusa/config` | [/guide/configuration](/guide/configuration) |
+| `Broadcast` | `@pondoknusa/core` | [/guide/broadcasting](/guide/broadcasting) |
 
 ## Methods
 
@@ -148,9 +148,9 @@ Use `app.make(ConfigRepository)` — not a static facade
 
 ## Usage
 
-Import facades from `@tyravel/core` (or `@tyravel/config` for `Config`) after booting the application:
+Import facades from `@pondoknusa/core` (or `@pondoknusa/config` for `Config`) after booting the application:
 
 ```typescript
-import { Route, View, DB } from '@tyravel/core';
-import { env } from '@tyravel/config';
+import { Route, View, DB } from '@pondoknusa/core';
+import { env } from '@pondoknusa/config';
 ```

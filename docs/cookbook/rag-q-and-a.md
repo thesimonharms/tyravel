@@ -1,13 +1,13 @@
 # RAG Q&A endpoint
 
-Build a minimal retrieval-augmented Q&A flow with `@tyravel/rag` and `@tyravel/vector`.
+Build a minimal retrieval-augmented Q&A flow with `@pondoknusa/rag` and `@pondoknusa/vector`.
 
 ## Scaffold
 
 ```bash
-tyravel new knowledge-base --ai
+pondoknusa new knowledge-base --ai
 npm install
-tyravel vector:install
+pondoknusa vector:install
 ```
 
 The `--ai` flag adds vector config, embed jobs, models, and example routes.
@@ -15,7 +15,7 @@ The `--ai` flag adds vector config, embed jobs, models, and example routes.
 ## Ingest documents
 
 ```typescript
-import { ingestFile } from '@tyravel/rag';
+import { ingestFile } from '@pondoknusa/rag';
 
 await ingestFile('storage/docs/handbook.pdf', {
   source: 'handbook',
@@ -26,15 +26,15 @@ await ingestFile('storage/docs/handbook.pdf', {
 Embed chunks:
 
 ```bash
-tyravel vector:embed
+pondoknusa vector:embed
 ```
 
 ## Ask endpoint
 
 ```typescript
-import { Route } from '@tyravel/core';
-import { Response } from '@tyravel/http';
-import { retrieveAndAnswer } from '@tyravel/rag';
+import { Route } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
+import { retrieveAndAnswer } from '@pondoknusa/rag';
 
 Route.post('/api/ask', async (request) => {
   const { question } = await request.json();
@@ -43,8 +43,8 @@ Route.post('/api/ask', async (request) => {
 });
 ```
 
-Use your preferred LLM SDK in the app layer — Tyravel handles storage, retrieval, and prompt templates.
+Use your preferred LLM SDK in the app layer — Pondoknusa handles storage, retrieval, and prompt templates.
 
 ## Example app
 
-See [`examples/rag`](https://github.com/thesimonharms/tyravel/tree/main/examples/rag) for ingest → embed → ask → stream with GraphQL read API.
+See [`examples/rag`](https://github.com/pondoknusa/pondoknusa/tree/main/examples/rag) for ingest → embed → ask → stream with GraphQL read API.

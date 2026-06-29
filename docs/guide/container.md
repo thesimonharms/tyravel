@@ -1,6 +1,6 @@
 # Service container
 
-The IoC container is the heart of every Tyravel application. It manages class dependencies and performs dependency injection.
+The IoC container is the heart of every Pondoknusa application. It manages class dependencies and performs dependency injection.
 
 ## Binding
 
@@ -9,7 +9,7 @@ The IoC container is the heart of every Tyravel application. It manages class de
 Register a factory or constructor that creates a new instance every time:
 
 ```typescript
-import { Container } from '@tyravel/container';
+import { Container } from '@pondoknusa/container';
 
 const container = new Container();
 
@@ -95,7 +95,7 @@ container.call(sendEmail, { to: 'ada@example.com', from: 'system@example.com' })
 
 ## In the application
 
-When you use `Application` (from `@tyravel/core`), the container is already wired:
+When you use `Application` (from `@pondoknusa/core`), the container is already wired:
 
 ```typescript
 const app = new Application();

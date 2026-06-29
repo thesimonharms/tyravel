@@ -20,9 +20,9 @@ describe('MakeSocialDriverCommand', () => {
   });
 
   it('scaffolds a social OAuth driver', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-social-driver-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-social-driver-'));
     mkdirSync(join(tempDir, 'src'), { recursive: true });
-    writeFileSync(join(tempDir, 'tyravel.json'), JSON.stringify({ name: 'app', entry: 'src/main.ts' }));
+    writeFileSync(join(tempDir, 'pondoknusa.json'), JSON.stringify({ name: 'app', entry: 'src/main.ts' }));
     writeFileSync(join(tempDir, 'src/main.ts'), 'export {};\n');
 
     previousCwd = process.cwd();

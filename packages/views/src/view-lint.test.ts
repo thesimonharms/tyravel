@@ -7,7 +7,7 @@ import {
 
 describe('view lint severity', () => {
   const originalCi = process.env.CI;
-  const originalStrict = process.env.TYRAVEL_VIEW_LINT_STRICT;
+  const originalStrict = process.env.PONDOKNUSA_VIEW_LINT_STRICT;
 
   afterEach(() => {
     if (originalCi === undefined) {
@@ -17,9 +17,9 @@ describe('view lint severity', () => {
     }
 
     if (originalStrict === undefined) {
-      delete process.env.TYRAVEL_VIEW_LINT_STRICT;
+      delete process.env.PONDOKNUSA_VIEW_LINT_STRICT;
     } else {
-      process.env.TYRAVEL_VIEW_LINT_STRICT = originalStrict;
+      process.env.PONDOKNUSA_VIEW_LINT_STRICT = originalStrict;
     }
   });
 
@@ -37,7 +37,7 @@ describe('view lint severity', () => {
 
   it('downgrades advisory rules to warnings outside strict mode', async () => {
     delete process.env.CI;
-    delete process.env.TYRAVEL_VIEW_LINT_STRICT;
+    delete process.env.PONDOKNUSA_VIEW_LINT_STRICT;
 
     const issues = await lintViewSource(`{!! userInput !!}\n`);
 

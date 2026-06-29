@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, toKebabCase, toPascalCase, w
 export class MakeSocialDriverCommand extends Command {
   override readonly name = 'make:social-driver';
   override readonly description = 'Scaffold a custom social OAuth driver';
-  override readonly usage = 'tyravel make:social-driver <provider>';
+  override readonly usage = 'pondoknusa make:social-driver <provider>';
 
   async handle(args: string[]): Promise<number> {
     void parseOptions(args);
@@ -14,7 +14,7 @@ export class MakeSocialDriverCommand extends Command {
 
     if (!rawName) {
       console.error('Provider name is required.');
-      console.error('Usage: tyravel make:social-driver <provider>');
+      console.error('Usage: pondoknusa make:social-driver <provider>');
       return 1;
     }
 
@@ -33,7 +33,7 @@ export class MakeSocialDriverCommand extends Command {
     console.log(`Social OAuth driver created: app/social/drivers/${className}.ts`);
     console.log('');
     console.log('Register the driver during boot:');
-    console.log(`  import { registerOAuthDriver } from '@tyravel/auth';`);
+    console.log(`  import { registerOAuthDriver } from '@pondoknusa/auth';`);
     console.log(`  import { ${className} } from '../social/drivers/${className}.js';`);
     console.log(`  registerOAuthDriver('${providerName}', ${className});`);
     console.log('');

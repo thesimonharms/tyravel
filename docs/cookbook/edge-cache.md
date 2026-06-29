@@ -1,6 +1,6 @@
 # Edge response cache
 
-Serve cacheable public GET responses from an edge network using Tyravel's **ETag middleware** (Tier 15) and your CDN or reverse proxy replay cache.
+Serve cacheable public GET responses from an edge network using Pondoknusa's **ETag middleware** (Tier 15) and your CDN or reverse proxy replay cache.
 
 For Cloudflare-specific architecture (proxy + R2 + origin on Fly/Railway), start with the [Cloudflare deployment guide](/guide/deployment/cloudflare).
 
@@ -10,7 +10,7 @@ Wrap safe, idempotent GET routes with HTTP cache middleware:
 
 ```typescript
 import { createHash } from 'node:crypto';
-import { createHttpCacheMiddleware } from '@tyravel/http';
+import { createHttpCacheMiddleware } from '@pondoknusa/http';
 
 function hashBody(body: string): string {
   return createHash('sha256').update(body).digest('hex');
@@ -26,7 +26,7 @@ Route.get('/posts/:slug', showPost, {
 });
 ```
 
-Tyravel emits `ETag` and honors `If-None-Match` with `304 Not Modified` when content is unchanged.
+Pondoknusa emits `ETag` and honors `If-None-Match` with `304 Not Modified` when content is unchanged.
 
 ## Cloudflare (recommended pairing)
 
@@ -55,29 +55,29 @@ Typical stack: **Node origin** (Fly/Railway/Docker) + **Cloudflare proxy** in fr
 
 ### Tiered cache
 
-Enable **Tiered Cache** in Cloudflare to reduce origin load for global audiences. Origin still runs Tyravel SSR; edge serves repeat views of cacheable pages.
+Enable **Tiered Cache** in Cloudflare to reduce origin load for global audiences. Origin still runs Pondoknusa SSR; edge serves repeat views of cacheable pages.
 
 ## Fly.io
 
-- Terminate TLS at Fly; run Tyravel with `prepareHttpServer()` and warmed route/view caches.
+- Terminate TLS at Fly; run Pondoknusa with `prepareHttpServer()` and warmed route/view caches.
 - Set `Cache-Control` on public responses.
 - Multiple machines do not need sticky sessions for cacheable GET routes.
-- Dynamic session HTML: disable edge cache; use Tyravel `Cache.remember()` at origin.
+- Dynamic session HTML: disable edge cache; use Pondoknusa `Cache.remember()` at origin.
 
 ## Railway / nginx
 
 ```nginx
-proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=tyravel:10m;
+proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=pondoknusa:10m;
 
 location /public/ {
-  proxy_cache tyravel;
+  proxy_cache pondoknusa;
   proxy_cache_valid 200 5m;
   proxy_cache_revalidate on;
   proxy_pass http://127.0.0.1:3000;
 }
 ```
 
-Ensure Tyravel sends `ETag` so nginx can revalidate instead of serving stale content indefinitely.
+Ensure Pondoknusa sends `ETag` so nginx can revalidate instead of serving stale content indefinitely.
 
 ## Related
 

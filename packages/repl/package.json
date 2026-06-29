@@ -1,7 +1,7 @@
 {
-  "name": "@tyravel/repl",
+  "name": "@pondoknusa/repl",
   "version": "1.0.3",
-  "description": "Interactive Tyravel REPL (tyravel shell)",
+  "description": "Interactive Pondoknusa REPL (pondoknusa shell)",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -21,7 +21,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/repl"
   },
   "publishConfig": {
@@ -31,9 +31,9 @@
     "node": ">=26"
   },
   "dependencies": {
-    "@tyravel/config": "1.0.3",
-    "@tyravel/core": "1.0.3",
-    "@tyravel/support": "1.0.3"
+    "@pondoknusa/config": "1.0.3",
+    "@pondoknusa/core": "1.0.3",
+    "@pondoknusa/support": "1.0.3"
   },
   "devDependencies": {
     "typescript": "^5.7.0"

@@ -1,5 +1,5 @@
-import type { PolicyConstructor } from '@tyravel/auth';
-import type { ModelStatic } from '@tyravel/database';
+import type { PolicyConstructor } from '@pondoknusa/auth';
+import type { ModelStatic } from '@pondoknusa/database';
 
 export type AdminFieldType =
   | 'text'

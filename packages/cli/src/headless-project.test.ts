@@ -14,12 +14,12 @@ describe('isHeadlessProject', () => {
     }
   });
 
-  it('detects tyravel.json mode headless', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-headless-'));
+  it('detects pondoknusa.json mode headless', async () => {
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-headless-'));
     mkdirSync(join(tempDir, 'src'), { recursive: true });
     mkdirSync(join(tempDir, 'config'), { recursive: true });
     writeFileSync(
-      join(tempDir, 'tyravel.json'),
+      join(tempDir, 'pondoknusa.json'),
       JSON.stringify({ name: 'api', mode: 'headless', entry: 'src/main.ts', serve: { port: 3000, hostname: '127.0.0.1' } }),
     );
     writeFileSync(join(tempDir, 'src/main.ts'), 'export {};\n');
@@ -29,17 +29,17 @@ describe('isHeadlessProject', () => {
   });
 
   it('detects config.app.headless', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-headless-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-headless-'));
     mkdirSync(join(tempDir, 'src'), { recursive: true });
     mkdirSync(join(tempDir, 'config'), { recursive: true });
     writeFileSync(
-      join(tempDir, 'tyravel.json'),
+      join(tempDir, 'pondoknusa.json'),
       JSON.stringify({ name: 'api', entry: 'src/main.ts', serve: { port: 3000, hostname: '127.0.0.1' } }),
     );
     writeFileSync(join(tempDir, 'src/main.ts'), 'export {};\n');
     writeFileSync(
       join(tempDir, 'config/app.ts'),
-      `import { env, s } from '@tyravel/config';
+      `import { env, s } from '@pondoknusa/config';
 export const schema = s.object({ name: s.string(), headless: s.boolean() });
 export default { name: env('APP_NAME', 'api'), headless: true };
 `,
@@ -49,17 +49,17 @@ export default { name: env('APP_NAME', 'api'), headless: true };
   });
 
   it('returns false for full-stack projects', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-headless-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-headless-'));
     mkdirSync(join(tempDir, 'src'), { recursive: true });
     mkdirSync(join(tempDir, 'config'), { recursive: true });
     writeFileSync(
-      join(tempDir, 'tyravel.json'),
+      join(tempDir, 'pondoknusa.json'),
       JSON.stringify({ name: 'app', entry: 'src/main.ts', serve: { port: 3000, hostname: '127.0.0.1' } }),
     );
     writeFileSync(join(tempDir, 'src/main.ts'), 'export {};\n');
     writeFileSync(
       join(tempDir, 'config/app.ts'),
-      `import { env, s } from '@tyravel/config';
+      `import { env, s } from '@pondoknusa/config';
 export const schema = s.object({ name: s.string() });
 export default { name: env('APP_NAME', 'app') };
 `,

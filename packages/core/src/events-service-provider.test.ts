@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { ConfigRepository } from '@tyravel/config';
-import { Event, Listener } from '@tyravel/events';
+import { ConfigRepository } from '@pondoknusa/config';
+import { Event, Listener } from '@pondoknusa/events';
 import { Application } from './application.js';
 import { EventServiceProvider } from './events-service-provider.js';
 
@@ -18,7 +18,7 @@ describe('EventServiceProvider', () => {
   it('loads listener mappings from config during boot', async () => {
     SampleListener.count = 0;
 
-    const app = new Application('/tmp/tyravel-events-test');
+    const app = new Application('/tmp/pondoknusa-events-test');
     const config = new ConfigRepository({
       events: {
         listen: [[SampleEvent, [SampleListener]]],
@@ -29,7 +29,7 @@ describe('EventServiceProvider', () => {
     app.register(EventServiceProvider);
     await app.boot();
 
-    await app.make<import('@tyravel/events').EventDispatcher>('events').dispatch(
+    await app.make<import('@pondoknusa/events').EventDispatcher>('events').dispatch(
       new SampleEvent({ ok: true }),
     );
 

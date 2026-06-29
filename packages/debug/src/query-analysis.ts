@@ -1,4 +1,4 @@
-import type { QueryProfileEntry } from '@tyravel/database';
+import type { QueryProfileEntry } from '@pondoknusa/database';
 import type { DebugWarning } from './types.js';
 
 export function analyzeQueries(

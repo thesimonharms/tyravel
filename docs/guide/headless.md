@@ -1,35 +1,35 @@
 # Headless API mode
 
-Use Tyravel as a **backend-only** framework: JSON routes, queues, mail, and the full service container — without views, SSR, Echo, or client assets.
+Use Pondoknusa as a **backend-only** framework: JSON routes, queues, mail, and the full service container — without views, SSR, Echo, or client assets.
 
 ## Create a headless app
 
 ```bash
-tyravel new my-api --headless
+pondoknusa new my-api --headless
 # or
-tyravel new my-api --template=headless
+pondoknusa new my-api --template=headless
 ```
 
 With `npm create`:
 
 ```bash
-npm create tyravel@latest my-api -- --headless
+npm create pondoknusa@latest my-api -- --headless
 ```
 
 The scaffold includes:
 
 - `src/routes/api.ts` — versioned routes under `/api/v1/*`
 - `config/app.ts` — `headless: true` for tooling
-- `tyravel.json` — `"mode": "headless"`
-- No `resources/views/`, `@tyravel/echo`, or view-types CI workflow
+- `pondoknusa.json` — `"mode": "headless"`
+- No `resources/views/`, `@pondoknusa/echo`, or view-types CI workflow
 
 ## Quick start
 
 ```bash
 cd my-api
 npm install
-tyravel migrate
-tyravel dev
+pondoknusa migrate
+pondoknusa dev
 curl http://127.0.0.1:3000/api/v1/health
 ```
 
@@ -38,8 +38,8 @@ curl http://127.0.0.1:3000/api/v1/health
 Headless apps register routes in `src/routes/api.ts`:
 
 ```typescript
-import { Route } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+import { Route } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 
 Route.prefix('api/v1').middleware('throttle:api').group((routes) => {
   routes.get('/health', () => Response.json({ status: 'ok' }));
@@ -50,7 +50,7 @@ The root path `/` returns a small JSON index with links to this guide.
 
 ## Authentication
 
-Run `tyravel auth:install` for guards and migrations. On headless projects it scaffolds:
+Run `pondoknusa auth:install` for guards and migrations. On headless projects it scaffolds:
 
 - `config/auth.ts` with default guard `api`
 - Routes under `/api/v1/*` (login, tokens, me) without CSRF middleware
@@ -67,7 +67,7 @@ Stateless API routes (GET `/api/v1/health`, `auth:api` Bearer routes, etc.) auto
 After `await app.boot()`, call `prepareHttpServer()` — it applies the headless profile, registers HTTP middleware, loads `storage/framework/routes.json` in production, and starts hot reload in development:
 
 ```typescript
-import { ConfigRepository, prepareHttpServer } from '@tyravel/core';
+import { ConfigRepository, prepareHttpServer } from '@pondoknusa/core';
 
 await prepareHttpServer(app, app.make(ConfigRepository));
 ```
@@ -79,41 +79,41 @@ This enables JSON exception responses even when clients send `Accept: text/html`
 Generate a starter OpenAPI 3.0 document from registered routes:
 
 ```bash
-tyravel make:openapi
+pondoknusa make:openapi
 # writes storage/api/openapi.json
 
-tyravel make:openapi --stdout
+pondoknusa make:openapi --stdout
 ```
 
 Refine request/response schemas in the exported file for your API consumers.
 
 ## Development
 
-`tyravel dev` hot-reloads **config and routes** in headless mode. View watching is disabled because there are no `.tyr` templates.
+`pondoknusa dev` hot-reloads **config and routes** in headless mode. View watching is disabled because there are no `.tyr` templates.
 
 Concurrent workers still work:
 
 ```bash
-tyravel dev              # web + queue worker + debug:watch (when debug is installed)
-tyravel dev --no-queue   # web only
+pondoknusa dev              # web + queue worker + debug:watch (when debug is installed)
+pondoknusa dev --no-queue   # web only
 ```
 
 ## Deploy checks
 
-`tyravel deploy:check` runs doctor and route-cache validation. View compilation is skipped when headless mode is detected.
+`pondoknusa deploy:check` runs doctor and route-cache validation. View compilation is skipped when headless mode is detected.
 
 ```bash
-tyravel deploy:check
+pondoknusa deploy:check
 ```
 
-`tyravel doctor` reports headless mode and skips production view-cache requirements.
+`pondoknusa doctor` reports headless mode and skips production view-cache requirements.
 
 ## Converting an existing app
 
 To mark an existing API-only project as headless:
 
 1. Set `headless: true` in `config/app.ts`
-2. Add `"mode": "headless"` to `tyravel.json` (optional but recommended)
+2. Add `"mode": "headless"` to `pondoknusa.json` (optional but recommended)
 3. Move routes to `src/routes/api.ts` and import them from `src/main.ts`
 4. Remove unused view, Echo, and SSR dependencies from `package.json`
 

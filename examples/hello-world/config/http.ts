@@ -1,4 +1,4 @@
-import type { HttpConfig } from '@tyravel/core';
+import type { HttpConfig } from '@pondoknusa/core';
 
 export default {
   trustedProxies: ['127.0.0.1', '::1'],

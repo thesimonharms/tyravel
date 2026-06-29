@@ -8,7 +8,7 @@ const lines = report.results.map(
 );
 
 const summary = [
-  '## Tyravel benchmarks',
+  '## Pondoknusa benchmarks',
   '',
   `Node ${report.node} on ${report.platform}/${report.arch}${report.quick ? ' (quick mode)' : ''}`,
   '',

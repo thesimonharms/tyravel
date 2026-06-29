@@ -1,4 +1,4 @@
-import type { NotificationsConfig } from '@tyravel/notifications';
+import type { NotificationsConfig } from '@pondoknusa/notifications';
 
 export default {
   table: 'notifications',

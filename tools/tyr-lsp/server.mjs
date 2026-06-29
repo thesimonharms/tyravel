@@ -28,7 +28,7 @@ connection.onInitialize((params) => {
       definitionProvider: true,
     },
     serverInfo: {
-      name: 'tyravel-tyr-lsp',
+      name: 'pondoknusa-tyr-lsp',
       version: '0.1.0',
     },
     workspaceRoot: root,
@@ -90,7 +90,7 @@ connection.onCompletion(async (params) => {
       items.push({
         label,
         kind: CompletionItemKind.File,
-        detail: 'Tyravel view',
+        detail: 'Pondoknusa view',
         insertText: `'${label}'`,
       });
     }
@@ -112,7 +112,7 @@ connection.onCompletion(async (params) => {
       }
     } catch {
       items.push({
-        label: 'Run tyravel view:types',
+        label: 'Run pondoknusa view:types',
         kind: CompletionItemKind.Text,
         detail: 'Generate types/view-props.generated.d.ts first',
       });

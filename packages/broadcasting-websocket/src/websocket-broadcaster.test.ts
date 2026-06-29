@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { MemoryRedis, type RedisManager } from '@tyravel/redis';
-import { TYRAVEL_BROADCAST_REDIS_CHANNEL } from '@tyravel/broadcasting';
+import { MemoryRedis, type RedisManager } from '@pondoknusa/redis';
+import { PONDOKNUSA_BROADCAST_REDIS_CHANNEL } from '@pondoknusa/broadcasting';
 import { WebSocketBroadcaster } from './websocket-broadcaster.js';
 
 function asRedisManager(client: MemoryRedis): RedisManager {
@@ -25,7 +25,7 @@ describe('WebSocketBroadcaster', () => {
     });
 
     expect(redis.published).toHaveLength(1);
-    expect(redis.published[0]?.channel).toBe(TYRAVEL_BROADCAST_REDIS_CHANNEL);
+    expect(redis.published[0]?.channel).toBe(PONDOKNUSA_BROADCAST_REDIS_CHANNEL);
     expect(redis.published[0]?.message).toContain('OrderShipped');
   });
 

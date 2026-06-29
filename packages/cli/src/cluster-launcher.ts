@@ -1,15 +1,15 @@
 /**
- * Cluster primary/worker bootstrap for `tyravel start --cluster`.
+ * Cluster primary/worker bootstrap for `pondoknusa start --cluster`.
  *
- * Workers dynamically import TYRAVEL_CLUSTER_ENTRY (the app main file).
+ * Workers dynamically import PONDOKNUSA_CLUSTER_ENTRY (the app main file).
  */
 import cluster from 'node:cluster';
 import { availableParallelism } from 'node:os';
 import { pathToFileURL } from 'node:url';
 
-const entry = process.env.TYRAVEL_CLUSTER_ENTRY;
+const entry = process.env.PONDOKNUSA_CLUSTER_ENTRY;
 if (!entry) {
-  console.error('TYRAVEL_CLUSTER_ENTRY is not set.');
+  console.error('PONDOKNUSA_CLUSTER_ENTRY is not set.');
   process.exit(1);
 }
 
@@ -17,7 +17,7 @@ const clusterEntry = entry;
 
 const workers = Math.max(
   1,
-  Number(process.env.TYRAVEL_WORKERS) || availableParallelism(),
+  Number(process.env.PONDOKNUSA_WORKERS) || availableParallelism(),
 );
 
 async function runWorker(): Promise<void> {

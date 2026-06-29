@@ -6,14 +6,14 @@ import { featureTestStub } from '../stubs-testing.js';
 export class MakeTestCommand extends Command {
   override readonly name = 'make:test';
   override readonly description = 'Create a feature test class';
-  override readonly usage = 'tyravel make:test <Name> [--feature]';
+  override readonly usage = 'pondoknusa make:test <Name> [--feature]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
     const [name] = positionalArgs(args);
 
     if (!name) {
-      console.error('Usage: tyravel make:test <Name> [--feature]');
+      console.error('Usage: pondoknusa make:test <Name> [--feature]');
       return 1;
     }
 

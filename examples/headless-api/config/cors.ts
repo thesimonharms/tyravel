@@ -1,4 +1,4 @@
-import type { CorsConfig } from '@tyravel/core';
+import type { CorsConfig } from '@pondoknusa/core';
 
 export default {
   enabled: true,

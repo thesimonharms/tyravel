@@ -1,4 +1,4 @@
-import { DatabaseManager, type ConnectionConfig } from '@tyravel/database';
+import { DatabaseManager, type ConnectionConfig } from '@pondoknusa/database';
 import { MysqlConnection } from './mysql-connection.js';
 import type { MysqlConnectionConfig } from './types.js';
 

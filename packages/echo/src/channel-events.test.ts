@@ -1,7 +1,7 @@
 import { describe, expect, expectTypeOf, it } from 'vitest';
 import type { EchoEventPayload } from './channel-events.js';
 
-declare module '@tyravel/echo' {
+declare module '@pondoknusa/echo' {
   interface EchoChannelEventMap {
     'orders.1': {
       OrderShipped: { id: number };

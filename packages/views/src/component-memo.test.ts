@@ -25,7 +25,7 @@ describe('component memoization', () => {
   });
 
   it('stores rendered component HTML in the memo cache', async () => {
-    const basePath = join(tmpdir(), `tyravel-memo-${Date.now()}`);
+    const basePath = join(tmpdir(), `pondoknusa-memo-${Date.now()}`);
     const viewsPath = join(basePath, 'resources/views');
     mkdirSync(join(viewsPath, 'components'), { recursive: true });
 

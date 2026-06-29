@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { Application } from './application.js';
 import { HEADLESS_BINDING } from './boot-profile.js';
-import { ConfigRepository } from '@tyravel/config';
+import { ConfigRepository } from '@pondoknusa/config';
 import { ExceptionHandler } from './exception-handler.js';
 import {
   HttpException,
   MethodNotAllowedException,
   RouteNotFoundException,
-} from '@tyravel/http';
-import { ValidationException } from '@tyravel/validation';
+} from '@pondoknusa/http';
+import { ValidationException } from '@pondoknusa/validation';
 
 function makeApp(debug: boolean): Application {
   const app = new Application();

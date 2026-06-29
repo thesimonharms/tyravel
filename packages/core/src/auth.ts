@@ -1,7 +1,7 @@
 import type { Application } from './application.js';
-import type { AuthManager } from '@tyravel/auth';
-import type { Authenticatable, CreateTokenOptions, NewAccessToken } from '@tyravel/auth';
-import { PersonalAccessTokenRepository } from '@tyravel/auth';
+import type { AuthManager } from '@pondoknusa/auth';
+import type { Authenticatable, CreateTokenOptions, NewAccessToken } from '@pondoknusa/auth';
+import { PersonalAccessTokenRepository } from '@pondoknusa/auth';
 
 let authApplication: Application | undefined;
 

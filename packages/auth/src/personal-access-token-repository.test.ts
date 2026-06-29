@@ -1,6 +1,6 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { afterEach, describe, expect, it } from 'vitest';
-import { QueryBuilder, SqliteConnection } from '@tyravel/database';
+import { QueryBuilder, SqliteConnection } from '@pondoknusa/database';
 import { PersonalAccessTokenRepository } from './personal-access-token-repository.js';
 import type { Authenticatable } from './types.js';
 

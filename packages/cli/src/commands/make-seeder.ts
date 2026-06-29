@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, toKebabCase, toPascalCase, w
 export class MakeSeederCommand extends Command {
   override readonly name = 'make:seeder';
   override readonly description = 'Create a new database seeder class';
-  override readonly usage = 'tyravel make:seeder <Name>';
+  override readonly usage = 'pondoknusa make:seeder <Name>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -14,7 +14,7 @@ export class MakeSeederCommand extends Command {
 
     if (!rawName) {
       console.error('Seeder name is required.');
-      console.error('Usage: tyravel make:seeder <Name>');
+      console.error('Usage: pondoknusa make:seeder <Name>');
       return 1;
     }
 

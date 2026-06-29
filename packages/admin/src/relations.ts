@@ -1,4 +1,4 @@
-import type { Model, ModelStatic } from '@tyravel/database';
+import type { Model, ModelStatic } from '@pondoknusa/database';
 import type { AdminField, AdminHasManySection } from './types.js';
 
 export interface RelationOption {

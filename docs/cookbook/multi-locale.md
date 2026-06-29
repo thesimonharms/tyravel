@@ -17,7 +17,7 @@ export default {
 ## Publish locale files
 
 ```bash
-tyravel lang:publish
+pondoknusa lang:publish
 ```
 
 Creates `lang/en.json`. Copy to `lang/de.json`, `lang/fr.json`, etc.
@@ -33,7 +33,7 @@ Creates `lang/en.json`. Copy to `lang/de.json`, `lang/fr.json`, etc.
 ## Missing keys
 
 ```bash
-tyravel lang:missing
+pondoknusa lang:missing
 ```
 
 Reports keys used in views but absent from locale files — useful in CI.
@@ -43,7 +43,7 @@ Reports keys used in views but absent from locale files — useful in CI.
 Set locale per request in middleware:
 
 ```typescript
-import { Lang } from '@tyravel/core';
+import { Lang } from '@pondoknusa/core';
 
 Lang.setLocale(request.headers.get('Accept-Language')?.split(',')[0] ?? 'en');
 ```

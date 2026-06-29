@@ -12,8 +12,8 @@ export default {
     websocket: {
       driver: 'websocket',
       redisConnection: env('REDIS_CONNECTION', 'default'),
-      channel: env('BROADCAST_REDIS_CHANNEL', 'tyravel:broadcast'),
-      path: '/tyravel/ws',
+      channel: env('BROADCAST_REDIS_CHANNEL', 'pondoknusa:broadcast'),
+      path: '/pondoknusa/ws',
     },
   },
 };
@@ -21,7 +21,7 @@ export default {
 
 ```typescript
 // src/main.ts
-import { WebSocketBroadcastServiceProvider } from '@tyravel/broadcasting-websocket';
+import { WebSocketBroadcastServiceProvider } from '@pondoknusa/broadcasting-websocket';
 ```
 
 Authorize private channels in `routes/channels.ts` using `private-` prefixes to match Echo conventions.
@@ -29,12 +29,12 @@ Authorize private channels in `routes/channels.ts` using `private-` prefixes to 
 ## Client
 
 ```typescript
-import { Echo } from '@tyravel/echo';
+import { Echo } from '@pondoknusa/echo';
 
 const echo = new Echo({
   broadcaster: 'websocket',
   host: window.location.host,
-  path: '/tyravel/ws',
+  path: '/pondoknusa/ws',
 });
 
 echo.private(`users.${userId}`).listen('NotificationSent', (event) => {
@@ -44,6 +44,6 @@ echo.private(`users.${userId}`).listen('NotificationSent', (event) => {
 
 ## Debugging
 
-- `tyravel route:list --json` — confirm `/broadcasting/auth` is registered
+- `pondoknusa route:list --json` — confirm `/broadcasting/auth` is registered
 - Redis required for multi-process fan-out
-- See [0.13 migration notes](https://github.com/thesimonharms/tyravel/blob/main/CHANGELOG.md#0130---2026-06-25) if upgrading from Socket.io
+- See [0.13 migration notes](https://github.com/pondoknusa/pondoknusa/blob/main/CHANGELOG.md#0130---2026-06-25) if upgrading from Socket.io

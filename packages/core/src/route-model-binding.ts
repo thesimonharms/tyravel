@@ -1,5 +1,5 @@
-import type { ModelStatic } from '@tyravel/database';
-import { createRouteBinding, type RouteBinding } from '@tyravel/http';
+import type { ModelStatic } from '@pondoknusa/database';
+import { createRouteBinding, type RouteBinding } from '@pondoknusa/http';
 
 function normalizeRouteId(value: string): string | number {
   const parsed = Number(value);

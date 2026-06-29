@@ -1,7 +1,7 @@
-import type { CacheStore } from '@tyravel/cache';
-import { Response } from '@tyravel/http';
-import type { TyravelRequest } from '@tyravel/http';
-import type { RouteHandler } from '@tyravel/http';
+import type { CacheStore } from '@pondoknusa/cache';
+import { Response } from '@pondoknusa/http';
+import type { PondoknusaRequest } from '@pondoknusa/http';
+import type { RouteHandler } from '@pondoknusa/http';
 import { executeGraphQL, executeNamedOperation } from './execute.js';
 import type { GraphQLOperationRegistry } from './operations.js';
 import type { GraphQLSchema } from './schema.js';
@@ -12,7 +12,7 @@ export interface GraphQLHandlerOptions {
   operations?: GraphQLOperationRegistry;
   cache?: CacheStore;
   defaultCacheTtl?: number;
-  context?: (request: TyravelRequest) => GraphQLContext | Promise<GraphQLContext>;
+  context?: (request: PondoknusaRequest) => GraphQLContext | Promise<GraphQLContext>;
 }
 
 export function createGraphQLHandler(options: GraphQLHandlerOptions): RouteHandler {
@@ -44,7 +44,7 @@ export function createGraphQLHandler(options: GraphQLHandlerOptions): RouteHandl
   };
 }
 
-async function readGraphQLPayload(request: TyravelRequest): Promise<GraphQLRequestPayload> {
+async function readGraphQLPayload(request: PondoknusaRequest): Promise<GraphQLRequestPayload> {
   if (request.method === 'GET') {
     const query = request.query('query');
     const operationName = request.query('operationName');

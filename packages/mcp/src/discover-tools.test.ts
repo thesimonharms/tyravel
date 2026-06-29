@@ -16,12 +16,12 @@ describe('discoverMcpTools', () => {
   });
 
   it('returns an empty list when no tools directory exists', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-mcp-tools-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-mcp-tools-'));
     await expect(discoverMcpTools(tempDir)).resolves.toEqual([]);
   });
 
   it('discovers exported MCP tools', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-mcp-tools-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-mcp-tools-'));
     const toolsDir = join(tempDir, 'src/mcp/tools');
     mkdirSync(toolsDir, { recursive: true });
     writeFileSync(

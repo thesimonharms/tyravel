@@ -1,6 +1,6 @@
-import { ServiceProvider } from '@tyravel/core';
-import { ConfigRepository } from '@tyravel/config';
-import { setSmsTransport } from '@tyravel/notifications';
+import { ServiceProvider } from '@pondoknusa/core';
+import { ConfigRepository } from '@pondoknusa/config';
+import { setSmsTransport } from '@pondoknusa/notifications';
 import { AuthController } from '../controllers/auth-controller.js';
 import { UserController } from '../controllers/user-controller.js';
 
@@ -11,14 +11,14 @@ export class AppServiceProvider extends ServiceProvider {
 
     this.app.middleware('json', async (_request, next) => {
       const response = await next();
-      response.headers.set('x-tyravel-api', '1');
+      response.headers.set('x-pondoknusa-api', '1');
       return response;
     });
   }
 
   override boot() {
     setSmsTransport(async (message) => {
-      console.log(`[sms] ${message.from ?? 'Tyravel'} → ${message.to}: ${message.body}`);
+      console.log(`[sms] ${message.from ?? 'Pondoknusa'} → ${message.to}: ${message.body}`);
     });
 
     const config = this.app.make<ConfigRepository>('config');

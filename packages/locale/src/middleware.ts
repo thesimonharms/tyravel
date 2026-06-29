@@ -1,4 +1,4 @@
-import type { Middleware, TyravelRequest } from '@tyravel/http';
+import type { Middleware, PondoknusaRequest } from '@pondoknusa/http';
 import { parseAcceptLanguage } from './accept-language.js';
 import { persistLocaleToSession, readUserLocale } from './user-locale.js';
 import { readRouteLocale } from './route-locale.js';
@@ -9,7 +9,7 @@ export interface SetLocaleMiddlewareOptions {
   sessionKey?: string;
   queryKey?: string;
   routeParameter?: string;
-  resolveLocale?: (request: TyravelRequest) => string | Promise<string | undefined> | undefined;
+  resolveLocale?: (request: PondoknusaRequest) => string | Promise<string | undefined> | undefined;
 }
 
 export function createSetLocaleMiddleware(
@@ -32,7 +32,7 @@ export function createSetLocaleMiddleware(
 }
 
 async function resolveRequestLocale(
-  request: TyravelRequest,
+  request: PondoknusaRequest,
   options: SetLocaleMiddlewareOptions,
   sessionKey: string,
   queryKey: string,

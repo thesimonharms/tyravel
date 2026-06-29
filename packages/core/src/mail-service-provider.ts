@@ -1,4 +1,4 @@
-import { ConfigRepository } from '@tyravel/config';
+import { ConfigRepository } from '@pondoknusa/config';
 import {
   MAIL_VIEWS_PATH,
   MailManager,
@@ -6,10 +6,10 @@ import {
   setQueuedMailContext,
   type MailConfig,
   type MailQueueBridge,
-} from '@tyravel/mail';
-import { Dispatcher, JobRegistry, QueueManager } from '@tyravel/queue';
-import type { Job } from '@tyravel/queue';
-import { ViewEngine } from '@tyravel/views';
+} from '@pondoknusa/mail';
+import { Dispatcher, JobRegistry, QueueManager } from '@pondoknusa/queue';
+import type { Job } from '@pondoknusa/queue';
+import { ViewEngine } from '@pondoknusa/views';
 import { ServiceProvider } from './service-provider.js';
 
 export class MailServiceProvider extends ServiceProvider {

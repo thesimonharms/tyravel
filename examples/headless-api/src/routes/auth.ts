@@ -1,4 +1,4 @@
-import { Route } from '@tyravel/core';
+import { Route } from '@pondoknusa/core';
 import { AuthController } from '../controllers/AuthController.js';
 
 Route.prefix('api/v1').middleware('throttle:api').group((routes) => {

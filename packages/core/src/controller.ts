@@ -1,6 +1,6 @@
-import type { Constructor } from '@tyravel/container';
-import type { RouteHandler, TyravelRequest } from '@tyravel/http';
-import { resolveHttpResult } from '@tyravel/http';
+import type { Constructor } from '@pondoknusa/container';
+import type { RouteHandler, PondoknusaRequest } from '@pondoknusa/http';
+import { resolveHttpResult } from '@pondoknusa/http';
 import type { Application } from './application.js';
 import {
   FormRequest,
@@ -35,7 +35,7 @@ export function createControllerHandler(
 ): RouteHandler {
   const [Controller, method, FormRequestClass] = action;
 
-  return async (request: TyravelRequest) => {
+  return async (request: PondoknusaRequest) => {
     const controller = app.make(Controller);
     const handler = (controller as Record<string, unknown>)[method];
 
@@ -52,7 +52,7 @@ export function createControllerHandler(
     const result =
       formRequest && handler.length < 2
         ? await (handler as (form: FormRequest) => unknown).call(controller, formRequest)
-        : await (handler as (request: TyravelRequest, form?: FormRequest) => unknown).call(
+        : await (handler as (request: PondoknusaRequest, form?: FormRequest) => unknown).call(
             controller,
             request,
             formRequest,

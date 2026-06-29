@@ -1,4 +1,4 @@
-import { StorageManager, type DiskConfig } from '@tyravel/storage';
+import { StorageManager, type DiskConfig } from '@pondoknusa/storage';
 import { SupabaseDisk } from './supabase-disk.js';
 import type { SupabaseDiskConfig } from './types.js';
 

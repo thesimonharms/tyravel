@@ -13,16 +13,16 @@ import {
   ViewServiceProvider,
   setRouteApplication,
   setViewApplication,
-} from '@tyravel/core';
-import { DatabaseManager, Migrator } from '@tyravel/database';
+} from '@pondoknusa/core';
+import { DatabaseManager, Migrator } from '@pondoknusa/database';
 import {
   JobRegistry,
   QueueManager,
   QueueWorker,
   isWorkerQueue,
-} from '@tyravel/queue';
-import { TestCase, createHttpKernel, createTestingMiddleware, wireFacades } from '@tyravel/testing';
-import { HttpTestClient } from '@tyravel/testing';
+} from '@pondoknusa/queue';
+import { TestCase, createHttpKernel, createTestingMiddleware, wireFacades } from '@pondoknusa/testing';
+import { HttpTestClient } from '@pondoknusa/testing';
 import { AppServiceProvider } from '../../src/providers/app-service-provider.js';
 
 const supportDir = dirname(fileURLToPath(import.meta.url));

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Router } from '@tyravel/http';
+import { Router } from '@pondoknusa/http';
 import { registerDebugRoutes } from './register-routes.js';
 import { DebugStore } from './store.js';
 
@@ -26,7 +26,7 @@ describe('registerDebugRoutes', () => {
       method: 'GET',
       url: new URL('http://localhost/__debug?correlation=req-1'),
       headers: new Headers(),
-    } as import('@tyravel/http').TyravelRequest);
+    } as import('@pondoknusa/http').PondoknusaRequest);
 
     const response = await dispatch;
     expect(response.status).toBe(200);

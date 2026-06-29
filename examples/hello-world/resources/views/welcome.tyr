@@ -1,7 +1,7 @@
 @layout('layouts.app')
 
 @section('title')
-  Welcome to Tyravel
+  Welcome to Pondoknusa
 @endsection
 
 @section('content')

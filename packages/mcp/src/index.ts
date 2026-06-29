@@ -10,7 +10,7 @@ export {
   type ExportRulesOptions,
 } from './export-rules.js';
 export { buildCapabilityManifest } from './manifest.js';
-export { TyravelMcpServer, type McpTool } from './server.js';
+export { PondoknusaMcpServer, type McpTool } from './server.js';
 export type {
   AppMcpContext,
   CapabilityManifest,

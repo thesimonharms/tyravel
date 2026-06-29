@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TyravelRequest } from '@tyravel/http';
+import { PondoknusaRequest } from '@pondoknusa/http';
 import { Session } from './session.js';
 import {
   createVerifyCsrfTokenMiddleware,
@@ -11,8 +11,8 @@ function requestWithSession(
   path: string,
   token?: string,
   body?: Record<string, string>,
-): TyravelRequest {
-  const request = new TyravelRequest(
+): PondoknusaRequest {
+  const request = new PondoknusaRequest(
     new Request(`http://localhost${path}`, {
       method,
       headers: body ? { 'content-type': 'application/json' } : undefined,
@@ -52,7 +52,7 @@ describe('createVerifyCsrfTokenMiddleware', () => {
 
   it('accepts a matching X-CSRF-TOKEN header', async () => {
     const middleware = createVerifyCsrfTokenMiddleware();
-    const request = new TyravelRequest(
+    const request = new PondoknusaRequest(
       new Request('http://localhost/login', {
         method: 'POST',
         headers: { 'X-CSRF-TOKEN': 'token-a' },

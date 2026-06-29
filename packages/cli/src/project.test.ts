@@ -14,9 +14,9 @@ describe('findProjectRoot', () => {
     }
   });
 
-  it('finds the nearest directory with Tyravel markers', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-root-'));
-    writeFileSync(join(tempDir, 'tyravel.json'), '{}');
+  it('finds the nearest directory with Pondoknusa markers', async () => {
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-root-'));
+    writeFileSync(join(tempDir, 'pondoknusa.json'), '{}');
     mkdirSync(join(tempDir, 'src'), { recursive: true });
     writeFileSync(join(tempDir, 'src/main.ts'), '');
 

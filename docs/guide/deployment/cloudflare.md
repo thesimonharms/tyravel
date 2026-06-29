@@ -1,6 +1,6 @@
 # Deploy with Cloudflare
 
-Cloudflare integrates with Tyravel as **optional modules** — pick only what you need. Tyravel **1.x** still runs on **Node.js** (Fly, Railway, Docker, VPS). Full Tyravel on **Workers** is not supported yet.
+Cloudflare integrates with Pondoknusa as **optional modules** — pick only what you need. Pondoknusa **1.x** still runs on **Node.js** (Fly, Railway, Docker, VPS). Full Pondoknusa on **Workers** is not supported yet.
 
 New apps ship a copy-paste guide at `deploy/cloudflare.md` with the same module layout.
 
@@ -29,17 +29,17 @@ Deploy the Node origin first — [Fly.io](/guide/deployment/fly), [Railway](/gui
 
 ## Product status
 
-| Cloudflare product | Tyravel integration | Module |
+| Cloudflare product | Pondoknusa integration | Module |
 |--------------------|---------------------|--------|
 | DNS + proxy | Origin on Node | 1 |
 | Cache / CDN | `ETag` middleware + cache rules | 2 |
-| R2 | `@tyravel/storage-r2` | 3 |
+| R2 | `@pondoknusa/storage-r2` | 3 |
 | Pages | Vite/client `dist/` | 4 |
 | Tunnel | Preview/staging | 5 |
 | WAF / DDoS / TLS | In front of origin | 1, 6 |
-| **Workers** (full Tyravel) | — | Not supported (roadmap) |
+| **Workers** (full Pondoknusa) | — | Not supported (roadmap) |
 | **D1** | — | Not supported |
-| **Queues** (CF) | — | Use `tyravel queue:work` on origin |
+| **Queues** (CF) | — | Use `pondoknusa queue:work` on origin |
 
 ---
 
@@ -47,7 +47,7 @@ Deploy the Node origin first — [Fly.io](/guide/deployment/fly), [Railway](/gui
 
 **When:** Custom domain, free TLS, DDoS protection, orange-cloud origin masking.
 
-**Prerequisites:** Tyravel running with a public hostname.
+**Prerequisites:** Pondoknusa running with a public hostname.
 
 1. Add the domain in Cloudflare **DNS**.
 2. Create a **proxied** record — CNAME to Fly/Railway hostname, or A/AAAA to a VPS IP.
@@ -56,7 +56,7 @@ Deploy the Node origin first — [Fly.io](/guide/deployment/fly), [Railway](/gui
 
 ```bash
 APP_URL=https://your-domain.example
-TYRAVEL_HOST=0.0.0.0
+PONDOKNUSA_HOST=0.0.0.0
 SESSION_SECURE=true
 ```
 
@@ -73,7 +73,7 @@ Use `TRUST_PROXY=true` when the app reads `X-Forwarded-*`. WebSocket upgrades pa
 **Prerequisites:** [Module 1](#module-1-dns--proxy) or another CDN in front of the same origin.
 
 ```typescript
-import { createHttpCacheMiddleware } from '@tyravel/http';
+import { createHttpCacheMiddleware } from '@pondoknusa/http';
 
 Route.get('/posts/:slug', showPost, {
   middleware: [createHttpCacheMiddleware({ maxAge: 300 })],
@@ -100,13 +100,13 @@ In Cloudflare: enable **Origin Cache Control**, add **Cache Rules** for public `
 **Prerequisites:** Node origin. Works **without** Module 1.
 
 ```bash
-npm install @tyravel/storage-r2
+npm install @pondoknusa/storage-r2
 ```
 
 Register `R2StorageServiceProvider` and configure `config/storage.ts`. Full config: [Storage guide](/guide/storage).
 
 ```bash
-R2_BUCKET=tyravel
+R2_BUCKET=pondoknusa
 R2_ENDPOINT=https://<account_id>.r2.cloudflarestorage.com
 R2_ACCESS_KEY_ID=...
 R2_SECRET_ACCESS_KEY=...
@@ -119,14 +119,14 @@ R2_PUBLIC_URL=https://files.your-domain.example  # optional
 
 ## Module 4: Pages (static assets)
 
-**When:** SPA front-end; Tyravel API or SSR on a subdomain.
+**When:** SPA front-end; Pondoknusa API or SSR on a subdomain.
 
 | Host | Serves |
 |------|--------|
 | `www.example.com` (Pages) | Vite client `dist/` |
-| `api.example.com` (Node) | Tyravel ([headless](/guide/headless) or full stack) |
+| `api.example.com` (Node) | Pondoknusa ([headless](/guide/headless) or full stack) |
 
-Connect Pages to Git or `wrangler pages deploy dist`. Point `api.example.com` through Module 1 at the Tyravel origin. Set `VITE_API_URL` on the client build.
+Connect Pages to Git or `wrangler pages deploy dist`. Point `api.example.com` through Module 1 at the Pondoknusa origin. Set `VITE_API_URL` on the client build.
 
 Subdomain split is simpler than single-hostname origin rules. Headless API origins skip `view:cache`.
 
@@ -141,9 +141,9 @@ Subdomain split is simpler than single-hostname origin rules. Headless API origi
 cloudflared tunnel --url http://127.0.0.1:3000
 
 # Named tunnel
-cloudflared tunnel create tyravel-staging
-cloudflared tunnel route dns tyravel-staging staging.example.com
-cloudflared tunnel run tyravel-staging
+cloudflared tunnel create pondoknusa-staging
+cloudflared tunnel route dns pondoknusa-staging staging.example.com
+cloudflared tunnel run pondoknusa-staging
 ```
 
 Set `APP_URL` to the tunnel hostname. Not a production origin replacement.
@@ -161,21 +161,21 @@ Set `APP_URL` to the tunnel hostname. Not a production origin replacement.
 - Bot Fight Mode (test against legitimate API clients)
 - Disable Rocket Loader on WebSocket or strict CSP paths
 
-Pair with Tyravel auth throttling and `APP_DEBUG=false`.
+Pair with Pondoknusa auth throttling and `APP_DEBUG=false`.
 
 ---
 
 ## Not supported on Workers (yet)
 
-| Tyravel requirement | Workers limitation |
+| Pondoknusa requirement | Workers limitation |
 |---------------------|-------------------|
 | Node.js 26+ (`node:sqlite`, etc.) | Subset compat |
 | `view:cache`, framework disk | No persistent local disk |
-| `tyravel queue:work` | No long-lived processes |
-| `tyravel start --cluster` | Isolates, not `node:cluster` |
+| `pondoknusa queue:work` | No long-lived processes |
+| `pondoknusa start --cluster` | Isolates, not `node:cluster` |
 | WebSocket hub + Redis | Custom fan-out needed |
 
-Planned: headless JSON on Workers + Hyperdrive, then precompiled SSR. See [Tyravel Cloud](/guide/deployment/tyravel-cloud) and [ROADMAP](https://github.com/thesimonharms/tyravel/blob/main/ROADMAP.md).
+Planned: headless JSON on Workers + Hyperdrive, then precompiled SSR. See [Pondoknusa Cloud](/guide/deployment/pondoknusa-cloud) and [ROADMAP](https://github.com/pondoknusa/pondoknusa/blob/main/ROADMAP.md).
 
 ---
 
@@ -189,14 +189,14 @@ Planned: headless JSON on Workers + Hyperdrive, then precompiled SSR. See [Tyrav
 | 2 | Session lost | Bypass `Set-Cookie` routes; `SESSION_SECURE=true` |
 | 3 | R2 403 | Token permissions; bucket CORS |
 | 4 | CORS errors | API allows Pages origin |
-| 5 | Tunnel 502 | `TYRAVEL_HOST=0.0.0.0` on origin |
+| 5 | Tunnel 502 | `PONDOKNUSA_HOST=0.0.0.0` on origin |
 | 6 | WS drops | Bypass Rocket Loader |
 
 ---
 
 ## Related
 
-- `deploy/cloudflare.md` in new Tyravel projects (modular recipes)
+- `deploy/cloudflare.md` in new Pondoknusa projects (modular recipes)
 - [Platform matrix](/guide/deployment/platforms)
 - [Edge response cache](/cookbook/edge-cache)
 - [Storage](/guide/storage)

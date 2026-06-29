@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import type { CacheStore } from '@tyravel/cache';
+import type { CacheStore } from '@pondoknusa/cache';
 import type { Job } from './job.js';
 import { serializeJob } from './payload.js';
 import type { QueueContract } from './queue-contract.js';
@@ -18,7 +18,7 @@ export interface BatchState {
 export class BatchRepository {
   constructor(
     private readonly cache: CacheStore,
-    private readonly prefix = 'tyravel_batch:',
+    private readonly prefix = 'pondoknusa_batch:',
   ) {}
 
   private key(id: string): string {

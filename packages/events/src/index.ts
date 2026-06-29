@@ -1,4 +1,4 @@
-import type { Container } from '@tyravel/container';
+import type { Container } from '@pondoknusa/container';
 import { EventDispatcher } from './event-dispatcher.js';
 import {
   registerEventListeners,

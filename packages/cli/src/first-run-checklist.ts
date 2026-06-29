@@ -14,30 +14,30 @@ export function printFirstRunChecklist(
     console.log('  npm install');
   }
 
-  console.log('  tyravel migrate');
-  console.log('  tyravel dev');
+  console.log('  pondoknusa migrate');
+  console.log('  pondoknusa dev');
 
   if (options.headless) {
     console.log('  curl http://127.0.0.1:3000/api/v1/health');
   }
 
-  console.log('  tyravel dev --queue     # web + queue worker together');
+  console.log('  pondoknusa dev --queue     # web + queue worker together');
   console.log('  # or: npm run dev:worker in another terminal');
 
-  console.log('  tyravel test');
+  console.log('  pondoknusa test');
 
   if (options.auth) {
     console.log(
       options.headless
-        ? '  tyravel auth:install    # API token guards and migrations'
-        : '  tyravel auth:install    # guards, login routes, migrations',
+        ? '  pondoknusa auth:install    # API token guards and migrations'
+        : '  pondoknusa auth:install    # guards, login routes, migrations',
     );
   }
 
   console.log(
     options.headless
-      ? '  tyravel deploy:check    # doctor + routes (no view cache)'
-      : '  tyravel doctor          # verify environment before deploy',
+      ? '  pondoknusa deploy:check    # doctor + routes (no view cache)'
+      : '  pondoknusa doctor          # verify environment before deploy',
   );
   console.log('');
 }

@@ -6,7 +6,7 @@ export default {
   perPage: 15,
   auditLog: {
     enabled: true,
-    persistPath: '.tyravel/admin-audit.json',
+    persistPath: '.pondoknusa/admin-audit.json',
     maxEntries: 500,
   },
 } as const;

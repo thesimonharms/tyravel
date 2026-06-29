@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/database",
+  "name": "@pondoknusa/database",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -21,13 +21,13 @@
     "node": ">=26"
   },
   "dependencies": {
-    "@tyravel/support": "1.0.3"
+    "@pondoknusa/support": "1.0.3"
   },
-  "description": "Database ORM, query builder, and migrations for Tyravel",
+  "description": "Database ORM, query builder, and migrations for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/database"
   },
   "publishConfig": {

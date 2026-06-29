@@ -6,7 +6,7 @@ import { assertJsonSnapshot } from './snapshots.js';
 
 describe('snapshot assertions', () => {
   it('writes and compares JSON snapshots', async () => {
-    const directory = await mkdtemp(join(tmpdir(), 'tyravel-snap-'));
+    const directory = await mkdtemp(join(tmpdir(), 'pondoknusa-snap-'));
     await assertJsonSnapshot({ ok: true }, 'health', { directory, update: true });
     const file = await readFile(join(directory, 'health.snap'), 'utf8');
     expect(file).toContain('"ok": true');

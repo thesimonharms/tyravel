@@ -1,5 +1,5 @@
-import type { RouteParams } from '@tyravel/http';
-import { signRouteUrl, temporarySignedRouteParams } from '@tyravel/http';
+import type { RouteParams } from '@pondoknusa/http';
+import { signRouteUrl, temporarySignedRouteParams } from '@pondoknusa/http';
 import type { Application } from './application.js';
 
 let urlApplication: Application | undefined;
@@ -67,5 +67,5 @@ function resolveAppKey(): string {
     // Config may not be registered in lightweight tests.
   }
 
-  return 'tyravel-app-key';
+  return 'pondoknusa-app-key';
 }

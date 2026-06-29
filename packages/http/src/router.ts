@@ -1,5 +1,5 @@
-import { TyravelRequest } from './request.js';
-import { TyravelRequestPool } from './request-pool.js';
+import { PondoknusaRequest } from './request.js';
+import { PondoknusaRequestPool } from './request-pool.js';
 import { Response } from './response.js';
 import {
   MethodNotAllowedException,
@@ -135,7 +135,7 @@ export class Router implements Routable {
   private jsonFastPathEnabled = true;
   private early404Enabled = false;
   private requestPoolingEnabled = false;
-  private readonly requestPool = new TyravelRequestPool();
+  private readonly requestPool = new PondoknusaRequestPool();
 
   constructor(middlewareRegistry = new MiddlewareRegistry()) {
     this.middlewareRegistry = middlewareRegistry;
@@ -465,15 +465,15 @@ export class Router implements Routable {
     params: RouteParams,
   ): Promise<Response> {
     const resolved = await this.resolveBindings(params);
-    const tyravelRequest = this.requestPoolingEnabled
+    const pondoknusaRequest = this.requestPoolingEnabled
       ? this.requestPool.acquire(request, resolved, route.definition.name)
-      : new TyravelRequest(request, resolved, route.definition.name);
+      : new PondoknusaRequest(request, resolved, route.definition.name);
 
     try {
-      return await route.pipelineRunner.run(tyravelRequest);
+      return await route.pipelineRunner.run(pondoknusaRequest);
     } finally {
       if (this.requestPoolingEnabled) {
-        this.requestPool.release(tyravelRequest);
+        this.requestPool.release(pondoknusaRequest);
       }
     }
   }

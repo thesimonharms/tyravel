@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, writeFile, pathExists } from
 export class QueueTableCommand extends Command {
   override readonly name = 'queue:table';
   override readonly description = 'Create a migration for the queue jobs table';
-  override readonly usage = 'tyravel queue:table';
+  override readonly usage = 'pondoknusa queue:table';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -23,7 +23,7 @@ export class QueueTableCommand extends Command {
 
     await writeFile(target, jobsTableMigration());
     console.log(`Migration created: database/migrations/${fileName}`);
-    console.log('Run tyravel migrate to create the jobs table.');
+    console.log('Run pondoknusa migrate to create the jobs table.');
 
     return 0;
   }

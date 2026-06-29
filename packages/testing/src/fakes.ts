@@ -1,5 +1,5 @@
-import type { Abstract } from '@tyravel/container';
-import type { Application } from '@tyravel/core';
+import type { Abstract } from '@pondoknusa/container';
+import type { Application } from '@pondoknusa/core';
 import { vi } from 'vitest';
 
 /**

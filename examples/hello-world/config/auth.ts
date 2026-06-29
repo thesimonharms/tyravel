@@ -1,5 +1,5 @@
-import type { AuthConfig } from '@tyravel/auth';
-import { env } from '@tyravel/config';
+import type { AuthConfig } from '@pondoknusa/auth';
+import { env } from '@pondoknusa/config';
 import { Post } from '../src/models/post.js';
 import { User } from '../src/models/user.js';
 import { PostPolicy } from '../src/policies/post-policy.js';
@@ -26,7 +26,7 @@ export default {
   },
   session: {
     driver: 'database',
-    cookie: 'tyravel_session',
+    cookie: 'pondoknusa_session',
     lifetimeMinutes: 120,
     secure: env('SESSION_SECURE', 'false') === 'true',
     table: 'sessions',

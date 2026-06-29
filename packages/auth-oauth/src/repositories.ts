@@ -1,7 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
-import { createSignedTokenServiceFromConfig, type SignedTokenService } from '@tyravel/crypto';
-import type { DatabaseConnection } from '@tyravel/database';
-import { QueryBuilder } from '@tyravel/database';
+import { createSignedTokenServiceFromConfig, type SignedTokenService } from '@pondoknusa/crypto';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import { QueryBuilder } from '@pondoknusa/database';
 import {
   generatePlainToken,
   hashToken,

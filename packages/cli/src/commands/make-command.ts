@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, toKebabCase, toPascalCase, w
 export class MakeCommandCommand extends Command {
   override readonly name = 'make:command';
   override readonly description = 'Create a new console command class';
-  override readonly usage = 'tyravel make:command <Name>';
+  override readonly usage = 'pondoknusa make:command <Name>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -14,7 +14,7 @@ export class MakeCommandCommand extends Command {
 
     if (!rawName) {
       console.error('Command name is required.');
-      console.error('Usage: tyravel make:command <Name>');
+      console.error('Usage: pondoknusa make:command <Name>');
       return 1;
     }
 

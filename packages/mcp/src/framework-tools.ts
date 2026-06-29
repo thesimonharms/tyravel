@@ -18,15 +18,15 @@ export function createFrameworkTools(context: AppMcpContext): McpTool[] {
 
   return [
     {
-      name: 'tyravel.routes',
-      description: 'List registered HTTP routes for the Tyravel application.',
+      name: 'pondoknusa.routes',
+      description: 'List registered HTTP routes for the Pondoknusa application.',
       inputSchema: { type: 'object', properties: {} },
       async handler() {
         return context.routes;
       },
     },
     {
-      name: 'tyravel.models',
+      name: 'pondoknusa.models',
       description: 'List Eloquent-style models discovered under src/models.',
       inputSchema: { type: 'object', properties: {} },
       async handler() {
@@ -34,7 +34,7 @@ export function createFrameworkTools(context: AppMcpContext): McpTool[] {
       },
     },
     {
-      name: 'tyravel.config',
+      name: 'pondoknusa.config',
       description: 'List config keys or fetch a single non-sensitive config value.',
       inputSchema: {
         type: 'object',
@@ -59,15 +59,15 @@ export function createFrameworkTools(context: AppMcpContext): McpTool[] {
       },
     },
     {
-      name: 'tyravel.commands',
-      description: 'List Tyravel CLI commands available to this project.',
+      name: 'pondoknusa.commands',
+      description: 'List Pondoknusa CLI commands available to this project.',
       inputSchema: { type: 'object', properties: {} },
       async handler() {
         return context.commands;
       },
     },
     {
-      name: 'tyravel.docs',
+      name: 'pondoknusa.docs',
       description: 'Index markdown docs under docs/ with titles for agent retrieval.',
       inputSchema: {
         type: 'object',
@@ -84,8 +84,8 @@ export function createFrameworkTools(context: AppMcpContext): McpTool[] {
       },
     },
     {
-      name: 'tyravel.capabilities',
-      description: 'Return the full Tyravel capability manifest for agents.',
+      name: 'pondoknusa.capabilities',
+      description: 'Return the full Pondoknusa capability manifest for agents.',
       inputSchema: { type: 'object', properties: {} },
       async handler() {
         return manifest;

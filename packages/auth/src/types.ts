@@ -1,6 +1,6 @@
-import type { Model } from '@tyravel/database';
-import type { TyravelRequest } from '@tyravel/http';
-import type { Constructor } from '@tyravel/container';
+import type { Model } from '@pondoknusa/database';
+import type { PondoknusaRequest } from '@pondoknusa/http';
+import type { Constructor } from '@pondoknusa/container';
 import type { Policy } from './policy.js';
 
 export interface Authenticatable {
@@ -83,7 +83,7 @@ export interface AuthConfig {
 
 export interface Guard {
   readonly name: string;
-  setRequest(request: TyravelRequest): void;
+  setRequest(request: PondoknusaRequest): void;
   user(): Authenticatable | null;
   id(): string | number | null;
   check(): boolean | Promise<boolean>;

@@ -1,11 +1,11 @@
-import type { MailConfig } from '@tyravel/mail';
-import { env, envInt } from '@tyravel/config';
+import type { MailConfig } from '@pondoknusa/mail';
+import { env, envInt } from '@pondoknusa/config';
 
 export default {
   default: env('MAIL_MAILER', 'log'),
   from: {
     address: env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-    name: env('MAIL_FROM_NAME', 'Tyravel'),
+    name: env('MAIL_FROM_NAME', 'Pondoknusa'),
   },
   connections: {
     log: { driver: 'log' },

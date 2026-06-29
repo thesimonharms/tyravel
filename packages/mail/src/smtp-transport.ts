@@ -19,7 +19,7 @@ export class SmtpMailTransport implements MailTransport {
 
     try {
       await readGreeting(socket, timeout);
-      await sendCommand(socket, `EHLO tyravel.local`, timeout);
+      await sendCommand(socket, `EHLO pondoknusa.local`, timeout);
 
       if (encryption === 'tls') {
         const reply = await sendCommand(socket, 'STARTTLS', timeout);
@@ -27,7 +27,7 @@ export class SmtpMailTransport implements MailTransport {
           throw new Error(`SMTP STARTTLS failed: ${reply}`);
         }
         const upgraded = await upgradeTls(socket, this.config.host, timeout);
-        await sendCommand(upgraded, `EHLO tyravel.local`, timeout);
+        await sendCommand(upgraded, `EHLO pondoknusa.local`, timeout);
         await authenticate(upgraded, this.config, timeout);
         await transmit(upgraded, message, timeout);
         await sendCommand(upgraded, 'QUIT', timeout);

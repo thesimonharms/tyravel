@@ -21,7 +21,7 @@ export const guideSidebar = [
       { text: 'Platform matrix', link: '/guide/deployment/platforms' },
       { text: 'Cloudflare', link: '/guide/deployment/cloudflare' },
       { text: 'CI/CD', link: '/guide/deployment/ci-cd' },
-      { text: 'Tyravel Cloud (planned)', link: '/guide/deployment/tyravel-cloud' },
+      { text: 'Pondoknusa Cloud (planned)', link: '/guide/deployment/pondoknusa-cloud' },
       { text: 'Docker', link: '/guide/deployment/docker' },
       { text: 'Fly.io', link: '/guide/deployment/fly' },
       { text: 'Railway', link: '/guide/deployment/railway' },

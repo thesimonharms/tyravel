@@ -1,14 +1,14 @@
 # Headless API example
 
-Reference Tyravel app for backend-only JSON APIs with personal access tokens, database queues, and deploy manifests.
+Reference Pondoknusa app for backend-only JSON APIs with personal access tokens, database queues, and deploy manifests.
 
 ## Quick start
 
 ```bash
 cd examples/headless-api
 npm install
-tyravel migrate
-tyravel dev
+pondoknusa migrate
+pondoknusa dev
 curl http://127.0.0.1:3000/api/v1/health
 ```
 
@@ -41,7 +41,7 @@ curl http://127.0.0.1:3000/api/v1/me \
 ## Queue worker
 
 ```bash
-tyravel dev              # web + queue worker together
+pondoknusa dev              # web + queue worker together
 # or
 npm run dev:worker       # worker only
 ```
@@ -49,27 +49,27 @@ npm run dev:worker       # worker only
 ## Scaffold your own
 
 ```bash
-npm create tyravel@latest my-api -- --headless --auth
+npm create pondoknusa@latest my-api -- --headless --auth
 cd my-api
-tyravel migrate
-tyravel auth:install     # if not included at scaffold time
-tyravel dev
+pondoknusa migrate
+pondoknusa auth:install     # if not included at scaffold time
+pondoknusa dev
 ```
 
 ## OpenAPI stub
 
 ```bash
-tyravel make:openapi
+pondoknusa make:openapi
 cat storage/api/openapi.json
 ```
 
 ## Pre-deploy
 
 ```bash
-tyravel route:cache
-tyravel deploy:check
+pondoknusa route:cache
+pondoknusa deploy:check
 ```
 
 Production boots warm `storage/framework/routes.json` automatically via `prepareHttpServer()`.
 
-See [Headless API guide](https://tyravel.dev/guide/headless) and `deploy/README.md`.
+See [Headless API guide](https://pondoknusa.dev/guide/headless) and `deploy/README.md`.

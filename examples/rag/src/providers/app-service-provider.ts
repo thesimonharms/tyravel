@@ -1,6 +1,6 @@
-import { ServiceProvider } from '@tyravel/core';
-import { JobRegistry } from '@tyravel/queue';
-import { EmbedChunksJob } from '@tyravel/vector';
+import { ServiceProvider } from '@pondoknusa/core';
+import { JobRegistry } from '@pondoknusa/queue';
+import { EmbedChunksJob } from '@pondoknusa/vector';
 
 export class AppServiceProvider extends ServiceProvider {
   override register() {

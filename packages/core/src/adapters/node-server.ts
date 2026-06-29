@@ -29,7 +29,7 @@ async function createNodeServer(
   options: NodeServeOptions = {},
 ) {
   const { readFileSync } = await import('node:fs');
-  const { attachBroadcastWebSocketUpgrade } = await import('@tyravel/broadcasting');
+  const { attachBroadcastWebSocketUpgrade } = await import('@pondoknusa/broadcasting');
 
   let isShuttingDown = false;
   const connections = new Set<Socket>();

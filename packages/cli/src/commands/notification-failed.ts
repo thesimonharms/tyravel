@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { loadConfig } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
@@ -8,10 +8,10 @@ import {
   QueueServiceProvider,
   ServiceProvider,
   setQueueApplication,
-} from '@tyravel/core';
-import { FailedNotificationRepository } from '@tyravel/notifications';
-import type { FailedJobRepository, QueueManager } from '@tyravel/queue';
-import { decodePayload } from '@tyravel/queue';
+} from '@pondoknusa/core';
+import { FailedNotificationRepository } from '@pondoknusa/notifications';
+import type { FailedJobRepository, QueueManager } from '@pondoknusa/queue';
+import { decodePayload } from '@pondoknusa/queue';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { parseOptions, positionalArgs } from '../utils.js';
@@ -19,7 +19,7 @@ import { parseOptions, positionalArgs } from '../utils.js';
 export class NotificationFailedCommand extends Command {
   override readonly name = 'notification:failed';
   override readonly description = 'List failed notification jobs';
-  override readonly usage = 'tyravel notification:failed';
+  override readonly usage = 'pondoknusa notification:failed';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -50,7 +50,7 @@ export class NotificationFailedCommand extends Command {
 export class NotificationRetryCommand extends Command {
   override readonly name = 'notification:retry';
   override readonly description = 'Retry a failed notification job by id';
-  override readonly usage = 'tyravel notification:retry <id>';
+  override readonly usage = 'pondoknusa notification:retry <id>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);

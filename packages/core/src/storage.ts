@@ -1,7 +1,7 @@
 import {
   StorageManager,
   StorageRepository,
-} from '@tyravel/storage';
+} from '@pondoknusa/storage';
 import type { Application } from './application.js';
 
 let storageApplication: Application | undefined;

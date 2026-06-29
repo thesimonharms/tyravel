@@ -1,15 +1,15 @@
 import { pathToFileURL } from 'node:url';
 import { join } from 'node:path';
-import { loadConfig } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
   DatabaseServiceProvider,
   ServiceProvider,
-} from '@tyravel/core';
-import { isPrunableModel, pruneModels } from '@tyravel/database';
-import type { ModelStatic } from '@tyravel/database';
-import { discoverModels } from '@tyravel/mcp';
+} from '@pondoknusa/core';
+import { isPrunableModel, pruneModels } from '@pondoknusa/database';
+import type { ModelStatic } from '@pondoknusa/database';
+import { discoverModels } from '@pondoknusa/mcp';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { importAppServiceProvider } from '../project-bootstrap.js';
@@ -18,7 +18,7 @@ import { parseOptions, positionalArgs } from '../utils.js';
 export class ModelPruneCommand extends Command {
   override readonly name = 'model:prune';
   override readonly description = 'Prune models that define a prunable() query';
-  override readonly usage = 'tyravel model:prune';
+  override readonly usage = 'pondoknusa model:prune';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);

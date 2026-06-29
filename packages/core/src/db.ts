@@ -1,4 +1,4 @@
-import type { DatabaseConnection, DatabaseManager } from '@tyravel/database';
+import type { DatabaseConnection, DatabaseManager } from '@pondoknusa/database';
 import type { Application } from './application.js';
 
 let dbApplication: Application | undefined;

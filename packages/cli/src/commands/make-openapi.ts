@@ -1,12 +1,12 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { loadConfig } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
   setRouteApplication,
   ServiceProvider,
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 import { Command } from '../command.js';
 import { isHeadlessProject } from '../headless-project.js';
 import { routesToOpenApi } from '../openapi-export.js';
@@ -18,7 +18,7 @@ export class MakeOpenApiCommand extends Command {
   override readonly name = 'make:openapi';
   override readonly description = 'Export registered routes as an OpenAPI 3.0 stub';
   override readonly usage =
-    'tyravel make:openapi [--stdout] [--output=<path>] [--server=<url>]';
+    'pondoknusa make:openapi [--stdout] [--output=<path>] [--server=<url>]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -58,7 +58,7 @@ export class MakeOpenApiCommand extends Command {
       ?? 'http://127.0.0.1:3000';
 
     const document = routesToOpenApi(routes, {
-      title: appConfig?.name ?? 'Tyravel API',
+      title: appConfig?.name ?? 'Pondoknusa API',
       serverUrl,
     });
 

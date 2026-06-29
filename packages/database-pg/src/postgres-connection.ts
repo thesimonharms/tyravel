@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import pg from 'pg';
-import type { DatabaseConnection, QueryResult } from '@tyravel/database';
-import { PostgresGrammar, type SqlGrammar } from '@tyravel/database';
+import type { DatabaseConnection, QueryResult } from '@pondoknusa/database';
+import { PostgresGrammar, type SqlGrammar } from '@pondoknusa/database';
 import type { PgConnectionConfig } from './types.js';
 
 const { Pool } = pg;

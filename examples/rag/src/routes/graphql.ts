@@ -1,11 +1,11 @@
-import { Route } from '@tyravel/core';
-import { ArrayStore } from '@tyravel/cache';
+import { Route } from '@pondoknusa/core';
+import { ArrayStore } from '@pondoknusa/cache';
 import {
   createGraphQLHandler,
   createOperationRegistry,
   defineSchema,
   defineType,
-} from '@tyravel/graphql';
+} from '@pondoknusa/graphql';
 import { Document } from '../models/document.js';
 
 const cache = new ArrayStore();
@@ -13,7 +13,7 @@ const cache = new ArrayStore();
 const schema = defineSchema({
   Query: {
     hello: {
-      resolve: () => 'Tyravel RAG',
+      resolve: () => 'Pondoknusa RAG',
     },
     documents: {
       resolve: async () => Document.query().limit(10).get(),

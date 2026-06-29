@@ -2,8 +2,8 @@ import {
   registerLocalVectorSearchDriver,
   registerVectorSearchDriver,
   setEmbeddingFormatter,
-} from '@tyravel/vector';
-import type { DatabaseConnection } from '@tyravel/database';
+} from '@pondoknusa/vector';
+import type { DatabaseConnection } from '@pondoknusa/database';
 import { formatPgVector } from './pgvector.js';
 import { PgVectorSearchDriver } from './pgvector-search-driver.js';
 

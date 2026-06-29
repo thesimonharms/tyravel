@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pat
 export class MakeEventCommand extends Command {
   override readonly name = 'make:event';
   override readonly description = 'Create a new domain event class';
-  override readonly usage = 'tyravel make:event <Name>';
+  override readonly usage = 'pondoknusa make:event <Name>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -14,7 +14,7 @@ export class MakeEventCommand extends Command {
 
     if (!rawName) {
       console.error('Event name is required.');
-      console.error('Usage: tyravel make:event <Name>');
+      console.error('Usage: pondoknusa make:event <Name>');
       return 1;
     }
 

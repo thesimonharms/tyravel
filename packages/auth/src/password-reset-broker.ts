@@ -1,6 +1,6 @@
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
-import type { DatabaseConnection } from '@tyravel/database';
-import { QueryBuilder } from '@tyravel/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import { QueryBuilder } from '@pondoknusa/database';
 import { Hasher } from './hasher.js';
 import { InvalidResetTokenException } from './authorization-exceptions.js';
 import type { PasswordBrokerConfig } from './types.js';
@@ -63,7 +63,7 @@ export class PasswordResetBroker {
       throw new InvalidResetTokenException();
     }
 
-    const { Model } = await import('@tyravel/database');
+    const { Model } = await import('@pondoknusa/database');
     const ModelClass = user.constructor as unknown as typeof Model;
     const passwordHash = this.hasher.make(input.password);
     await ModelClass.query()

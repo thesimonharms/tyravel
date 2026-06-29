@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TyravelRequest } from '@tyravel/http';
+import { PondoknusaRequest } from '@pondoknusa/http';
 import { AuthorizationException } from './authorization-exceptions.js';
 import { createTokenAbilityMiddleware } from './auth-manager.js';
 import { parseTokenAbilities, tokenCan, tokenCanAny } from './token-abilities.js';
@@ -27,7 +27,7 @@ describe('token abilities helpers', () => {
 describe('createTokenAbilityMiddleware', () => {
   it('throws when required abilities are missing', async () => {
     const middleware = createTokenAbilityMiddleware('posts:write');
-    const request = new TyravelRequest(new Request('http://localhost/api/posts'));
+    const request = new PondoknusaRequest(new Request('http://localhost/api/posts'));
     request.tokenAbilities = ['posts:read'];
 
     await expect(middleware(request, async () => new Response('ok'))).rejects.toBeInstanceOf(
@@ -37,7 +37,7 @@ describe('createTokenAbilityMiddleware', () => {
 
   it('allows requests with the required ability', async () => {
     const middleware = createTokenAbilityMiddleware('posts:write');
-    const request = new TyravelRequest(new Request('http://localhost/api/posts'));
+    const request = new PondoknusaRequest(new Request('http://localhost/api/posts'));
     request.tokenAbilities = ['posts:write'];
 
     const response = await middleware(request, async () => new Response('ok'));

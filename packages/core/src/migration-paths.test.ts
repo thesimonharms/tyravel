@@ -2,9 +2,9 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { ConfigRepository } from '@tyravel/config';
-import { Migrator } from '@tyravel/database';
-import { SqliteConnection } from '@tyravel/database';
+import { ConfigRepository } from '@pondoknusa/config';
+import { Migrator } from '@pondoknusa/database';
+import { SqliteConnection } from '@pondoknusa/database';
 import { Application } from './application.js';
 import { DatabaseServiceProvider } from './database-service-provider.js';
 import { ServiceProvider } from './service-provider.js';
@@ -24,9 +24,9 @@ describe('ServiceProvider.loadMigrationsFrom', () => {
     }
   });
 
-  it('registers package migrations for tyravel migrate', async () => {
-    root = mkdtempSync(join(tmpdir(), 'tyravel-consumer-'));
-    packageMigrations = mkdtempSync(join(tmpdir(), 'tyravel-lontar-migrations-'));
+  it('registers package migrations for pondoknusa migrate', async () => {
+    root = mkdtempSync(join(tmpdir(), 'pondoknusa-consumer-'));
+    packageMigrations = mkdtempSync(join(tmpdir(), 'pondoknusa-lontar-migrations-'));
 
     mkdirSync(join(root, 'database/migrations'), { recursive: true });
     writeFileSync(

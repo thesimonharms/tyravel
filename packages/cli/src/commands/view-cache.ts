@@ -6,7 +6,7 @@ import { bootViewApplication, enableCompiledCache } from '../view-bootstrap.js';
 export class ViewCacheCommand extends Command {
   override readonly name = 'view:cache';
   override readonly description = 'Compile all Tyr templates for production';
-  override readonly usage = 'tyravel view:cache [--workers=<n>] [--serial]';
+  override readonly usage = 'pondoknusa view:cache [--workers=<n>] [--serial]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -31,7 +31,7 @@ export class ViewCacheCommand extends Command {
 export class ViewClearCommand extends Command {
   override readonly name = 'view:clear';
   override readonly description = 'Clear compiled Tyr template cache';
-  override readonly usage = 'tyravel view:clear';
+  override readonly usage = 'pondoknusa view:clear';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);

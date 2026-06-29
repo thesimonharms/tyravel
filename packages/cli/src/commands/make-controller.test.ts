@@ -20,9 +20,9 @@ describe('MakeControllerCommand', () => {
   });
 
   function scaffoldProject(): void {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-make-controller-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-make-controller-'));
     mkdirSync(join(tempDir, 'src'), { recursive: true });
-    writeFileSync(join(tempDir, 'tyravel.json'), JSON.stringify({ name: 'app', entry: 'src/main.ts' }));
+    writeFileSync(join(tempDir, 'pondoknusa.json'), JSON.stringify({ name: 'app', entry: 'src/main.ts' }));
     writeFileSync(join(tempDir, 'src/main.ts'), 'export {};\n');
     previousCwd = process.cwd();
     process.chdir(tempDir);
@@ -40,7 +40,7 @@ describe('MakeControllerCommand', () => {
 
     const contents = readFileSync(filePath, 'utf8');
     expect(contents).toContain("request.routeModel<Post>('post')");
-    expect(contents).toContain('async destroy(request: TyravelRequest)');
+    expect(contents).toContain('async destroy(request: PondoknusaRequest)');
   });
 
   it('scaffolds an invokable controller', async () => {

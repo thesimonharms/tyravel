@@ -1,11 +1,11 @@
-# Tyravel VS Code / Cursor extension (stub)
+# Pondoknusa VS Code / Cursor extension (stub)
 
 Syntax highlighting and snippets for `.tyr` templates. This is a starter pack — install locally while a full language server is planned (Tier 18 P2).
 
 ## Install locally
 
 ```bash
-cd tools/vscode-tyravel
+cd tools/vscode-pondoknusa
 code --install-extension .
 # or in Cursor: Extensions → Install from VSIX after `npm run package`
 ```
@@ -16,10 +16,10 @@ For go-to-definition and `@include` completion, use the basic LSP in `tools/tyr-
 
 ## Typed props
 
-Run `tyravel view:types` in your app to generate `types/view-props.generated.d.ts`. Export the component catalog for tooling:
+Run `pondoknusa view:types` in your app to generate `types/view-props.generated.d.ts`. Export the component catalog for tooling:
 
 ```bash
-tyravel view:catalog --ide=vscode > .tyravel/view-catalog.json
+pondoknusa view:catalog --ide=vscode > .pondoknusa/view-catalog.json
 ```
 
 ## Snippets

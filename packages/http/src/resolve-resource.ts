@@ -1,12 +1,12 @@
 import { isJsonResource, isResourceCollection } from './api-resource.js';
 import { Response } from './response.js';
-import type { TyravelRequest } from './request.js';
+import type { PondoknusaRequest } from './request.js';
 
 const WebResponse = globalThis.Response;
 
 export async function resolveHttpResult(
   result: unknown,
-  request?: TyravelRequest,
+  request?: PondoknusaRequest,
 ): Promise<Response> {
   if (result instanceof WebResponse) {
     return result;

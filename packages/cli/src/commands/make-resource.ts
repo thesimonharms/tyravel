@@ -6,7 +6,7 @@ import { parseOptions, positionalArgs, projectPath, toPascalCase, writeFile, pat
 export class MakeResourceCommand extends Command {
   override readonly name = 'make:resource';
   override readonly description = 'Create a new API resource class';
-  override readonly usage = 'tyravel make:resource <Name>';
+  override readonly usage = 'pondoknusa make:resource <Name>';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -14,7 +14,7 @@ export class MakeResourceCommand extends Command {
 
     if (!rawName) {
       console.error('Resource name is required.');
-      console.error('Usage: tyravel make:resource <Name>');
+      console.error('Usage: pondoknusa make:resource <Name>');
       return 1;
     }
 

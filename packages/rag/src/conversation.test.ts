@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Model, SqliteConnection } from '@tyravel/database';
+import { Model, SqliteConnection } from '@pondoknusa/database';
 import { ConversationMemory } from './conversation.js';
 
 class ConversationMessage extends Model {

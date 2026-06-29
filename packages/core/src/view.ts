@@ -3,8 +3,8 @@ import {
   Response,
   type PartialReloadOptions,
   type SsrStreamOptions,
-} from '@tyravel/http';
-import type { TyravelRequest } from '@tyravel/http';
+} from '@pondoknusa/http';
+import type { PondoknusaRequest } from '@pondoknusa/http';
 import type {
   ComponentCatalogEntry,
   IslandCatalogEntry,
@@ -17,22 +17,22 @@ import type {
   ViewContext,
   ViewExpressionBindings,
   ViewPropsFor,
-} from '@tyravel/views';
-import { ViewEngine } from '@tyravel/views';
+} from '@pondoknusa/views';
+import { ViewEngine } from '@pondoknusa/views';
 import type { Application } from './application.js';
 
 let activeApp: Application | undefined;
-let activeViewRequest: TyravelRequest | undefined;
+let activeViewRequest: PondoknusaRequest | undefined;
 
 export function setViewApplication(app: Application): void {
   activeApp = app;
 }
 
-export function setViewRequest(request: TyravelRequest | undefined): void {
+export function setViewRequest(request: PondoknusaRequest | undefined): void {
   activeViewRequest = request;
 }
 
-export function getViewRequest(): TyravelRequest | undefined {
+export function getViewRequest(): PondoknusaRequest | undefined {
   return activeViewRequest;
 }
 

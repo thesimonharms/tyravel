@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { ArrayStore } from '@tyravel/cache';
+import { ArrayStore } from '@pondoknusa/cache';
 import { buildGraphQLCacheKey, rememberGraphQLResponse } from './cache.js';
 
 describe('GraphQL cache helpers', () => {

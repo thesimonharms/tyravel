@@ -1,5 +1,5 @@
-import type { DatabaseManager } from '@tyravel/database';
-import type { RedisManager } from '@tyravel/redis';
+import type { DatabaseManager } from '@pondoknusa/database';
+import type { RedisManager } from '@pondoknusa/redis';
 import { DatabaseQueue } from './database-queue.js';
 import type { QueueContract } from './queue-contract.js';
 import { RedisQueue } from './redis-queue.js';

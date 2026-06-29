@@ -1,4 +1,4 @@
-import { ConfigRepository } from '@tyravel/config';
+import { ConfigRepository } from '@pondoknusa/config';
 import {
   CallQueuedListener,
   EventDispatcher,
@@ -8,8 +8,8 @@ import {
   setQueuedListenerContext,
   type EventsConfig,
   type QueuedListenerBridge,
-} from '@tyravel/events';
-import { Dispatcher, JobRegistry, QueueManager } from '@tyravel/queue';
+} from '@pondoknusa/events';
+import { Dispatcher, JobRegistry, QueueManager } from '@pondoknusa/queue';
 import { ServiceProvider } from './service-provider.js';
 
 export class EventServiceProvider extends ServiceProvider {

@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/notifications",
+  "name": "@pondoknusa/notifications",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -15,10 +15,10 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/broadcasting": "1.0.3",
-    "@tyravel/database": "1.0.3",
-    "@tyravel/mail": "1.0.3",
-    "@tyravel/queue": "1.0.3"
+    "@pondoknusa/broadcasting": "1.0.3",
+    "@pondoknusa/database": "1.0.3",
+    "@pondoknusa/mail": "1.0.3",
+    "@pondoknusa/queue": "1.0.3"
   },
   "files": [
     "dist"
@@ -29,11 +29,11 @@
   "devDependencies": {
     "@types/node": "^26.0.1"
   },
-  "description": "Multi-channel notifications for Tyravel",
+  "description": "Multi-channel notifications for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/notifications"
   },
   "publishConfig": {

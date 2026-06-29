@@ -1,4 +1,4 @@
-import type { ViewEngine } from '@tyravel/views';
+import type { ViewEngine } from '@pondoknusa/views';
 import type { MailMessage } from './types.js';
 
 export interface RenderMailViewsOptions {

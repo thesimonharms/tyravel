@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { Model, SqliteConnection } from '@tyravel/database';
-import { JobRegistry, QueueWorker } from '@tyravel/queue';
+import { Model, SqliteConnection } from '@pondoknusa/database';
+import { JobRegistry, QueueWorker } from '@pondoknusa/queue';
 import {
   EmbedChunksJob,
   registerEmbedModel,

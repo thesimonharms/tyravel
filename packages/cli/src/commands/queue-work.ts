@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { loadConfig } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
@@ -8,8 +8,8 @@ import {
   QueueServiceProvider,
   ServiceProvider,
   setQueueApplication,
-} from '@tyravel/core';
-import type { QueueProcessor } from '@tyravel/queue';
+} from '@pondoknusa/core';
+import type { QueueProcessor } from '@pondoknusa/queue';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import {
@@ -23,7 +23,7 @@ export class QueueWorkCommand extends Command {
   override readonly name = 'queue:work';
   override readonly description = 'Process jobs from the queue';
   override readonly usage =
-    'tyravel queue:work [--queue=default] [--connection=database] [--sleep=1]';
+    'pondoknusa queue:work [--queue=default] [--connection=database] [--sleep=1]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);

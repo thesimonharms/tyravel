@@ -1,4 +1,4 @@
-import type { ModelStatic } from '@tyravel/database';
+import type { ModelStatic } from '@pondoknusa/database';
 import { distanceToScore, vectorDistance } from './distance.js';
 import { blendHybridScore, textMatchScore } from './hybrid-search.js';
 import { matchesMetadataFilters, parseMetadataColumn } from './metadata-filters.js';

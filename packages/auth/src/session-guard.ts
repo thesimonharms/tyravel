@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto';
-import type { TyravelRequest } from '@tyravel/http';
+import type { PondoknusaRequest } from '@pondoknusa/http';
 import { InvalidCredentialsException } from './exceptions.js';
 import { Session } from './session.js';
 import type { SessionStore } from './session.js';
@@ -16,7 +16,7 @@ export class SessionGuard implements Guard {
   readonly name: string;
   private session?: Session;
   private currentUser: Authenticatable | null = null;
-  private request?: TyravelRequest;
+  private request?: PondoknusaRequest;
 
   constructor(
     name: string,
@@ -27,7 +27,7 @@ export class SessionGuard implements Guard {
     this.name = name;
   }
 
-  setRequest(request: TyravelRequest): void {
+  setRequest(request: PondoknusaRequest): void {
     this.request = request;
   }
 
@@ -130,7 +130,7 @@ export class SessionGuard implements Guard {
   }
 }
 
-function readCookie(request: TyravelRequest, name: string): string | undefined {
+function readCookie(request: PondoknusaRequest, name: string): string | undefined {
   const header = request.header('cookie');
   if (!header) {
     return undefined;

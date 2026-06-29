@@ -1,5 +1,5 @@
-import { localizedRouteGroup } from '@tyravel/locale';
-import type { ModelStatic } from '@tyravel/database';
+import { localizedRouteGroup } from '@pondoknusa/locale';
+import type { ModelStatic } from '@pondoknusa/database';
 import type {
   Groupable,
   MiddlewareGroupable,
@@ -11,7 +11,7 @@ import type {
   Routable,
   Router,
   ScopedRouteRegistrar,
-} from '@tyravel/http';
+} from '@pondoknusa/http';
 import type { ControllerAction } from './controller.js';
 import type { Application } from './application.js';
 import { implicitBindingParameter, modelRouteBinding } from './route-model-binding.js';
@@ -25,7 +25,7 @@ export function setRouteApplication(app: Application): void {
 function router(): Router {
   if (!activeApp) {
     throw new Error(
-      'Route facade is not ready. Boot the application and call setRouteApplication(app) before defining routes. See https://tyravel.dev/guide/application-structure.',
+      'Route facade is not ready. Boot the application and call setRouteApplication(app) before defining routes. See https://pondoknusa.dev/guide/application-structure.',
     );
   }
   return activeApp.router();

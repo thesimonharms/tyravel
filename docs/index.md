@@ -2,10 +2,10 @@
 layout: home
 
 hero:
-  name: Tyravel
+  name: Pondoknusa
   image:
     src: /logo.svg
-    alt: Tyravel
+    alt: Pondoknusa
   text: Laravel ergonomics on Node.js
   tagline: Service container, routing, ORM, queues, auth, and an Artisan-like CLI — all on standard Web APIs.
   actions:
@@ -27,5 +27,5 @@ features:
   - title: Full documentation
     details: Guide chapters, auto-generated package & CLI reference, zero-to-deploy tutorials, and a cookbook.
   - title: Post-quantum ready
-    details: ML-KEM and ML-DSA via @tyravel/crypto — session encryption at rest and signed OAuth tokens.
+    details: ML-KEM and ML-DSA via @pondoknusa/crypto — session encryption at rest and signed OAuth tokens.
 ---

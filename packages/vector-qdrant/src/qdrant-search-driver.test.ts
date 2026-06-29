@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Model } from '@tyravel/database';
+import { Model } from '@pondoknusa/database';
 import { QdrantVectorSearchDriver } from './qdrant-search-driver.js';
 
 class Document extends Model {
@@ -7,7 +7,7 @@ class Document extends Model {
 }
 
 describe('QdrantVectorSearchDriver', () => {
-  it('maps Qdrant payloads into ranked Tyravel rows', async () => {
+  it('maps Qdrant payloads into ranked Pondoknusa rows', async () => {
     const fetchImpl = async () =>
       new Response(
         JSON.stringify({

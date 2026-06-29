@@ -1,6 +1,6 @@
-import type { BroadcastManager } from '@tyravel/broadcasting';
-import type { MailManager } from '@tyravel/mail';
-import type { Job } from '@tyravel/queue';
+import type { BroadcastManager } from '@pondoknusa/broadcasting';
+import type { MailManager } from '@pondoknusa/mail';
+import type { Job } from '@pondoknusa/queue';
 import type { Notification } from './notification.js';
 import type { Notifiable } from './types.js';
 import { MailChannel } from './channels/mail-channel.js';

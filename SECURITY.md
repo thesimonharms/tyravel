@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Tyravel publishes security fixes for the **latest minor** on each supported major line.
+Pondoknusa publishes security fixes for the **latest minor** on each supported major line.
 
 | Version | Supported |
 |---------|-----------|
@@ -16,7 +16,7 @@ See [STABILITY.md](STABILITY.md) for the long-term support (LTS) window on the `
 
 **Do not** open public GitHub issues for security vulnerabilities.
 
-1. Email **security@tyravel.dev** (or, if unavailable, open a private [GitHub security advisory](https://github.com/thesimonharms/tyravel/security/advisories/new) on this repository).
+1. Email **security@pondoknusa.dev** (or, if unavailable, open a private [GitHub security advisory](https://github.com/pondoknusa/pondoknusa/security/advisories/new) on this repository).
 2. Include:
    - Affected package(s) and version(s)
    - Steps to reproduce or a minimal proof of concept
@@ -39,13 +39,13 @@ We may request an extension for complex issues. We will keep you informed of pro
 
 In scope:
 
-- `@tyravel/*` packages published to npm from this monorepo
-- Official CLI (`tyravel`) and documented stable APIs in [STABILITY.md](STABILITY.md)
+- `@pondoknusa/*` packages published to npm from this monorepo
+- Official CLI (`pondoknusa`) and documented stable APIs in [STABILITY.md](STABILITY.md)
 - Example applications under `examples/` when the flaw is in framework code they exercise
 
 Out of scope:
 
-- Applications built with Tyravel (report to the app maintainer first)
+- Applications built with Pondoknusa (report to the app maintainer first)
 - Optional third-party drivers (`pg`, `mysql2`, `redis`, AWS SDK) — report upstream
 - Experimental APIs marked in [STABILITY.md](STABILITY.md) unless the flaw also affects stable surfaces
 - Denial-of-service from intentionally unbounded user input without a framework defect

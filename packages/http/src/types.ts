@@ -1,4 +1,4 @@
-import type { TyravelRequest } from './request.js';
+import type { PondoknusaRequest } from './request.js';
 
 export type HttpMethod =
   | 'GET'
@@ -13,11 +13,11 @@ export type RouteParamValue = string | object;
 export type RouteParams = Record<string, RouteParamValue>;
 
 export type RouteHandler = (
-  request: TyravelRequest,
+  request: PondoknusaRequest,
 ) => Response | Promise<Response>;
 
 export type Middleware = (
-  request: TyravelRequest,
+  request: PondoknusaRequest,
   next: () => Promise<Response>,
 ) => Promise<Response>;
 

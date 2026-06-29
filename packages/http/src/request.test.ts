@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { TyravelRequest } from './request.js';
+import { PondoknusaRequest } from './request.js';
 
-describe('TyravelRequest', () => {
+describe('PondoknusaRequest', () => {
   it('reads page and per_page query parameters', () => {
-    const request = new TyravelRequest(
+    const request = new PondoknusaRequest(
       new Request('http://localhost/users?page=3&per_page=25'),
     );
 
@@ -14,7 +14,7 @@ describe('TyravelRequest', () => {
   });
 
   it('falls back when query values are invalid', () => {
-    const request = new TyravelRequest(
+    const request = new PondoknusaRequest(
       new Request('http://localhost/users?page=0&per_page=-5'),
     );
 
@@ -23,7 +23,7 @@ describe('TyravelRequest', () => {
   });
 
   it('reinitializes and clears mutable request state', () => {
-    const request = new TyravelRequest(new Request('http://localhost/a'), { id: '1' }, 'a.show');
+    const request = new PondoknusaRequest(new Request('http://localhost/a'), { id: '1' }, 'a.show');
     request.user = { id: 42 };
     request.locale = 'en';
 
@@ -37,7 +37,7 @@ describe('TyravelRequest', () => {
   });
 
   it('resolves ip and secure state from trusted proxy headers', () => {
-    const request = new TyravelRequest(
+    const request = new PondoknusaRequest(
       new Request('http://localhost/users', {
         headers: {
           'x-forwarded-for': '203.0.113.10, 10.0.0.1',

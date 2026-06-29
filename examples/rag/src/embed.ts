@@ -1,8 +1,8 @@
-import type { EmbedFn } from '@tyravel/vector';
+import type { EmbedFn } from '@pondoknusa/vector';
 
 /**
  * Replace with your provider SDK (OpenAI, Anthropic, local model, etc.).
- * Tyravel intentionally does not ship a unified LLM interface.
+ * Pondoknusa intentionally does not ship a unified LLM interface.
  */
 export const embed: EmbedFn = async (text) => {
   const dimensions = 8;

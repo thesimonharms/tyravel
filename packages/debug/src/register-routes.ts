@@ -1,5 +1,5 @@
-import { Response } from '@tyravel/http';
-import type { Groupable } from '@tyravel/http';
+import { Response } from '@pondoknusa/http';
+import type { Groupable } from '@pondoknusa/http';
 import type { DebugCorrelationStore } from './correlation-store.js';
 import type { DebugStore } from './store.js';
 

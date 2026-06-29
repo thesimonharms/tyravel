@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { Job } from '@tyravel/queue';
+import type { Job } from '@pondoknusa/queue';
 import { EventDispatcher } from './event-dispatcher.js';
 import { EventRegistry } from './event-registry.js';
 import { ListenerRegistry } from './listener-registry.js';

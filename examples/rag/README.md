@@ -1,19 +1,19 @@
-# Tyravel RAG example
+# Pondoknusa RAG example
 
-Minimal ingest → embed → ask flow. Embedding and LLM calls use your own SDK in the app layer (`src/embed.ts`); Tyravel handles chunking, storage, and retrieval.
+Minimal ingest → embed → ask flow. Embedding and LLM calls use your own SDK in the app layer (`src/embed.ts`); Pondoknusa handles chunking, storage, and retrieval.
 
 ```bash
 npm install
 cp .env.example .env
-tyravel migrate
-tyravel serve
+pondoknusa migrate
+pondoknusa serve
 ```
 
 In another terminal, embed ingested chunks and process the queue:
 
 ```bash
-tyravel vector:embed --model=Document
-tyravel queue:work
+pondoknusa vector:embed --model=Document
+pondoknusa queue:work
 ```
 
 Then `POST /rag/ask` with `{ "question": "..." }` returns a grounded prompt plus retrieved chunks.
@@ -37,18 +37,18 @@ curl -N -X POST http://127.0.0.1:3000/rag/ask/stream \
 Scaffold a new app with AI routes and vector config:
 
 ```bash
-tyravel new my-ai-app --ai
+pondoknusa new my-ai-app --ai
 ```
 
 Run the MCP server for agent tooling:
 
 ```bash
-tyravel mcp:serve
+pondoknusa mcp:serve
 ```
 
 Export Cursor / Claude agent rules from the capability manifest:
 
 ```bash
-tyravel mcp:export-rules --format=cursor
-tyravel mcp:export-rules --format=agents --output=AGENTS.md
+pondoknusa mcp:export-rules --format=cursor
+pondoknusa mcp:export-rules --format=agents --output=AGENTS.md
 ```

@@ -1,4 +1,4 @@
-import type { MailMessage } from '@tyravel/mail';
+import type { MailMessage } from '@pondoknusa/mail';
 import type { BroadcastMessage } from './channels/broadcast-channel.js';
 import type { SlackMessage } from './channels/slack-channel.js';
 import type { SmsMessage } from './channels/sms-channel.js';

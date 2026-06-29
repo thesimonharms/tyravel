@@ -6,7 +6,7 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import type { TemporaryUrlFilesystem } from '@tyravel/storage';
+import type { TemporaryUrlFilesystem } from '@pondoknusa/storage';
 import type { S3DiskConfig } from './types.js';
 
 export class S3Disk implements TemporaryUrlFilesystem {

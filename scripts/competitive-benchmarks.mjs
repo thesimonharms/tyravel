@@ -148,12 +148,12 @@ async function createHonoServer() {
   };
 }
 
-export async function measureCompareTyravel(httpOptions, measureHttp) {
+export async function measureComparePondoknusa(httpOptions, measureHttp) {
   const result = await measureHttp(httpOptions);
   return {
     ...result,
-    name: 'compare.tyravel',
-    label: 'Compare: Tyravel JSON (/bench)',
+    name: 'compare.pondoknusa',
+    label: 'Compare: Pondoknusa JSON (/bench)',
     category: 'compare',
   };
 }
@@ -187,7 +187,7 @@ export async function measureCompareHono(httpOptions) {
 
 export async function runCompetitiveBenchmarks(httpOptions, measureHttp) {
   const runners = [
-    () => measureCompareTyravel(httpOptions, measureHttp),
+    () => measureComparePondoknusa(httpOptions, measureHttp),
     () => measureCompareExpress(httpOptions),
     () => measureCompareFastify(httpOptions),
     () => measureCompareHono(httpOptions),

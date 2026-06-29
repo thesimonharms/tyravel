@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/http",
+  "name": "@pondoknusa/http",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -17,11 +17,11 @@
   "files": [
     "dist"
   ],
-  "description": "HTTP router and middleware for Tyravel",
+  "description": "HTTP router and middleware for Pondoknusa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/http"
   },
   "publishConfig": {

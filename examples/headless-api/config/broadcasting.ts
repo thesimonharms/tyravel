@@ -1,5 +1,5 @@
-import type { BroadcastingConfig } from '@tyravel/broadcasting';
-import { env, envInt } from '@tyravel/config';
+import type { BroadcastingConfig } from '@pondoknusa/broadcasting';
+import { env, envInt } from '@pondoknusa/config';
 
 export default {
   default: env('BROADCAST_CONNECTION', 'log'),
@@ -9,8 +9,8 @@ export default {
     websocket: {
       driver: 'websocket',
       redisConnection: env('REDIS_CONNECTION', 'default'),
-      channel: env('BROADCAST_REDIS_CHANNEL', 'tyravel:broadcast'),
-      path: '/tyravel/ws',
+      channel: env('BROADCAST_REDIS_CHANNEL', 'pondoknusa:broadcast'),
+      path: '/pondoknusa/ws',
     },
   },
   queueConnection: env('QUEUE_CONNECTION', 'database'),

@@ -1,5 +1,5 @@
 {
-  "name": "tyravel-rag-example",
+  "name": "pondoknusa-rag-example",
   "entry": "src/main.ts",
   "serve": {
     "port": 3000,

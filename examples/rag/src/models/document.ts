@@ -1,4 +1,4 @@
-import { Model } from '@tyravel/database';
+import { Model } from '@pondoknusa/database';
 
 export class Document extends Model {
   static override table = 'documents';

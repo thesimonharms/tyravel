@@ -1,7 +1,7 @@
-import { ConfigRepository } from '@tyravel/config';
-import { DatabaseManager } from '@tyravel/database';
-import { MailManager } from '@tyravel/mail';
-import { Dispatcher, JobRegistry, QueueManager } from '@tyravel/queue';
+import { ConfigRepository } from '@pondoknusa/config';
+import { DatabaseManager } from '@pondoknusa/database';
+import { MailManager } from '@pondoknusa/mail';
+import { Dispatcher, JobRegistry, QueueManager } from '@pondoknusa/queue';
 import {
   NOTIFICATIONS_VIEWS_PATH,
   NotificationManager,
@@ -12,9 +12,9 @@ import {
   setQueuedNotificationContext,
   type NotificationQueueBridge,
   type NotificationsConfig,
-} from '@tyravel/notifications';
-import type { Job } from '@tyravel/queue';
-import { ViewEngine } from '@tyravel/views';
+} from '@pondoknusa/notifications';
+import type { Job } from '@pondoknusa/queue';
+import { ViewEngine } from '@pondoknusa/views';
 import { ServiceProvider } from './service-provider.js';
 
 export class NotificationServiceProvider extends ServiceProvider {
@@ -68,9 +68,9 @@ export class NotificationServiceProvider extends ServiceProvider {
     }
   }
 
-  private resolveBroadcast(): import('@tyravel/broadcasting').BroadcastManager | undefined {
+  private resolveBroadcast(): import('@pondoknusa/broadcasting').BroadcastManager | undefined {
     try {
-      return this.app.make<import('@tyravel/broadcasting').BroadcastManager>('broadcast');
+      return this.app.make<import('@pondoknusa/broadcasting').BroadcastManager>('broadcast');
     } catch {
       return undefined;
     }

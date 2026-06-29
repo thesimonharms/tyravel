@@ -7,7 +7,7 @@ import { optionFlag, parseOptions, positionalArgs, projectPath, toKebabCase, wri
 export class MakeIslandCommand extends Command {
   override readonly name = 'make:island';
   override readonly description = 'Scaffold a paired island view partial and client mount';
-  override readonly usage = 'tyravel make:island <name> [--programmatic]';
+  override readonly usage = 'pondoknusa make:island <name> [--programmatic]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -16,7 +16,7 @@ export class MakeIslandCommand extends Command {
 
     if (!rawName) {
       console.error('Island name is required.');
-      console.error('Usage: tyravel make:island <name>');
+      console.error('Usage: pondoknusa make:island <name>');
       return 1;
     }
 

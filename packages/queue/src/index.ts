@@ -1,7 +1,7 @@
-import type { CacheStore } from '@tyravel/cache';
-import type { Container } from '@tyravel/container';
-import type { DatabaseManager } from '@tyravel/database';
-import type { RedisManager } from '@tyravel/redis';
+import type { CacheStore } from '@pondoknusa/cache';
+import type { Container } from '@pondoknusa/container';
+import type { DatabaseManager } from '@pondoknusa/database';
+import type { RedisManager } from '@pondoknusa/redis';
 import { BatchRepository } from './batch.js';
 import { Dispatcher } from './dispatcher.js';
 import { JobRegistry } from './registry.js';

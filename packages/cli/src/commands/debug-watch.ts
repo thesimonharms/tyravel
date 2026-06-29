@@ -4,15 +4,15 @@ import {
   formatDebugEntryLine,
   formatDebugExecutionLine,
   watchDebugEntries,
-} from '@tyravel/debug';
+} from '@pondoknusa/debug';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { parseOptions, pathExists, projectPath } from '../utils.js';
 
 export class DebugWatchCommand extends Command {
   override readonly name = 'debug:watch';
-  override readonly description = 'Tail persisted debug entries while tyravel serve is running';
-  override readonly usage = 'tyravel debug:watch [--correlations]';
+  override readonly description = 'Tail persisted debug entries while pondoknusa serve is running';
+  override readonly usage = 'pondoknusa debug:watch [--correlations]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -59,7 +59,7 @@ export class DebugWatchCommand extends Command {
   }
 
   private async resolveEntriesPath(root: string): Promise<string> {
-    const preferred = projectPath(root, '.tyravel/debug-entries.json');
+    const preferred = projectPath(root, '.pondoknusa/debug-entries.json');
     if (await pathExists(preferred)) {
       return preferred;
     }
@@ -73,7 +73,7 @@ export class DebugWatchCommand extends Command {
   }
 
   private async resolveCorrelationsPath(root: string): Promise<string> {
-    const preferred = projectPath(root, '.tyravel/debug-correlations.json');
+    const preferred = projectPath(root, '.pondoknusa/debug-correlations.json');
     if (await pathExists(preferred)) {
       return preferred;
     }

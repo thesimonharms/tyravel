@@ -15,9 +15,9 @@ describe('env', () => {
   it('returns defaults and casts booleans and numbers', () => {
     process.env.APP_DEBUG = 'true';
     process.env.APP_PORT = '3000';
-    process.env.APP_NAME = 'Tyravel';
+    process.env.APP_NAME = 'Pondoknusa';
 
-    expect(env('APP_NAME')).toBe('Tyravel');
+    expect(env('APP_NAME')).toBe('Pondoknusa');
     expect(env('MISSING', 'fallback')).toBe('fallback');
     expect(env('APP_DEBUG', false)).toBe(true);
     expect(env('APP_PORT', 8080)).toBe(3000);

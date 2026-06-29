@@ -13,7 +13,7 @@ export interface SmsMessage {
 export type SmsTransport = (message: SmsMessage) => Promise<void>;
 
 let smsTransport: SmsTransport = async (message) => {
-  console.log(`[sms] ${message.from ?? 'Tyravel'} → ${message.to}: ${message.body}`);
+  console.log(`[sms] ${message.from ?? 'Pondoknusa'} → ${message.to}: ${message.body}`);
 };
 
 export function setSmsTransport(transport: SmsTransport): void {

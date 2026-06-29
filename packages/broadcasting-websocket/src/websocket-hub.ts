@@ -2,13 +2,13 @@ import type { IncomingMessage } from 'node:http';
 import type { Server } from 'node:http';
 import type { Socket } from 'node:net';
 import {
-  TYRAVEL_WS_PATH,
+  PONDOKNUSA_WS_PATH,
   parseRedisBroadcastMessage,
   parseWsClientMessage,
   serializeWsServerMessage,
   verifyChannelAuthToken,
   type RedisBroadcastMessage,
-} from '@tyravel/broadcasting';
+} from '@pondoknusa/broadcasting';
 import { acceptWebSocket, computeAcceptKey, writeUpgradeResponse, type WebSocketConnection } from './ws-framing.js';
 
 type PresenceMember = {
@@ -27,7 +27,7 @@ export class WebSocketHub {
   private readonly presenceMembers = new Map<string, Map<string, PresenceMember>>();
   private redisHandler?: (message: RedisBroadcastMessage) => void;
 
-  constructor(private readonly path: string = TYRAVEL_WS_PATH) {}
+  constructor(private readonly path: string = PONDOKNUSA_WS_PATH) {}
 
   attach(server: Server): void {
     server.on('upgrade', (request, socket, head) => {

@@ -1,5 +1,5 @@
-import { Model, ModelQueryBuilder } from '@tyravel/database';
-import type { ModelStatic } from '@tyravel/database';
+import { Model, ModelQueryBuilder } from '@pondoknusa/database';
+import type { ModelStatic } from '@pondoknusa/database';
 import { scopeNearest, similarTo, type VectorSearch } from './vector-search.js';
 import type { Embedding, VectorSearchOptions } from './types.js';
 

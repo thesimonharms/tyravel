@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { PayloadCipher, deriveAtRestKey } from '@tyravel/crypto';
-import { SqliteConnection } from '@tyravel/database';
+import { PayloadCipher, deriveAtRestKey } from '@pondoknusa/crypto';
+import { SqliteConnection } from '@pondoknusa/database';
 import { MemorySessionStore, DatabaseSessionStore } from './session-store.js';
 
 describe('session encryption', () => {

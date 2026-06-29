@@ -1,6 +1,6 @@
-import type { Application } from '@tyravel/core';
-import { ArrayMailTransport, MailManager } from '@tyravel/mail';
-import type { MailMessage } from '@tyravel/mail';
+import type { Application } from '@pondoknusa/core';
+import { ArrayMailTransport, MailManager } from '@pondoknusa/mail';
+import type { MailMessage } from '@pondoknusa/mail';
 
 export class MailFake {
   constructor(readonly transport: ArrayMailTransport) {}

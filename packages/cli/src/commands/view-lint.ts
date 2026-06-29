@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises';
-import { lintHasErrors, lintViewSource, type ViewLintIssue } from '@tyravel/views';
+import { lintHasErrors, lintViewSource, type ViewLintIssue } from '@pondoknusa/views';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { parseOptions, positionalArgs } from '../utils.js';
@@ -8,7 +8,7 @@ import { bootViewApplication } from '../view-bootstrap.js';
 export class ViewLintCommand extends Command {
   override readonly name = 'view:lint';
   override readonly description = 'Lint Tyr templates for common issues';
-  override readonly usage = 'tyravel view:lint [--strict]';
+  override readonly usage = 'pondoknusa view:lint [--strict]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);

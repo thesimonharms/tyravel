@@ -1,6 +1,6 @@
-import { ConfigRepository } from '@tyravel/config';
-import { CacheManager, CacheRepository, type CacheConfig } from '@tyravel/cache';
-import { RedisManager } from '@tyravel/redis';
+import { ConfigRepository } from '@pondoknusa/config';
+import { CacheManager, CacheRepository, type CacheConfig } from '@pondoknusa/cache';
+import { RedisManager } from '@pondoknusa/redis';
 import { ServiceProvider } from './service-provider.js';
 
 export class CacheServiceProvider extends ServiceProvider {

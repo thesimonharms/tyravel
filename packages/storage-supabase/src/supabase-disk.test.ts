@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { StorageManager } from '@tyravel/storage';
+import { StorageManager } from '@pondoknusa/storage';
 import { registerSupabaseStorageDriver } from './register.js';
 import { SupabaseDisk } from './supabase-disk.js';
 

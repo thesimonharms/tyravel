@@ -20,7 +20,7 @@ describe('AuthInstallCommand', () => {
   });
 
   it('installs headless-aware auth scaffolding', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-auth-install-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-auth-install-'));
     previousCwd = process.cwd();
 
     const newCommand = new NewCommand();

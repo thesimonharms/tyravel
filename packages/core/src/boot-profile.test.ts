@@ -1,4 +1,4 @@
-import { ConfigRepository } from '@tyravel/config';
+import { ConfigRepository } from '@pondoknusa/config';
 import { describe, expect, it } from 'vitest';
 import { Application } from './application.js';
 import {

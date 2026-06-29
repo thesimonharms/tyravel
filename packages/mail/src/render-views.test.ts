@@ -2,12 +2,12 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { describe, expect, it } from 'vitest';
-import { ViewEngine } from '@tyravel/views';
+import { ViewEngine } from '@pondoknusa/views';
 import { renderMailViews } from './render-views.js';
 
 describe('renderMailViews', () => {
   it('renders html and text views into a mail message', async () => {
-    const basePath = join(tmpdir(), `tyravel-mail-views-${Date.now()}`);
+    const basePath = join(tmpdir(), `pondoknusa-mail-views-${Date.now()}`);
     const viewsPath = join(basePath, 'resources/views');
     mkdirSync(viewsPath, { recursive: true });
 

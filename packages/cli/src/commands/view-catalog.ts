@@ -1,4 +1,4 @@
-import { serializeViewCatalog } from '@tyravel/views';
+import { serializeViewCatalog } from '@pondoknusa/views';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { parseOptions, positionalArgs } from '../utils.js';
@@ -7,7 +7,7 @@ import { bootViewApplication } from '../view-bootstrap.js';
 export class ViewCatalogCommand extends Command {
   override readonly name = 'view:catalog';
   override readonly description = 'Export component and island catalog metadata';
-  override readonly usage = 'tyravel view:catalog [--json] [--ide=vscode]';
+  override readonly usage = 'pondoknusa view:catalog [--json] [--ide=vscode]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -20,8 +20,8 @@ export class ViewCatalogCommand extends Command {
     if (options.json || options.ide === 'vscode') {
       const payload = options.ide === 'vscode'
         ? {
-            $schema: 'https://tyravel.dev/schemas/view-catalog-vscode.json',
-            generator: 'tyravel view:catalog --ide=vscode',
+            $schema: 'https://pondoknusa.dev/schemas/view-catalog-vscode.json',
+            generator: 'pondoknusa view:catalog --ide=vscode',
             ...catalog,
           }
         : catalog;

@@ -1,8 +1,8 @@
 # Cloudflare (modular)
 
-Use only the modules you need. Tyravel **1.x** runs on **Node.js** (Fly, Railway, Docker, or a VPS) — Cloudflare products sit in front of or beside that origin. Full Tyravel on **Workers** is not supported yet.
+Use only the modules you need. Pondoknusa **1.x** runs on **Node.js** (Fly, Railway, Docker, or a VPS) — Cloudflare products sit in front of or beside that origin. Full Pondoknusa on **Workers** is not supported yet.
 
-Full docs: [tyravel.dev/guide/deployment/cloudflare](https://tyravel.dev/guide/deployment/cloudflare)
+Full docs: [pondoknusa.dev/guide/deployment/cloudflare](https://pondoknusa.dev/guide/deployment/cloudflare)
 
 ## Pick your modules
 
@@ -15,7 +15,7 @@ Full docs: [tyravel.dev/guide/deployment/cloudflare](https://tyravel.dev/guide/d
 | Share staging without opening ports | [Tunnel](#module-5-tunnel-previews) | Yes (local or remote) |
 | Bot protection, rate limits | [WAF + security](#module-6-waf--security) | Yes (usually with Module 1) |
 
-**Origin** — deploy Tyravel with the manifests in this folder (`fly.toml`, `railway.toml`, `docker-compose.yml`) before enabling proxy or CDN modules.
+**Origin** — deploy Pondoknusa with the manifests in this folder (`fly.toml`, `railway.toml`, `docker-compose.yml`) before enabling proxy or CDN modules.
 
 ## Common combinations
 
@@ -33,7 +33,7 @@ Full docs: [tyravel.dev/guide/deployment/cloudflare](https://tyravel.dev/guide/d
 
 **When:** Custom domain, free TLS, DDoS protection, orange-cloud hiding of origin IP.
 
-**Prerequisites:** Tyravel running on a host with a public hostname (see `fly.toml` / `railway.toml` / Docker).
+**Prerequisites:** Pondoknusa running on a host with a public hostname (see `fly.toml` / `railway.toml` / Docker).
 
 1. Add the domain in Cloudflare **DNS**.
 2. Create a **proxied** (orange cloud) record:
@@ -44,7 +44,7 @@ Full docs: [tyravel.dev/guide/deployment/cloudflare](https://tyravel.dev/guide/d
 
 ```bash
 APP_URL=https://your-domain.example
-TYRAVEL_HOST=0.0.0.0
+PONDOKNUSA_HOST=0.0.0.0
 SESSION_SECURE=true
 ```
 
@@ -65,7 +65,7 @@ Use `TRUST_PROXY=true` if your app reads `X-Forwarded-*` for client IP or scheme
 ### App: HTTP cache middleware
 
 ```typescript
-import { createHttpCacheMiddleware } from '@tyravel/http';
+import { createHttpCacheMiddleware } from '@pondoknusa/http';
 
 Route.get('/posts/:slug', showPost, {
   middleware: [createHttpCacheMiddleware({ maxAge: 300 })],
@@ -91,7 +91,7 @@ Route.get('/posts/:slug', showPost, {
 | `/build/*` fingerprinted assets | Yes — long `max-age` |
 | WebSocket upgrade | **Bypass** (automatic) |
 
-More examples: [edge cache cookbook](https://tyravel.dev/cookbook/edge-cache).
+More examples: [edge cache cookbook](https://pondoknusa.dev/cookbook/edge-cache).
 
 **Skip this module** if every route is personalized or you only need TLS (Module 1).
 
@@ -101,10 +101,10 @@ More examples: [edge cache cookbook](https://tyravel.dev/cookbook/edge-cache).
 
 **When:** User uploads, exports, or static files in object storage — independent of CDN/proxy.
 
-**Prerequisites:** Node origin (uploads use the S3-compatible API from Tyravel). Works **without** Module 1.
+**Prerequisites:** Node origin (uploads use the S3-compatible API from Pondoknusa). Works **without** Module 1.
 
 ```bash
-npm install @tyravel/storage-r2
+npm install @pondoknusa/storage-r2
 ```
 
 ```typescript
@@ -114,7 +114,7 @@ export default {
   disks: {
     r2: {
       driver: 'r2',
-      bucket: env('R2_BUCKET', 'tyravel'),
+      bucket: env('R2_BUCKET', 'pondoknusa'),
       endpoint: env('R2_ENDPOINT'), // https://<account>.r2.cloudflarestorage.com
       accessKeyId: env('R2_ACCESS_KEY_ID'),
       secretAccessKey: env('R2_SECRET_ACCESS_KEY'),
@@ -126,7 +126,7 @@ export default {
 
 ```typescript
 // src/main.ts
-import { R2StorageServiceProvider } from '@tyravel/storage-r2';
+import { R2StorageServiceProvider } from '@pondoknusa/storage-r2';
 
 app.register(R2StorageServiceProvider);
 ```
@@ -134,7 +134,7 @@ app.register(R2StorageServiceProvider);
 Origin env:
 
 ```bash
-R2_BUCKET=tyravel
+R2_BUCKET=pondoknusa
 R2_ENDPOINT=https://<account_id>.r2.cloudflarestorage.com
 R2_ACCESS_KEY_ID=...
 R2_SECRET_ACCESS_KEY=...
@@ -149,18 +149,18 @@ Create an R2 API token with Object Read & Write on the bucket. Configure bucket 
 
 ## Module 4: Pages (static assets)
 
-**When:** UI is a Vite/React/Vue SPA; Tyravel serves API and/or SSR on a subdomain.
+**When:** UI is a Vite/React/Vue SPA; Pondoknusa serves API and/or SSR on a subdomain.
 
 **Prerequisites:** Separate Node deploy for API/SSR (this folder’s Fly/Railway/Docker manifests).
 
 | Host | Serves |
 |------|--------|
 | `www.example.com` (Pages) | `dist/` / Vite client build |
-| `api.example.com` (Node) | Tyravel headless or full stack |
+| `api.example.com` (Node) | Pondoknusa headless or full stack |
 
 1. Connect the Pages project to your Git repo (or `wrangler pages deploy dist`).
 2. Build command: `npm run build` (client only).
-3. Point `api.example.com` DNS (Module 1) at the Tyravel origin.
+3. Point `api.example.com` DNS (Module 1) at the Pondoknusa origin.
 4. Set client env `VITE_API_URL=https://api.example.com`.
 
 **Origin rules (optional):** Serve `/build/*` from Pages and proxy everything else to Node on one hostname — more complex; subdomain split is simpler.
@@ -173,7 +173,7 @@ Create an R2 API token with Object Read & Write on the bucket. Configure bucket 
 
 **When:** Staging, PR previews, or local demos without public ingress.
 
-**Prerequisites:** Tyravel listening locally or on a private host (`tyravel start` / `tyravel dev`).
+**Prerequisites:** Pondoknusa listening locally or on a private host (`pondoknusa start` / `pondoknusa dev`).
 
 Quick tunnel (no account):
 
@@ -184,9 +184,9 @@ cloudflared tunnel --url http://127.0.0.1:3000
 Named tunnel (persistent hostname):
 
 ```bash
-cloudflared tunnel create tyravel-staging
-cloudflared tunnel route dns tyravel-staging staging.example.com
-cloudflared tunnel run tyravel-staging
+cloudflared tunnel create pondoknusa-staging
+cloudflared tunnel route dns pondoknusa-staging staging.example.com
+cloudflared tunnel run pondoknusa-staging
 ```
 
 Set `APP_URL` to the tunnel hostname. Not a replacement for production origin hosting — use Module 1 for production.
@@ -206,7 +206,7 @@ Examples (enable as needed):
 - **Bot Fight Mode** / Super Bot Fight (may affect legitimate API clients — test first).
 - Disable **Rocket Loader** on paths that use WebSockets or strict CSP.
 
-Pair with Tyravel auth throttling and `APP_DEBUG=false` on the origin.
+Pair with Pondoknusa auth throttling and `APP_DEBUG=false` on the origin.
 
 ---
 
@@ -214,11 +214,11 @@ Pair with Tyravel auth throttling and `APP_DEBUG=false` on the origin.
 
 | Product | Status |
 |---------|--------|
-| **Workers** (full Tyravel) | Roadmap — needs HTTP kernel + boot adapter |
+| **Workers** (full Pondoknusa) | Roadmap — needs HTTP kernel + boot adapter |
 | **D1** | Use Postgres/MySQL on origin |
-| **Cloudflare Queues** | Use `tyravel queue:work` on origin |
+| **Cloudflare Queues** | Use `pondoknusa queue:work` on origin |
 
-Headless JSON on Workers + Hyperdrive is planned; track [ROADMAP](https://github.com/thesimonharms/tyravel/blob/main/ROADMAP.md).
+Headless JSON on Workers + Hyperdrive is planned; track [ROADMAP](https://github.com/pondoknusa/pondoknusa/blob/main/ROADMAP.md).
 
 ---
 
@@ -232,7 +232,7 @@ Headless JSON on Workers + Hyperdrive is planned; track [ROADMAP](https://github
 | 2 | Session lost | Bypass cache on `Set-Cookie` routes; `SESSION_SECURE=true` |
 | 3 | R2 403 | Token permissions; bucket CORS |
 | 4 | CORS errors | API allows Pages origin; correct `VITE_API_URL` |
-| 5 | Tunnel 502 | Origin on `127.0.0.1:3000`; `TYRAVEL_HOST=0.0.0.0` |
+| 5 | Tunnel 502 | Origin on `127.0.0.1:3000`; `PONDOKNUSA_HOST=0.0.0.0` |
 | 6 | WS drops | Bypass Rocket Loader; confirm origin upgrade |
 
 ---
@@ -240,5 +240,5 @@ Headless JSON on Workers + Hyperdrive is planned; track [ROADMAP](https://github
 ## Related
 
 - [deploy/README.md](./README.md) — Docker, Fly, Railway
-- [Deployment guide](https://tyravel.dev/guide/deployment)
-- [Storage (R2)](https://tyravel.dev/guide/storage)
+- [Deployment guide](https://pondoknusa.dev/guide/deployment)
+- [Storage (R2)](https://pondoknusa.dev/guide/storage)

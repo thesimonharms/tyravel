@@ -1,4 +1,4 @@
-import { env } from '@tyravel/config';
+import { env } from '@pondoknusa/config';
 
 export default {
   default: env('DB_CONNECTION', 'sqlite'),

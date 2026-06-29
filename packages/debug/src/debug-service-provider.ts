@@ -1,9 +1,9 @@
 import { isAbsolute, join } from 'node:path';
-import type { ConfigRepository } from '@tyravel/config';
-import type { Constructor } from '@tyravel/container';
-import type { LogManager } from '@tyravel/log';
-import type { Groupable, Middleware } from '@tyravel/http';
-import { setQueueWorkerProcessHook } from '@tyravel/queue';
+import type { ConfigRepository } from '@pondoknusa/config';
+import type { Constructor } from '@pondoknusa/container';
+import type { LogManager } from '@pondoknusa/log';
+import type { Groupable, Middleware } from '@pondoknusa/http';
+import { setQueueWorkerProcessHook } from '@pondoknusa/queue';
 import { extractDebugRequestId } from './correlation.js';
 import { DebugCorrelationStore } from './correlation-store.js';
 import { registerDebugRoutes } from './register-routes.js';
@@ -123,12 +123,12 @@ export class DebugServiceProvider {
   }
 
   private resolvePersistPath(config: DebugConfig): string {
-    const relative = config.persistPath ?? '.tyravel/debug-entries.json';
+    const relative = config.persistPath ?? '.pondoknusa/debug-entries.json';
     return isAbsolute(relative) ? relative : join(this.app.basePath, relative);
   }
 
   private resolveCorrelationsPath(config: DebugConfig): string {
-    const relative = config.correlationsPath ?? '.tyravel/debug-correlations.json';
+    const relative = config.correlationsPath ?? '.pondoknusa/debug-correlations.json';
     return isAbsolute(relative) ? relative : join(this.app.basePath, relative);
   }
 

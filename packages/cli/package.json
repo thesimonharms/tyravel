@@ -1,10 +1,10 @@
 {
-  "name": "@tyravel/cli",
+  "name": "@pondoknusa/cli",
   "version": "1.0.3",
-  "description": "The Tyravel command-line interface",
+  "description": "The Pondoknusa command-line interface",
   "type": "module",
   "bin": {
-    "tyravel": "./dist/bin/tyravel.js"
+    "pondoknusa": "./dist/bin/pondoknusa.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -19,20 +19,20 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/crypto": "1.0.3",
-    "@tyravel/support": "1.0.3",
-    "@tyravel/auth-oauth": "1.0.3",
-    "@tyravel/config": "1.0.3",
-    "@tyravel/locale": "1.0.3",
-    "@tyravel/core": "1.0.3",
-    "@tyravel/database": "1.0.3",
-    "@tyravel/mcp": "1.0.3",
-    "@tyravel/notifications": "1.0.3",
-    "@tyravel/vector": "1.0.3",
-    "@tyravel/debug": "1.0.3",
-    "@tyravel/queue": "1.0.3",
-    "@tyravel/views": "1.0.3",
-    "@tyravel/repl": "1.0.3"
+    "@pondoknusa/crypto": "1.0.3",
+    "@pondoknusa/support": "1.0.3",
+    "@pondoknusa/auth-oauth": "1.0.3",
+    "@pondoknusa/config": "1.0.3",
+    "@pondoknusa/locale": "1.0.3",
+    "@pondoknusa/core": "1.0.3",
+    "@pondoknusa/database": "1.0.3",
+    "@pondoknusa/mcp": "1.0.3",
+    "@pondoknusa/notifications": "1.0.3",
+    "@pondoknusa/vector": "1.0.3",
+    "@pondoknusa/debug": "1.0.3",
+    "@pondoknusa/queue": "1.0.3",
+    "@pondoknusa/views": "1.0.3",
+    "@pondoknusa/repl": "1.0.3"
   },
   "files": [
     "dist"
@@ -43,7 +43,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/cli"
   },
   "publishConfig": {

@@ -1,4 +1,4 @@
-import type { Model, ModelStatic } from '@tyravel/database';
+import type { Model, ModelStatic } from '@pondoknusa/database';
 import { searchVectors } from './search-driver.js';
 import type { Embedding, VectorSearchOptions } from './types.js';
 
@@ -45,7 +45,7 @@ export function scopeNearest<TModel extends Model>(
 }
 
 export function nearestOnBuilder<TModel extends Model>(
-  builder: import('@tyravel/database').ModelQueryBuilder,
+  builder: import('@pondoknusa/database').ModelQueryBuilder,
   embedding: Embedding,
   options: VectorSearchOptions = {},
 ): VectorSearch<TModel> {

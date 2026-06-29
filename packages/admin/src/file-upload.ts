@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { extname } from 'node:path';
-import type { TyravelRequest } from '@tyravel/http';
+import type { PondoknusaRequest } from '@pondoknusa/http';
 import type { AdminField } from './types.js';
 
 export interface StorageLike {
@@ -9,7 +9,7 @@ export interface StorageLike {
 }
 
 export async function parseAdminInputWithFiles(
-  request: TyravelRequest,
+  request: PondoknusaRequest,
   fields: AdminField[],
   storage?: StorageLike,
 ): Promise<Record<string, unknown>> {
@@ -43,7 +43,7 @@ export async function parseAdminInputWithFiles(
 }
 
 async function parseScalarInput(
-  request: TyravelRequest,
+  request: PondoknusaRequest,
   fields: AdminField[],
   contentType: string,
 ): Promise<Record<string, unknown>> {

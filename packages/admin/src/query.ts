@@ -1,5 +1,5 @@
-import type { ModelQueryBuilder } from '@tyravel/database';
-import type { TyravelRequest } from '@tyravel/http';
+import type { ModelQueryBuilder } from '@pondoknusa/database';
+import type { PondoknusaRequest } from '@pondoknusa/http';
 import type { AdminResource } from './admin-resource.js';
 
 export function applyAdminSearch(
@@ -28,7 +28,7 @@ export function applyAdminSearch(
 export function applyAdminFilters(
   builder: ModelQueryBuilder,
   resource: AdminResource,
-  request: TyravelRequest,
+  request: PondoknusaRequest,
 ): ModelQueryBuilder {
   for (const filter of resource.filters) {
     const value = request.query(`filter_${filter.name}`);
@@ -48,7 +48,7 @@ export function applyAdminFilters(
 
 export function resolveAdminSort(
   resource: AdminResource,
-  request: TyravelRequest,
+  request: PondoknusaRequest,
 ): { column: string; direction: 'asc' | 'desc' } {
   const sort = request.query('sort');
   const direction = request.query('direction') === 'desc' ? 'desc' : 'asc';

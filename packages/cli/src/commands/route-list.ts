@@ -1,10 +1,10 @@
-import { loadConfig } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
   setRouteApplication,
   ServiceProvider,
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { importAppServiceProvider, importProjectRoutes } from '../project-bootstrap.js';
@@ -13,7 +13,7 @@ import { parseOptions, positionalArgs } from '../utils.js';
 export class RouteListCommand extends Command {
   override readonly name = 'route:list';
   override readonly description = 'List all registered routes';
-  override readonly usage = 'tyravel route:list [--json] [--middleware=name] [--name=route.name] [--action=Controller]';
+  override readonly usage = 'pondoknusa route:list [--json] [--middleware=name] [--name=route.name] [--action=Controller]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);

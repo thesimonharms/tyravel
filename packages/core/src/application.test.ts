@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Response } from '@tyravel/http';
+import { Response } from '@pondoknusa/http';
 import { Application } from './application.js';
 import { HttpKernel } from './http-kernel.js';
 import { Route, setRouteApplication } from './route.js';
@@ -7,7 +7,7 @@ import { ServiceProvider } from './service-provider.js';
 
 class AppServiceProvider extends ServiceProvider {
   override register() {
-    this.app.instance('greeting', 'Hello from Tyravel');
+    this.app.instance('greeting', 'Hello from Pondoknusa');
   }
 }
 
@@ -18,7 +18,7 @@ describe('Application', () => {
 
     await app.boot();
 
-    expect(app.make<string>('greeting')).toBe('Hello from Tyravel');
+    expect(app.make<string>('greeting')).toBe('Hello from Pondoknusa');
     expect(app.router()).toBe(app.router());
   });
 

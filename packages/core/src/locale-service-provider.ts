@@ -1,6 +1,6 @@
-import type { AuthManager } from '@tyravel/auth';
-import { ConfigRepository } from '@tyravel/config';
-import { withMiddlewareMeta } from '@tyravel/http';
+import type { AuthManager } from '@pondoknusa/auth';
+import { ConfigRepository } from '@pondoknusa/config';
+import { withMiddlewareMeta } from '@pondoknusa/http';
 import {
   createRouteLocaleMiddleware,
   createSetLocaleMiddleware,
@@ -11,10 +11,10 @@ import {
   readUserLocale,
   type LocaleConfig,
   Translator,
-} from '@tyravel/locale';
-import { setFactoryLocale } from '@tyravel/database';
-import { setValidationMessageResolver } from '@tyravel/validation';
-import { ViewEngine } from '@tyravel/views';
+} from '@pondoknusa/locale';
+import { setFactoryLocale } from '@pondoknusa/database';
+import { setValidationMessageResolver } from '@pondoknusa/validation';
+import { ViewEngine } from '@pondoknusa/views';
 import { ServiceProvider } from './service-provider.js';
 import { setLangApplication } from './lang.js';
 import { setUrlApplication } from './url.js';
@@ -109,7 +109,7 @@ export class LocaleServiceProvider extends ServiceProvider {
     };
   }
 
-  private resolveUserLocale(request: import('@tyravel/http').TyravelRequest): string | undefined {
+  private resolveUserLocale(request: import('@pondoknusa/http').PondoknusaRequest): string | undefined {
     try {
       const auth = this.app.make<AuthManager>('auth');
       request.user = request.user ?? auth.user();

@@ -14,7 +14,7 @@ export default {
 Run the notifications table migration:
 
 ```bash
-tyravel migrate
+pondoknusa migrate
 ```
 
 ## Sending notifications
@@ -22,7 +22,7 @@ tyravel migrate
 Use the `Notifications` facade:
 
 ```typescript
-import { Notifications } from '@tyravel/core';
+import { Notifications } from '@pondoknusa/core';
 
 // Queued when the notification implements ShouldQueue
 await Notifications.send(user, new WelcomeNotification(user));
@@ -36,8 +36,8 @@ await Notifications.sendNow(user, new WelcomeNotification(user));
 Extend `Notification` and implement `via()` to declare delivery channels:
 
 ```typescript
-import { Notification, type Notifiable } from '@tyravel/notifications';
-import type { MailMessage } from '@tyravel/mail';
+import { Notification, type Notifiable } from '@pondoknusa/notifications';
+import type { MailMessage } from '@pondoknusa/mail';
 
 export class WelcomeNotification extends Notification {
   constructor(private readonly user: { email: string; name: string }) {
@@ -116,7 +116,7 @@ override toBroadcast(notifiable: Notifiable) {
 Register a transport during boot (the default logs to stdout):
 
 ```typescript
-import { setSmsTransport } from '@tyravel/notifications';
+import { setSmsTransport } from '@pondoknusa/notifications';
 
 setSmsTransport(async (message) => {
   // Twilio example:
@@ -149,7 +149,7 @@ See `examples/hello-world/src/notifications/login-code-notification.ts` for a wo
 Send multiple notifications in one pass:
 
 ```typescript
-import { NotificationBatch } from '@tyravel/notifications';
+import { NotificationBatch } from '@pondoknusa/notifications';
 
 const batch = new NotificationBatch();
 batch.add(user, new CommentNotification(post));
@@ -166,7 +166,7 @@ await batch.sendDigestNow(manager); // one combined digest per notifiable
 For in-app notification bells:
 
 ```typescript
-import { DatabaseNotificationInbox } from '@tyravel/notifications';
+import { DatabaseNotificationInbox } from '@pondoknusa/notifications';
 
 const inbox = new DatabaseNotificationInbox({ connection });
 
@@ -184,7 +184,7 @@ await inbox.markAllAsRead(user);
 Extend `ShouldQueue` or override `shouldQueue()` to deliver notifications via the queue:
 
 ```typescript
-import { Notification, ShouldQueue } from '@tyravel/notifications';
+import { Notification, ShouldQueue } from '@pondoknusa/notifications';
 
 export class WelcomeNotification extends Notification implements ShouldQueue {
   override shouldQueue(): boolean {
@@ -202,8 +202,8 @@ export class WelcomeNotification extends Notification implements ShouldQueue {
 Failed queued notifications land in `failed_jobs`. Inspect and retry them:
 
 ```bash
-tyravel notification:failed
-tyravel notification:retry <id>
+pondoknusa notification:failed
+pondoknusa notification:retry <id>
 ```
 
 ## Notifiable type
@@ -221,7 +221,7 @@ interface Notifiable {
 ## Testing fakes
 
 ```typescript
-import { mailFake, notificationFake } from '@tyravel/testing';
+import { mailFake, notificationFake } from '@pondoknusa/testing';
 
 const mail = mailFake(app);
 const notifications = notificationFake(app);
@@ -235,7 +235,7 @@ mail.assertNothingSent();
 ## Service provider registration
 
 ```typescript
-import { NotificationServiceProvider } from '@tyravel/core';
+import { NotificationServiceProvider } from '@pondoknusa/core';
 
 app.register(NotificationServiceProvider);
 await app.boot();
@@ -244,7 +244,7 @@ await app.boot();
 Then wire the facade:
 
 ```typescript
-import { setNotificationApplication } from '@tyravel/core';
+import { setNotificationApplication } from '@pondoknusa/core';
 
 setNotificationApplication(app);
 ```

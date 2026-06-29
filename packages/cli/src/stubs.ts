@@ -18,8 +18,8 @@ export function projectConfig(name: string): string {
 export { mainEntry } from './stubs-project.js';
 
 export function middleware(name: string): string {
-  return `import type { Middleware } from '@tyravel/http';
-import type { TyravelRequest } from '@tyravel/http';
+  return `import type { Middleware } from '@pondoknusa/http';
+import type { PondoknusaRequest } from '@pondoknusa/http';
 
 export const ${name}Middleware: Middleware = async (request, next) => {
   return next();
@@ -41,7 +41,7 @@ export function consoleCommand(name: string, signature: string): string {
 }
 
 export function appConfig(name: string): string {
-  return `import { env, s } from '@tyravel/config';
+  return `import { env, s } from '@pondoknusa/config';
 
 export const schema = s.object({
   name: s.string({ required: true, minLength: 1 }),
@@ -69,7 +69,7 @@ export function defaultLocaleFile(): string {
   return JSON.stringify(
     {
       messages: {
-        welcome: 'Welcome to Tyravel',
+        welcome: 'Welcome to Pondoknusa',
       },
     },
     null,
@@ -125,7 +125,7 @@ export function mount({ element, props }: {
 }
 
 export function islandClientMount(id: string): string {
-  return `import { registerIsland } from '@tyravel/ssr';
+  return `import { registerIsland } from '@pondoknusa/ssr';
 
 registerIsland('${id}', ({ element, props }) => {
   // TODO: mount interactive behavior on \`element\` using \`props\`
@@ -143,7 +143,7 @@ export function componentView(name: string): string {
 }
 
 export function componentClass(className: string, tagName: string): string {
-  return `import type { ViewContext } from '@tyravel/views';
+  return `import type { ViewContext } from '@pondoknusa/views';
 
 export class ${className} {
   readonly tag = '${tagName}';
@@ -158,23 +158,23 @@ export class ${className} {
 export { databaseConfig } from './stubs-project.js';
 
 export function appServiceProvider(): string {
-  return `import { ServiceProvider } from '@tyravel/core';
+  return `import { ServiceProvider } from '@pondoknusa/core';
 
 export class AppServiceProvider extends ServiceProvider {
   override async register() {
-    this.app.instance('app.name', 'Tyravel');
+    this.app.instance('app.name', 'Pondoknusa');
   }
 }
 `;
 }
 
 export function webRoutes(): string {
-  return `import { Route } from '@tyravel/core';
-import { Response } from '@tyravel/http';
+  return `import { Route } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
 
 Route.get('/', (request) =>
   Response.json({
-    message: 'Welcome to Tyravel',
+    message: 'Welcome to Pondoknusa',
     path: request.path,
   }),
 );
@@ -184,17 +184,17 @@ Route.get('/', (request) =>
 export function controller(name: string): string {
   const className = `${name}Controller`;
 
-  return `import type { TyravelRequest } from '@tyravel/http';
-import { Response } from '@tyravel/http';
+  return `import type { PondoknusaRequest } from '@pondoknusa/http';
+import { Response } from '@pondoknusa/http';
 
 export class ${className} {
-  index(_request: TyravelRequest) {
+  index(_request: PondoknusaRequest) {
     return Response.json({
       message: '${className}@index',
     });
   }
 
-  show(request: TyravelRequest) {
+  show(request: PondoknusaRequest) {
     return Response.json({
       message: '${className}@show',
       id: request.param('id'),
@@ -207,11 +207,11 @@ export class ${className} {
 export function invokableController(name: string): string {
   const className = `${name}Controller`;
 
-  return `import type { TyravelRequest } from '@tyravel/http';
-import { Response } from '@tyravel/http';
+  return `import type { PondoknusaRequest } from '@pondoknusa/http';
+import { Response } from '@pondoknusa/http';
 
 export class ${className} {
-  async __invoke(_request: TyravelRequest) {
+  async __invoke(_request: PondoknusaRequest) {
     return Response.json({
       message: '${className}',
     });
@@ -225,8 +225,8 @@ export function apiResourceController(name: string): string {
   const parameter = name.charAt(0).toLowerCase() + name.slice(1);
   const table = `${parameter}s`;
 
-  return `import type { TyravelRequest } from '@tyravel/http';
-import { Response } from '@tyravel/http';
+  return `import type { PondoknusaRequest } from '@pondoknusa/http';
+import { Response } from '@pondoknusa/http';
 import { ${name}, type ${name} } from '../models/${name}.js';
 
 export class ${className} {
@@ -235,17 +235,17 @@ export class ${className} {
     return Response.json(records.map((record) => record.toJSON()));
   }
 
-  async show(request: TyravelRequest) {
+  async show(request: PondoknusaRequest) {
     const ${parameter} = request.routeModel<${name}>('${parameter}');
     return Response.json(${parameter}?.toJSON() ?? null);
   }
 
-  async store(request: TyravelRequest) {
+  async store(request: PondoknusaRequest) {
     const record = await ${name}.create(await request.json());
     return Response.json(record.toJSON(), { status: 201 });
   }
 
-  async update(request: TyravelRequest) {
+  async update(request: PondoknusaRequest) {
     const ${parameter} = request.routeModel<${name}>('${parameter}');
     if (!${parameter}) {
       return Response.json({ message: 'Not found.' }, { status: 404 });
@@ -255,7 +255,7 @@ export class ${className} {
     return Response.json(${parameter}.toJSON());
   }
 
-  async destroy(request: TyravelRequest) {
+  async destroy(request: PondoknusaRequest) {
     const ${parameter} = request.routeModel<${name}>('${parameter}');
     if (!${parameter}) {
       return Response.json({ message: 'Not found.' }, { status: 404 });
@@ -291,7 +291,7 @@ Route.group({ prefix: 'api', as: 'api.' }, () => {
 export function apiResource(name: string): string {
   const className = name.endsWith('Resource') ? name : `${name}Resource`;
 
-  return `import { JsonResource } from '@tyravel/http';
+  return `import { JsonResource } from '@pondoknusa/http';
 
 export class ${className} extends JsonResource {
   toArray() {
@@ -306,7 +306,7 @@ export class ${className} extends JsonResource {
 export function formRequest(name: string): string {
   const className = name.endsWith('Request') ? name : `${name}Request`;
 
-  return `import { FormRequest } from '@tyravel/core';
+  return `import { FormRequest } from '@pondoknusa/core';
 
 export class ${className} extends FormRequest {
   authorize(): boolean {
@@ -326,7 +326,7 @@ export function model(name: string, keyType: 'int' | 'uuid' | 'ulid' = 'int'): s
   const table = `${name.charAt(0).toLowerCase()}${name.slice(1)}s`;
 
   if (keyType === 'uuid') {
-    return `import { HasUuids } from '@tyravel/database';
+    return `import { HasUuids } from '@pondoknusa/database';
 
 export interface ${name}Attributes {
   id: string;
@@ -339,7 +339,7 @@ export class ${name} extends HasUuids<${name}Attributes> {
   }
 
   if (keyType === 'ulid') {
-    return `import { HasUlids } from '@tyravel/database';
+    return `import { HasUlids } from '@pondoknusa/database';
 
 export interface ${name}Attributes {
   id: string;
@@ -351,7 +351,7 @@ export class ${name} extends HasUlids<${name}Attributes> {
 `;
   }
 
-  return `import { Model } from '@tyravel/database';
+  return `import { Model } from '@pondoknusa/database';
 
 export interface ${name}Attributes {
   id: number;
@@ -364,7 +364,7 @@ export class ${name} extends Model<${name}Attributes> {
 }
 
 export function uuidModelMigration(tableName: string): string {
-  return `import { Migration } from '@tyravel/database';
+  return `import { Migration } from '@pondoknusa/database';
 
 export default class Create${tableName.charAt(0).toUpperCase()}${tableName.slice(1)}Table extends Migration {
   async up(): Promise<void> {
@@ -382,7 +382,7 @@ export default class Create${tableName.charAt(0).toUpperCase()}${tableName.slice
 }
 
 export function ulidModelMigration(tableName: string): string {
-  return `import { Migration } from '@tyravel/database';
+  return `import { Migration } from '@pondoknusa/database';
 
 export default class Create${tableName.charAt(0).toUpperCase()}${tableName.slice(1)}Table extends Migration {
   async up(): Promise<void> {
@@ -403,7 +403,7 @@ export function factory(modelName: string): string {
   const factoryName = `${modelName}Factory`;
   const exportName = `${modelName.charAt(0).toLowerCase()}${modelName.slice(1)}Factory`;
 
-  return `import { Factory, fakeEmail, fakeName } from '@tyravel/database';
+  return `import { Factory, fakeEmail, fakeName } from '@pondoknusa/database';
 import { ${modelName}, type ${modelName}Attributes } from '../../src/models/${modelName}.js';
 
 export class ${factoryName} extends Factory<${modelName}, ${modelName}Attributes> {
@@ -422,7 +422,7 @@ export const ${exportName} = new ${factoryName}();
 }
 
 export function seeder(className: string): string {
-  return `import { Seeder } from '@tyravel/database';
+  return `import { Seeder } from '@pondoknusa/database';
 
 export class ${className} extends Seeder {
   override async run(): Promise<void> {
@@ -437,9 +437,9 @@ export function databaseSeeder(): string {
 }
 
 export function migration(className: string): string {
-  return `import { Migration } from '@tyravel/database';
-import type { DatabaseConnection } from '@tyravel/database';
-import type { SchemaBuilder } from '@tyravel/database';
+  return `import { Migration } from '@pondoknusa/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import type { SchemaBuilder } from '@pondoknusa/database';
 
 export default class ${className} extends Migration {
   override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
@@ -473,7 +473,7 @@ export function layoutView(): string {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>@yield('title', 'Tyravel')</title>
+  <title>@yield('title', 'Pondoknusa')</title>
   @stack('styles')
 </head>
 <body>
@@ -488,7 +488,7 @@ export function layoutView(): string {
 export function provider(name: string): string {
   const className = `${name}ServiceProvider`;
 
-  return `import { ServiceProvider } from '@tyravel/core';
+  return `import { ServiceProvider } from '@pondoknusa/core';
 
 export class ${className} extends ServiceProvider {
   override async register() {
@@ -504,7 +504,7 @@ export class ${className} extends ServiceProvider {
 
 export function mcpTool(name: string): string {
   const camel = name.charAt(0).toLowerCase() + name.slice(1);
-  return `import type { McpTool } from '@tyravel/mcp';
+  return `import type { McpTool } from '@pondoknusa/mcp';
 
 export const ${camel}Tool: McpTool = {
   name: '${camel}',
@@ -521,7 +521,7 @@ export const ${camel}Tool: McpTool = {
 }
 
 export function job(name: string): string {
-  return `import { Job } from '@tyravel/queue';
+  return `import { Job } from '@pondoknusa/queue';
 
 export interface ${name}Payload {
   //
@@ -538,9 +538,9 @@ export class ${name} extends Job<${name}Payload> {
 export { queueConfig } from './stubs-project.js';
 
 export function pgvectorExtensionMigration(): string {
-  return `import { Migration } from '@tyravel/database';
-import type { DatabaseConnection } from '@tyravel/database';
-import { ensurePgVectorExtension } from '@tyravel/vector-pg';
+  return `import { Migration } from '@pondoknusa/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import { ensurePgVectorExtension } from '@pondoknusa/vector-pg';
 
 export default class EnablePgVectorExtension extends Migration {
   override async up(connection: DatabaseConnection) {
@@ -555,9 +555,9 @@ export default class EnablePgVectorExtension extends Migration {
 }
 
 export function jobsTableMigration(): string {
-  return `import { Migration } from '@tyravel/database';
-import type { DatabaseConnection } from '@tyravel/database';
-import type { SchemaBuilder } from '@tyravel/database';
+  return `import { Migration } from '@pondoknusa/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import type { SchemaBuilder } from '@pondoknusa/database';
 
 export default class CreateJobsTable extends Migration {
   override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
@@ -580,7 +580,7 @@ export default class CreateJobsTable extends Migration {
 }
 
 export function domainEvent(name: string): string {
-  return `import { Event } from '@tyravel/events';
+  return `import { Event } from '@pondoknusa/events';
 
 export interface ${name}Payload {
   //
@@ -591,8 +591,8 @@ export class ${name} extends Event<${name}Payload> {}
 }
 
 export function eventListener(name: string): string {
-  return `import { Listener } from '@tyravel/events';
-import type { Event } from '@tyravel/events';
+  return `import { Listener } from '@pondoknusa/events';
+import type { Event } from '@pondoknusa/events';
 
 export class ${name} extends Listener<Event> {
   override async handle(_event: Event): Promise<void> {
@@ -603,7 +603,7 @@ export class ${name} extends Listener<Event> {
 }
 
 export function eventsConfig(): string {
-  return `import type { EventsConfig } from '@tyravel/events';
+  return `import type { EventsConfig } from '@pondoknusa/events';
 
 export default {
   listen: [],
@@ -615,9 +615,9 @@ export default {
 }
 
 export function failedJobsTableMigration(): string {
-  return `import { Migration } from '@tyravel/database';
-import type { DatabaseConnection } from '@tyravel/database';
-import type { SchemaBuilder } from '@tyravel/database';
+  return `import { Migration } from '@pondoknusa/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import type { SchemaBuilder } from '@pondoknusa/database';
 
 export default class CreateFailedJobsTable extends Migration {
   override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
@@ -640,8 +640,8 @@ export default class CreateFailedJobsTable extends Migration {
 }
 
 export function eventSubscriber(name: string): string {
-  return `import { EventSubscriber } from '@tyravel/events';
-import type { EventDispatcher } from '@tyravel/events';
+  return `import { EventSubscriber } from '@pondoknusa/events';
+import type { EventDispatcher } from '@pondoknusa/events';
 
 export class ${name} extends EventSubscriber {
   subscribe(dispatcher: EventDispatcher): void {
@@ -652,8 +652,8 @@ export class ${name} extends EventSubscriber {
 }
 
 export function authConfig(): string {
-  return `import type { AuthConfig } from '@tyravel/auth';
-import { env } from '@tyravel/config';
+  return `import type { AuthConfig } from '@pondoknusa/auth';
+import { env } from '@pondoknusa/config';
 import { User } from '../src/models/User.js';
 
 export default {
@@ -678,7 +678,7 @@ export default {
   },
   session: {
     driver: 'database',
-    cookie: 'tyravel_session',
+    cookie: 'pondoknusa_session',
     lifetimeMinutes: 120,
     secure: env('SESSION_SECURE', 'false') === 'true',
     table: 'sessions',
@@ -783,8 +783,8 @@ export default {
 }
 
 export function userModel(): string {
-  return `import { Model } from '@tyravel/database';
-import type { Authenticatable } from '@tyravel/auth';
+  return `import { Model } from '@pondoknusa/database';
+import type { Authenticatable } from '@pondoknusa/auth';
 
 export interface UserAttributes {
   id: number;
@@ -808,9 +808,9 @@ export class User extends Model<UserAttributes> implements Authenticatable {
 }
 
 export function usersTableMigration(): string {
-  return `import { Migration } from '@tyravel/database';
-import type { DatabaseConnection } from '@tyravel/database';
-import type { SchemaBuilder } from '@tyravel/database';
+  return `import { Migration } from '@pondoknusa/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import type { SchemaBuilder } from '@pondoknusa/database';
 
 export default class CreateUsersTable extends Migration {
   override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
@@ -832,9 +832,9 @@ export default class CreateUsersTable extends Migration {
 }
 
 export function sessionsTableMigration(): string {
-  return `import { Migration } from '@tyravel/database';
-import type { DatabaseConnection } from '@tyravel/database';
-import type { SchemaBuilder } from '@tyravel/database';
+  return `import { Migration } from '@pondoknusa/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import type { SchemaBuilder } from '@pondoknusa/database';
 
 export default class CreateSessionsTable extends Migration {
   override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
@@ -857,9 +857,9 @@ export default class CreateSessionsTable extends Migration {
 }
 
 export function passwordResetTokensMigration(): string {
-  return `import { Migration } from '@tyravel/database';
-import type { DatabaseConnection } from '@tyravel/database';
-import type { SchemaBuilder } from '@tyravel/database';
+  return `import { Migration } from '@pondoknusa/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import type { SchemaBuilder } from '@pondoknusa/database';
 
 export default class CreatePasswordResetTokensTable extends Migration {
   override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
@@ -879,9 +879,9 @@ export default class CreatePasswordResetTokensTable extends Migration {
 }
 
 export function personalAccessTokensMigration(): string {
-  return `import { Migration } from '@tyravel/database';
-import type { DatabaseConnection } from '@tyravel/database';
-import type { SchemaBuilder } from '@tyravel/database';
+  return `import { Migration } from '@pondoknusa/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import type { SchemaBuilder } from '@pondoknusa/database';
 
 export default class CreatePersonalAccessTokensTable extends Migration {
   override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
@@ -910,9 +910,9 @@ export default class CreatePersonalAccessTokensTable extends Migration {
 }
 
 export function oauthAccountsMigration(): string {
-  return `import { Migration } from '@tyravel/database';
-import type { DatabaseConnection } from '@tyravel/database';
-import type { SchemaBuilder } from '@tyravel/database';
+  return `import { Migration } from '@pondoknusa/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import type { SchemaBuilder } from '@pondoknusa/database';
 
 export default class CreateOauthAccountsTable extends Migration {
   override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
@@ -942,7 +942,7 @@ export function socialDriverStub(providerName: string, className: string): strin
   OAuthProviderConfig,
   OAuthUserProfile,
   SocialOAuthDriver,
-} from '@tyravel/auth';
+} from '@pondoknusa/auth';
 
 export class ${className} implements SocialOAuthDriver {
   readonly name = '${providerName}';
@@ -977,8 +977,8 @@ export class ${className} implements SocialOAuthDriver {
 }
 
 export function postPolicyStub(): string {
-  return `import { Policy } from '@tyravel/auth';
-import type { Authenticatable } from '@tyravel/auth';
+  return `import { Policy } from '@pondoknusa/auth';
+import type { Authenticatable } from '@pondoknusa/auth';
 
 export class PostPolicy extends Policy {
   update(user: Authenticatable, _post: unknown): boolean {
@@ -989,16 +989,16 @@ export class PostPolicy extends Policy {
 }
 
 export function authController(): string {
-  return `import type { TyravelRequest } from '@tyravel/http';
-import { Response } from '@tyravel/http';
-import { Auth, Password } from '@tyravel/core';
-import type { Application } from '@tyravel/core';
-import { OAuthManager } from '@tyravel/auth';
+  return `import type { PondoknusaRequest } from '@pondoknusa/http';
+import { Response } from '@pondoknusa/http';
+import { Auth, Password } from '@pondoknusa/core';
+import type { Application } from '@pondoknusa/core';
+import { OAuthManager } from '@pondoknusa/auth';
 
 export class AuthController {
   constructor(private readonly app: Application) {}
 
-  async login(request: TyravelRequest) {
+  async login(request: PondoknusaRequest) {
     const body = await request.json<{ email?: string; password?: string }>();
     await Auth.attempt({
       email: body.email ?? '',
@@ -1012,18 +1012,18 @@ export class AuthController {
     });
   }
 
-  async logout(_request: TyravelRequest) {
+  async logout(_request: PondoknusaRequest) {
     await Auth.logout();
     return Response.json({ message: 'Logged out.' });
   }
 
-  me(request: TyravelRequest) {
+  me(request: PondoknusaRequest) {
     return Response.json({
       user: request.user,
     });
   }
 
-  async forgotPassword(request: TyravelRequest) {
+  async forgotPassword(request: PondoknusaRequest) {
     const body = await request.json<{ email?: string }>();
     await Password.sendResetLink(body.email ?? '');
     return Response.json({
@@ -1031,7 +1031,7 @@ export class AuthController {
     });
   }
 
-  async resetPassword(request: TyravelRequest) {
+  async resetPassword(request: PondoknusaRequest) {
     const body = await request.json<{
       email?: string;
       token?: string;
@@ -1045,7 +1045,7 @@ export class AuthController {
     return Response.json({ message: 'Password has been reset.' });
   }
 
-  async createToken(request: TyravelRequest) {
+  async createToken(request: PondoknusaRequest) {
     const body = await request.json<{
       name?: string;
       abilities?: string[];
@@ -1066,7 +1066,7 @@ export class AuthController {
     });
   }
 
-  async revokeToken(request: TyravelRequest) {
+  async revokeToken(request: PondoknusaRequest) {
     const tokenId = Number(request.param('id'));
     const revoked = await Auth.revokeToken(tokenId);
     if (!revoked) {
@@ -1075,7 +1075,7 @@ export class AuthController {
     return Response.json({ message: 'Token revoked.' });
   }
 
-  oauthRedirect(request: TyravelRequest) {
+  oauthRedirect(request: PondoknusaRequest) {
     const provider = request.param('provider');
     const oauth = this.app.make(OAuthManager);
     const state = oauth.createState();
@@ -1093,7 +1093,7 @@ export class AuthController {
     return Response.redirect(url, 302);
   }
 
-  async oauthCallback(request: TyravelRequest) {
+  async oauthCallback(request: PondoknusaRequest) {
     const provider = request.param('provider');
     const oauth = this.app.make(OAuthManager);
     const url = new URL(request.url);
@@ -1115,7 +1115,7 @@ export class AuthController {
 }
 
 export function authRoutes(): string {
-  return `import { Route } from '@tyravel/core';
+  return `import { Route } from '@pondoknusa/core';
 import { AuthController } from '../controllers/AuthController.js';
 
 Route.middleware(['csrf', 'guest']).post('/login', [AuthController, 'login']);
@@ -1131,9 +1131,9 @@ Route.middleware('guest').get('/auth/:provider/callback', [AuthController, 'oaut
 }
 
 export function oauthServerMigration(): string {
-  return `import { Migration } from '@tyravel/database';
-import type { DatabaseConnection } from '@tyravel/database';
-import type { SchemaBuilder } from '@tyravel/database';
+  return `import { Migration } from '@pondoknusa/database';
+import type { DatabaseConnection } from '@pondoknusa/database';
+import type { SchemaBuilder } from '@pondoknusa/database';
 
 export default class CreateOauthServerTables extends Migration {
   override async up(_connection: DatabaseConnection, schema: SchemaBuilder) {
@@ -1196,8 +1196,8 @@ export default class CreateOauthServerTables extends Migration {
 }
 
 export function oauthServerConfig(): string {
-  return `import type { OAuthServerConfig } from '@tyravel/auth-oauth';
-import { env } from '@tyravel/config';
+  return `import type { OAuthServerConfig } from '@pondoknusa/auth-oauth';
+import { env } from '@pondoknusa/config';
 
 export default {
   connection: 'sqlite',
@@ -1210,17 +1210,17 @@ export default {
 }
 
 export function oauthServerController(): string {
-  return `import type { Application } from '@tyravel/core';
-import { Auth } from '@tyravel/core';
-import { createPkcePair } from '@tyravel/auth';
-import { OAuthServer } from '@tyravel/auth-oauth';
-import type { TyravelRequest } from '@tyravel/http';
-import { Response } from '@tyravel/http';
+  return `import type { Application } from '@pondoknusa/core';
+import { Auth } from '@pondoknusa/core';
+import { createPkcePair } from '@pondoknusa/auth';
+import { OAuthServer } from '@pondoknusa/auth-oauth';
+import type { PondoknusaRequest } from '@pondoknusa/http';
+import { Response } from '@pondoknusa/http';
 
 export class OAuthServerController {
   constructor(private readonly app: Application) {}
 
-  async showAuthorize(request: TyravelRequest) {
+  async showAuthorize(request: PondoknusaRequest) {
     const oauth = this.app.make(OAuthServer);
     const validation = await oauth.validateAuthorizationRequest({
       clientId: request.query('client_id', '') ?? '',
@@ -1241,7 +1241,7 @@ export class OAuthServerController {
     });
   }
 
-  async approveAuthorize(request: TyravelRequest) {
+  async approveAuthorize(request: PondoknusaRequest) {
     const body = await request.json<{
       client_id?: string;
       redirect_uri?: string;
@@ -1281,7 +1281,7 @@ export class OAuthServerController {
     return Response.redirect(redirect, 302);
   }
 
-  async token(request: TyravelRequest) {
+  async token(request: PondoknusaRequest) {
     const raw = await this.readTokenRequest(request);
     const oauth = this.app.make(OAuthServer);
     const tokenResponse = await oauth.issueToken({
@@ -1297,7 +1297,7 @@ export class OAuthServerController {
     return Response.json(tokenResponse);
   }
 
-  async revoke(request: TyravelRequest) {
+  async revoke(request: PondoknusaRequest) {
     const raw = await this.readTokenRequest(request);
     if (!raw.token) {
       return Response.json({ error: 'invalid_request', message: 'token is required.' }, { status: 400 });
@@ -1308,11 +1308,11 @@ export class OAuthServerController {
     return new Response(null, { status: 200 });
   }
 
-  async userInfo(request: TyravelRequest) {
+  async userInfo(request: PondoknusaRequest) {
     return Response.json({ user: request.user ?? null, scopes: request.tokenAbilities ?? [] });
   }
 
-  private async readTokenRequest(request: TyravelRequest): Promise<Record<string, string>> {
+  private async readTokenRequest(request: PondoknusaRequest): Promise<Record<string, string>> {
     const contentType = request.header('content-type') ?? '';
     if (contentType.includes('application/json')) {
       const json = await request.json<Record<string, string>>();
@@ -1333,7 +1333,7 @@ export class OAuthServerController {
 }
 
 export function oauthServerRoutes(): string {
-  return `import { Route } from '@tyravel/core';
+  return `import { Route } from '@pondoknusa/core';
 import { OAuthServerController } from '../controllers/OAuthServerController.js';
 
 Route.middleware('auth').get('/oauth/authorize', [OAuthServerController, 'showAuthorize']);
@@ -1345,12 +1345,12 @@ Route.middleware('auth:oauth').get('/oauth/userinfo', [OAuthServerController, 'u
 }
 
 export function appServiceProviderWithAuth(): string {
-  return `import { ServiceProvider } from '@tyravel/core';
+  return `import { ServiceProvider } from '@pondoknusa/core';
 import { AuthController } from '../controllers/AuthController.js';
 
 export class AppServiceProvider extends ServiceProvider {
   override register() {
-    this.app.instance('app.name', 'Tyravel');
+    this.app.instance('app.name', 'Pondoknusa');
     this.app.bind(AuthController, () => new AuthController(this.app));
   }
 }
@@ -1375,7 +1375,7 @@ export function mainEntryWithAuth(): string {
   setViewApplication,
   ViewServiceProvider,
   serve,
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 import { AppServiceProvider } from './providers/app-service-provider.js';
 import './routes/web.js';
 import './routes/auth.js';
@@ -1416,7 +1416,7 @@ export default {
   perPage: 15,
   auditLog: {
     enabled: true,
-    persistPath: '.tyravel/admin-audit.json',
+    persistPath: '.pondoknusa/admin-audit.json',
     maxEntries: 500,
   },
 } as const;
@@ -1424,15 +1424,15 @@ export default {
 }
 
 export function adminRoutes(): string {
-  return `import { Route } from '@tyravel/core';
-import { AdminController, registerAdminRoutes } from '@tyravel/admin';
+  return `import { Route } from '@pondoknusa/core';
+import { AdminController, registerAdminRoutes } from '@pondoknusa/admin';
 
 registerAdminRoutes(Route, AdminController);
 `;
 }
 
 export function adminResources(): string {
-  return `import { defineAdminResource, type AdminRegistry } from '@tyravel/admin';
+  return `import { defineAdminResource, type AdminRegistry } from '@pondoknusa/admin';
 import { User } from '../models/User.js';
 import { UserPolicy } from '../policies/UserPolicy.js';
 
@@ -1464,8 +1464,8 @@ export function debugLazyRegistration(): string {
 }
 
 export function adminPanelServiceProvider(): string {
-  return `import { ServiceProvider } from '@tyravel/core';
-import { AdminServiceProvider } from '@tyravel/admin';
+  return `import { ServiceProvider } from '@pondoknusa/core';
+import { AdminServiceProvider } from '@pondoknusa/admin';
 
 export class AdminPanelServiceProvider extends ServiceProvider {
   private readonly admin = new AdminServiceProvider(this.app);
@@ -1482,8 +1482,8 @@ export class AdminPanelServiceProvider extends ServiceProvider {
 }
 
 export function userPolicyWithAdmin(): string {
-  return `import { Policy } from '@tyravel/auth';
-import type { Authenticatable } from '@tyravel/auth';
+  return `import { Policy } from '@pondoknusa/auth';
+import type { Authenticatable } from '@pondoknusa/auth';
 
 export class UserPolicy extends Policy {
   accessAdmin(user: Authenticatable): boolean {
@@ -1520,21 +1520,21 @@ export function debugConfig(): string {
   injectBar: true,
   maxEntries: 50,
   persist: true,
-  persistPath: '.tyravel/debug-entries.json',
+  persistPath: '.pondoknusa/debug-entries.json',
   slowQueryMs: 100,
   nPlusOneThreshold: 3,
   otel: {
     enabled: false,
     endpoint: 'http://127.0.0.1:4318/v1/traces',
-    serviceName: 'tyravel',
+    serviceName: 'pondoknusa',
   },
 } as const;
 `;
 }
 
 export function debugPanelServiceProvider(): string {
-  return `import { ServiceProvider } from '@tyravel/core';
-import { DebugServiceProvider } from '@tyravel/debug';
+  return `import { ServiceProvider } from '@pondoknusa/core';
+import { DebugServiceProvider } from '@pondoknusa/debug';
 
 export class DebugPanelServiceProvider extends ServiceProvider {
   private readonly debug = new DebugServiceProvider(this.app);
@@ -1551,8 +1551,8 @@ export class DebugPanelServiceProvider extends ServiceProvider {
 }
 
 export function cryptoConfig(): string {
-  return `import type { CryptoConfig } from '@tyravel/crypto';
-import { env } from '@tyravel/config';
+  return `import type { CryptoConfig } from '@pondoknusa/crypto';
+import { env } from '@pondoknusa/config';
 
 export default {
   kem: 'hybrid-x25519-ml-kem-768',

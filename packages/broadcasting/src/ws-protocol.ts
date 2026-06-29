@@ -1,5 +1,5 @@
-export const TYRAVEL_WS_PATH = '/tyravel/ws';
-export const TYRAVEL_BROADCAST_REDIS_CHANNEL = 'tyravel:broadcast';
+export const PONDOKNUSA_WS_PATH = '/pondoknusa/ws';
+export const PONDOKNUSA_BROADCAST_REDIS_CHANNEL = 'pondoknusa:broadcast';
 
 export type WsClientMessage =
   | { type: 'subscribe'; channel: string; auth?: string; channelData?: string }

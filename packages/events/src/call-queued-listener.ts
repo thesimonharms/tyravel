@@ -1,4 +1,4 @@
-import { Job } from '@tyravel/queue';
+import { Job } from '@pondoknusa/queue';
 import { getQueuedListenerContext } from './queued-listener-context.js';
 
 export interface CallQueuedListenerData extends Record<string, unknown> {
@@ -15,7 +15,7 @@ export class CallQueuedListener extends Job<CallQueuedListenerData> {
 
     if (context.container) {
       const instance = context.container.make(
-        ListenerClass as import('@tyravel/container').Constructor<
+        ListenerClass as import('@pondoknusa/container').Constructor<
           import('./types.js').ListenerContract
         >,
       );

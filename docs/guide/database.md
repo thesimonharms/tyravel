@@ -10,7 +10,7 @@ export default {
     postgres: {
       driver: 'postgres',
       host: '127.0.0.1',
-      database: 'tyravel',
+      database: 'pondoknusa',
       username: 'postgres',
       password: '',
     },
@@ -51,8 +51,8 @@ const users = await User.query().with('posts').getModels();
 ## Migrations
 
 ```bash
-tyravel make:migration create_posts_table
-tyravel migrate
+pondoknusa make:migration create_posts_table
+pondoknusa migrate
 ```
 
 ```typescript
@@ -66,9 +66,9 @@ await schema.create('posts', (table) => {
 ## Factories & seeders
 
 ```bash
-tyravel make:factory Post
-tyravel make:seeder DatabaseSeeder
-tyravel db:seed
+pondoknusa make:factory Post
+pondoknusa make:seeder DatabaseSeeder
+pondoknusa db:seed
 ```
 
 ## Computed attributes

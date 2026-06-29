@@ -6,7 +6,7 @@ import { DebugStore } from './store.js';
 
 describe('DebugStore', () => {
   it('persists and clears entries', async () => {
-    const dir = await mkdtemp(join(tmpdir(), 'tyravel-debug-'));
+    const dir = await mkdtemp(join(tmpdir(), 'pondoknusa-debug-'));
     const path = join(dir, 'entries.json');
     const store = new DebugStore(10, path);
 

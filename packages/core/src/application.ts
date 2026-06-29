@@ -1,13 +1,13 @@
-import { Container } from '@tyravel/container';
-import type { Abstract, Constructor, Factory } from '@tyravel/container';
-import type { ConfigRepository } from '@tyravel/config';
+import { Container } from '@pondoknusa/container';
+import type { Abstract, Constructor, Factory } from '@pondoknusa/container';
+import type { ConfigRepository } from '@pondoknusa/config';
 import {
   createRouter,
   MiddlewareRegistry,
   type MiddlewareInput,
   type RouteHandler,
   type Router,
-} from '@tyravel/http';
+} from '@pondoknusa/http';
 import { createControllerHandler, isControllerAction } from './controller.js';
 import {
   bindingMatches,

@@ -1,4 +1,4 @@
-import { env, s } from '@tyravel/config';
+import { env, s } from '@pondoknusa/config';
 
 export const schema = s.object({
   default: s.string({ required: true, minLength: 1 }),

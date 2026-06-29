@@ -1,19 +1,19 @@
-import type { ConfigRepository } from '@tyravel/config';
-import type { Response } from '@tyravel/http';
+import type { ConfigRepository } from '@pondoknusa/config';
+import type { Response } from '@pondoknusa/http';
 import {
   HttpException,
   MethodNotAllowedException,
   NotFoundHttpException,
   Response as ResponseFactory,
   RouteNotFoundException,
-} from '@tyravel/http';
+} from '@pondoknusa/http';
 import type {
   AuthenticationException,
   AuthorizationException,
   InvalidCredentialsException,
   InvalidResetTokenException,
-} from '@tyravel/auth';
-import type { ValidationException } from '@tyravel/validation';
+} from '@pondoknusa/auth';
+import type { ValidationException } from '@pondoknusa/validation';
 import type { Application } from './application.js';
 import { isHeadlessApplication } from './boot-profile.js';
 

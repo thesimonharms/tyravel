@@ -1,7 +1,7 @@
 import { join } from 'node:path';
-import { ConfigRepository } from '@tyravel/config';
-import { DatabaseManager, Model, resolvePoolWarmupEnabled } from '@tyravel/database';
-import type { DatabaseConfig } from '@tyravel/database';
+import { ConfigRepository } from '@pondoknusa/config';
+import { DatabaseManager, Model, resolvePoolWarmupEnabled } from '@pondoknusa/database';
+import type { DatabaseConfig } from '@pondoknusa/database';
 import { ServiceProvider } from './service-provider.js';
 
 export class DatabaseServiceProvider extends ServiceProvider {

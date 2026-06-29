@@ -1,9 +1,9 @@
-import type { Application } from '@tyravel/core';
+import type { Application } from '@pondoknusa/core';
 import {
   ArrayBroadcaster,
   BroadcastManager,
   type BroadcastPayload,
-} from '@tyravel/broadcasting';
+} from '@pondoknusa/broadcasting';
 
 export class BroadcastFake {
   constructor(

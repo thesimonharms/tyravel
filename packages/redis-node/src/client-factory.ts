@@ -1,5 +1,5 @@
 import { createClient, createCluster } from 'redis';
-import type { RedisClient, RedisConnectionConfig } from '@tyravel/redis';
+import type { RedisClient, RedisConnectionConfig } from '@pondoknusa/redis';
 import { resolveSentinelMasterUrl } from './sentinel-discovery.js';
 
 type NodeRedisClient = {

@@ -1,8 +1,8 @@
 import { timingSafeEqual } from 'node:crypto';
-import { HttpException } from '@tyravel/http';
-import type { Middleware } from '@tyravel/http';
-import { withMiddlewareMeta } from '@tyravel/http';
-import type { TyravelRequest } from '@tyravel/http';
+import { HttpException } from '@pondoknusa/http';
+import type { Middleware } from '@pondoknusa/http';
+import { withMiddlewareMeta } from '@pondoknusa/http';
+import type { PondoknusaRequest } from '@pondoknusa/http';
 
 const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
 
@@ -45,7 +45,7 @@ export function createVerifyCsrfTokenMiddleware(
   }, { tag: 'csrf' });
 }
 
-function readSubmittedToken(request: TyravelRequest): Promise<string | undefined> {
+function readSubmittedToken(request: PondoknusaRequest): Promise<string | undefined> {
   const header = request.header('x-csrf-token') ?? request.header('X-CSRF-TOKEN');
   if (header) {
     return Promise.resolve(header);

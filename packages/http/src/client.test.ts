@@ -74,7 +74,7 @@ describe('Fluent HTTP Client', () => {
     expect(res1.json()).toEqual({ username: 'steve' });
     expect(res1.header('X-Platform')).toBe('GitHub');
 
-    const res2 = await Http.get('https://google.com/search?q=tyravel');
+    const res2 = await Http.get('https://google.com/search?q=pondoknusa');
     expect(res2.status()).toBe(200);
     expect(res2.body()).toBe('Google Search');
 

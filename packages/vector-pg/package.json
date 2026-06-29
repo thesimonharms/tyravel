@@ -1,5 +1,5 @@
 {
-  "name": "@tyravel/vector-pg",
+  "name": "@pondoknusa/vector-pg",
   "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.js",
@@ -15,8 +15,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tyravel/database": "1.0.3",
-    "@tyravel/vector": "1.0.3"
+    "@pondoknusa/database": "1.0.3",
+    "@pondoknusa/vector": "1.0.3"
   },
   "files": [
     "dist"
@@ -27,11 +27,11 @@
   "devDependencies": {
     "@types/node": "^26.0.1"
   },
-  "description": "pgvector driver for Tyravel vector search",
+  "description": "pgvector driver for Pondoknusa vector search",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thesimonharms/tyravel.git",
+    "url": "git+https://github.com/pondoknusa/pondoknusa.git",
     "directory": "packages/vector-pg"
   },
   "publishConfig": {

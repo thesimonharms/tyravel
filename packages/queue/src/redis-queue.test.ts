@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MemoryRedis, type RedisManager } from '@tyravel/redis';
+import { MemoryRedis, type RedisManager } from '@pondoknusa/redis';
 import { Job } from './job.js';
 import { JobRegistry } from './registry.js';
 import { QueueManager } from './queue-manager.js';

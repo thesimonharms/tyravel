@@ -7,4 +7,4 @@ export {
   loadProjectConfig,
   requireProjectRoot,
 } from './project.js';
-export type { TyravelConfig } from './project.js';
+export type { PondoknusaConfig } from './project.js';

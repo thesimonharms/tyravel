@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TyravelRequest } from '@tyravel/http';
+import { PondoknusaRequest } from '@pondoknusa/http';
 import { Hasher } from './hasher.js';
 import { MemorySessionStore, SessionGuard } from './index.js';
 import type { Authenticatable, AuthConfig } from './types.js';
@@ -49,7 +49,7 @@ class StubProvider implements UserProvider {
 
 describe('SessionGuard', () => {
   const config: AuthConfig['session'] = {
-    cookie: 'tyravel_session',
+    cookie: 'pondoknusa_session',
     lifetimeMinutes: 120,
     table: 'sessions',
   };
@@ -62,7 +62,7 @@ describe('SessionGuard', () => {
       new MemorySessionStore(),
       config,
     );
-    const request = new TyravelRequest(
+    const request = new PondoknusaRequest(
       new Request('http://localhost/login', { method: 'POST' }),
     );
     guard.setRequest(request);
@@ -75,7 +75,7 @@ describe('SessionGuard', () => {
     const response = await guard.persistSession(
       new globalThis.Response(JSON.stringify({ ok: true }), { status: 200 }),
     );
-    expect(response.headers.get('set-cookie')).toContain('tyravel_session=');
+    expect(response.headers.get('set-cookie')).toContain('pondoknusa_session=');
   });
 
   it('adds Secure when configured', async () => {
@@ -90,7 +90,7 @@ describe('SessionGuard', () => {
         sameSite: 'Strict',
       },
     );
-    const request = new TyravelRequest(
+    const request = new PondoknusaRequest(
       new Request('http://localhost/login', { method: 'POST' }),
     );
     guard.setRequest(request);

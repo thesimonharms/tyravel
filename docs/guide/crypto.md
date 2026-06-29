@@ -1,21 +1,21 @@
 # Post-quantum cryptography
 
-Tyravel ships post-quantum primitives in `@tyravel/crypto`, with optional integration into session storage and the OAuth2 authorization server.
+Pondoknusa ships post-quantum primitives in `@pondoknusa/crypto`, with optional integration into session storage and the OAuth2 authorization server.
 
 ## Install
 
 Scaffold configuration, then add the package:
 
 ```bash
-tyravel crypto:install
-npm install @tyravel/crypto
+pondoknusa crypto:install
+npm install @pondoknusa/crypto
 ```
 
 Generate key material with the CLI (no config file required):
 
 ```bash
-tyravel crypto:generate-keys --algorithm=hybrid-x25519-ml-kem-768
-tyravel crypto:generate-keys --algorithm=ml-dsa-65
+pondoknusa crypto:generate-keys --algorithm=hybrid-x25519-ml-kem-768
+pondoknusa crypto:generate-keys --algorithm=ml-dsa-65
 ```
 
 ## Configuration
@@ -23,8 +23,8 @@ tyravel crypto:generate-keys --algorithm=ml-dsa-65
 Add `config/crypto.ts` to your application:
 
 ```typescript
-import type { CryptoConfig } from '@tyravel/crypto';
-import { env } from '@tyravel/config';
+import type { CryptoConfig } from '@pondoknusa/crypto';
+import { env } from '@pondoknusa/config';
 
 export default {
   kem: 'hybrid-x25519-ml-kem-768',
@@ -58,12 +58,12 @@ NIST category 3 (~AES-192 equivalent): ML-KEM-768, ML-DSA-65. Category 5 (~AES-2
 
 ## Runtime backend
 
-Tyravel requires **Node.js 26+** and uses native OpenSSL PQC for all algorithms, including the hybrid X25519 + ML-KEM-768 construction. The `@noble/post-quantum` fallback was removed in v0.12.1.
+Pondoknusa requires **Node.js 26+** and uses native OpenSSL PQC for all algorithms, including the hybrid X25519 + ML-KEM-768 construction. The `@noble/post-quantum` fallback was removed in v0.12.1.
 
 Detect support at runtime:
 
 ```typescript
-import { supportsNativePqc } from '@tyravel/crypto';
+import { supportsNativePqc } from '@pondoknusa/crypto';
 
 if (supportsNativePqc()) {
   // OpenSSL PQC is available
@@ -75,7 +75,7 @@ if (supportsNativePqc()) {
 `CryptoManager` is the main facade:
 
 ```typescript
-import { CryptoManager } from '@tyravel/crypto';
+import { CryptoManager } from '@pondoknusa/crypto';
 
 const crypto = new CryptoManager({
   kem: 'hybrid-x25519-ml-kem-768',
@@ -98,7 +98,7 @@ const valid = crypto.verify(signature, 'message', signKeys.publicKey);
 Serialize keys for storage or `.env`:
 
 ```typescript
-import { serializeKeyMaterial, deserializeKeyMaterial } from '@tyravel/crypto';
+import { serializeKeyMaterial, deserializeKeyMaterial } from '@pondoknusa/crypto';
 
 const json = serializeKeyMaterial(signKeys);
 // { algorithm, publicKey: '<base64>', secretKey: '<base64>' }
@@ -109,7 +109,7 @@ const json = serializeKeyMaterial(signKeys);
 Use these when you need algorithm-specific control:
 
 ```typescript
-import { MlKem, MlDsa, SlhDsa, HybridEncryptor } from '@tyravel/crypto';
+import { MlKem, MlDsa, SlhDsa, HybridEncryptor } from '@pondoknusa/crypto';
 
 const hybrid = new HybridEncryptor();
 const keys = hybrid.generateKeyPair();
@@ -140,7 +140,7 @@ The in-memory `array` session driver is never encrypted (intended for tests).
 
 ## OAuth access token signing
 
-When `crypto.oauth.signTokens` is `true`, `@tyravel/auth-oauth` issues signed bearer tokens instead of opaque random secrets:
+When `crypto.oauth.signTokens` is `true`, `@pondoknusa/auth-oauth` issues signed bearer tokens instead of opaque random secrets:
 
 ```
 oat_<base64-payload>.<base64-signature>
@@ -149,7 +149,7 @@ oat_<base64-payload>.<base64-signature>
 The payload includes token id, client id, user id, scopes, and expiry. ML-DSA verifies integrity; revocation and expiry still consult the database.
 
 ```bash
-tyravel crypto:generate-keys --algorithm=ml-dsa-65
+pondoknusa crypto:generate-keys --algorithm=ml-dsa-65
 
 OAUTH_SIGN_TOKENS=true
 OAUTH_TOKEN_PUBLIC_KEY=<base64-public-key>
@@ -158,12 +158,12 @@ OAUTH_TOKEN_SECRET_KEY=<base64-secret-key>
 
 Legacy opaque tokens continue to work when signing is disabled.
 
-You can also configure signing directly on `oauthServer.tokenSigning` in `config/oauthServer.ts` (created by `tyravel oauth:install`) without using `config/crypto.ts`.
+You can also configure signing directly on `oauthServer.tokenSigning` in `config/oauthServer.ts` (created by `pondoknusa oauth:install`) without using `config/crypto.ts`.
 
 ## CLI reference
 
 ```bash
-tyravel crypto:generate-keys [--algorithm=<name>] [--format=json|env]
+pondoknusa crypto:generate-keys [--algorithm=<name>] [--format=json|env]
 ```
 
 Use `--format=env` to print `.env`-ready lines for signing keys (`OAUTH_TOKEN_*`) or session keys (`SESSION_ENCRYPTION_KEY`).

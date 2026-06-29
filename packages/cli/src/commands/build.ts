@@ -7,7 +7,7 @@ import { optionString, parseOptions, pathExists, positionalArgs } from '../utils
 export class BuildCommand extends Command {
   override readonly name = 'build';
   override readonly description = 'Bundle the app entry into a single production file (esbuild)';
-  override readonly usage = 'tyravel build [--outfile=<path>] [--minify]';
+  override readonly usage = 'pondoknusa build [--outfile=<path>] [--minify]';
 
   async handle(args: string[]): Promise<number> {
     const options = parseOptions(args);
@@ -29,7 +29,7 @@ export class BuildCommand extends Command {
       esbuild = (await import('esbuild')) as typeof esbuild;
     } catch {
       console.error(
-        'esbuild is required for tyravel build. Install it in your app: npm install -D esbuild',
+        'esbuild is required for pondoknusa build. Install it in your app: npm install -D esbuild',
       );
       return 1;
     }
@@ -53,7 +53,7 @@ export class BuildCommand extends Command {
       sourcemap: true,
       packages: 'external',
       banner: {
-        js: '// Tyravel production bundle — see docs/guide/performance.md#single-file-bundle',
+        js: '// Pondoknusa production bundle — see docs/guide/performance.md#single-file-bundle',
       },
     });
 
@@ -66,14 +66,14 @@ export class BuildCommand extends Command {
     await writeFile(
       readme,
       [
-        'Tyravel production bundle',
+        'Pondoknusa production bundle',
         '',
         'Run: node bootstrap/app.mjs',
         '',
         'Trade-offs:',
         '- Faster cold start on edge runtimes; no per-request TypeScript compile.',
         '- Native addons and dynamic imports may need extra esbuild plugins.',
-        '- Run tyravel config:cache, route:cache, and view:cache before bundling.',
+        '- Run pondoknusa config:cache, route:cache, and view:cache before bundling.',
         '',
       ].join('\n'),
       'utf8',

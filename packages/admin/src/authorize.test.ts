@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
-import { AuthorizationException } from '@tyravel/auth';
+import { AuthorizationException } from '@pondoknusa/auth';
 import { defineAdminResource } from './admin-resource.js';
 import { authorizeResourceAbility } from './authorize.js';
-import type { ModelStatic } from '@tyravel/database';
+import type { ModelStatic } from '@pondoknusa/database';
 
 const model = { name: 'Post', primaryKey: 'id' } as ModelStatic;
 

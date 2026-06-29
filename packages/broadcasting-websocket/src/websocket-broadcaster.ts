@@ -1,11 +1,11 @@
 import {
-  TYRAVEL_BROADCAST_REDIS_CHANNEL,
+  PONDOKNUSA_BROADCAST_REDIS_CHANNEL,
   buildChannelAuthToken,
   type Broadcaster,
   type BroadcastPayload,
   type WebSocketBroadcastConnectionConfig,
-} from '@tyravel/broadcasting';
-import type { RedisManager } from '@tyravel/redis';
+} from '@pondoknusa/broadcasting';
+import type { RedisManager } from '@pondoknusa/redis';
 
 export class WebSocketBroadcaster implements Broadcaster {
   private readonly redisConnection: string;
@@ -16,7 +16,7 @@ export class WebSocketBroadcaster implements Broadcaster {
     config: WebSocketBroadcastConnectionConfig,
   ) {
     this.redisConnection = config.redisConnection ?? 'default';
-    this.channel = config.channel ?? TYRAVEL_BROADCAST_REDIS_CHANNEL;
+    this.channel = config.channel ?? PONDOKNUSA_BROADCAST_REDIS_CHANNEL;
   }
 
   async broadcast(payload: BroadcastPayload): Promise<void> {

@@ -1,14 +1,14 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { loadConfig } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
   DatabaseServiceProvider,
   ServiceProvider,
-} from '@tyravel/core';
-import { DatabaseManager, Migrator } from '@tyravel/database';
-import type { DatabaseConfig } from '@tyravel/database';
+} from '@pondoknusa/core';
+import { DatabaseManager, Migrator } from '@pondoknusa/database';
+import type { DatabaseConfig } from '@pondoknusa/database';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { parseOptions, positionalArgs } from '../utils.js';
@@ -16,7 +16,7 @@ import { parseOptions, positionalArgs } from '../utils.js';
 export class MigrateCommand extends Command {
   override readonly name = 'migrate';
   override readonly description = 'Run database migrations';
-  override readonly usage = 'tyravel migrate';
+  override readonly usage = 'pondoknusa migrate';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);

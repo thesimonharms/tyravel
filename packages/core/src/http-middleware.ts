@@ -5,8 +5,8 @@ import {
   registerThrottlePresets,
   type CorsOptions,
   type ThrottlePresetMap,
-} from '@tyravel/http';
-import type { ConfigRepository } from '@tyravel/config';
+} from '@pondoknusa/http';
+import type { ConfigRepository } from '@pondoknusa/config';
 import type { Application } from './application.js';
 
 export interface CorsConfig extends CorsOptions {
@@ -19,7 +19,7 @@ export interface HttpConfig {
   jsonFastPath?: boolean;
   /** Return minimal 404/405 JSON without exception handler (default: !app.debug). */
   early404?: boolean;
-  /** Reuse TyravelRequest instances for matched routes (default: !app.debug). */
+  /** Reuse PondoknusaRequest instances for matched routes (default: !app.debug). */
   requestPooling?: boolean;
   throttle?: {
     enabled?: boolean;

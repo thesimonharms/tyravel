@@ -16,7 +16,7 @@ function resolveWorkerScript(): string {
   const directory = dirname(fileURLToPath(import.meta.url));
   const compiledWorker = join(directory, 'compile-worker.js');
   if (!existsSync(compiledWorker)) {
-    throw new Error('compile-worker.js is not built. Run npm run build in @tyravel/views.');
+    throw new Error('compile-worker.js is not built. Run npm run build in @pondoknusa/views.');
   }
 
   return compiledWorker;

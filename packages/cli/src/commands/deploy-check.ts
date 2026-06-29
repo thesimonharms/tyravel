@@ -1,11 +1,11 @@
 import { join } from 'node:path';
-import { buildConfigCacheManifest, loadConfig } from '@tyravel/config';
+import { buildConfigCacheManifest, loadConfig } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
   setRouteApplication,
   ServiceProvider,
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 import { Command } from '../command.js';
 import { runDoctorChecks } from '../doctor-checks.js';
 import { isHeadlessProject } from '../headless-project.js';
@@ -16,13 +16,13 @@ import { bootViewApplication, enableCompiledCache } from '../view-bootstrap.js';
 export class DeployCheckCommand extends Command {
   override readonly name = 'deploy:check';
   override readonly description = 'Run pre-deploy checks (doctor, routes, views)';
-  override readonly usage = 'tyravel deploy:check';
+  override readonly usage = 'pondoknusa deploy:check';
 
   async handle(): Promise<number> {
     const root = await requireProjectRoot();
     const checks = await runDoctorChecks(root);
 
-    console.log('Tyravel deploy:check');
+    console.log('Pondoknusa deploy:check');
     console.log('');
 
     let failed = 0;

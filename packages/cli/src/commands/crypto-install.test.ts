@@ -20,10 +20,10 @@ describe('CryptoInstallCommand', () => {
   });
 
   it('scaffolds config/crypto.ts', async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'tyravel-crypto-install-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'pondoknusa-crypto-install-'));
     mkdirSync(join(tempDir, 'config'), { recursive: true });
     mkdirSync(join(tempDir, 'src'), { recursive: true });
-    writeFileSync(join(tempDir, 'tyravel.json'), JSON.stringify({ name: 'app', entry: 'src/main.ts' }));
+    writeFileSync(join(tempDir, 'pondoknusa.json'), JSON.stringify({ name: 'app', entry: 'src/main.ts' }));
     writeFileSync(join(tempDir, 'src/main.ts'), 'export {};\n');
 
     previousCwd = process.cwd();

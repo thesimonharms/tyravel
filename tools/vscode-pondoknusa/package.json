@@ -1,9 +1,9 @@
 {
-  "name": "tyravel",
-  "displayName": "Tyravel",
-  "description": "Syntax highlighting and snippets for Tyravel .tyr templates",
+  "name": "pondoknusa",
+  "displayName": "Pondoknusa",
+  "description": "Syntax highlighting and snippets for Pondoknusa .tyr templates",
   "version": "0.1.0",
-  "publisher": "tyravel",
+  "publisher": "pondoknusa",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -12,7 +12,7 @@
     "languages": [
       {
         "id": "tyr",
-        "aliases": ["Tyravel", "tyr"],
+        "aliases": ["Pondoknusa", "tyr"],
         "extensions": [".tyr"],
         "configuration": "./language-configuration.json"
       }
@@ -27,7 +27,7 @@
     "snippets": [
       {
         "language": "tyr",
-        "path": "./snippets/tyravel.code-snippets"
+        "path": "./snippets/pondoknusa.code-snippets"
       }
     ]
   },
@@ -36,7 +36,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/thesimonharms/tyravel.git",
-    "directory": "tools/vscode-tyravel"
+    "url": "https://github.com/pondoknusa/pondoknusa.git",
+    "directory": "tools/vscode-pondoknusa"
   }
 }

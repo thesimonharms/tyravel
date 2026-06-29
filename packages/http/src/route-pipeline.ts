@@ -1,4 +1,4 @@
-import type { TyravelRequest } from './request.js';
+import type { PondoknusaRequest } from './request.js';
 import type { Middleware, RouteHandler } from './types.js';
 
 /**
@@ -6,7 +6,7 @@ import type { Middleware, RouteHandler } from './types.js';
  * (no per-request closure allocation for the pipeline itself).
  */
 export class RoutePipelineRunner {
-  private request!: TyravelRequest;
+  private request!: PondoknusaRequest;
   private index = 0;
 
   constructor(
@@ -23,7 +23,7 @@ export class RoutePipelineRunner {
     return Promise.resolve(this.handler(this.request));
   };
 
-  run(request: TyravelRequest): Promise<Response> {
+  run(request: PondoknusaRequest): Promise<Response> {
     this.request = request;
     this.index = 0;
 

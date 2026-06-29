@@ -1,6 +1,6 @@
-import type { ModelStatic } from '@tyravel/database';
-import { MemoryVectorSearchDriver, type VectorSearchDriver } from '@tyravel/vector';
-import type { Embedding, VectorSearchOptions } from '@tyravel/vector';
+import type { ModelStatic } from '@pondoknusa/database';
+import { MemoryVectorSearchDriver, type VectorSearchDriver } from '@pondoknusa/vector';
+import type { Embedding, VectorSearchOptions } from '@pondoknusa/vector';
 import { formatPgVector, pgVectorOperator } from './pgvector.js';
 
 export class PgVectorSearchDriver implements VectorSearchDriver {

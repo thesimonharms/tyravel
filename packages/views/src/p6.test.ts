@@ -11,7 +11,7 @@ import { ViewEngine } from './view-engine.js';
 import { ViewPropsValidationError } from './component-props.js';
 
 function createFixture(): { basePath: string; engine: ViewEngine } {
-  const basePath = join(tmpdir(), `tyravel-p6-${Date.now()}-${Math.random()}`);
+  const basePath = join(tmpdir(), `pondoknusa-p6-${Date.now()}-${Math.random()}`);
   const viewsPath = join(basePath, 'resources/views');
   mkdirSync(join(viewsPath, 'layouts'), { recursive: true });
 

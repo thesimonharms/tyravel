@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { Application, HttpKernel, Route, setRouteApplication } from '@tyravel/core';
-import { Response } from '@tyravel/http';
-import { TestCase, withTyravelTest, wireFacades } from './index.js';
+import { Application, HttpKernel, Route, setRouteApplication } from '@pondoknusa/core';
+import { Response } from '@pondoknusa/http';
+import { TestCase, withPondoknusaTest, wireFacades } from './index.js';
 
 class HomeTest extends TestCase {
   protected createApplication(): Application {
-    return new Application('/tmp/tyravel-testing');
+    return new Application('/tmp/pondoknusa-testing');
   }
 
   protected override async configureApplication(app: Application): Promise<void> {
@@ -28,8 +28,8 @@ describe('HttpTestClient', () => {
   });
 });
 
-describe('withTyravelTest', () => {
-  const t = withTyravelTest(HomeTest);
+describe('withPondoknusaTest', () => {
+  const t = withPondoknusaTest(HomeTest);
 
   it('boots TestCase per example', async () => {
     const response = await t.http.get('http://localhost/health');

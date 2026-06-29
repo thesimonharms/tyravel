@@ -1,11 +1,11 @@
-import type { TyravelRequest } from '@tyravel/http';
+import type { PondoknusaRequest } from '@pondoknusa/http';
 import type { Authenticatable, Guard } from './types.js';
 import type { UserProvider } from './user-provider.js';
 import { PersonalAccessTokenRepository } from './personal-access-token-repository.js';
 
 export class TokenGuard implements Guard {
   readonly name: string;
-  private request?: TyravelRequest;
+  private request?: PondoknusaRequest;
   private currentUser: Authenticatable | null = null;
   private resolved = false;
 
@@ -17,7 +17,7 @@ export class TokenGuard implements Guard {
     this.name = name;
   }
 
-  setRequest(request: TyravelRequest): void {
+  setRequest(request: PondoknusaRequest): void {
     this.request = request;
     this.currentUser = null;
     this.resolved = false;

@@ -1,4 +1,4 @@
-import type { MailManager, Mailer, Mailable, MailMessage } from '@tyravel/mail';
+import type { MailManager, Mailer, Mailable, MailMessage } from '@pondoknusa/mail';
 import type { Application } from './application.js';
 
 let mailApplication: Application | undefined;

@@ -216,7 +216,7 @@ describe('Router', () => {
     expect(order).toEqual(['handler']);
   });
 
-  it('reuses TyravelRequest instances when request pooling is enabled', async () => {
+  it('reuses PondoknusaRequest instances when request pooling is enabled', async () => {
     const router = new Router();
     router.setRequestPooling(true);
 

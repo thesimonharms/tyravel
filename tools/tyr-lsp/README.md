@@ -1,9 +1,9 @@
-# Tyravel `.tyr` language server (basic)
+# Pondoknusa `.tyr` language server (basic)
 
-Stdio LSP for Tyravel templates. Provides:
+Stdio LSP for Pondoknusa templates. Provides:
 
 - Completion for `@include`, `@component`, and `@layout` view paths
-- Prop name completion from `types/view-props.generated.d.ts` (run `tyravel view:types` first)
+- Prop name completion from `types/view-props.generated.d.ts` (run `pondoknusa view:types` first)
 - Go-to-definition for referenced view paths
 
 ## Install
@@ -15,18 +15,18 @@ npm install
 
 ## VS Code / Cursor
 
-Add to `.vscode/settings.json` in your Tyravel app:
+Add to `.vscode/settings.json` in your Pondoknusa app:
 
 ```json
 {
-  "tyravel.languageServerPath": "../tyravel/tools/tyr-lsp/server.mjs"
+  "pondoknusa.languageServerPath": "../pondoknusa/tools/tyr-lsp/server.mjs"
 }
 ```
 
-Or configure the [Tyravel extension stub](../vscode-tyravel/README.md) and point your editor's LSP client at:
+Or configure the [Pondoknusa extension stub](../vscode-pondoknusa/README.md) and point your editor's LSP client at:
 
 ```bash
-node /path/to/tyravel/tools/tyr-lsp/server.mjs
+node /path/to/pondoknusa/tools/tyr-lsp/server.mjs
 ```
 
 ## Scope

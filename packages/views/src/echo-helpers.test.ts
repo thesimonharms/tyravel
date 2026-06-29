@@ -13,7 +13,7 @@ describe('renderEchoBootstrap', () => {
       {
         broadcaster: 'websocket',
         host: 'http://127.0.0.1:3000',
-        path: '/tyravel/ws',
+        path: '/pondoknusa/ws',
         authEndpoint: '/broadcasting/auth',
       },
       {

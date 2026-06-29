@@ -1,7 +1,7 @@
-import { ConfigRepository } from '@tyravel/config';
-import { DatabaseManager } from '@tyravel/database';
-import { Response } from '@tyravel/http';
-import { RedisManager } from '@tyravel/redis';
+import { ConfigRepository } from '@pondoknusa/config';
+import { DatabaseManager } from '@pondoknusa/database';
+import { Response } from '@pondoknusa/http';
+import { RedisManager } from '@pondoknusa/redis';
 import { HealthChecker } from './health.js';
 import { Route } from './route.js';
 import { ServiceProvider } from './service-provider.js';
@@ -56,7 +56,7 @@ export class HealthServiceProvider extends ServiceProvider {
       checker.register('redis', async () => {
         const redis = this.app.make<RedisManager>('redis');
         const client = await redis.connection();
-        await client.set('tyravel:health:probe', '1', { EX: 5 });
+        await client.set('pondoknusa:health:probe', '1', { EX: 5 });
         return true;
       });
     }

@@ -1,5 +1,5 @@
-import { Notification } from '@tyravel/notifications';
-import type { Notifiable, SmsMessage } from '@tyravel/notifications';
+import { Notification } from '@pondoknusa/notifications';
+import type { Notifiable, SmsMessage } from '@pondoknusa/notifications';
 
 /**
  * Example SMS notification — wire `setSmsTransport()` in AppServiceProvider
@@ -22,7 +22,7 @@ export class LoginCodeNotification extends Notification {
 
     return {
       to,
-      body: `Your Tyravel login code is ${this.code}`,
+      body: `Your Pondoknusa login code is ${this.code}`,
     };
   }
 }

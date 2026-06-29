@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Container } from '@tyravel/container';
+import { Container } from '@pondoknusa/container';
 import { Gate, Policy } from './index.js';
 import type { Authenticatable } from './types.js';
 import { AuthorizationException } from './authorization-exceptions.js';

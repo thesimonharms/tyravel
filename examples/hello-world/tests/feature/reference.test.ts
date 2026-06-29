@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import { withTyravelTest } from '@tyravel/testing';
-import { ArrayMailTransport, MailManager } from '@tyravel/mail';
+import { withPondoknusaTest } from '@pondoknusa/testing';
+import { ArrayMailTransport, MailManager } from '@pondoknusa/mail';
 import { ReferenceTestCase } from '../support/reference-test-case.js';
 
-const t = withTyravelTest(ReferenceTestCase);
+const t = withPondoknusaTest(ReferenceTestCase);
 
 describe('hello-world reference app', () => {
   it('renders the welcome page', async () => {
     const response = await t.http.get('http://localhost/');
     await response.assertOk();
     const html = await response.text();
-    expect(html).toContain('Hello Tyravel');
+    expect(html).toContain('Hello Pondoknusa');
   });
 
   it('streams deferred view sections over chunked html', async () => {
@@ -18,9 +18,9 @@ describe('hello-world reference app', () => {
     await response.assertOk();
     const html = await response.text();
 
-    expect(html).toContain('Streaming Tyravel');
+    expect(html).toContain('Streaming Pondoknusa');
     expect(html).toContain('Slow section rendered after the shell.');
-    expect(html.indexOf('Streaming Tyravel')).toBeLessThan(
+    expect(html.indexOf('Streaming Pondoknusa')).toBeLessThan(
       html.indexOf('Slow section rendered after the shell.'),
     );
   });
@@ -53,7 +53,7 @@ describe('hello-world reference app', () => {
     const mail = t.app.make(MailManager);
     const transport = mail.transport('array') as ArrayMailTransport;
     expect(transport.messages).toHaveLength(1);
-    expect(transport.messages[0]?.subject).toBe('Welcome to Tyravel');
+    expect(transport.messages[0]?.subject).toBe('Welcome to Pondoknusa');
     expect(transport.messages[0]?.to[0]?.address).toBe('ada@example.com');
     expect(transport.messages[0]?.text).toContain('Ada');
   });

@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import type { TyravelRequest } from './request.js';
+import type { PondoknusaRequest } from './request.js';
 import type { Middleware } from './types.js';
 
 const WebResponse = globalThis.Response;
@@ -7,7 +7,7 @@ const WebResponse = globalThis.Response;
 export interface HttpCacheOptions {
   maxAge?: number;
   privacy?: 'public' | 'private';
-  etag?: (request: TyravelRequest, body: string) => string | Promise<string>;
+  etag?: (request: PondoknusaRequest, body: string) => string | Promise<string>;
 }
 
 export function createHttpCacheMiddleware(options: HttpCacheOptions = {}): Middleware {

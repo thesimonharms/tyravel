@@ -1,5 +1,5 @@
-import { Model } from '@tyravel/database';
-import type { Authenticatable } from '@tyravel/auth';
+import { Model } from '@pondoknusa/database';
+import type { Authenticatable } from '@pondoknusa/auth';
 
 export interface UserAttributes {
   id: number;

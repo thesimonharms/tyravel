@@ -7,7 +7,7 @@ import { SlhDsa } from './slh-dsa.js';
 import { serializeKeyMaterial } from './serialization.js';
 import { supportsNativePqc } from './native-backend.js';
 
-describe('@tyravel/crypto', () => {
+describe('@pondoknusa/crypto', () => {
   it('reports native PQC availability for the current runtime', () => {
     expect(typeof supportsNativePqc()).toBe('boolean');
   });
@@ -17,7 +17,7 @@ describe('@tyravel/crypto', () => {
     (algorithm) => {
       const kem = new MlKem(algorithm);
       const keys = kem.generateKeyPair();
-      const plaintext = new TextEncoder().encode('tyravel post-quantum');
+      const plaintext = new TextEncoder().encode('pondoknusa post-quantum');
       const envelope = kem.encrypt(plaintext, keys.publicKey);
       const decrypted = kem.decrypt(envelope, keys.secretKey);
       expect(decrypted).toEqual(plaintext);

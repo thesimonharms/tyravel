@@ -5,7 +5,7 @@ import {
   PutItemCommand,
   ScanCommand,
 } from '@aws-sdk/client-dynamodb';
-import type { CacheStore } from '@tyravel/cache';
+import type { CacheStore } from '@pondoknusa/cache';
 
 export interface DynamoDbStoreConfig {
   driver: 'dynamodb';

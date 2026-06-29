@@ -11,89 +11,89 @@ Current monorepo version: **1.0.3**.
 
 | Package | Description |
 |---------|-------------|
-| [@tyravel/graphql](/reference/generated/packages/graphql) | Zero-dependency GraphQL server with programmatic schema and operation caching for Tyravel |
-| [@tyravel/mcp](/reference/generated/packages/mcp) | MCP server and capability manifest for Tyravel agents |
-| [@tyravel/rag](/reference/generated/packages/rag) | RAG ingestion and retrieval helpers for Tyravel |
-| [@tyravel/vector](/reference/generated/packages/vector) | Embedding storage and vector similarity search for Tyravel |
-| [@tyravel/vector-pg](/reference/generated/packages/vector-pg) | pgvector driver for Tyravel vector search |
-| [@tyravel/vector-pinecone](/reference/generated/packages/vector-pinecone) | Pinecone vector store driver for Tyravel |
-| [@tyravel/vector-qdrant](/reference/generated/packages/vector-qdrant) | Qdrant vector store driver for Tyravel |
+| [@pondoknusa/graphql](/reference/generated/packages/graphql) | Zero-dependency GraphQL server with programmatic schema and operation caching for Pondoknusa |
+| [@pondoknusa/mcp](/reference/generated/packages/mcp) | MCP server and capability manifest for Pondoknusa agents |
+| [@pondoknusa/rag](/reference/generated/packages/rag) | RAG ingestion and retrieval helpers for Pondoknusa |
+| [@pondoknusa/vector](/reference/generated/packages/vector) | Embedding storage and vector similarity search for Pondoknusa |
+| [@pondoknusa/vector-pg](/reference/generated/packages/vector-pg) | pgvector driver for Pondoknusa vector search |
+| [@pondoknusa/vector-pinecone](/reference/generated/packages/vector-pinecone) | Pinecone vector store driver for Pondoknusa |
+| [@pondoknusa/vector-qdrant](/reference/generated/packages/vector-qdrant) | Qdrant vector store driver for Pondoknusa |
 
 ## Cache drivers
 
 | Package | Description |
 |---------|-------------|
-| [@tyravel/cache-dynamodb](/reference/generated/packages/cache-dynamodb) | DynamoDB cache driver for Tyravel |
-| [@tyravel/cache-memcached](/reference/generated/packages/cache-memcached) | Memcached cache driver for Tyravel |
-| [@tyravel/cache-upstash](/reference/generated/packages/cache-upstash) | Upstash Redis REST cache driver for Tyravel |
+| [@pondoknusa/cache-dynamodb](/reference/generated/packages/cache-dynamodb) | DynamoDB cache driver for Pondoknusa |
+| [@pondoknusa/cache-memcached](/reference/generated/packages/cache-memcached) | Memcached cache driver for Pondoknusa |
+| [@pondoknusa/cache-upstash](/reference/generated/packages/cache-upstash) | Upstash Redis REST cache driver for Pondoknusa |
 
 ## Database
 
 | Package | Description |
 |---------|-------------|
-| [@tyravel/database](/reference/generated/packages/database) | Database ORM, query builder, and migrations for Tyravel |
-| [@tyravel/database-mysql](/reference/generated/packages/database-mysql) | MySQL database driver for Tyravel |
-| [@tyravel/database-pg](/reference/generated/packages/database-pg) | PostgreSQL database driver for Tyravel |
+| [@pondoknusa/database](/reference/generated/packages/database) | Database ORM, query builder, and migrations for Pondoknusa |
+| [@pondoknusa/database-mysql](/reference/generated/packages/database-mysql) | MySQL database driver for Pondoknusa |
+| [@pondoknusa/database-pg](/reference/generated/packages/database-pg) | PostgreSQL database driver for Pondoknusa |
 
 ## Developer experience
 
 | Package | Description |
 |---------|-------------|
-| [@tyravel/cli](/reference/generated/packages/cli) | The Tyravel command-line interface |
-| [@tyravel/testing](/reference/generated/packages/testing) | Testing utilities for Tyravel applications |
+| [@pondoknusa/cli](/reference/generated/packages/cli) | The Pondoknusa command-line interface |
+| [@pondoknusa/testing](/reference/generated/packages/testing) | Testing utilities for Pondoknusa applications |
 
 ## Kernel & HTTP
 
 | Package | Description |
 |---------|-------------|
-| [@tyravel/collection](/reference/generated/packages/collection) | Fluent, typed collection pipeline for Tyravel |
-| [@tyravel/config](/reference/generated/packages/config) | Typed configuration loading for Tyravel |
-| [@tyravel/container](/reference/generated/packages/container) | IoC service container for Tyravel |
-| [@tyravel/core](/reference/generated/packages/core) | Tyravel application kernel, providers, and facades |
-| [@tyravel/http](/reference/generated/packages/http) | HTTP router and middleware for Tyravel |
-| [@tyravel/support](/reference/generated/packages/support) | String and utility helpers for Tyravel |
-| [@tyravel/validation](/reference/generated/packages/validation) | Request validation for Tyravel |
+| [@pondoknusa/collection](/reference/generated/packages/collection) | Fluent, typed collection pipeline for Pondoknusa |
+| [@pondoknusa/config](/reference/generated/packages/config) | Typed configuration loading for Pondoknusa |
+| [@pondoknusa/container](/reference/generated/packages/container) | IoC service container for Pondoknusa |
+| [@pondoknusa/core](/reference/generated/packages/core) | Pondoknusa application kernel, providers, and facades |
+| [@pondoknusa/http](/reference/generated/packages/http) | HTTP router and middleware for Pondoknusa |
+| [@pondoknusa/support](/reference/generated/packages/support) | String and utility helpers for Pondoknusa |
+| [@pondoknusa/validation](/reference/generated/packages/validation) | Request validation for Pondoknusa |
 
 ## Platform services
 
 | Package | Description |
 |---------|-------------|
-| [@tyravel/admin](/reference/generated/packages/admin) | Optional CRUD admin panel for Tyravel |
-| [@tyravel/auth](/reference/generated/packages/auth) | Authentication and authorization for Tyravel |
-| [@tyravel/auth-oauth](/reference/generated/packages/auth-oauth) | OAuth2 authorization server for Tyravel |
-| [@tyravel/broadcasting](/reference/generated/packages/broadcasting) | Real-time event broadcasting for Tyravel |
-| [@tyravel/broadcasting-websocket](/reference/generated/packages/broadcasting-websocket) | Native WebSocket broadcast driver and hub for Tyravel |
-| [@tyravel/cache](/reference/generated/packages/cache) | Cache stores and repository for Tyravel |
-| [@tyravel/crypto](/reference/generated/packages/crypto) | Post-quantum cryptography for Tyravel |
-| [@tyravel/debug](/reference/generated/packages/debug) | Request timeline and debug bar for Tyravel |
-| [@tyravel/events](/reference/generated/packages/events) | Domain events and listeners for Tyravel |
-| [@tyravel/log](/reference/generated/packages/log) | Structured logging channels and repository for Tyravel |
-| [@tyravel/mail](/reference/generated/packages/mail) | Mail manager, mailables, and SMTP for Tyravel |
-| [@tyravel/notifications](/reference/generated/packages/notifications) | Multi-channel notifications for Tyravel |
-| [@tyravel/queue](/reference/generated/packages/queue) | Queue and background jobs for Tyravel |
-| [@tyravel/repl](/reference/generated/packages/repl) | Interactive Tyravel REPL (tyravel shell) |
-| [@tyravel/storage](/reference/generated/packages/storage) | Filesystem storage and repository for Tyravel |
+| [@pondoknusa/admin](/reference/generated/packages/admin) | Optional CRUD admin panel for Pondoknusa |
+| [@pondoknusa/auth](/reference/generated/packages/auth) | Authentication and authorization for Pondoknusa |
+| [@pondoknusa/auth-oauth](/reference/generated/packages/auth-oauth) | OAuth2 authorization server for Pondoknusa |
+| [@pondoknusa/broadcasting](/reference/generated/packages/broadcasting) | Real-time event broadcasting for Pondoknusa |
+| [@pondoknusa/broadcasting-websocket](/reference/generated/packages/broadcasting-websocket) | Native WebSocket broadcast driver and hub for Pondoknusa |
+| [@pondoknusa/cache](/reference/generated/packages/cache) | Cache stores and repository for Pondoknusa |
+| [@pondoknusa/crypto](/reference/generated/packages/crypto) | Post-quantum cryptography for Pondoknusa |
+| [@pondoknusa/debug](/reference/generated/packages/debug) | Request timeline and debug bar for Pondoknusa |
+| [@pondoknusa/events](/reference/generated/packages/events) | Domain events and listeners for Pondoknusa |
+| [@pondoknusa/log](/reference/generated/packages/log) | Structured logging channels and repository for Pondoknusa |
+| [@pondoknusa/mail](/reference/generated/packages/mail) | Mail manager, mailables, and SMTP for Pondoknusa |
+| [@pondoknusa/notifications](/reference/generated/packages/notifications) | Multi-channel notifications for Pondoknusa |
+| [@pondoknusa/queue](/reference/generated/packages/queue) | Queue and background jobs for Pondoknusa |
+| [@pondoknusa/repl](/reference/generated/packages/repl) | Interactive Pondoknusa REPL (pondoknusa shell) |
+| [@pondoknusa/storage](/reference/generated/packages/storage) | Filesystem storage and repository for Pondoknusa |
 
 ## Redis
 
 | Package | Description |
 |---------|-------------|
-| [@tyravel/redis](/reference/generated/packages/redis) | Redis connection manager for Tyravel |
-| [@tyravel/redis-node](/reference/generated/packages/redis-node) | node-redis client driver for Tyravel |
+| [@pondoknusa/redis](/reference/generated/packages/redis) | Redis connection manager for Pondoknusa |
+| [@pondoknusa/redis-node](/reference/generated/packages/redis-node) | node-redis client driver for Pondoknusa |
 
 ## Storage drivers
 
 | Package | Description |
 |---------|-------------|
-| [@tyravel/storage-aws-s3](/reference/generated/packages/storage-aws-s3) | AWS S3 storage driver for Tyravel |
-| [@tyravel/storage-r2](/reference/generated/packages/storage-r2) | Cloudflare R2 storage driver for Tyravel |
-| [@tyravel/storage-supabase](/reference/generated/packages/storage-supabase) | Supabase storage driver for Tyravel |
+| [@pondoknusa/storage-aws-s3](/reference/generated/packages/storage-aws-s3) | AWS S3 storage driver for Pondoknusa |
+| [@pondoknusa/storage-r2](/reference/generated/packages/storage-r2) | Cloudflare R2 storage driver for Pondoknusa |
+| [@pondoknusa/storage-supabase](/reference/generated/packages/storage-supabase) | Supabase storage driver for Pondoknusa |
 
 ## Views & client
 
 | Package | Description |
 |---------|-------------|
-| [@tyravel/echo](/reference/generated/packages/echo) | Laravel Echo-style browser client for Tyravel broadcasting |
-| [@tyravel/locale](/reference/generated/packages/locale) | Localization and translation for Tyravel |
-| [@tyravel/ssr](/reference/generated/packages/ssr) | Client-side hydration runtime for Tyravel SSR islands |
-| [@tyravel/views](/reference/generated/packages/views) | Blade-like view engine for Tyravel |
+| [@pondoknusa/echo](/reference/generated/packages/echo) | Laravel Echo-style browser client for Pondoknusa broadcasting |
+| [@pondoknusa/locale](/reference/generated/packages/locale) | Localization and translation for Pondoknusa |
+| [@pondoknusa/ssr](/reference/generated/packages/ssr) | Client-side hydration runtime for Pondoknusa SSR islands |
+| [@pondoknusa/views](/reference/generated/packages/views) | Blade-like view engine for Pondoknusa |

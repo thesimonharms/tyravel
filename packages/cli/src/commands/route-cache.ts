@@ -1,12 +1,12 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { loadConfig } from '@tyravel/config';
+import { loadConfig } from '@pondoknusa/config';
 import {
   Application,
   ConfigServiceProvider,
   setRouteApplication,
   ServiceProvider,
-} from '@tyravel/core';
+} from '@pondoknusa/core';
 import { Command } from '../command.js';
 import { requireProjectRoot } from '../project.js';
 import { importAppServiceProvider, importProjectRoutes } from '../project-bootstrap.js';
@@ -15,7 +15,7 @@ import { parseOptions, positionalArgs } from '../utils.js';
 export class RouteCacheCommand extends Command {
   override readonly name = 'route:cache';
   override readonly description = 'Compile and cache the route manifest for production boot';
-  override readonly usage = 'tyravel route:cache';
+  override readonly usage = 'pondoknusa route:cache';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
@@ -58,7 +58,7 @@ export class RouteCacheCommand extends Command {
 export class RouteClearCommand extends Command {
   override readonly name = 'route:clear';
   override readonly description = 'Remove the cached route manifest';
-  override readonly usage = 'tyravel route:clear';
+  override readonly usage = 'pondoknusa route:clear';
 
   async handle(args: string[]): Promise<number> {
     parseOptions(args);
