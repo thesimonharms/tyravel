@@ -70,6 +70,9 @@ jobs:
             @pondoknusa/crypto
             @pondoknusa/auth
             @pondoknusa/cache
+            @pondoknusa/cache-dynamodb
+            @pondoknusa/cache-upstash
+            @pondoknusa/cache-memcached
             @pondoknusa/storage
             @pondoknusa/storage-aws-s3
             @pondoknusa/storage-r2
@@ -110,6 +113,23 @@ jobs:
           echo "Published: $PUBLISHED"
           echo "Skipped:   $SKIPPED"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+          # Unscoped scaffold package (npm create pondoknusa)
+          CREATE_VERSION=$(node -p "require('./packages/create-pondoknusa/package.json').version")
+          CREATE_REMOTE=$(npm view create-pondoknusa version 2>/dev/null || echo "")
+          if [[ "$CREATE_VERSION" == "$CREATE_REMOTE" ]]; then
+            echo "⏭  create-pondoknusa@$CREATE_VERSION already published — skipping"
+          else
+            echo "📦 Publishing create-pondoknusa@$CREATE_VERSION…"
+            npm publish --workspace=create-pondoknusa --access public
+            echo "✅ Published create-pondoknusa@$CREATE_VERSION"
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Deprecate legacy @tyravel packages
+        if: startsWith(github.ref_name, 'v2.')
+        run: node scripts/deprecate-tyravel.mjs
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

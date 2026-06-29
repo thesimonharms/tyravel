@@ -112,7 +112,7 @@ for (const dir of pkgDirs) {
 
   let changed = false;
 
-  if (pkg.version && pkg.name?.startsWith('@pondoknusa/')) {
+  if (pkg.version && (pkg.name?.startsWith('@pondoknusa/') || pkg.name === 'create-pondoknusa')) {
     pkg.version = newVersion;
     changed = true;
   }
