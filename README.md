@@ -899,8 +899,11 @@ Create at [npmjs.com → Access Tokens](https://www.npmjs.com/settings/~/tokens)
 Deprecate legacy `@tyravel/*` after `@pondoknusa/*` is live:
 
 ```bash
-NODE_AUTH_TOKEN=<granular-token> node scripts/deprecate-tyravel.mjs
+npm login
+./scripts/deprecate-tyravel.sh   # interactive passkey per package
 ```
+
+Non-interactive (CI): `NODE_AUTH_TOKEN=<granular-token> node scripts/deprecate-tyravel.mjs`
 
 See [CHANGELOG.md](./CHANGELOG.md) for release notes.
 
