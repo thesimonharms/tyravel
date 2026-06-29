@@ -113,6 +113,10 @@ export {
   resolveClientIp,
   resolveSecure,
 } from './trusted-proxies.js';
+export {
+  cachedFormData,
+  createFormBodyCacheMiddleware,
+} from './form-body-cache.js';
 export type { TrustedProxiesOptions } from './trusted-proxies.js';
 export type {
   HttpMethod,

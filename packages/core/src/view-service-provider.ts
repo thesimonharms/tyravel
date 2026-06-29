@@ -1,8 +1,7 @@
-import { randomBytes } from 'node:crypto';
 import { join } from 'node:path';
 import { resolveEchoClientConfig, type BroadcastingConfig } from '@pondoknusa/broadcasting';
 import { ConfigRepository } from '@pondoknusa/config';
-import type { AuthManager, Gate } from '@pondoknusa/auth';
+import { ensureSessionCsrfToken, type AuthManager, type Gate, type Session } from '@pondoknusa/auth';
 import type { PondoknusaRequest } from '@pondoknusa/http';
 import { withMiddlewareMeta } from '@pondoknusa/http';
 import {
@@ -37,17 +36,7 @@ function readOldInput(
 }
 
 function ensureCsrfToken(request: PondoknusaRequest | undefined): string {
-  const session = request?.session;
-  if (!session) {
-    return '';
-  }
-
-  let token = session.get<string>('_csrf_token');
-  if (!token) {
-    token = randomBytes(32).toString('base64url');
-    session.put('_csrf_token', token);
-  }
-  return token;
+  return ensureSessionCsrfToken(request?.session as Session | undefined) ?? '';
 }
 
 function readValidationErrors(request: PondoknusaRequest | undefined): ViewErrorBag {

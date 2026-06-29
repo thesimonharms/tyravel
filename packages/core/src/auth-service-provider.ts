@@ -23,6 +23,7 @@ import {
   type EloquentUserProviderConfig,
   type GuardConfig,
 } from '@pondoknusa/auth';
+import { createFormBodyCacheMiddleware } from '@pondoknusa/http';
 import { RedisManager } from '@pondoknusa/redis';
 import { ServiceProvider } from './service-provider.js';
 
@@ -128,6 +129,7 @@ export class AuthServiceProvider extends ServiceProvider {
       this.app.singleton(OAuthManager, () => oauth);
     }
 
+    this.app.use(createFormBodyCacheMiddleware());
     this.app.use(createStartSessionMiddleware(auth));
     this.app.use(
       createVerifyCsrfTokenMiddleware({

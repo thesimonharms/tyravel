@@ -1,8 +1,11 @@
 import { timingSafeEqual } from 'node:crypto';
-import { HttpException } from '@pondoknusa/http';
-import type { Middleware } from '@pondoknusa/http';
-import { withMiddlewareMeta } from '@pondoknusa/http';
-import type { PondoknusaRequest } from '@pondoknusa/http';
+import {
+  cachedFormData,
+  HttpException,
+  withMiddlewareMeta,
+  type Middleware,
+  type PondoknusaRequest,
+} from '@pondoknusa/http';
 
 const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
 
@@ -49,6 +52,11 @@ function readSubmittedToken(request: PondoknusaRequest): Promise<string | undefi
   const header = request.header('x-csrf-token') ?? request.header('X-CSRF-TOKEN');
   if (header) {
     return Promise.resolve(header);
+  }
+
+  const cached = cachedFormData(request)?.get('_token');
+  if (typeof cached === 'string') {
+    return Promise.resolve(cached);
   }
 
   return request.input<string>('_token');

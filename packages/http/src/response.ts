@@ -165,8 +165,8 @@ export class ResponseFactory {
     });
   }
 
-  redirect(location: string, status = 302): Response {
-    return WebResponse.redirect(location, status);
+  redirect(location: string, status = 302, request?: { url: string | URL }): Response {
+    return WebResponse.redirect(resolveRedirectLocation(location, request), status);
   }
 
   noContent(status = 204): Response {
@@ -175,6 +175,19 @@ export class ResponseFactory {
 }
 
 export const Response = new ResponseFactory();
+
+function resolveRedirectLocation(location: string, request?: { url: string | URL }): string {
+  if (location.startsWith('http://') || location.startsWith('https://')) {
+    return location;
+  }
+
+  const base =
+    request?.url !== undefined
+      ? String(request.url)
+      : (process.env.APP_URL ?? 'http://127.0.0.1:3000');
+
+  return new URL(location, base).href;
+}
 
 async function* encodeHtmlChunks(
   source: AsyncIterable<string>,

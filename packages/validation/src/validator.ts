@@ -1,4 +1,4 @@
-import type { PondoknusaRequest } from '@pondoknusa/http';
+import { cachedFormData, type PondoknusaRequest } from '@pondoknusa/http';
 import { parseRuleSet, type ValidationRules } from './rules.js';
 
 export interface ValidationErrors {
@@ -74,7 +74,7 @@ export async function validateRequest<T extends Record<string, unknown>>(
     contentType.includes('application/x-www-form-urlencoded') ||
     contentType.includes('multipart/form-data')
   ) {
-    const formData = await request.formData();
+    const formData = cachedFormData(request) ?? (await request.formData());
     const entries: Record<string, FormDataEntryValue> = {};
     formData.forEach((value, key) => {
       entries[key] = value;

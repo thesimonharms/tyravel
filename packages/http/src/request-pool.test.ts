@@ -17,6 +17,7 @@ describe('PondoknusaRequestPool', () => {
     expect(second.param('id')).toBe('2');
     expect(second.user).toBeNull();
     expect(second.session).toBeUndefined();
+    expect(second.getFormBodyCache()).toBeUndefined();
   });
 
   it('creates new instances when the pool is empty', () => {

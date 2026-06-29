@@ -44,6 +44,7 @@ export {
   createVerifyCsrfTokenMiddleware,
   VerifyCsrfTokenException,
 } from './verify-csrf-token.js';
+export { ensureSessionCsrfToken } from './csrf-session.js';
 export type { VerifyCsrfTokenOptions } from './verify-csrf-token.js';
 export { tokenCan, tokenCanAny, parseTokenAbilities } from './token-abilities.js';
 export { RedisSessionStore } from './redis-session-store.js';

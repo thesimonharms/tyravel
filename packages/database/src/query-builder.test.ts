@@ -42,4 +42,19 @@ describe('QueryBuilder', () => {
 
     expect(deleted).toBe(1);
   });
+
+  it('whereIn with an empty list matches no rows', async () => {
+    const connection = new SqliteConnection(':memory:');
+    await connection.exec(`
+      CREATE TABLE "users" (
+        "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+        "name" TEXT NOT NULL
+      )
+    `);
+
+    await new QueryBuilder(connection, 'users').insert({ name: 'Ada' });
+
+    const count = await new QueryBuilder(connection, 'users').whereIn('id', []).count();
+    expect(count).toBe(0);
+  });
 });

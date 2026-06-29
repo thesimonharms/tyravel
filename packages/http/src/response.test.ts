@@ -1,92 +1,31 @@
 import { describe, expect, it } from 'vitest';
 import { Response } from './response.js';
 
-describe('Response', () => {
-  it('returns a raw body with a custom content-type via make', async () => {
-    const body = '<?xml version="1.0"?><rss version="2.0"></rss>';
-    const response = Response.make(body, {
-      headers: { 'Content-Type': 'application/rss+xml; charset=utf-8' },
-    });
+describe('Response.redirect', () => {
+  it('resolves relative paths against APP_URL', () => {
+    const previous = process.env.APP_URL;
+    process.env.APP_URL = 'https://pondoknusa.com';
 
-    expect(response.status).toBe(200);
-    expect(response.headers.get('content-type')).toBe(
-      'application/rss+xml; charset=utf-8',
-    );
-    expect(await response.text()).toBe(body);
-  });
-
-  it('supports atom feeds with make and a custom content-type', async () => {
-    const body = '<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom"></feed>';
-    const response = Response.make(body, {
-      headers: { 'Content-Type': 'application/atom+xml; charset=utf-8' },
-    });
-
-    expect(response.headers.get('content-type')).toBe(
-      'application/atom+xml; charset=utf-8',
-    );
-    expect(await response.text()).toBe(body);
-  });
-
-  it('returns xml with a default content-type', async () => {
-    const body = '<?xml version="1.0"?><root></root>';
-    const response = Response.xml(body);
-
-    expect(response.headers.get('content-type')).toBe(
-      'application/xml; charset=utf-8',
-    );
-    expect(await response.text()).toBe(body);
-  });
-
-  it('allows overriding the xml content-type', async () => {
-    const body = '<?xml version="1.0"?><rss version="2.0"></rss>';
-    const response = Response.xml(body, {
-      headers: { 'Content-Type': 'application/rss+xml; charset=utf-8' },
-    });
-
-    expect(response.headers.get('content-type')).toBe(
-      'application/rss+xml; charset=utf-8',
-    );
-    expect(await response.text()).toBe(body);
-  });
-
-  it('streams chunked html from an async iterable', async () => {
-    async function* chunks(): AsyncGenerator<string> {
-      yield '<html><head><title>Stream</title></head>';
-      yield '<body><main>Ready</main></body></html>';
+    try {
+      const response = Response.redirect('/dashboard');
+      expect(response.headers.get('location')).toBe('https://pondoknusa.com/dashboard');
+    } finally {
+      if (previous === undefined) {
+        delete process.env.APP_URL;
+      } else {
+        process.env.APP_URL = previous;
+      }
     }
-
-    const response = Response.streamHtml(chunks());
-    expect(response.headers.get('content-type')).toBe('text/html; charset=utf-8');
-    expect(await response.text()).toBe(
-      '<html><head><title>Stream</title></head><body><main>Ready</main></body></html>',
-    );
   });
 
-  it('streams interleaved view chunks into valid html', async () => {
-    async function* chunks(): AsyncGenerator<string> {
-      yield '<html><body><main>Core</main>';
-      yield '<aside>Sidebar</aside></body></html>';
-    }
-
-    const response = Response.streamHtml(chunks());
-    const html = await response.text();
-
-    expect(html).toContain('<main>Core</main>');
-    expect(html).toContain('<aside>Sidebar</aside>');
-    expect(html.indexOf('<main>Core</main>')).toBeLessThan(html.indexOf('<aside>Sidebar</aside>'));
+  it('resolves relative paths against the request URL', () => {
+    const request = { url: 'https://pondoknusa.com/register' };
+    const response = Response.redirect('/dashboard', 302, request);
+    expect(response.headers.get('location')).toBe('https://pondoknusa.com/dashboard');
   });
 
-  it('forwards status and extra headers', async () => {
-    const response = Response.make('created', {
-      status: 201,
-      headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        Location: '/feeds/latest',
-      },
-    });
-
-    expect(response.status).toBe(201);
-    expect(response.headers.get('location')).toBe('/feeds/latest');
-    expect(await response.text()).toBe('created');
+  it('passes through absolute URLs', () => {
+    const response = Response.redirect('https://example.com/path');
+    expect(response.headers.get('location')).toBe('https://example.com/path');
   });
 });

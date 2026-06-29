@@ -305,6 +305,10 @@ export class QueryBuilder<T extends Row = Row> {
 
       if (clause.type === 'in') {
         const values = clause.value as RowValue[];
+        if (values.length === 0) {
+          parts.push(`${prefix}1 = 0`);
+          continue;
+        }
         const placeholders = inPlaceholderList(
           this.grammar.driver,
           values.length,

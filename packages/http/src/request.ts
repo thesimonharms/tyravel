@@ -40,6 +40,17 @@ export class PondoknusaRequest {
     this.tokenId = undefined;
     this.remoteAddress = undefined;
     this.trustedProxies = [];
+    this.cachedFormData = undefined;
+  }
+
+  private cachedFormData?: FormData;
+
+  setFormBodyCache(data: FormData): void {
+    this.cachedFormData = data;
+  }
+
+  getFormBodyCache(): FormData | undefined {
+    return this.cachedFormData;
   }
 
   session?: SessionContract;
@@ -146,6 +157,9 @@ export class PondoknusaRequest {
   }
 
   async formData(): Promise<FormData> {
+    if (this.cachedFormData) {
+      return this.cachedFormData;
+    }
     return this.raw.formData();
   }
 
