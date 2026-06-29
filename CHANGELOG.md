@@ -11,6 +11,7 @@ See [v2.0.0 release notes](https://github.com/pondoknusa/pondoknusa/releases/tag
 
 - **Rebrand to Pondoknusa** — project, npm org (`@pondoknusa/*`), CLI (`pondoknusa`), config file (`pondoknusa.json`), and GitHub org (`pondoknusa/pondoknusa`) renamed from Tyravel to distance branding from Laravel
 - **Legacy `@tyravel/*` packages deprecated** on npm with pointers to `@pondoknusa/*`
+- **Documentation site** — VitePress config, logo, and [Upgrading to 2.0](docs/guide/upgrading-to-2.0.md) guide; live at [pondoknusa.dev](https://pondoknusa.dev)
 
 ## [1.0.3] - 2026-06-28
 
@@ -99,11 +100,11 @@ Pondoknusa **1.0.0** is the first semver-strict release. Feature work through Ti
 
 ### Added
 
-- **Hosted documentation** — VitePress site deployed to GitHub Pages ([thesimonharms.github.io/pondoknusa](https://thesimonharms.github.io/pondoknusa/)); `docs/public/CNAME` ready for `pondoknusa.dev`
+- **Hosted documentation** — VitePress site deployed to GitHub Pages at [pondoknusa.dev](https://pondoknusa.dev)
 - **Deploy walkthroughs** — Fly.io, Railway, and Docker guides with copy-paste manifests in `examples/hello-world/deploy/`
 - **Cookbook (complete)** — observability and multi-tenant recipes
 - **Facade reference** — generated method tables in `docs/reference/generated/facades.md`
-- **Brand** — new `Ty` gradient logo for README, docs site, and favicon
+- **Brand** — gradient logo for README, docs site, and favicon (updated in 2.0 to the Pondoknusa stroke mark)
 
 ### Changed
 

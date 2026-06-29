@@ -556,7 +556,7 @@ Pondoknusa **1.0.0** is the first semver-strict era (see [STABILITY.md](STABILIT
 
 - [x] **In-repo documentation system** — VitePress guide + reference + tutorials + cookbook; `npm run docs:generate` for package/CLI manifests; GitHub Pages workflow (`.github/workflows/docs.yml`)
 - [x] **Hosted documentation site (workflow)** — GitHub Pages deploy (`.github/workflows/docs.yml`); `docs/public/CNAME` for pondoknusa.dev
-- [x] **Hosted documentation site (live)** — GitHub Pages enabled (`build_type: workflow`); Docs workflow deploys on push to `main`; interim URL https://thesimonharms.github.io/pondoknusa/
+- [x] **Hosted documentation site (live)** — GitHub Pages enabled (`build_type: workflow`); Docs workflow deploys on push to `main`; live at https://pondoknusa.dev
 - [x] **Custom domain (pondoknusa.dev)** — DNS pointed at GitHub Pages; HTTPS live at https://pondoknusa.dev
 - [x] **Package & CLI reference (generated)** — every `@pondoknusa/*` package with exports table; full `pondoknusa` command list from `@pondoknusa/cli`
 - [x] **Configuration reference** — `docs/guide/configuration-reference.md` for scaffold config keys and env vars

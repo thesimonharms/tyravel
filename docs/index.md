@@ -7,7 +7,7 @@ hero:
     src: /logo.svg
     alt: Pondoknusa
   text: Laravel ergonomics on Node.js
-  tagline: Service container, routing, ORM, queues, auth, and an Artisan-like CLI — all on standard Web APIs.
+  tagline: v2.0.0 — service container, routing, ORM, queues, auth, and an Artisan-like CLI on standard Web APIs.
   actions:
     - theme: brand
       text: Get started

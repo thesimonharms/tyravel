@@ -33,7 +33,7 @@ That is the full set of external production dependencies across the Pondoknusa m
 
 ## API stability
 
-Published `@pondoknusa/*` packages follow the semver and deprecation rules in [STABILITY.md](STABILITY.md). Patch releases preserve documented stable APIs; experimental features (programmatic `.tyr.ts` views, REPL, etc.) may change in minors. See [Upgrading to 1.0](docs/guide/upgrading-to-1.0.md) when moving from 0.x.
+Published `@pondoknusa/*` packages follow the semver and deprecation rules in [STABILITY.md](STABILITY.md). Patch releases preserve documented stable APIs; experimental features (programmatic `.tyr.ts` views, REPL, etc.) may change in minors. See [Upgrading to 2.0](docs/guide/upgrading-to-2.0.md) when moving from Tyravel, or [Upgrading to 1.0](docs/guide/upgrading-to-1.0.md) when moving from 0.x.
 
 ## Packages
 
@@ -848,7 +848,7 @@ npm run typecheck # Type-check via project references
 
 ## Migrating from Tyravel
 
-Pondoknusa is a **rename** of Tyravel — same codebase, new package scope and branding. npm does **not** allow renaming packages; you publish under `@pondoknusa/*` and deprecate `@tyravel/*` separately.
+Pondoknusa is a **rename** of Tyravel — same codebase, new package scope and branding. npm does **not** allow renaming packages; you publish under `@pondoknusa/*` and deprecate `@tyravel/*` separately. Full checklist: [docs/guide/upgrading-to-2.0.md](docs/guide/upgrading-to-2.0.md).
 
 | Before (Tyravel) | After (Pondoknusa) |
 |------------------|-------------------|
