@@ -15,6 +15,8 @@ jobs:
           node-version: 26
           registry-url: https://registry.npmjs.org
 
+      # Deprecate requires a granular token with "Bypass two-factor authentication"
+      # and read-write on @tyravel/* — passkeys cannot authorize scripted npm commands.
       - name: Deprecate @tyravel/* on npm
         run: node scripts/deprecate-tyravel.mjs
         env:

@@ -872,20 +872,34 @@ Legacy `@tyravel/*` installs show an npm deprecation notice pointing here. `.tyr
 
 ## Publishing (`@pondoknusa/*`)
 
-Releases are automated: push a `v*` tag and the [Release workflow](.github/workflows/release.yml) publishes all packages to the [`@pondoknusa` npm org](https://www.npmjs.com/org/pondoknusa).
+npm uses **passkeys** for interactive sign-in — there is no authenticator OTP to type. Scripts and CI need either **trusted publishing** (OIDC from GitHub Actions) or a **granular access token**.
+
+Releases: push a `v*` tag and the [Release workflow](.github/workflows/release.yml) publishes to the [`@pondoknusa` npm org](https://www.npmjs.com/org/pondoknusa).
 
 ```bash
 npm run release:prepare -- patch   # bumps, tests, tags, pushes
 ```
 
-To deprecate legacy `@tyravel/*` packages (one-time, after `@pondoknusa/*` is live):
+### CI publish (recommended)
+
+1. On [npmjs.com](https://www.npmjs.com), open each package (or configure as you publish) → **Settings → Trusted publishing**
+2. Add GitHub Actions: org **`pondoknusa`**, repo **`pondoknusa`**, workflow **`release.yml`**
+3. The workflow already requests `id-token: write` for OIDC — no long-lived publish token needed once trusted publishing is linked
+
+For the **first** publish of each new package name, you may need a one-time granular token (see below) before trusted publishing can be attached to that package.
+
+### Granular token (scripts + first publish)
+
+Create at [npmjs.com → Access Tokens](https://www.npmjs.com/settings/~/tokens):
+
+- **Bypass two-factor authentication** — required for non-interactive publish/deprecate (passkeys cannot run in scripts)
+- **Packages and scopes** → read-write on `@pondoknusa/*` (publish) and `@tyravel/*` (deprecate)
+- Store as `NPM_TOKEN` in [GitHub Actions secrets](https://github.com/pondoknusa/pondoknusa/settings/secrets/actions)
+
+Deprecate legacy `@tyravel/*` after `@pondoknusa/*` is live:
 
 ```bash
-# Automation token from https://www.npmjs.com/settings/~tokens (bypasses 2FA)
-NODE_AUTH_TOKEN=<token> node scripts/deprecate-tyravel.mjs
-
-# Or with interactive login + 2FA code
-node scripts/deprecate-tyravel.mjs --otp=123456
+NODE_AUTH_TOKEN=<granular-token> node scripts/deprecate-tyravel.mjs
 ```
 
 See [CHANGELOG.md](./CHANGELOG.md) for release notes.

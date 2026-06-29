@@ -5,23 +5,20 @@
  * npm cannot rename packages — this marks old names as deprecated so installs
  * show a migration warning. New code publishes under @pondoknusa/* separately.
  *
+ * npm accounts use passkeys for interactive sign-in. Scripts and CI cannot use
+ * passkeys — use a granular access token with "Bypass two-factor authentication"
+ * and read-write access to the @tyravel scope.
+ *
  * Usage:
- *   # Recommended: Automation token (bypasses 2FA, works in CI)
- *   NODE_AUTH_TOKEN=<automation-token> node scripts/deprecate-tyravel.mjs
- *
- *   # Interactive login (requires 2FA OTP for each package batch)
- *   npm login
- *   node scripts/deprecate-tyravel.mjs --otp=123456
- *
+ *   NODE_AUTH_TOKEN=<granular-token> node scripts/deprecate-tyravel.mjs
  *   node scripts/deprecate-tyravel.mjs --dry-run
+ *
+ * Create the token at https://www.npmjs.com/settings/~/tokens
  */
 
 import { execSync } from 'node:child_process';
 
 const DRY_RUN = process.argv.includes('--dry-run');
-const otpArg = process.argv.find((a) => a.startsWith('--otp='));
-const otp = otpArg?.slice('--otp='.length) ?? process.env.NPM_OTP ?? '';
-const otpFlag = otp ? ` --otp=${otp}` : '';
 
 const MIGRATION_URL =
   'https://github.com/pondoknusa/pondoknusa/blob/main/README.md#migrating-from-tyravel';
@@ -99,24 +96,24 @@ function migrationMessage(pkg) {
     const target = `@pondoknusa/${pkg.slice('@tyravel/'.length)}`;
     return `Renamed to ${target}. Migrate: ${MIGRATION_URL}`;
   }
-  return `Renamed to create-pondoknusa. Use: npm create pondoknusa`;
+  return 'Renamed to create-pondoknusa. Use: npm create pondoknusa';
 }
 
 function explainFailure(pkg, detail) {
-  if (/EOTP|one-time password/i.test(detail)) {
+  if (/EOTP|one-time password|passkey|webauthn/i.test(detail)) {
     return [
-      `✗ ${pkg}: npm requires 2FA for this action.`,
-      '  Use an Automation token (recommended):',
+      `✗ ${pkg}: npm requires passkey sign-in for this action.`,
+      '  Scripts cannot use passkeys. Create a granular access token instead:',
+      '    https://www.npmjs.com/settings/~/tokens',
+      '  Enable "Bypass two-factor authentication" and grant read-write on @tyravel/*',
       '    NODE_AUTH_TOKEN=<token> node scripts/deprecate-tyravel.mjs',
-      '  Or pass your authenticator code:',
-      '    node scripts/deprecate-tyravel.mjs --otp=123456',
     ].join('\n');
   }
   if (/E404|404 Not Found.*PUT/i.test(detail)) {
     return [
       `✗ ${pkg}: not authorized to modify this package.`,
-      '  Deprecation needs maintainer access on the @tyravel npm org.',
-      '  Log in as the account that published @tyravel/*, or use its Automation token.',
+      '  Use a granular token from the account that maintains @tyravel/*',
+      '  with read-write scope on those packages (org access alone is not enough).',
     ].join('\n');
   }
   return `✗ ${pkg}: ${detail}`;
@@ -126,10 +123,11 @@ let deprecated = 0;
 let skipped = 0;
 let failed = 0;
 
-if (!DRY_RUN && !process.env.NODE_AUTH_TOKEN && !otp) {
+if (!DRY_RUN && !process.env.NODE_AUTH_TOKEN) {
   console.warn(
-    '⚠  No NODE_AUTH_TOKEN or --otp set. If npm login has 2FA enabled, deprecate will fail with EOTP.\n' +
-      '   Create an Automation token at https://www.npmjs.com/settings/~tokens\n',
+    '⚠  NODE_AUTH_TOKEN is not set.\n' +
+      '   npm login uses passkeys and cannot authorize scripted deprecate/publish.\n' +
+      '   Create a granular token: https://www.npmjs.com/settings/~/tokens\n',
   );
 }
 
@@ -150,14 +148,14 @@ for (const pkg of [...LEGACY_PACKAGES, ...UNSCOPED]) {
 
   try {
     // Omitting a version deprecates all published versions of the package.
-    run(`npm deprecate "${pkg}" "${msg}"${otpFlag}`);
+    run(`npm deprecate "${pkg}" "${msg}"`);
     console.log(`✅ Deprecated ${pkg}`);
     deprecated++;
   } catch (err) {
     const detail = [err.stderr, err.stdout, err.message].filter(Boolean).join('\n').trim();
     console.error(explainFailure(pkg, detail));
     failed++;
-    if (/EOTP|one-time password/i.test(detail)) {
+    if (/EOTP|one-time password|passkey|webauthn/i.test(detail)) {
       break;
     }
   }
