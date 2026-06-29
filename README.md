@@ -5,7 +5,13 @@
 <h1 align="center">Pondoknusa</h1>
 
 <p align="center">
-  <strong>v1.0.3</strong> — TypeScript-native full-stack web framework (service container, routing, middleware, queues, auth, post-quantum crypto, and a first-class CLI) on standard Web APIs.
+  <strong>v2.0.0</strong> — TypeScript-native full-stack web framework (service container, routing, middleware, queues, auth, post-quantum crypto, and a first-class CLI) on standard Web APIs.
+</p>
+
+<p align="center">
+  <a href="https://github.com/pondoknusa/pondoknusa">GitHub</a> ·
+  <a href="https://www.npmjs.com/org/pondoknusa">npm</a> ·
+  <a href="https://pondoknusa.dev">Docs</a>
 </p>
 
 <p align="center">
@@ -70,7 +76,7 @@ npm run build
 Create a new application:
 
 ```bash
-npx pondoknusa new my-app
+npm create pondoknusa@latest my-app
 cd my-app
 npm install
 pondoknusa serve
@@ -840,15 +846,46 @@ npm run build     # Build all packages
 npm run typecheck # Type-check via project references
 ```
 
-## Publishing (`@pondoknusa/*` v0.11.0)
+## Migrating from Tyravel
 
-From the monorepo root after `npm run build`:
+Pondoknusa is a **rename** of Tyravel — same codebase, new package scope and branding. npm does **not** allow renaming packages; you publish under `@pondoknusa/*` and deprecate `@tyravel/*` separately.
+
+| Before (Tyravel) | After (Pondoknusa) |
+|------------------|-------------------|
+| `@tyravel/core` | `@pondoknusa/core` |
+| `tyravel` CLI | `pondoknusa` CLI |
+| `tyravel.json` | `pondoknusa.json` |
+| `TYRAVEL_*` env vars | `PONDOKNUSA_*` |
+| `thesimonharms/tyravel` | `pondoknusa/pondoknusa` |
+
+```diff
+# package.json
+- "@tyravel/core": "^1.0.3"
++ "@pondoknusa/core": "^2.0.0"
+
+# scaffold
+- npm create tyravel@latest
++ npm create pondoknusa@latest
+```
+
+Legacy `@tyravel/*` installs show an npm deprecation notice pointing here. `.tyr` templates are unchanged.
+
+## Publishing (`@pondoknusa/*`)
+
+Releases are automated: push a `v*` tag and the [Release workflow](.github/workflows/release.yml) publishes all packages to the [`@pondoknusa` npm org](https://www.npmjs.com/org/pondoknusa).
 
 ```bash
-# Publish in dependency order (container → … → core → cli)
-npm publish -w @pondoknusa/container --access public
-# … repeat for each package, or use your preferred release script
-npm publish -w @pondoknusa/cli --access public
+npm run release:prepare -- patch   # bumps, tests, tags, pushes
+```
+
+To deprecate legacy `@tyravel/*` packages (one-time, after `@pondoknusa/*` is live):
+
+```bash
+# Automation token from https://www.npmjs.com/settings/~tokens (bypasses 2FA)
+NODE_AUTH_TOKEN=<token> node scripts/deprecate-tyravel.mjs
+
+# Or with interactive login + 2FA code
+node scripts/deprecate-tyravel.mjs --otp=123456
 ```
 
 See [CHANGELOG.md](./CHANGELOG.md) for release notes.
@@ -875,7 +912,7 @@ Published to [pondoknusa.dev](https://pondoknusa.dev) via GitHub Pages (`.github
 
 See [ROADMAP.md](./ROADMAP.md) for release tiers.
 
-### Shipped highlights (through v1.0.1)
+### Shipped highlights (through v2.0.0)
 
 - [x] Service container, HTTP router, kernel, `Route` facade, CLI scaffolding
 - [x] Eloquent-style ORM, views, queue/events, cache, mail, notifications, broadcasting, storage
