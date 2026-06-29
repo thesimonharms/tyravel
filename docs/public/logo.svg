@@ -1,62 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="Pondoknusa">
   <defs>
-    <linearGradient id="pn-indigo" x1="0.15" y1="0" x2="0.85" y2="1">
-      <stop offset="0%" stop-color="#c7d2fe"/>
-      <stop offset="45%" stop-color="#818cf8"/>
-      <stop offset="100%" stop-color="#4f46e5"/>
-    </linearGradient>
-    <linearGradient id="pn-teal" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#5eead4"/>
-      <stop offset="100%" stop-color="#0d9488"/>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a5b4fc"/>
+      <stop offset="100%" stop-color="#6366f1"/>
     </linearGradient>
   </defs>
 
   <rect width="400" height="400" rx="80" fill="#0f0f1a"/>
 
-  <!-- Island (nusa) -->
-  <ellipse cx="200" cy="318" rx="124" ry="24" fill="url(#pn-teal)" opacity="0.14"/>
-
-  <!-- Water -->
   <path
-    d="M 78 300 C 112 276, 146 324, 180 300 S 248 276, 282 300 S 350 324, 384 300"
-    fill="none"
-    stroke="url(#pn-teal)"
-    stroke-width="10"
-    stroke-linecap="round"
-    opacity="0.9"
-  />
-  <path
-    d="M 92 328 C 126 304, 160 352, 194 328 S 262 304, 296 328 S 330 352, 364 328"
-    fill="none"
-    stroke="url(#pn-teal)"
-    stroke-width="7"
-    stroke-linecap="round"
-    opacity="0.45"
-  />
-
-  <!-- Pondok roof -->
-  <path d="M 112 186 L 200 102 L 288 186 Z" fill="url(#pn-indigo)"/>
-  <path
-    d="M 128 186 L 200 118 L 272 186"
-    fill="none"
-    stroke="#e0e7ff"
-    stroke-width="5"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    opacity="0.35"
-  />
-
-  <!-- P monogram -->
-  <path
-    fill="url(#pn-indigo)"
-    d="M 164 186
-       V 302
-       H 198
-       V 258
+    fill="url(#g)"
+    d="M 158 118
+       V 282
+       H 202
+       V 246
        H 252
-       C 286 258 286 214 252 214
-       H 198
-       V 186
+       C 286 246 286 202 252 202
+       H 202
+       V 118
        Z"
   />
 </svg>
