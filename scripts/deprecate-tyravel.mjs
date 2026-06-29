@@ -60,7 +60,11 @@ const LEGACY_PACKAGES = [
 const UNSCOPED = ['create-tyravel'];
 
 function run(cmd) {
-  return execSync(cmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }).trim();
+  return execSync(cmd, {
+    encoding: 'utf8',
+    stdio: ['pipe', 'pipe', 'pipe'],
+    env: { ...process.env, NPM_CONFIG_LOGLEVEL: 'error' },
+  }).trim();
 }
 
 function packageExists(name) {
@@ -74,6 +78,7 @@ function packageExists(name) {
 
 let deprecated = 0;
 let skipped = 0;
+let failed = 0;
 
 for (const pkg of [...LEGACY_PACKAGES, ...UNSCOPED]) {
   if (!packageExists(pkg)) {
@@ -100,10 +105,20 @@ for (const pkg of [...LEGACY_PACKAGES, ...UNSCOPED]) {
     console.log(`✅ Deprecated ${pkg}`);
     deprecated++;
   } catch (err) {
-    console.error(`✗ Failed to deprecate ${pkg}: ${err.stderr ?? err.message}`);
+    const detail = err.stderr?.trim() || err.message;
+    console.error(`✗ Failed to deprecate ${pkg}: ${detail}`);
+    failed++;
   }
 }
 
 console.log('');
 console.log(`Deprecated: ${deprecated}`);
 console.log(`Skipped:    ${skipped}`);
+console.log(`Failed:     ${failed}`);
+
+if (failed > 0) {
+  console.error(
+    '\nDeprecation requires an NPM token with maintainer access to @tyravel/* (the account that originally published them).',
+  );
+  process.exit(1);
+}
