@@ -1,6 +1,6 @@
 {
   "name": "@pondoknusa/admin",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,12 +15,12 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@pondoknusa/auth": "1.0.3",
-    "@pondoknusa/config": "1.0.3",
-    "@pondoknusa/container": "1.0.3",
-    "@pondoknusa/database": "1.0.3",
-    "@pondoknusa/http": "1.0.3",
-    "@pondoknusa/views": "1.0.3"
+    "@pondoknusa/auth": "2.0.0",
+    "@pondoknusa/config": "2.0.0",
+    "@pondoknusa/container": "2.0.0",
+    "@pondoknusa/database": "2.0.0",
+    "@pondoknusa/http": "2.0.0",
+    "@pondoknusa/views": "2.0.0"
   },
   "files": [
     "dist",

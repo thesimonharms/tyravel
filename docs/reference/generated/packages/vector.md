@@ -15,7 +15,7 @@ npm install @pondoknusa/vector
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.3` |
+| Version | `2.0.0` |
 | Source | [`packages/vector`](https://github.com/pondoknusa/pondoknusa/tree/main/packages/vector) |
 | Category | AI & agents |
 | Node.js | `>=26` |

@@ -15,7 +15,7 @@ npm install @pondoknusa/mcp
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.3` |
+| Version | `2.0.0` |
 | Source | [`packages/mcp`](https://github.com/pondoknusa/pondoknusa/tree/main/packages/mcp) |
 | Category | AI & agents |
 | Node.js | `>=26` |

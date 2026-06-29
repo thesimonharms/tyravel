@@ -1,6 +1,6 @@
 {
   "name": "@pondoknusa/ssr",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Client-side hydration runtime for Pondoknusa SSR islands",
   "license": "MIT",
   "type": "module",

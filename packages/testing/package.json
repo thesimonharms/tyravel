@@ -1,6 +1,6 @@
 {
   "name": "@pondoknusa/testing",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -19,15 +19,15 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@pondoknusa/auth": "1.0.3",
-    "@pondoknusa/broadcasting": "1.0.3",
-    "@pondoknusa/container": "1.0.3",
-    "@pondoknusa/core": "1.0.3",
-    "@pondoknusa/database": "1.0.3",
-    "@pondoknusa/http": "1.0.3",
-    "@pondoknusa/mail": "1.0.3",
-    "@pondoknusa/notifications": "1.0.3",
-    "@pondoknusa/views": "1.0.3"
+    "@pondoknusa/auth": "2.0.0",
+    "@pondoknusa/broadcasting": "2.0.0",
+    "@pondoknusa/container": "2.0.0",
+    "@pondoknusa/core": "2.0.0",
+    "@pondoknusa/database": "2.0.0",
+    "@pondoknusa/http": "2.0.0",
+    "@pondoknusa/mail": "2.0.0",
+    "@pondoknusa/notifications": "2.0.0",
+    "@pondoknusa/views": "2.0.0"
   },
   "peerDependencies": {
     "vitest": ">=2.0.0"

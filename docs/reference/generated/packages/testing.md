@@ -15,7 +15,7 @@ npm install @pondoknusa/testing
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.3` |
+| Version | `2.0.0` |
 | Source | [`packages/testing`](https://github.com/pondoknusa/pondoknusa/tree/main/packages/testing) |
 | Category | Developer experience |
 | Node.js | `>=26` |

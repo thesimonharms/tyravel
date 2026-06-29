@@ -15,7 +15,7 @@ npm install @pondoknusa/auth
 
 | Field | Value |
 |-------|-------|
-| Version | `1.0.3` |
+| Version | `2.0.0` |
 | Source | [`packages/auth`](https://github.com/pondoknusa/pondoknusa/tree/main/packages/auth) |
 | Category | Platform services |
 | Node.js | `>=26` |

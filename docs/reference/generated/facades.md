@@ -5,7 +5,7 @@
 
 Facades provide a static entry point to services resolved from the application container.
 
-Documented for Pondoknusa **1.0.3**. See [API stability](/guide/api-stability) for stability tiers.
+Documented for Pondoknusa **2.0.0**. See [API stability](/guide/api-stability) for stability tiers.
 
 | Facade | Package | Guide |
 |--------|---------|-------|

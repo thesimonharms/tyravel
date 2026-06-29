@@ -96,8 +96,7 @@ log('Bumping package versions');
 
 const pkgDirs = [
   ...readdirSync(join(ROOT, 'packages')).map((d) => join(ROOT, 'packages', d)),
-  join(ROOT, 'examples/hello-world'),
-  join(ROOT, 'examples/rag'),
+  ...readdirSync(join(ROOT, 'examples')).map((d) => join(ROOT, 'examples', d)),
 ];
 
 let bumped = 0;

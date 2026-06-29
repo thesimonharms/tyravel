@@ -3,14 +3,14 @@
 All notable changes to Pondoknusa are documented in this file.
 
 
-## [1.0.2] - 2026-06-28
+## [2.0.0] - 2026-06-29
 
-See [v1.0.2 release notes](https://github.com/pondoknusa/pondoknusa/releases/tag/v1.0.2).
-## [Unreleased]
+See [v2.0.0 release notes](https://github.com/pondoknusa/pondoknusa/releases/tag/v2.0.0).
 
 ### Changed
 
 - **Rebrand to Pondoknusa** — project, npm org (`@pondoknusa/*`), CLI (`pondoknusa`), config file (`pondoknusa.json`), and GitHub org (`pondoknusa/pondoknusa`) renamed from Tyravel to distance branding from Laravel
+- **Legacy `@tyravel/*` packages deprecated** on npm with pointers to `@pondoknusa/*`
 
 ## [1.0.3] - 2026-06-28
 

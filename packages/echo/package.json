@@ -1,6 +1,6 @@
 {
   "name": "@pondoknusa/echo",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Laravel Echo-style browser client for Pondoknusa broadcasting",
   "license": "MIT",
   "type": "module",

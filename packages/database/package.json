@@ -1,6 +1,6 @@
 {
   "name": "@pondoknusa/database",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,7 +21,7 @@
     "node": ">=26"
   },
   "dependencies": {
-    "@pondoknusa/support": "1.0.3"
+    "@pondoknusa/support": "2.0.0"
   },
   "description": "Database ORM, query builder, and migrations for Pondoknusa",
   "license": "MIT",
