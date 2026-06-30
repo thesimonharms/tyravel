@@ -56,7 +56,19 @@ export class QueueProcessor {
 
     try {
       while (!shouldQuit && (maxJobs === undefined || processed < maxJobs)) {
-        const record = await connection.pop(queueName);
+        let record;
+        try {
+          record = await connection.pop(queueName);
+        } catch (error) {
+          process.stderr.write(
+            `[queue] Connection error, retrying in ${sleepSeconds}s: ${String(error)}\n`,
+          );
+          if (sleepSeconds > 0) {
+            await sleep(sleepSeconds * 1000);
+          }
+          continue;
+        }
+
         if (!record) {
           if (sleepSeconds > 0) {
             await new Promise<void>((resolve) => {

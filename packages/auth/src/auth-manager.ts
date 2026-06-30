@@ -1,6 +1,6 @@
 import type { PondoknusaRequest } from '@pondoknusa/http';
 import type { Middleware } from '@pondoknusa/http';
-import { Response as HttpResponse, withMiddlewareMeta } from '@pondoknusa/http';
+import { Response, withMiddlewareMeta } from '@pondoknusa/http';
 
 import { AuthorizationException } from './authorization-exceptions.js';
 import { AuthenticationException } from './exceptions.js';
@@ -120,12 +120,16 @@ export function createAuthMiddleware(auth: AuthManager, guardName?: string): Mid
 }
 
 export function createGuestMiddleware(auth: AuthManager, guardName?: string): Middleware {
-  return async (_request, next) => {
+  return async (request, next) => {
     const guard = auth.guard(guardName);
     const ok = guard.check();
     const authenticated = ok instanceof Promise ? await ok : ok;
     if (authenticated) {
-      return HttpResponse.json({ message: 'Already authenticated.' }, { status: 409 });
+      const accept = request.header('accept') ?? '';
+      if (accept.includes('text/html') || !accept.includes('application/json')) {
+        return Response.redirect('/dashboard', 302, request);
+      }
+      return Response.json({ message: 'Already authenticated.' }, { status: 409 });
     }
 
     return next();
